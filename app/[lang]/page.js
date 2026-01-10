@@ -17,7 +17,7 @@ export default async function Home({ params }) {
         <div className="my-16 p-24">
           <Image
             src="/hero.svg"
-            alt="Discovery"
+            alt="hero image"
             width={120}
             height={150}
             priority
