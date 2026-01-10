@@ -1,0 +1,46 @@
+{
+  "nav": {
+    "services": "Projects",
+    "work": "About",
+    "contact": "Contact"
+  },
+  "home": {
+    "hero": {
+      "title": "discovery",
+      "description": "We utilise rigorous UX methodology and technical expertise to build scalable, high-performance digital products that meet market demands and exceed business objectives."
+    },
+    "services": {
+      "title": "So what the f*** do you guys actually do?",
+      "1": {
+        "title": "UX & UI design",
+        "description": "We simplify complex platforms, leveraging intelligent design and interaction principles to create intuitive, user-centric interfaces that drive adoption."
+      },
+      "2": {
+        "title": "CX Research & Audit",
+        "description": "We align product strategy with business goals, managing the entire lifecycle from ideation and feature prioritisation to market launch and iteration."
+      },
+      "3": {
+        "title": "Product Management",
+        "description": "We conduct deep-dive customer research and comprehensive experience audits to pinpoint friction points and uncover high-impact opportunities for improvement."
+      },
+      "4": {
+        "title": "Digital Transformation",
+        "description": "We partner with leadership to define roadmaps, modernise legacy systems, and implement the necessary cultural and technical shifts for long-term digital growth."
+      },
+      "5": {
+        "title": "Software Development",
+        "description": "We build scalable, high-performance back-end and front-end solutions, ensuring technical integrity and future-proofing the digital product."
+      }
+    },
+    "customers": {
+      "title": {
+        "line1": "But...",
+        "line2": "who the hell hires you people?"
+      },
+      "description": "Surprisingly, we get calls from companies in various sectors, although we tend to be closer to the Telco and IT industries... the truth is, no one is free of sin when we talk about customer experience."
+    },
+    "buttons": {
+      "discover": "discover more"
+    }
+  }
+}
