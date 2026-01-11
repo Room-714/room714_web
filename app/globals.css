@@ -19,3 +19,28 @@ body {
   background-color: var(--background);
   color: var(--foreground);
 }
+
+/* app/globals.css */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+
+  /* Se mueve la mitad del ancho total */
+}
+
+.animate-infinite-scroll {
+  display: flex;
+  width: max-content;
+  animation: scroll 20s linear infinite;
+  /* Ajusta los segundos para más o menos velocidad */
+}
+
+/* Pausar al pasar el ratón para mejor UX */
+.animate-infinite-scroll:hover {
+  animation-play-state: paused;
+}

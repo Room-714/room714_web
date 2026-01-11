@@ -14,15 +14,23 @@ export default async function Home({ params }) {
     <div className="flex flex-col bg-black">
       {/* Hero Section */}
       <section className="py-12 bg-white text-center flex flex-col items-center z-10">
-        <div className="my-16 p-24">
-          <Image
-            src="/hero.svg"
-            alt="hero image"
-            width={120}
-            height={150}
-            priority
-            className="w-auto h-auto"
-          />
+        <div className="mt-8 mb-16 p-4 md:p-12 lg:p-24 flex justify-center w-full">
+          <div
+            className="relative transition-all duration-300
+                  w-[50%] max-w-40
+                  md:w-[30%] md:max-w-55
+                  lg:w-[25%] lg:max-w-75
+                  aspect-120/150"
+          >
+            <Image
+              src="/hero.svg"
+              alt="Discovery"
+              fill
+              priority
+              className="object-contain"
+              sizes="(max-width: 768px) 160px, (max-width: 1200px) 220px, 300px"
+            />
+          </div>
         </div>
 
         <h1 className="font-body font-bold text-4xl md:text-[50px] lg:text-[80px] mb-16">
@@ -35,7 +43,12 @@ export default async function Home({ params }) {
 
         <PrimaryButton text={dict.home.buttons.discover} />
 
-        <div className="w-full max-w-200px mt-12">
+        <div
+          className="relative transition-all duration-300
+                  min-w-15    /* Pero que nunca baje de 60px */
+                  md:min-w-25 /* En Tablet no pasa de 100px */
+                  lg:min-w-40 /* En PC tiene más aire hasta 140px */"
+        >
           <Image
             src="/arrow.svg"
             alt="Arrow pointing down"
@@ -47,10 +60,10 @@ export default async function Home({ params }) {
       </section>
 
       {/* Services Section */}
-      <section className="bg-black rounded-t-[50px] -mt-10 pt-24 pb-10 mb-6 z-20">
+      <section className="bg-black rounded-t-[50px] -mt-10 pt-20 pb-8 mb-4 z-20">
         <div className="flex flex-col items-center">
-          <div className="sticky top-30 mb-16 h-30 flex items-center justify-center px-4">
-            <h2 className="text-white z-30 font-title font-bold text-3xl text-center px-2 leading-tight">
+          <div className="sticky top-12 mb-24 h-12 flex items-center justify-center px-4 md:px-8 lg:px-40">
+            <h2 className="text-white z-30 font-title font-bold text-2xl md:text-4xl lg:text-5xl text-center px-2 md:px-8 lg:px-16 leading-tight">
               {dict.home.services.title}
             </h2>
           </div>
@@ -62,7 +75,7 @@ export default async function Home({ params }) {
               <div
                 key={service.id}
                 className="sticky z-40 w-full"
-                style={{ top: "270px", marginBottom: "40px" }}
+                style={{ top: "140px", marginBottom: "40px" }}
               >
                 <ServiceCard
                   number={service.number}
@@ -90,30 +103,43 @@ export default async function Home({ params }) {
           />
         </div>
 
-        <h2 className="font-title font-bold text-red-500 text-3xl px-2 mb-6 leading-tight">
+        <h2 className="font-title font-bold text-red-500 text-3xl lg:text-5xl px-2 mb-6 leading-tight">
           {dict.home.customers.title.line1} <br />{" "}
           {dict.home.customers.title.line2}
         </h2>
 
-        <p className="font-body text-lg px-4 leading-5.5 text-black mb-10">
+        <p className="font-body text-lg px-4 lg:text-4xl lg:leading-9 lg:px-30 text-black mb-10">
           {dict.home.customers.description}
         </p>
 
-        {/* Container of Logos with Horizontal Scroll */}
-        <div className="w-full mb-10">
-          <div className="flex flex-nowrap overflow-x-auto gap-8 pb-4 scrollbar-hide snap-x snap-mandatory">
-            {[1, 2, 3, 4].map((num) => (
-              <div
-                key={`client-0${num}`}
-                className="flex-none w-32 h-16 relative snap-center hover:grayscale-0 transition-all duration-500"
-              >
-                <Image
-                  src={`/client-0${num}.svg`}
-                  alt={`Client-0${num}`}
-                  fill
-                  className="object-contain"
-                  sizes="(max-width: 768px) 128px, 128px"
-                />
+        {/* Contenedor principal con degradados laterales opcionales para suavizar bordes */}
+        <div className="relative w-full mb-10 overflow-hidden group py-12">
+          {/* Degradados laterales (puedes quitarlos si prefieres bordes limpios) */}
+          <div className="absolute inset-y-0 left-0 w-16 bg-linear-to-r from-white to-transparent z-10 pointer-events-none"></div>
+          <div className="absolute inset-y-0 right-0 w-16 bg-linear-to-l from-white to-transparent z-10 pointer-events-none"></div>
+
+          <div className="flex animate-infinite-scroll w-max hover:[animation-play-state:paused]">
+            {[1, 2].map((block) => (
+              <div key={block} className="flex">
+                {[1, 2, 3, 4].map((num) => (
+                  <div
+                    key={`${block}-${num}`}
+                    className="flex-none flex justify-center items-center
+                       w-[50vw] md:w-[33vw] lg:w-[25vw] 
+                       px-6 md:px-10 lg:px-14 transition-all duration-300"
+                  >
+                    {/* Altura aumentada de h-20 (80px) a h-[100px] para ese +25% */}
+                    <div className="relative w-full h-25 transition-all duration-500 transform hover:scale-110">
+                      <Image
+                        src={`/client-0${num}.svg`}
+                        alt={`Client-0${num}`}
+                        fill
+                        className="object-contain"
+                        sizes="(max-width: 768px) 50vw, 25vw"
+                      />
+                    </div>
+                  </div>
+                ))}
               </div>
             ))}
           </div>
