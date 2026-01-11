@@ -165,7 +165,7 @@ export default async function Home({ params }) {
         </div>
 
         {/* 2. Bloque Negro Inferior: Altura fija y contenido centrado */}
-        <div className="w-full bg-black -mt-1 h-[180px] md:h-[220px] flex flex-col items-center justify-center px-6">
+        <div className="w-full bg-black -mt-1 sm:-mt-2 h-45 md:h-55 flex flex-col items-center justify-center px-6">
           {/* Logo invertido (blanco) */}
           <div className="w-32 h-auto opacity-50 grayscale invert mb-6">
             <Image
@@ -177,9 +177,9 @@ export default async function Home({ params }) {
             />
           </div>
 
-          {/* Texto de Copyright */}
-          <p className="text-gray-500 text-[10px] md:text-xs font-body uppercase tracking-[0.2em] text-center">
-            © 2026 ROOM714. All rights reserved.
+          {/* Texto de Copyright con año dinámico */}
+          <p className="text-gray-500 text-xs md:text-sm font-body tracking-[0.2em] text-center">
+            Room 714 © {new Date().getFullYear()} - All rights reserved
           </p>
         </div>
       </footer>
