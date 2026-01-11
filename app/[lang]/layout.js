@@ -31,7 +31,10 @@ export default async function RootLayout({ children, params }) {
       lang={lang}
       className={`${fontMontserrat.variable} ${fontAlternates.variable} ${fontMynerve.variable}`}
     >
-      <body className="bg-white text-black font-body antialiased">
+      <body
+        className="bg-white text-black font-body antialiased"
+        suppressHydrationWarning={true}
+      >
         <Navbar dict={dict} />
 
         <main>{children}</main>
