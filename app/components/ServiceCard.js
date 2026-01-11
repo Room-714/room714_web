@@ -34,7 +34,7 @@ export default function ServiceCard({ number, title, description, image }) {
         </h3>
 
         {/* Descripción: Ajuste de lectura */}
-        <p className="font-body text-sm leading-3.5 md:text-xl md:leading-6 lg:text-3xl lg:leading-9 lg:pr-20">
+        <p className="font-body text-sm leading-4.8 md:text-xl md:leading-6 lg:text-3xl lg:leading-9 lg:pr-20">
           {description}
         </p>
       </div>
