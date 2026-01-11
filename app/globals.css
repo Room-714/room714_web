@@ -20,7 +20,6 @@ body {
   color: var(--foreground);
 }
 
-/* app/globals.css */
 @keyframes scroll {
   0% {
     transform: translateX(0);
@@ -30,7 +29,6 @@ body {
     transform: translateX(-50%);
   }
 
-  /* Se mueve la mitad del ancho total */
 }
 
 .animate-infinite-scroll {
