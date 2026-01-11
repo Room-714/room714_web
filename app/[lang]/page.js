@@ -150,15 +150,38 @@ export default async function Home({ params }) {
         </div>
       </section>
 
-      {/* Footer */}
+      {/* Footer completo */}
       <footer className="w-full bg-white">
-        <Image
-          src="/footer.svg"
-          alt="City Skyline"
-          width={1920}
-          height={400}
-          className="w-full h-auto"
-        />
+        {/* 1. Contenedor del Skyline: Proporcional y siempre visible */}
+        <div className="w-full">
+          <Image
+            src="/footer.svg"
+            alt="City Skyline"
+            width={1920} // Proporción original
+            height={400} // Proporción original
+            className="w-full h-auto block" // h-auto garantiza que no haya distorsión
+            priority
+          />
+        </div>
+
+        {/* 2. Bloque Negro Inferior: Altura fija y contenido centrado */}
+        <div className="w-full bg-black -mt-1 h-[180px] md:h-[220px] flex flex-col items-center justify-center px-6">
+          {/* Logo invertido (blanco) */}
+          <div className="w-32 h-auto opacity-50 grayscale invert mb-6">
+            <Image
+              src="/logo.svg"
+              alt="Logo Footer"
+              width={120}
+              height={40}
+              className="object-contain"
+            />
+          </div>
+
+          {/* Texto de Copyright */}
+          <p className="text-gray-500 text-[10px] md:text-xs font-body uppercase tracking-[0.2em] text-center">
+            © 2026 ROOM714. All rights reserved.
+          </p>
+        </div>
       </footer>
     </div>
   );
