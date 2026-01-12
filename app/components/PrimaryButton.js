@@ -5,27 +5,41 @@ export default function PrimaryButton({
   onClick,
   className = "",
   icon: Icon = ChevronRight,
+  isRed = false, // Nueva prop para determinar el estilo
 }) {
   return (
     <button
       onClick={onClick}
       className={`
-        group flex items-center justify-between
-        border-2 border-black rounded-full 
-        px-4 py-1 min-w-300px
-        bg-white hover:bg-gray-50 transition-all active:scale-95
+        group flex items-center
+        border-2 rounded-full 
+        px-4 py-1 w-fit
+        transition-all active:scale-95
         cursor-pointer
+        ${
+          isRed
+            ? "bg-red-600 border-red-600 hover:bg-red-700"
+            : "bg-white border-black hover:bg-gray-50"
+        }
         ${className}
       `}
     >
-      <span className="font-title mr-4 text-lg font-black text-red-500 uppercase tracking-tight">
+      <span
+        className={`
+        font-title mr-4 text-lg font-black uppercase tracking-tight
+        ${isRed ? "text-white" : "text-red-500"}
+      `}
+      >
         {text}
       </span>
-      <Icon
-        size={24}
-        strokeWidth={2.5}
-        className="text-black transition-transform duration-300 ease-in-out group-hover:translate-x-2 shrink-0"
-      />
+
+      <div
+        className={`
+        flex items-center justify-center transition-transform duration-300 ease-in-out text-black group-hover:translate-x-2 shrink-0"
+      `}
+      >
+        <Icon size={24} strokeWidth={2.5} />
+      </div>
     </button>
   );
 }

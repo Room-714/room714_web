@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Phone } from "lucide-react";
 import ServiceCard from "@/app/components/ServiceCard";
 import PrimaryButton from "@/app/components/PrimaryButton";
+import Navbar from "@/app/components/Navbar";
 import SERVICES from "@/app/data/Services";
 
 export default async function Home({ params }) {
@@ -12,6 +13,9 @@ export default async function Home({ params }) {
 
   return (
     <div className="flex flex-col bg-black">
+      {/* Navbar con modo light */}
+      <Navbar dict={dict} isDark={false} />
+
       {/* Hero Section */}
       <section className="py-12 bg-white text-center flex flex-col items-center z-10">
         <div className="mt-8 mb-16 p-4 md:p-12 lg:p-24 flex justify-center w-full">

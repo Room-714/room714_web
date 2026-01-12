@@ -1,7 +1,7 @@
 {
   "nav": {
-    "services": "Projects",
-    "work": "About",
+    "projects": "Projects",
+    "about": "About",
     "contact": "Contact"
   },
   "home": {
@@ -41,6 +41,84 @@
     },
     "buttons": {
       "discover": "discover more"
+    }
+  },
+  "contact": {
+    "title": "Let's talk!",
+    "interested": {
+      "question": "I'm interested in",
+      "interest_1": "site from scratch",
+      "interest_2": "UX/UI design",
+      "interest_3": "product design",
+      "interest_4": "mobile development"
+    },
+    "name": {
+      "title": "What's your name",
+      "placeholder": "enter your name here"
+    },
+    "info": {
+      "title": "How can we contact you?",
+      "placeholder": "enter your email here"
+    },
+    "message": {
+      "title": "Let us know how we can help you",
+      "placeholder": "tell us!"
+    },
+    "buttons": {
+      "send": "Contact us"
+    }
+  },
+  "about": {
+    "hero_text": "At Room 714 we synergise diverse expertise to deliver successful digital products...",
+    "quotes": "We turn strategic goals into tangible market-ready realities",
+    "rules": {
+      "title_line1": "the rules we",
+      "title_line2": "actually follow",
+      "rule_1": {
+        "title": "Rigorous Partnership",
+        "description": "We are not vendors; we are embedded extensions of your team. We commit to full transparency, accountability, and ethical rigour in every phase of the project lifecycle. Our success is measured by the sustained, long-term impact we create within your organisation."
+      },
+      "rule_2": {
+        "title": "Outcome-Driven Design",
+        "description": "Our expertise is always directed towards achieving quantifiable business metrics—growth, efficiency, and retention. We move beyond aesthetics to apply intelligent design principles and validated research that directly translate into commercial value and market advantage."
+      },
+      "rule_3": {
+        "title": "Methodological Simplicity",
+        "description": "We thrive on solving the most complex digital challenges, yet we maintain a strict focus on delivering zero-friction experiences. We simplify complex processes, ensuring that technical complexity is managed internally so the final product remains intuitive, accessible, and easy to scale for your users."
+      }
+    }
+  },
+  "projects": {
+    "title_1": "The work.",
+    "title_2": "No fluff.",
+    "description": "Transforming complexity into commercial success through intelligent design and technical excellence.",
+    "subtitle_challenge": "The challenge",
+    "subtitle_solution": "The idea",
+    "subtitle_results": "The outcome",
+    "case_study_01": {
+      "title": "Telecoms Operations Success",
+      "challenge": "High friction during customer activation of complex convergent service bundles...",
+      "idea": "Redesign of the entire digital Purchase and Activation (O2C) flow...",
+      "outcome": "45% increase in convergent bundle activation rates..."
+    },
+    "case_study_02": {
+      "title": "Telecoms Operations Success",
+      "challenge": "High friction during customer activation of complex convergent service bundles...",
+      "idea": "Redesign of the entire digital Purchase and Activation (O2C) flow...",
+      "outcome": "45% increase in convergent bundle activation rates..."
+    },
+    "case_study_03": {
+      "title": "Telecoms Operations Success",
+      "challenge": "High friction during customer activation of complex convergent service bundles...",
+      "idea": "Redesign of the entire digital Purchase and Activation (O2C) flow...",
+      "outcome": "45% increase in convergent bundle activation rates..."
+    },
+    "footer_cta": {
+      "line_1": "Tired of talking about metrics?",
+      "line_2": "Let's go build them."
+    },
+    "buttons": {
+      "view_case_study": "Contact us"
     }
   }
 }

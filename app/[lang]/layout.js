@@ -35,8 +35,6 @@ export default async function RootLayout({ children, params }) {
         className="bg-white text-black font-body antialiased"
         suppressHydrationWarning={true}
       >
-        <Navbar dict={dict} />
-
         <main>{children}</main>
       </body>
     </html>
