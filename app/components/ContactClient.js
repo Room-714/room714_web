@@ -1,12 +1,16 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-import { Phone, CheckCircle2, Loader2, AlertCircle } from "lucide-react";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { Send, CheckCircle2, Loader2, AlertCircle } from "lucide-react";
 import PrimaryButton from "@/app/components/PrimaryButton";
 
 export default function ContactClient({ dict, interests }) {
   const [status, setStatus] = useState("idle");
   const [selectedInterests, setSelectedInterests] = useState([]);
+  const params = useParams();
+  const lang = params?.lang || "en";
 
   const toggleInterest = (interest) => {
     setSelectedInterests((prev) =>
@@ -64,17 +68,17 @@ export default function ContactClient({ dict, interests }) {
             <div className="flex flex-col items-center lg:items-start justify-center py-20 animate-in fade-in slide-in-from-bottom-4 duration-500">
               <CheckCircle2 size={80} className="text-red-600 mb-6" />
               <h1 className="font-hand text-6xl md:text-8xl mb-4 text-center lg:text-left">
-                Done!
+                {dict.contact.success.title}
               </h1>
               <p className="font-body text-xl text-gray-400 text-center lg:text-left">
-                Thanks for reaching out.
+                {dict.contact.success.description}
               </p>
-              <button
-                onClick={() => setStatus("idle")}
+              <Link
+                href={`/${lang}`}
                 className="mt-8 text-sm uppercase font-bold tracking-widest hover:text-red-600"
               >
-                Back to form
-              </button>
+                {dict.contact.success.link}
+              </Link>
             </div>
           ) : (
             <>
@@ -164,7 +168,7 @@ export default function ContactClient({ dict, interests }) {
                   <PrimaryButton
                     text={dict.contact.buttons.send}
                     isRed={true}
-                    icon={Phone}
+                    icon={Send}
                     type="submit"
                   />
                 </div>

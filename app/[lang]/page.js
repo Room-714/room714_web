@@ -37,11 +37,11 @@ export default async function Home({ params }) {
           </div>
         </div>
 
-        <h1 className="font-body font-bold text-4xl md:text-[50px] lg:text-[80px] mb-16">
+        <h1 className="font-body font-bold text-4xl md:text-5xl lg:text-6xl mb-16">
           {dict.home.hero.title}
         </h1>
 
-        <p className="font-body text-2xl md:text-3xl lg:text-[40px] mb-8 px-4 md:px-8 lg:px-30">
+        <p className="font-body text-xl md:text-2xl lg:text-3xl mb-8 px-4 md:px-8 lg:px-30">
           {dict.home.hero.description}
         </p>
 
@@ -66,7 +66,7 @@ export default async function Home({ params }) {
       {/* Services Section */}
       <section className="bg-black rounded-t-[50px] -mt-10 pt-20 pb-8 mb-4 z-20">
         <div className="flex flex-col items-center">
-          <div className="sticky top-12 mb-24 h-12 flex items-center justify-center px-4 md:px-8 lg:px-40">
+          <div className="md:sticky top-12 mb-16 lg:mb-20 h-12 flex items-center justify-center px-4 md:px-8 lg:px-40">
             <h2 className="text-white z-30 font-title font-bold text-2xl md:text-4xl lg:text-5xl text-center px-2 md:px-8 lg:px-16 leading-tight">
               {dict.home.services.title}
             </h2>
@@ -78,7 +78,7 @@ export default async function Home({ params }) {
             return (
               <div
                 key={service.id}
-                className="sticky z-40 w-full"
+                className="md:sticky z-40 w-full"
                 style={{ top: "140px", marginBottom: "40px" }}
               >
                 <ServiceCard
@@ -112,12 +112,12 @@ export default async function Home({ params }) {
           {dict.home.customers.title.line2}
         </h2>
 
-        <p className="font-body text-lg px-4 lg:text-4xl lg:leading-9 lg:px-30 text-black mb-10">
+        <p className="font-body text-xl px-4 lg:text-4xl lg:leading-9 lg:px-30 text-black mb-10">
           {dict.home.customers.description}
         </p>
 
         {/* Contenedor principal con degradados laterales opcionales para suavizar bordes */}
-        <div className="relative w-full mb-10 overflow-hidden group py-12">
+        <div className="relative w-full mb-10 overflow-hidden group py-6">
           {/* Degradados laterales (puedes quitarlos si prefieres bordes limpios) */}
           <div className="absolute inset-y-0 left-0 w-16 bg-linear-to-r from-white to-transparent z-10 pointer-events-none"></div>
           <div className="absolute inset-y-0 right-0 w-16 bg-linear-to-l from-white to-transparent z-10 pointer-events-none"></div>
@@ -155,9 +155,9 @@ export default async function Home({ params }) {
       </section>
 
       {/* Footer completo */}
-      <footer className="w-full bg-white">
+      <footer className="w-full bg-white -mt-1">
         {/* 1. Contenedor del Skyline: Proporcional y siempre visible */}
-        <div className="w-full">
+        <div className="w-[80%] ml-auto">
           <Image
             src="/footer.svg"
             alt="City Skyline"

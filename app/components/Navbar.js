@@ -52,7 +52,7 @@ export default function Navbar({ dict, isDark = false }) {
         }`}
         onClick={() => setIsOpen(!isOpen)}
       >
-        {isOpen ? <X size={32} /> : <Menu size={32} strokeWidth={1.5} />}
+        {isOpen ? <X size={32} /> : <Menu size={32} strokeWidth={2.5} />}
       </button>
       {/* MENÚ MÓVIL: Desplegable */}
       {isOpen && (

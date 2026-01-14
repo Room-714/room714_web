@@ -1,5 +1,6 @@
 import { getDictionary } from "@/app/dictionaries";
 import Image from "next/image";
+import { Quote } from "lucide-react";
 import Navbar from "@/app/components/Navbar";
 import RulesSlider from "@/app/components/RulesSlider";
 
@@ -41,27 +42,37 @@ export default async function AboutPage({ params }) {
               className="object-contain"
             />
           </div>
-          <p className="font-body text-lg md:text-xl leading-relaxed text-gray-800">
+          <p className="font-body text-lg md:text-xl leading-6 text-black">
             {dict.about.hero_text}
           </p>
         </section>
 
         {/* Sección Cita */}
-        <section className="px-6 py-20 flex flex-col items-center text-center relative max-w-4xl">
-          <span className="text-red-600 text-8xl font-serif absolute top-0 left-6">
-            “
-          </span>
-          <h2 className="font-title text-4xl md:text-6xl leading-tight px-4">
+        <section className="px-6 py-24 flex flex-col items-center text-center relative max-w-4xl mx-auto">
+          {/* Icono de apertura */}
+          <Quote
+            className="text-red-600 absolute top-6 md:top-0 left-0 md:-left-8 rotate-180"
+            size={60}
+            strokeWidth={1.5}
+            fill="currentColor"
+          />
+
+          <h2 className="font-title text-4xl md:text-6xl leading-tight px-4 z-10">
             {dict.about.quotes}
           </h2>
-          <span className="text-red-600 text-8xl font-serif absolute bottom-0 right-6">
-            ”
-          </span>
+
+          {/* Icono de cierre (rotado 180 grados) */}
+          <Quote
+            className="text-red-600 absolute bottom-6 md:bottom-0 right-0 md:-right-8"
+            size={60}
+            strokeWidth={1.5}
+            fill="currentColor"
+          />
         </section>
 
         {/* Sección Oscura: The Rules */}
-        <section className="w-full bg-[#111111] rounded-t-[50px] pt-16 pb-24 flex flex-col items-center">
-          <h3 className="font-title text-white text-3xl md:text-5xl mb-12 text-center px-6">
+        <section className="w-full min-h-200 bg-black rounded-t-[50px] mt-4 py-16 flex flex-col items-center">
+          <h3 className="font-title text-white font-black text-3xl md:text-5xl mb-6 text-center px-6">
             {dict.about.rules.title_line1} <br /> {dict.about.rules.title_line2}
           </h3>
 

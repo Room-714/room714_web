@@ -64,12 +64,17 @@
       "title": "Let us know how we can help you",
       "placeholder": "tell us!"
     },
+    "success": {
+      "title": "Done!",
+      "description": "Thanks for reaching out.",
+      "link": "Back to home"
+    },
     "buttons": {
       "send": "Contact us"
     }
   },
   "about": {
-    "hero_text": "At Room 714 we synergise diverse expertise to deliver successful digital products...",
+    "hero_text": "At Room 714 we synergise diverse expertise  to deliver successful digital products, driven by a genuine customer-first strategy and holistic CX approach.",
     "quotes": "We turn strategic goals into tangible market-ready realities",
     "rules": {
       "title_line1": "the rules we",

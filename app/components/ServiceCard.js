@@ -6,7 +6,7 @@ export default function ServiceCard({ number, title, description, image }) {
       {/* Contenedor de Imagen: Ajusta el tamaño según dispositivo */}
       <div
         className="relative aspect-square shrink-0 
-                      w-[60%] max-w-55
+                      w-[95%]
                       md:w-1/3 md:max-w-none
                       lg:w-1/4 
                       mt-8 md:mt-0"

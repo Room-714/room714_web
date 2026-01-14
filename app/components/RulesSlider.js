@@ -3,9 +3,11 @@ import { useRef, useState } from "react";
 
 export default function RulesSlider({ rules }) {
   const scrollRef = useRef(null);
-  const [activeId, setActiveId] = useState(rules[2].id); // 03 activa por defecto
+  // Iniciamos en null o en un ID específico para que el texto aparezca solo al pinchar
+  const [activeId, setActiveId] = useState(null);
 
   const handleScroll = () => {
+    // Solo ejecutamos la detección de centro en móviles/tablets
     if (window.innerWidth < 1024 && scrollRef.current) {
       const scrollPosition = scrollRef.current.scrollLeft;
       const containerWidth = scrollRef.current.offsetWidth;
@@ -23,6 +25,7 @@ export default function RulesSlider({ rules }) {
           closestId = rules[index].id;
         }
       });
+
       if (closestId !== activeId) setActiveId(closestId);
     }
   };
@@ -32,7 +35,7 @@ export default function RulesSlider({ rules }) {
       ref={scrollRef}
       onScroll={handleScroll}
       className={`
-        w-full no-scrollbar transition-all duration-300
+        w-full no-scrollbar
         flex overflow-x-auto snap-x snap-mandatory gap-6 px-[10%] pb-20 pt-10
         lg:overflow-visible lg:px-24 lg:grid lg:grid-cols-3 lg:gap-10 lg:items-start
       `}
@@ -43,47 +46,44 @@ export default function RulesSlider({ rules }) {
         return (
           <div
             key={rule.id}
-            onClick={() => setActiveId(rule.id)}
+            onClick={() => setActiveId(isActive ? null : rule.id)} // Si pincha la activa, se cierra
             className={`
               rule-card shrink-0 bg-white rounded-[30px] p-8 cursor-pointer
-              transition-all duration-300 ease-in-out
-              /* Eliminamos scale-y para evitar deformación de títulos */
+              transition-all duration-500 ease-in-out self-start
               ${
                 isActive
-                  ? "shadow-2xl opacity-100 z-10"
-                  : "opacity-50 lg:opacity-70 hover:opacity-100 shadow-sm"
+                  ? "shadow-2xl opacity-100 z-10 translate-y-[-5px]"
+                  : "shadow-sm opacity-60 hover:opacity-100"
               }
-              w-[280px] md:w-[350px] lg:w-full lg:max-w-[400px]
+              w-[280px] md:w-[350px] lg:w-full
               snap-center
             `}
           >
             <div className="flex flex-col">
-              <span className="text-gray-400 font-body text-sm mb-2 block">
+              <span className="text-gray-400 font-body text-xs mb-3 block tracking-widest">
                 {rule.id}
               </span>
-              <h4
-                className={`
-                font-title text-2xl md:text-3xl text-black leading-tight transition-all duration-300
-                ${isActive ? "mb-6" : "mb-0"}
-              `}
-              >
+
+              <h4 className="font-title text-2xl md:text-3xl text-black leading-tight">
                 {rule.title}
               </h4>
 
-              {/* Desplegado real mediante altura, no escala visual */}
+              {/* El contenedor del texto crece hacia abajo */}
               <div
                 className={`
-                  transition-all duration-500 ease-in-out overflow-hidden
+                  grid transition-all duration-500 ease-in-out
                   ${
                     isActive
-                      ? "max-h-[500px] opacity-100 mt-2"
-                      : "max-h-0 opacity-0 mt-0"
+                      ? "grid-rows-[1fr] opacity-100 pt-6"
+                      : "grid-rows-[0fr] opacity-0 pt-0"
                   }
                 `}
               >
-                <p className="font-body text-gray-600 text-sm leading-relaxed">
-                  {rule.description}
-                </p>
+                <div className="overflow-hidden">
+                  <p className="font-body text-gray-600 text-sm md:text-base leading-relaxed border-t border-gray-100 pt-4">
+                    {rule.description}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
