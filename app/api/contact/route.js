@@ -4,6 +4,11 @@ import { Resend } from "resend";
 export async function POST(req) {
   const apiKey = process.env.RESEND_API_KEY;
 
+  console.log(
+    "Comprobando API KEY:",
+    apiKey ? apiKey.substring(0, 4) + "..." : "ESTÁ VACÍA"
+  );
+
   if (!apiKey) {
     console.error("Error: RESEND_API_KEY no configurada en .env.local");
     return NextResponse.json(
