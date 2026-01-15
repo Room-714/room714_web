@@ -2,6 +2,7 @@
 const dictionaries = {
   // Nota el './' porque ahora la carpeta está en el mismo nivel que este archivo
   en: () => import("./dictionaries/en.json").then((module) => module.default),
+  es: () => import("./dictionaries/es.json").then((module) => module.default),
 };
 
 export const getDictionary = async (locale) => {

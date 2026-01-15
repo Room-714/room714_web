@@ -1,0 +1,129 @@
+{
+  "nav": {
+    "projects": "Proyectos",
+    "about": "Nosotros",
+    "contact": "Contacto"
+  },
+  "home": {
+    "hero": {
+      "title": "discovery",
+      "description": "Utilizamos una metodología UX rigurosa y experiencia técnica para construir productos digitales escalables y de alto rendimiento que cumplen con las demandas del mercado y superan los objetivos de negocio."
+    },
+    "services": {
+      "title": "Vale, pero... ¿qué carajos hacéis vosotros exactamente?",
+      "1": {
+        "title": "Diseño UX & UI",
+        "description": "Simplificamos plataformas complejas mediante diseño inteligente y principios de interacción para crear interfaces intuitivas y centradas en el usuario que impulsan la adopción."
+      },
+      "2": {
+        "title": "Product Management",
+        "description": "Alineamos la estrategia de producto con los objetivos de negocio, gestionando todo el ciclo de vida: desde la ideación y priorización de funciones hasta el lanzamiento al mercado y su iteración."
+      },
+      "3": {
+        "title": "CX Research & Auditoría",
+        "description": "Realizamos investigaciones profundas de clientes y auditorías de experiencia integrales para detectar puntos de fricción y descubrir oportunidades de mejora de alto impacto."
+      },
+      "4": {
+        "title": "Transformación Digital",
+        "description": "Colaboramos con el liderazgo para definir hojas de ruta, modernizar sistemas heredados e implementar los cambios culturales y técnicos necesarios para el crecimiento digital a largo plazo."
+      },
+      "5": {
+        "title": "Software Development",
+        "description": "Construimos soluciones escalables de alto rendimiento, tanto en back-end como en front-end, garantizando la integridad técnica y la vigencia futura del producto digital."
+      }
+    },
+    "customers": {
+      "title": {
+        "line1": "Pero...",
+        "line2": "¿quién demonios os contrata?"
+      },
+      "description": "Sorprendentemente, recibimos llamadas de empresas de varios sectores, aunque solemos estar más cerca de las industrias de Telco e IT... la verdad es que nadie está libre de pecado cuando hablamos de experiencia de cliente."
+    },
+    "buttons": {
+      "discover": "descubrir más"
+    }
+  },
+  "contact": {
+    "title": "¡Hablemos!",
+    "interested": {
+      "question": "Me interesa",
+      "interest_1": "sitio desde cero",
+      "interest_2": "diseño UX/UI",
+      "interest_3": "diseño de producto",
+      "interest_4": "desarrollo móvil"
+    },
+    "name": {
+      "title": "Cómo te llamas",
+      "placeholder": "escribe tu nombre aquí"
+    },
+    "info": {
+      "title": "¿Cómo te contactamos?",
+      "placeholder": "escribe tu email aquí"
+    },
+    "message": {
+      "title": "Cuéntanos cómo podemos ayudarte",
+      "placeholder": "¡dinos!"
+    },
+    "success": {
+      "title": "¡Hecho!",
+      "description": "Gracias por contactar con nosotros.",
+      "link": "Volver al inicio"
+    },
+    "buttons": {
+      "send": "Contactar"
+    }
+  },
+  "about": {
+    "hero_text": "En Room 714 sinergizamos diversas especialidades para entregar productos digitales de éxito, impulsados por una estrategia genuina de 'el cliente primero' y un enfoque de CX holístico.",
+    "quotes": "Convertimos los objetivos estratégicos en realidades tangibles listas para el mercado",
+    "rules": {
+      "title_line1": "las reglas que",
+      "title_line2": "seguimos de verdad",
+      "rule_1": {
+        "title": "Partnership Riguroso",
+        "description": "No somos proveedores; somos una extensión integrada de tu equipo. Nos comprometemos con la total transparencia, la responsabilidad y el rigor ético en cada fase del ciclo de vida del proyecto. Nuestro éxito se mide por el impacto sostenido a largo plazo que creamos en tu organización."
+      },
+      "rule_2": {
+        "title": "Diseño Orientado a Resultados",
+        "description": "Nuestra experiencia se dirige siempre a lograr métricas de negocio cuantificables: crecimiento, eficiencia y retención. Vamos más allá de la estética para aplicar principios de diseño inteligente e investigación validada que se traducen directamente en valor comercial y ventaja competitiva."
+      },
+      "rule_3": {
+        "title": "Simplicidad Metodológica",
+        "description": "Nos apasiona resolver los retos digitales más complejos, manteniendo un enfoque estricto en ofrecer experiencias sin fricciones. Simplificamos procesos difíciles, asegurando que la complejidad técnica se gestione internamente para que el producto final sea intuitivo, accesible y fácil de escalar para tus usuarios."
+      }
+    }
+  },
+  "projects": {
+    "title_1": "El trabajo.",
+    "title_2": "Sin adornos.",
+    "description": "Transformando la complejidad en éxito comercial a través de diseño inteligente y excelencia técnica.",
+    "subtitle_challenge": "El reto",
+    "subtitle_solution": "La idea",
+    "subtitle_results": "El resultado",
+    "case_study_01": {
+      "title": "Éxito en Operaciones de Telecomunicaciones",
+      "challenge": "Alta fricción durante la activación de paquetes de servicios convergentes complejos...",
+      "idea": "Rediseño de todo el flujo digital de Compra y Activación (O2C)...",
+      "outcome": "Aumento del 45% en las tasas de activación de paquetes convergentes..."
+    },
+    "case_study_02": {
+      "title": "Éxito en Operaciones de Telecomunicaciones",
+      "challenge": "Alta fricción durante la activación de paquetes de servicios convergentes complejos...",
+      "idea": "Rediseño de todo el flujo digital de Compra y Activación (O2C)...",
+      "outcome": "Aumento del 45% en las tasas de activación de paquetes convergentes..."
+    },
+    "case_study_03": {
+      "title": "Éxito en Operaciones de Telecomunicaciones",
+      "challenge": "Alta fricción durante la activación de paquetes de servicios convergentes complejos...",
+      "idea": "Rediseño de todo el flujo digital de Compra y Activación (O2C)...",
+      "outcome": "Aumento del 45% en las tasas de activación de paquetes convergentes..."
+    },
+    "footer_cta": {
+      "line_1": "¿Cansado de hablar de métricas?",
+      "line_2": "Vamos a construirlas."
+    },
+    "buttons": {
+      "view_case_study": "Contactar"
+    }
+  }
+}
