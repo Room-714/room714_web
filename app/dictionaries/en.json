@@ -125,5 +125,15 @@
     "buttons": {
       "view_case_study": "Contact us"
     }
+  },
+  "footer": {
+    "we_are": "We are heeere...",
+    "legal": "Legal",
+    "terms": "Terms of Service",
+    "privacy": "Privacy Policy",
+    "cookies": "Cookie Policy",
+    "linkedin": "LinkedIn",
+    "blog": "Blog",
+    "copyright": "© Room 714. All rights reserved."
   }
 }

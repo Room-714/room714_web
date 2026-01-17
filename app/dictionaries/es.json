@@ -10,7 +10,7 @@
       "description": "Utilizamos una metodología UX rigurosa y experiencia técnica para construir productos digitales escalables y de alto rendimiento que cumplen con las demandas del mercado y superan los objetivos de negocio."
     },
     "services": {
-      "title": "Vale, pero... ¿qué carajos hacéis vosotros exactamente?",
+      "title": "Vale, pero... ¿qué c*** hacéis vosotros exactamente?",
       "1": {
         "title": "Diseño UX & UI",
         "description": "Simplificamos plataformas complejas mediante diseño inteligente y principios de interacción para crear interfaces intuitivas y centradas en el usuario que impulsan la adopción."
@@ -35,7 +35,7 @@
     "customers": {
       "title": {
         "line1": "Pero...",
-        "line2": "¿quién demonios os contrata?"
+        "line2": "¿os contrata alguien?"
       },
       "description": "Sorprendentemente, recibimos llamadas de empresas de varios sectores, aunque solemos estar más cerca de las industrias de Telco e IT... la verdad es que nadie está libre de pecado cuando hablamos de experiencia de cliente."
     },
@@ -125,5 +125,15 @@
     "buttons": {
       "view_case_study": "Contactar"
     }
+  },
+  "footer": {
+    "we_are": "Ya estamos aquiiii...",
+    "legal": "Legal",
+    "terms": "Términos y condiciones",
+    "privacy": "Política de Privacidad",
+    "cookies": "Política de Cookies",
+    "linkedin": "LinkedIn",
+    "blog": "Blog",
+    "copyright": "© Room 714. Todos los derechos reservados."
   }
 }

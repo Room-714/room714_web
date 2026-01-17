@@ -108,7 +108,9 @@ export default async function Home({ params }) {
         </div>
 
         <h2 className="font-title font-bold text-red-500 text-3xl lg:text-5xl px-2 mb-6 leading-tight">
-          {dict.home.customers.title.line1} <br />{" "}
+          {dict.home.customers.title.line1}
+        </h2>
+        <h2 className="font-hand font-bold text-red-500 text-3xl lg:text-5xl px-2 mb-6 leading-tight">
           {dict.home.customers.title.line2}
         </h2>
 
@@ -153,40 +155,6 @@ export default async function Home({ params }) {
           <PrimaryButton text="contact us" icon={Phone} />
         </div>
       </section>
-
-      {/* Footer completo */}
-      <footer className="w-full bg-white -mt-1">
-        {/* 1. Contenedor del Skyline: Proporcional y siempre visible */}
-        <div className="w-[80%] ml-auto">
-          <Image
-            src="/footer.svg"
-            alt="City Skyline"
-            width={1920} // Proporción original
-            height={400} // Proporción original
-            className="w-full h-auto block" // h-auto garantiza que no haya distorsión
-            priority
-          />
-        </div>
-
-        {/* 2. Bloque Negro Inferior: Altura fija y contenido centrado */}
-        <div className="w-full bg-black -mt-1 sm:-mt-2 h-45 md:h-55 flex flex-col items-center justify-center px-6">
-          {/* Logo invertido (blanco) */}
-          <div className="w-32 h-auto opacity-50 grayscale invert mb-6">
-            <Image
-              src="/logo.svg"
-              alt="Logo Footer"
-              width={120}
-              height={40}
-              className="object-contain"
-            />
-          </div>
-
-          {/* Texto de Copyright con año dinámico */}
-          <p className="text-gray-500 text-xs md:text-sm font-body tracking-[0.2em] text-center">
-            Room 714 © {new Date().getFullYear()} - All rights reserved
-          </p>
-        </div>
-      </footer>
     </div>
   );
 }

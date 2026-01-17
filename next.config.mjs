@@ -1,6 +1,27 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  /* config options here */
+  // 1. Optimización de imágenes (necesaria si usas dominios externos para fotos)
+  images: {
+    formats: ["image/avif", "image/webp"], // Prioriza formatos de última generación
+  },
+
+  // 2. Seguridad: Evita que otros sitios incrusten tu web en un iframe
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          {
+            key: "X-Frame-Options",
+            value: "DENY",
+          },
+        ],
+      },
+    ];
+  },
+
+  // 3. Limpieza de consola: Ignora warnings de hidratación por extensiones de navegador
+  reactStrictMode: true,
 };
 
 export default nextConfig;

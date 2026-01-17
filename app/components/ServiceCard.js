@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function ServiceCard({ number, title, description, image }) {
   return (
-    <div className="bg-white rounded-[40px] md:p-12 flex flex-col items-center justify-center md:flex-row md:gap-16 mx-auto transition-all duration-300">
+    <div className="bg-white rounded-[40px] md:p-12 flex flex-col items-center justify-center md:flex-row md:gap-16 mx-auto transition-all duration-300 shadow-[0_-10px_20px_rgba(0,0,0,0.1)]">
       {/* Contenedor de Imagen: Ajusta el tamaño según dispositivo */}
       <div
         className="relative aspect-square shrink-0 
@@ -24,7 +24,7 @@ export default function ServiceCard({ number, title, description, image }) {
       {/* Contenedor de Texto */}
       <div className="w-full flex flex-col justify-center text-black px-4 pb-8 md:px-0 md:pb-0 mt-4 md:mt-0">
         {/* Número con estilo sutil */}
-        <span className="font-body text-sm md:text-lg lg:text-3xl block tracking-widest">
+        <span className="font-hand text-sm md:text-lg lg:text-3xl block tracking-widest">
           {number}
         </span>
 
