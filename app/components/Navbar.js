@@ -3,20 +3,18 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams, usePathname } from "next/navigation"; // Añadimos usePathname
-import { Menu, X, Globe } from "lucide-react";
+import { useParams, usePathname } from "next/navigation";
+import { Menu, X } from "lucide-react";
 
 export default function Navbar({ dict, isDark = false }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const params = useParams();
-  const pathname = usePathname(); // Obtenemos la ruta actual (ej: /es/about)
+  const pathname = usePathname();
   const lang = params?.lang || "en";
 
-  // Función para cambiar el idioma manteniendo la página actual
   const getLanguagePath = (targetLang) => {
     if (!pathname) return `/${targetLang}`;
-    // Reemplazamos el idioma actual por el nuevo en la URL
     return pathname.replace(`/${lang}`, `/${targetLang}`);
   };
 
@@ -49,15 +47,20 @@ export default function Navbar({ dict, isDark = false }) {
       {/* MENÚ DESKTOP + SELECTOR IDIOMA */}
       <div className="hidden md:flex items-center gap-8 lg:gap-12">
         <nav className="flex items-center gap-8 lg:gap-10">
-          {navLinks.map((link) => (
-            <Link
-              key={link.name}
-              href={link.href}
-              className="font-title md:text-xl lg:text-2xl lg:font-medium tracking-wider hover:text-red-500 transition-all duration-300"
-            >
-              {link.name}
-            </Link>
-          ))}
+          {navLinks.map((link) => {
+            const isActive = pathname === link.href;
+            return (
+              <Link
+                key={link.name}
+                href={link.href}
+                className={`font-title md:text-xl lg:text-2xl lg:font-medium tracking-wider transition-all duration-300 ${
+                  isActive ? "text-red-600 font-bold" : "hover:text-red-500"
+                }`}
+              >
+                {link.name}
+              </Link>
+            );
+          })}
         </nav>
 
         {/* Selector de Idioma Desktop */}
@@ -98,16 +101,21 @@ export default function Navbar({ dict, isDark = false }) {
             isDark ? "bg-black border-gray-800" : "bg-white border-gray-200"
           }`}
         >
-          {navLinks.map((link) => (
-            <Link
-              key={link.name}
-              href={link.href}
-              onClick={() => setIsOpen(false)}
-              className="font-title text-2xl tracking-wider"
-            >
-              {link.name}
-            </Link>
-          ))}
+          {navLinks.map((link) => {
+            const isActive = pathname === link.href;
+            return (
+              <Link
+                key={link.name}
+                href={link.href}
+                onClick={() => setIsOpen(false)}
+                className={`font-title text-2xl tracking-wider ${
+                  isActive ? "text-red-600 font-bold" : ""
+                }`}
+              >
+                {link.name}
+              </Link>
+            );
+          })}
 
           {/* Selector de Idioma Móvil */}
           <div className="flex items-center gap-6 pt-4 border-t border-gray-500/20 uppercase font-bold tracking-widest text-sm">

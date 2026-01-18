@@ -11,23 +11,23 @@
     },
     "services": {
       "title": "So what the f*** do you guys actually do?",
-      "1": {
+      "num_1": {
         "title": "UX & UI design",
         "description": "We simplify complex platforms, leveraging intelligent design and interaction principles to create intuitive, user-centric interfaces that drive adoption."
       },
-      "2": {
+      "num_2": {
         "title": "CX Research & Audit",
         "description": "We align product strategy with business goals, managing the entire lifecycle from ideation and feature prioritisation to market launch and iteration."
       },
-      "3": {
+      "num_3": {
         "title": "Product Management",
         "description": "We conduct deep-dive customer research and comprehensive experience audits to pinpoint friction points and uncover high-impact opportunities for improvement."
       },
-      "4": {
+      "num_4": {
         "title": "Digital Transformation",
         "description": "We partner with leadership to define roadmaps, modernise legacy systems, and implement the necessary cultural and technical shifts for long-term digital growth."
       },
-      "5": {
+      "num_5": {
         "title": "Software Development",
         "description": "We build scalable, high-performance back-end and front-end solutions, ensuring technical integrity and future-proofing the digital product."
       }
@@ -74,49 +74,72 @@
     }
   },
   "about": {
-    "hero_text": "At Room 714 we synergise diverse expertise  to deliver successful digital products, driven by a genuine customer-first strategy and holistic CX approach.",
-    "quotes": "We turn strategic goals into tangible market-ready realities",
+    "title": "we are",
+    "hero_text": "We synergise diverse expertise  to deliver successful digital products, driven by a genuine customer-first strategy and holistic CX approach.",
+    "quotes_line1": "We turn strategic goals into",
+    "quotes_line2": "tangible, market-ready realities",
     "rules": {
-      "title_line1": "the rules we",
-      "title_line2": "actually follow",
+      "title_line1": "the rules we actually",
+      "title_line2": "follow",
       "rule_1": {
         "title": "Rigorous Partnership",
-        "description": "We are not vendors; we are embedded extensions of your team. We commit to full transparency, accountability, and ethical rigour in every phase of the project lifecycle. Our success is measured by the sustained, long-term impact we create within your organisation."
+        "description_line1": "We are not vendors; we are embedded extensions of your team.",
+        "description_line2": "We commit to full transparency, accountability, and ethical rigour in every phase of the project lifecycle. Our success is measured by the sustained, long-term impact we create within your organisation."
       },
       "rule_2": {
         "title": "Outcome-Driven Design",
-        "description": "Our expertise is always directed towards achieving quantifiable business metrics—growth, efficiency, and retention. We move beyond aesthetics to apply intelligent design principles and validated research that directly translate into commercial value and market advantage."
+        "description_line1": "Our expertise is always directed towards achieving quantifiable business metrics—growth, efficiency, and retention.",
+        "description_line2": "We move beyond aesthetics to apply intelligent design principles and validated research that directly translate into commercial value and market advantage."
       },
       "rule_3": {
         "title": "Methodological Simplicity",
-        "description": "We thrive on solving the most complex digital challenges, yet we maintain a strict focus on delivering zero-friction experiences. We simplify complex processes, ensuring that technical complexity is managed internally so the final product remains intuitive, accessible, and easy to scale for your users."
+        "description_line1": "We thrive on solving the most complex digital challenges, yet we maintain a strict focus on delivering zero-friction experiences.",
+        "description_line2": " We simplify complex processes, ensuring that technical complexity is managed internally so the final product remains intuitive, accessible, and easy to scale for your users."
       }
     }
   },
   "projects": {
     "title_1": "The work.",
     "title_2": "No fluff.",
-    "description": "Transforming complexity into commercial success through intelligent design and technical excellence.",
+    "description": "Transforming complexity into commercial success.",
     "subtitle_challenge": "The challenge",
     "subtitle_solution": "The idea",
     "subtitle_results": "The outcome",
     "case_study_01": {
       "title": "Telecoms Operations Success",
-      "challenge": "High friction during customer activation of complex convergent service bundles...",
-      "idea": "Redesign of the entire digital Purchase and Activation (O2C) flow...",
-      "outcome": "45% increase in convergent bundle activation rates..."
+      "challenge": "High friction during customer activation of complex convergent service bundles, leading to low adoption rates and increased support calls.",
+      "idea": "Redesign of the entire digital Purchase and Activation (CX) flow, implementing modular architecture and real-time service activation APIs.",
+      "outcome": "45% increase in convergent bundle activation rates and a 12% uplift in Average Revenue Per User (ARPU)."
     },
     "case_study_02": {
-      "title": "Telecoms Operations Success",
-      "challenge": "High friction during customer activation of complex convergent service bundles...",
-      "idea": "Redesign of the entire digital Purchase and Activation (O2C) flow...",
-      "outcome": "45% increase in convergent bundle activation rates..."
+      "title": "Wealth Management Success",
+      "challenge": "A private fund manager required migrating complex client fund contracting from a manual, paper-based system to a seamless, 100% online onboarding flow.",
+      "idea": "Strategic digital transformation integrating e-KYC and advanced digital signing for a zero-friction, compliant customer experience.",
+      "outcome": "95% reduction in account activation time (now under 48 hours) and 41% uplift in digital onboarding completion rates."
     },
     "case_study_03": {
-      "title": "Telecoms Operations Success",
-      "challenge": "High friction during customer activation of complex convergent service bundles...",
-      "idea": "Redesign of the entire digital Purchase and Activation (O2C) flow...",
-      "outcome": "45% increase in convergent bundle activation rates..."
+      "title": "Tech & SaaS Efficiency Success",
+      "challenge": "Overly complex service administration dashboards causing high rates of critical operational errors and staff inefficiency due to severe data overload.",
+      "idea": "Complete UX/UI redesign integrating a Generative AI layer to instantly summarise complex data, converting real-time metrics into actionable insights and streamlined commands.",
+      "outcome": "38% reduction in critical service provisioning errors and a 25% saving in average time required for internal teams to resolve tier-1 issues."
+    },
+    "case_study_04": {
+      "title": "Tax Management & Accounting App",
+      "challenge": "Friction-heavy communication and fragmented document exchange between businesses and accountants, leading to filing delays and high operational overhead.",
+      "idea": "A collaborative digital ecosystem with a dual-interface approach, automating data ingestion and creating a shared single source of truth for real-time tax compliance.",
+      "outcome": "40% reduction in document-related back-and-forth and a 30% improvement in time-to-filing efficiency for both SMEs and accounting firms."
+    },
+    "case_study_05": {
+      "title": "Elite Digital Security & Asset Protection",
+      "challenge": "High-net-worth individuals (HNWIs) faced fragmented security monitoring for their global assets, digital identities, and private communications, lacking a unified command centre view.",
+      "idea": "A premium, concierge-style security application providing 360° real-time supervision of devices, connections, and sensitive documents under a zero-trust architecture.",
+      "outcome": "100% visibility of the digital footprint and a 60% faster response time to potential identity threats or unauthorised access attempts."
+    },
+    "case_study_06": {
+      "title": "Enterprise & Gov Security Framework",
+      "challenge": "Large organisations and government bodies required a unified security posture that could leverage carrier-grade network intelligence and top-tier security suites.",
+      "idea": "Development of a holistic security framework integrating network-level protection with a high-end service suite, specifically designed for mission-critical infrastructure.",
+      "outcome": "55% reduction in incident mitigation time and full compliance with sovereign security standards for large-scale public and private organisations."
     },
     "footer_cta": {
       "line_1": "Tired of talking about metrics?",

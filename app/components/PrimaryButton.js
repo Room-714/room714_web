@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 
 export default function PrimaryButton({
@@ -5,41 +6,47 @@ export default function PrimaryButton({
   onClick,
   className = "",
   icon: Icon = ChevronRight,
-  isRed = false, // Nueva prop para determinar el estilo
+  isRed = false,
+  href = null, // Valor por defecto null para que sea opcional
+  type = "button", // Útil para formularios
 }) {
-  return (
-    <button
-      onClick={onClick}
-      className={`
-        group flex items-center
-        border-2 rounded-full 
-        px-4 py-2 w-fit
-        transition-all active:scale-95
-        cursor-pointer
-        ${
-          isRed
-            ? "bg-red-600 border-red-600 hover:bg-red-700"
-            : "bg-white border-black hover:bg-gray-50"
-        }
-        ${className}
-      `}
-    >
+  // Estilos base compartidos
+  const sharedClasses = `
+    group flex items-center
+    border-2 rounded-full 
+    px-4 py-2 w-fit
+    transition-all active:scale-95
+    cursor-pointer
+    ${isRed ? "bg-red-600 border-red-600 hover:bg-red-700" : "bg-white border-black hover:bg-gray-50"}
+    ${className}
+  `;
+
+  // El contenido interno del botón
+  const ButtonInner = (
+    <>
       <span
-        className={`
-        font-title mr-4 text-base font-black uppercase tracking-tighter
-        ${isRed ? "text-white" : "text-red-500"}
-      `}
+        className={`font-title mr-4 text-base font-black uppercase tracking-tighter ${isRed ? "text-white" : "text-red-500"}`}
       >
         {text}
       </span>
-
-      <div
-        className={`
-        flex items-center justify-center transition-transform duration-300 ease-in-out text-black group-hover:translate-x-2 shrink-0"
-      `}
-      >
+      <div className="flex items-center justify-center transition-transform duration-300 ease-in-out text-black group-hover:translate-x-2 shrink-0">
         <Icon size={24} strokeWidth={2.5} />
       </div>
+    </>
+  );
+
+  // LÓGICA: Si hay href, renderiza un Link. Si no, un botón con onClick.
+  if (href) {
+    return (
+      <Link href={href} className={sharedClasses}>
+        {ButtonInner}
+      </Link>
+    );
+  }
+
+  return (
+    <button type={type} onClick={onClick} className={sharedClasses}>
+      {ButtonInner}
     </button>
   );
 }

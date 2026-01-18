@@ -1,85 +1,102 @@
 import { getDictionary } from "@/app/dictionaries";
 import Image from "next/image";
-import { Quote } from "lucide-react";
 import Navbar from "@/app/components/Navbar";
 import RulesSlider from "@/app/components/RulesSlider";
+import { getRules } from "@/app/data/Rules";
 
 export default async function AboutPage({ params }) {
   const { lang } = await params;
   const dict = await getDictionary(lang);
-
-  // Datos para las "Rules" (idealmente en tu diccionario)
-  const rules = [
-    {
-      id: "01",
-      title: dict.about.rules.rule_1.title,
-      description: dict.about.rules.rule_1.description,
-    },
-    {
-      id: "02",
-      title: dict.about.rules.rule_2.title,
-      description: dict.about.rules.rule_2.description,
-    },
-    {
-      id: "03",
-      title: dict.about.rules.rule_3.title,
-      description: dict.about.rules.rule_3.description,
-    },
-  ];
+  const rules = getRules(dict);
 
   return (
-    <>
+    <div className="bg-red-700 flex flex-col">
+      {/* Este fondo "empujará" hasta el footer */}
       <Navbar dict={dict} isDark={false} />
-
       <main className="flex flex-col items-center overflow-x-hidden">
         {/* Sección Hero / Intro */}
-        <section className="px-6 py-12 flex flex-col items-center text-center max-w-2xl">
-          <div className="relative w-48 h-64 mb-8">
+        <section className="w-full px-2 py-24 bg-white flex flex-col items-center text-center">
+          {/* Contenedor principal de los elementos del hero */}
+          <div className="w-full flex items-center justify-center gap-1 pr-4">
+            <h1 className="font-body font-extrabold text-6xl md:text-7xl lg:text-9xl leading-tight text-black">
+              {dict.about.title}
+            </h1>
+            {/* Contenedor de la imagen/flecha */}
+            <div className="relative w-20 h-30 md:w-24 md:h-36 lg:w-32 lg:h-48 mt-4">
+              <Image
+                src="/about/curve-arrow.svg"
+                alt="Room 714 arrow"
+                fill
+                className="object-contain"
+                priority // Añadimos priority al ser parte del Hero
+              />
+            </div>
+          </div>
+          {/* El texto del diccionario */}
+          <div className="w-[60%] ml-auto">
+            <p className="font-hand text-center text-lg md:text-2xl lg:text-4xl leading-tight text-black mt-4 px-2">
+              Room <span className="text-red-500">714</span>.{" "}
+              {dict.about.hero_text}
+            </p>
+          </div>
+        </section>
+        {/* Sección Cita */}
+        <section className="px-2 py-10 bg-white flex flex-col items-center text-center w-full">
+          <h2 className="font-body font-black text-xl md:text-3xl leading-tight">
+            {dict.about.quotes_line1}
+          </h2>
+          <h2 className="font-hand text-2xl md:text-4xl leading-tight">
+            {dict.about.quotes_line2}
+          </h2>
+          <div className="relative w-[80%] md:w-[60%] h-6 md:h-8">
             <Image
-              src="/about.svg"
-              alt="Room 714 Door"
+              src="/about/line.svg"
+              alt="line decoration"
               fill
               className="object-contain"
             />
           </div>
-          <p className="font-body text-lg md:text-xl leading-6 text-black">
-            {dict.about.hero_text}
-          </p>
         </section>
-
-        {/* Sección Cita */}
-        <section className="px-6 py-24 flex flex-col items-center text-center relative max-w-4xl mx-auto">
-          {/* Icono de apertura */}
-          <Quote
-            className="text-red-600 absolute top-6 md:top-0 left-0 md:-left-8 rotate-180"
-            size={60}
-            strokeWidth={1.5}
-            fill="currentColor"
-          />
-
-          <h2 className="font-title text-4xl md:text-6xl leading-tight px-4 z-10">
-            {dict.about.quotes}
-          </h2>
-
-          {/* Icono de cierre (rotado 180 grados) */}
-          <Quote
-            className="text-red-600 absolute bottom-6 md:bottom-0 right-0 md:-right-8"
-            size={60}
-            strokeWidth={1.5}
-            fill="currentColor"
-          />
-        </section>
-
         {/* Sección Oscura: The Rules */}
-        <section className="w-full min-h-200 bg-black rounded-t-[50px] mt-4 py-16 flex flex-col items-center">
-          <h3 className="font-title text-white font-black text-3xl md:text-5xl mb-6 text-center px-6">
-            {dict.about.rules.title_line1} <br /> {dict.about.rules.title_line2}
+        <section className="w-full bg-red-700 mt-4 py-16 flex flex-col items-center gap-2">
+          <h3 className="font-body text-white font-black text-2xl md:text-4xl text-center px-6">
+            {dict.about.rules.title_line1}
           </h3>
+          {/* Contenedor relativo para centrar sus hijos */}
+          <div className="relative flex mb-4 items-center justify-center">
+            {/* El texto va primero o después, pero con z-index alto */}
+            <h3 className="relative z-20 font-hand text-white text-4xl md:text-5xl text-center px-12">
+              {dict.about.rules.title_line2}
+            </h3>
+            {/* El círculo se posiciona absoluto para "flotar" detrás del texto */}
+            <div className="absolute inset-0 z-10 flex items-center justify-center">
+              <div className="relative w-[80%] md:max-w-100 h-20 md:h-32">
+                <Image
+                  src="/about/circle.svg"
+                  alt="line decoration"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+            </div>
+          </div>
 
           {/* Slider de Tarjetas */}
           <RulesSlider rules={rules} />
         </section>
       </main>
-    </>
+      <section className="w-full bg-red-700">
+        <div className="w-[60%] ml-auto leading-0 flex">
+          <Image
+            src="/skyline.svg"
+            alt="City Skyline"
+            width={1920}
+            height={400}
+            className="w-full h-auto block -mb-1 md:-mb-3 lg:-mb-5"
+            priority
+          />
+        </div>
+      </section>
+    </div>
   );
 }

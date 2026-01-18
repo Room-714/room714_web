@@ -131,25 +131,11 @@ export default async function RootLayout({ children, params }) {
         `}
       </Script>
 
-      <body
-        className="bg-white text-black font-body antialiased"
-        suppressHydrationWarning={true}
-      >
+      <body className="font-body antialiased" suppressHydrationWarning={true}>
         <main>{children}</main>
         {/* Footer completo */}
-        <footer className="w-full bg-white -mt-1">
-          {/* 1. Contenedor del Skyline: Proporcional y siempre visible */}
-          <div className="w-[80%] ml-auto">
-            <Image
-              src="/footer.svg"
-              alt="City Skyline"
-              width={1920} // Proporción original
-              height={400} // Proporción original
-              className="w-full h-auto block" // h-auto garantiza que no haya distorsión
-              priority
-            />
-          </div>
-          <div className="max-full -mt-1 flex flex-col bg-black md:flex-row md:justify-between items-start md:items-center px-2 py-10">
+        <footer className="w-full">
+          <div className="max-full flex flex-col bg-[#1A1A1A] md:flex-row md:justify-between items-start md:items-center px-2 py-10">
             {/* LADO IZQUIERDO: Personaje y frase */}
             <div className="flex flex-col items-center pl-2 gap-2 mb-6 md:mb-0">
               <span className="font-hand text-center text-base md:text-xl lg:text-2xl mb-2 text-white">
@@ -221,7 +207,7 @@ export default async function RootLayout({ children, params }) {
           </div>
 
           {/* COPYRIGHT */}
-          <div className="pb-8 bg-black text-center text-xs text-white">
+          <div className="pb-8 bg-[#1A1A1A] text-center text-xs text-white">
             {dict.footer.copyright}
           </div>
         </footer>

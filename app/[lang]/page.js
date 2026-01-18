@@ -5,11 +5,12 @@ import { Phone } from "lucide-react";
 import ServiceCard from "@/app/components/ServiceCard";
 import PrimaryButton from "@/app/components/PrimaryButton";
 import Navbar from "@/app/components/Navbar";
-import SERVICES from "@/app/data/Services";
+import { getServicesData } from "@/app/data/Services";
 
 export default async function Home({ params }) {
   const { lang } = await params;
   const dict = await getDictionary(lang);
+  const services = getServicesData(dict);
 
   return (
     <div className="flex flex-col bg-black">
@@ -45,7 +46,10 @@ export default async function Home({ params }) {
           {dict.home.hero.description}
         </p>
 
-        <PrimaryButton text={dict.home.buttons.discover} />
+        <PrimaryButton
+          text={dict.home.buttons.discover}
+          href={`/${lang}/about`}
+        />
 
         <div
           className="relative transition-all duration-300
@@ -72,9 +76,7 @@ export default async function Home({ params }) {
             </h2>
           </div>
           {/* Dynamic mapping of Service Cards */}
-          {SERVICES.map((service, index) => {
-            const translation = dict.home.services[service.id];
-            if (!translation) return null;
+          {services.map((service, index) => {
             return (
               <div
                 key={service.id}
@@ -83,10 +85,9 @@ export default async function Home({ params }) {
               >
                 <ServiceCard
                   number={service.number}
-                  icon={service.icon}
                   image={service.image}
-                  title={translation.title}
-                  description={translation.description}
+                  title={service.title}
+                  description={service.description}
                 />
               </div>
             );
@@ -98,7 +99,7 @@ export default async function Home({ params }) {
       <section className="bg-white rounded-t-[50px] -mt-50px px-2 py-10 flex flex-col items-center text-center z-50">
         <div className="mb-8 p-4">
           <Image
-            src="/clients-image.svg"
+            src="/clients-hero.svg"
             alt="Clients"
             width={280}
             height={280}
@@ -137,7 +138,7 @@ export default async function Home({ params }) {
                     {/* Altura aumentada de h-20 (80px) a h-[100px] para ese +25% */}
                     <div className="relative w-full h-25 transition-all duration-500 transform hover:scale-110">
                       <Image
-                        src={`/client-0${num}.svg`}
+                        src={`/clients/client-0${num}.svg`}
                         alt={`Client-0${num}`}
                         fill
                         className="object-contain"
@@ -152,7 +153,25 @@ export default async function Home({ params }) {
         </div>
 
         <div className="w-2/3 mb-10 flex justify-center">
-          <PrimaryButton text="contact us" icon={Phone} />
+          <PrimaryButton
+            text="contact us"
+            icon={Phone}
+            href={`/${lang}/contact`}
+          />
+        </div>
+      </section>
+
+      {/* 1. Contenedor del Skyline: Proporcional y siempre visible */}
+      <section className="w-full bg-white">
+        <div className="w-[60%] ml-auto leading-0 flex">
+          <Image
+            src="/skyline.svg"
+            alt="City Skyline"
+            width={1920}
+            height={400}
+            className="w-full h-auto block -mb-1 md:-mb-3 lg:-mb-5"
+            priority
+          />
         </div>
       </section>
     </div>
