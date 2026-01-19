@@ -117,7 +117,7 @@ export default async function Home({ params }) {
           {dict.home.customers.title.line2}
         </h2>
 
-        <p className="font-body text-xl px-4 lg:text-4xl lg:leading-9 lg:px-30 text-black mb-10">
+        <p className="font-body text-xl px-4 lg:text-4xl leading relaxed lg:px-30 text-black mb-10">
           {dict.home.customers.description}
         </p>
 
