@@ -48,10 +48,14 @@
     "title": "¡Hablemos!",
     "interested": {
       "question": "Me interesa",
-      "interest_1": "un producto desde cero",
-      "interest_2": "rediseño UX/UI",
-      "interest_3": "estrategia de producto",
-      "interest_4": "desarrollo software"
+      "interest_1": "Crear un producto desde cero",
+      "interest_2": "Rediseño UX/UI",
+      "interest_3": "Estrategia de Producto",
+      "interest_4": "Modernizar un sistema legado",
+      "interest_5": "Auditoría de CX / Research",
+      "interest_6": "Desarrollo de software a medida",
+      "interest_7": "Rediseñar un Dashboard / SaaS",
+      "interest_8": "Integración de IA Generativa"
     },
     "name": {
       "title": "¿Cómo te llamas?",

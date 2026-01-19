@@ -41,11 +41,11 @@ export default async function AboutPage({ params }) {
           </div>
         </section>
         {/* Sección Cita */}
-        <section className="px-2 py-10 bg-white flex flex-col items-center text-center w-full">
-          <h2 className="font-body font-black text-xl md:text-3xl leading-tight">
+        <section className="px-2 pt-10 pb-20 bg-white flex flex-col items-center text-center w-full">
+          <h2 className="font-body font-black text-xl md:text-3xl lg:text-5xl leading-tight">
             {dict.about.quotes_line1}
           </h2>
-          <h2 className="font-hand text-2xl md:text-4xl leading-tight">
+          <h2 className="font-hand text-2xl md:text-4xl lg:text-6xl leading-tight">
             {dict.about.quotes_line2}
           </h2>
           <div className="relative w-[80%] md:w-[60%] lg:w-[40%] h-6 md:h-8">

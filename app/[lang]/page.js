@@ -20,7 +20,7 @@ export default async function Home({ params }) {
       <Navbar dict={dict} isDark={false} />
 
       {/* Hero Section */}
-      <section className="px-10 bg-white text-center flex flex-col lg:flex-row items-center z-10">
+      <section className="bg-white text-center flex flex-col lg:flex-row items-center z-10">
         <div className="flex pb-10 justify-center w-full">
           <div
             className="relative transition-all duration-300

@@ -19,10 +19,10 @@ export default function ProjectCard({ project, isOpen, onClick, dict }) {
 
       <div className="py-4 px-6">
         {/* CABECERA: Título Horizontal */}
-        <div className="flex justify-start items-center">
-          <div className="flex justify-center items-start gap-4">
+        <div className="flex justify-between items-center">
+          <div className="flex justify-start items-start gap-4">
             <span
-              className={`font-black font-hand text-lg md:text-2xl lg:text-4xl ${isOpen ? "text-red-600 pt-2" : "text-gray-400"}`}
+              className={`font-black font-hand text-lg md:text-2xl lg:text-4xl ${isOpen ? "text-red-500 pt-2" : "text-gray-400"}`}
             >
               {project.id}
             </span>
@@ -38,7 +38,7 @@ export default function ProjectCard({ project, isOpen, onClick, dict }) {
           >
             <ChevronDown
               size={24}
-              className={isOpen ? "text-red-600" : "text-gray-400"}
+              className={isOpen ? "text-red-500" : "text-gray-400"}
             />
           </div>
         </div>
@@ -62,7 +62,7 @@ export default function ProjectCard({ project, isOpen, onClick, dict }) {
               {/* TEXTOS */}
               <div className="flex-1 space-y-4 mt-6">
                 <div>
-                  <p className="font-hand text-xl md:text-2xl lg:text-3xl font-black text-red-600 mb-1">
+                  <p className="font-hand text-xl md:text-2xl lg:text-3xl font-black text-red-500 mb-1">
                     {dict.projects.subtitle_challenge}
                   </p>
                   <p className="text-gray-700 text-base leading-5 md:text-lg md:leading-6 lg:text-2xl lg:leading-8">
@@ -71,7 +71,7 @@ export default function ProjectCard({ project, isOpen, onClick, dict }) {
                 </div>
 
                 <div>
-                  <p className="font-hand text-xl md:text-2xl lg:text-3xl font-black text-red-600 mb-1">
+                  <p className="font-hand text-xl md:text-2xl lg:text-3xl font-black text-red-500 mb-1">
                     {dict.projects.subtitle_solution}
                   </p>
                   <p className="text-gray-900 text-base leading-5 md:text-lg md:leading-6 lg:text-2xl lg:leading-8">
@@ -80,7 +80,7 @@ export default function ProjectCard({ project, isOpen, onClick, dict }) {
                 </div>
 
                 <div>
-                  <p className="font-hand text-xl md:text-2xl lg:text-3xl font-black text-red-600 mb-1">
+                  <p className="font-hand text-xl md:text-2xl lg:text-3xl font-black text-red-500 mb-1">
                     {dict.projects.subtitle_results}
                   </p>
                   <p className="text-gray-900 text-base leading-5 md:text-lg md:leading-6 lg:text-2xl lg:leading-8">

@@ -48,10 +48,14 @@
     "title": "Let's talk!",
     "interested": {
       "question": "I'm interested in",
-      "interest_1": "a product from scratch",
-      "interest_2": "UX/UI redesign",
-      "interest_3": "product strategy",
-      "interest_4": "technical development"
+      "interest_1": "Building a product from scratch",
+      "interest_2": "UX/UI Redesign",
+      "interest_3": "Product Strategy",
+      "interest_4": "Modernising a legacy system",
+      "interest_5": "CX Audit & Research",
+      "interest_6": "Custom Software Development",
+      "interest_7": "SaaS or Dashboard Redesign",
+      "interest_8": "Generative AI Integration"
     },
     "name": {
       "title": "Your name",
