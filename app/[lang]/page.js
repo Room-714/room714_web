@@ -11,6 +11,8 @@ export default async function Home({ params }) {
   const { lang } = await params;
   const dict = await getDictionary(lang);
   const services = getServicesData(dict);
+  const BLOB_URL =
+    "https://tzhsvjcv6h2qp8xy.public.blob.vercel-storage.com/Animacion%20ejemplo.mp4";
 
   return (
     <div className="flex flex-col bg-black">
@@ -18,51 +20,51 @@ export default async function Home({ params }) {
       <Navbar dict={dict} isDark={false} />
 
       {/* Hero Section */}
-      <section className="py-12 bg-white text-center flex flex-col items-center z-10">
-        <div className="mt-8 mb-16 p-4 md:p-12 lg:p-24 flex justify-center w-full">
+      <section className="p-8 bg-white text-center flex flex-col lg:flex-row items-center z-10">
+        <div className="mt-8 flex justify-center w-full">
           <div
             className="relative transition-all duration-300
-                  w-[50%] max-w-40
-                  md:w-[30%] md:max-w-55
-                  lg:w-[25%] lg:max-w-75
-                  aspect-120/150"
+                 w-full 
+                 max-w-200
+                 aspect-square
+                 overflow-hidden"
           >
-            <Image
-              src="/hero.svg"
-              alt="Discovery"
-              fill
-              priority
-              className="object-contain"
-              sizes="(max-width: 768px) 160px, (max-width: 1200px) 220px, 300px"
-            />
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="auto"
+              className="w-full h-full object-contain"
+            >
+              <source src={BLOB_URL} type="video/mp4" />
+            </video>
           </div>
         </div>
 
-        <h1 className="font-body font-bold text-4xl md:text-5xl lg:text-6xl mb-16">
-          {dict.home.hero.title}
-        </h1>
+        <div className="mt-8 px-4 md:px-12 flex flex-col justify-center items-center w-full">
+          <p className="font-hand font-black text-red-500 text-3xl md:text-4xl lg:text-6xl mb-8 lg:mb-16 px-4 md:px-8 lg:px-24">
+            {dict.home.hero.title}
+          </p>
+          <p className="font-body text-xl md:text-2xl lg:text-3xl mb-8 lg:mb-16 px-4 md:px-8 lg:px-24">
+            {dict.home.hero.description}
+          </p>
+          <PrimaryButton
+            text={dict.home.buttons.discover}
+            href={`/${lang}/about`}
+          />
+        </div>
+      </section>
 
-        <p className="font-body text-xl md:text-2xl lg:text-3xl mb-8 px-4 md:px-8 lg:px-30">
-          {dict.home.hero.description}
-        </p>
-
-        <PrimaryButton
-          text={dict.home.buttons.discover}
-          href={`/${lang}/about`}
-        />
-
-        <div
-          className="relative transition-all duration-300
-                  min-w-15    /* Pero que nunca baje de 60px */
-                  md:min-w-25 /* En Tablet no pasa de 100px */
-                  lg:min-w-40 /* En PC tiene más aire hasta 140px */"
-        >
+      {/* Contenedor de la flecha con tamaño basado en Tailwind */}
+      <section className="pb-12 bg-white text-center flex flex-col items-center z-10 w-full">
+        <div className="transition-all duration-300">
           <Image
             src="/arrow.svg"
             alt="Arrow pointing down"
-            width={120}
-            height={150}
-            className="h-auto w-full"
+            width={120} // El ancho base del SVG
+            height={150} // El alto base del SVG
+            className="h-auto w-full priority animate-bounce"
           />
         </div>
       </section>

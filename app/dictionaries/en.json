@@ -6,8 +6,8 @@
   },
   "home": {
     "hero": {
-      "title": "discovery",
-      "description": "We design and build digital products that actually work. No fluff, no buzzwords: just experience engineering and technical execution to drive real business growth."
+      "title": "We design and build digital products that actually work",
+      "description": "No fluff, no buzzwords: just experience engineering and technical execution to drive real business growth."
     },
     "services": {
       "title": "So... what the f*** do you guys actually do?",
@@ -151,7 +151,7 @@
     }
   },
   "footer": {
-    "we_are": "Room 714",
+    "we_are": "We are heeeere...",
     "legal": "Legal",
     "terms": "Terms & Conditions",
     "privacy": "Privacy Policy",

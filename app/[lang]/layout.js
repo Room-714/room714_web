@@ -165,7 +165,7 @@ export default async function RootLayout({ children, params }) {
               </div>
 
               {/* Links Grid */}
-              <div className="w-[80%] grid grid-cols-2 md:w-full lg:grid-cols-3 justify-items-end gap-y-2 gap-x-8 text-sm md:text-base font-light text-white">
+              <div className="w-[80%] grid grid-cols-2 md:w-full lg:grid-cols-3 justify-items-end gap-y-2 md:gap-y-4 lg:gap-y-8 gap-x-4 md:gap-x-16 text-xs md:text-lg lg:text-2xl font-light text-white">
                 <Link
                   href="/legal"
                   className="hover:text-white transition-colors"
@@ -207,7 +207,7 @@ export default async function RootLayout({ children, params }) {
           </div>
 
           {/* COPYRIGHT */}
-          <div className="pb-8 bg-[#1A1A1A] text-center text-xs text-white">
+          <div className="py-8 bg-[#1A1A1A] text-center text-xs md:text-base lg:text-lg text-white">
             © {new Date().getFullYear()} {dict.footer.copyright}
           </div>
         </footer>
