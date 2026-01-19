@@ -154,7 +154,7 @@ export default async function Home({ params }) {
 
         <div className="w-2/3 mb-10 flex justify-center">
           <PrimaryButton
-            text="contact us"
+            text={dict.home.buttons.clients}
             icon={Phone}
             href={`/${lang}/contact`}
           />

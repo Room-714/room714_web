@@ -7,29 +7,29 @@
   "home": {
     "hero": {
       "title": "discovery",
-      "description": "Utilizamos una metodología UX rigurosa y experiencia técnica para construir productos digitales escalables y de alto rendimiento que cumplen con las demandas del mercado y superan los objetivos de negocio."
+      "description": "Diseñamos y construimos productos digitales que funcionan. Sin palabras vacías: solo ingeniería de experiencia y ejecución técnica para que tu negocio crezca de verdad."
     },
     "services": {
       "title": "Vale, pero... ¿qué c*** hacéis vosotros exactamente?",
       "num_1": {
         "title": "Diseño UX & UI",
-        "description": "Simplificamos plataformas complejas mediante diseño inteligente y principios de interacción para crear interfaces intuitivas y centradas en el usuario que impulsan la adopción."
+        "description": "Matamos la complejidad. Creamos interfaces tan intuitivas que tus usuarios no necesitarán manual de instrucciones, solo ganas de usar tu producto."
       },
       "num_2": {
         "title": "Product Management",
-        "description": "Alineamos la estrategia de producto con los objetivos de negocio, gestionando todo el ciclo de vida: desde la ideación y priorización de funciones hasta el lanzamiento al mercado y su iteración."
+        "description": "Priorizamos lo que importa. Alineamos tu estrategia con objetivos reales, gestionando el producto desde la idea hasta que está en manos del cliente."
       },
       "num_3": {
         "title": "CX Research & Auditoría",
-        "description": "Realizamos investigaciones profundas de clientes y auditorías de experiencia integrales para detectar puntos de fricción y descubrir oportunidades de mejora de alto impacto."
+        "description": "Encontramos dónde estás perdiendo dinero. Analizamos el comportamiento de tus clientes para eliminar fricciones y abrir nuevas oportunidades de impacto."
       },
       "num_4": {
         "title": "Transformación Digital",
-        "description": "Colaboramos con el liderazgo para definir hojas de ruta, modernizar sistemas heredados e implementar los cambios culturales y técnicos necesarios para el crecimiento digital a largo plazo."
+        "description": "Modernizamos tu empresa de arriba a abajo. Desde sistemas antiguos hasta la cultura interna, preparamos tu estructura para el mundo digital."
       },
       "num_5": {
         "title": "Software Development",
-        "description": "Construimos soluciones escalables de alto rendimiento, tanto en back-end como en front-end, garantizando la integridad técnica y la vigencia futura del producto digital."
+        "description": "Código limpio y escalable. Construimos soluciones robustas (back y front) que no se rompen cuando tu negocio empieza a crecer rápido."
       }
     },
     "customers": {
@@ -37,23 +37,24 @@
         "line1": "Pero...",
         "line2": "¿os contrata alguien?"
       },
-      "description": "Sorprendentemente, recibimos llamadas de empresas de varios sectores, aunque solemos estar más cerca de las industrias de Telco e IT... la verdad es que nadie está libre de pecado cuando hablamos de experiencia de cliente."
+      "description": "Sorprendentemente, sí. Trabajamos con líderes en Telco e IT, pero la verdad es que nadie está libre de pecado cuando hablamos de experiencia de cliente. Si tienes un problema digital, somos tu equipo."
     },
     "buttons": {
-      "discover": "descubrir más"
+      "discover": "descubrir más",
+      "clients": "contactar"
     }
   },
   "contact": {
     "title": "¡Hablemos!",
     "interested": {
       "question": "Me interesa",
-      "interest_1": "sitio desde cero",
-      "interest_2": "diseño UX/UI",
-      "interest_3": "diseño de producto",
-      "interest_4": "desarrollo móvil"
+      "interest_1": "un producto desde cero",
+      "interest_2": "rediseño UX/UI",
+      "interest_3": "estrategia de producto",
+      "interest_4": "desarrollo software"
     },
     "name": {
-      "title": "Cómo te llamas",
+      "title": "¿Cómo te llamas?",
       "placeholder": "escribe tu nombre aquí"
     },
     "info": {
@@ -62,91 +63,91 @@
     },
     "message": {
       "title": "Cuéntanos cómo podemos ayudarte",
-      "placeholder": "¡dinos!"
+      "placeholder": "¿enq ué líos andáis metidos?"
     },
     "success": {
       "title": "¡Hecho!",
-      "description": "Gracias por contactar con nosotros.",
+      "description": "En breve nos ponemos en contacto contigo",
       "link": "Volver al inicio"
     },
     "buttons": {
-      "send": "Contactar"
+      "send": "contactar"
     }
   },
   "about": {
-    "title": "somos",
-    "hero_text": "Sinergizamos diversas especialidades para entregar productos digitales de éxito, impulsados por una estrategia genuina de 'el cliente primero' y un enfoque de CX holístico.",
-    "quotes_line1": "Convertimos los objetivos estratégicos en",
-    "quotes_line2": "realidades listas para el mercado",
+    "title": "quiénes somos",
+    "hero_text": "No somos una agencia al uso. Somos un equipo de especialistas obsesionados con entregar productos digitales que impactan en la cuenta de resultados, no solo en la estética.",
+    "quotes_line1": "Convertimos objetivos estratégicos en",
+    "quotes_line2": "realidades listas para vender",
     "rules": {
-      "title_line1": "las reglas que",
-      "title_line2": "seguimos",
+      "title_line1": "Seguimos estas",
+      "title_line2": "reglas",
       "rule_1": {
-        "title": "Partnership Riguroso",
-        "description_line1": "No somos proveedores; somos una extensión integrada de tu equipo.",
-        "description_line2": "Nos comprometemos con la total transparencia, la responsabilidad y el rigor ético en cada fase del ciclo de vida del proyecto. Nuestro éxito se mide por el impacto sostenido a largo plazo que creamos en tu organización."
+        "title": "Partnership Real",
+        "description_line1": "Olvídate de la relación cliente-proveedor fría. Somos parte de tu equipo.",
+        "description_line2": "Trabajamos con total transparencia y honestidad. Si algo no va a funcionar, te lo diremos. Nos va la marcha y nos comprometemos con tu éxito a largo plazo."
       },
       "rule_2": {
-        "title": "Diseño Orientado a Resultados",
-        "description_line1": "Nuestra experiencia se dirige siempre a lograr métricas de negocio cuantificables: crecimiento, eficiencia y retención.",
-        "description_line2": "Vamos más allá de la estética para aplicar principios de diseño inteligente e investigación validada que se traducen directamente en valor comercial y ventaja competitiva."
+        "title": "Diseño para el Negocio",
+        "description_line1": "Lo bonito está bien, pero lo que factura está mejor.",
+        "description_line2": "Cada decisión de diseño que tomamos busca una métrica: más conversión, más retención o menos costes operativos. Si no aporta valor, no se hace."
       },
       "rule_3": {
-        "title": "Simplicidad Metodológica",
-        "description_line1": "Nos apasiona resolver los retos digitales más complejos, manteniendo un enfoque estricto en ofrecer experiencias sin fricciones.",
-        "description_line2": "Simplificamos procesos difíciles, asegurando que la complejidad técnica se gestione internamente para que el producto final sea intuitivo, accesible y fácil de escalar para tus usuarios."
+        "title": "Simplicidad ante todo",
+        "description_line1": "Resolvemos marrones complejos con soluciones sencillas.",
+        "description_line2": "Gestionamos la complejidad técnica por dentro para que, por fuera, tu producto sea tan fácil de usar que parezca magia. Escalable, accesible y sin fricciones."
       }
     }
   },
   "projects": {
     "title_1": "El trabajo.",
     "title_2": "Sin adornos.",
-    "description": "Transformando la complejidad en éxito comercial.",
+    "description": "Transformando la complejidad en éxito.",
     "subtitle_challenge": "El reto",
     "subtitle_solution": "La idea",
     "subtitle_results": "El resultado",
     "case_study_01": {
-      "title": "Éxito en Operaciones de Telecomunicaciones",
-      "challenge": "Elevada fricción en la activación de paquetes convergentes complejos, lo que generaba bajas tasas de adopción y un aumento en las llamadas a soporte.",
-      "idea": "Rediseño integral del flujo digital de compra y activación (CX), implementando una arquitectura modular y APIs de activación de servicio en tiempo real.",
-      "outcome": "Incremento del 45% en las tasas de activación de paquetes convergentes y un aumento del 12% en el ARPU (ingresos medios por usuario)."
+      "title": "Telecoms: Optimización del Flujo de Activación",
+      "challenge": "La complejidad técnica en la activación de paquetes convergentes creaba una barrera insalvable para los clientes. El proceso era tan confuso que la mayoría abandonaba a mitad del registro, saturando el centro de atención al cliente con llamadas de soporte técnico.",
+      "idea": "Rediseñamos la experiencia de compra y activación (CX) eliminando pasos innecesarios. Implementamos una arquitectura modular conectada a APIs en tiempo real que validan la provisión del servicio al instante, permitiendo al usuario completar el proceso sin ayuda externa.",
+      "outcome": "Logramos un incremento del 45% en las activaciones completadas con éxito y un aumento del 12% en el ARPU (ingresos medios por usuario) al facilitar la contratación de servicios adicionales."
     },
     "case_study_02": {
-      "title": "Éxito en Gestión de Patrimonios",
-      "challenge": "Una gestora de fondos privados necesitaba migrar la contratación de fondos de un sistema manual basado en papel a un flujo de onboarding 100% digital y fluido.",
-      "idea": "Transformación digital estratégica integrando e-KYC y firma digital avanzada para una experiencia de cliente sin fricciones y plenamente regulada.",
-      "outcome": "Reducción del 95% en el tiempo de activación de cuentas (ahora en menos de 48 horas) y un aumento del 41% en las tasas de finalización del onboarding digital."
+      "title": "Wealth Management: Onboarding Digital de Alta Confianza",
+      "challenge": "Una gestora de fondos de inversión operaba mediante procesos analógicos basados en papel y firmas físicas. Esto dilataba el alta de nuevos clientes durante semanas, provocando una alta tasa de abandono en perfiles de alto valor que buscaban agilidad.",
+      "idea": "Ejecutamos una transformación digital integral del proceso de contratación. Integramos biometría (e-KYC) y sistemas de firma digital avanzada para crear un flujo 100% online, seguro y legalmente robusto que permite abrir una cuenta en cuestión de minutos.",
+      "outcome": "Redujimos el tiempo de activación de cuentas en un 95% (pasando de semanas a menos de 48h) y aumentamos en un 41% la tasa de finalización del proceso de onboarding."
     },
     "case_study_03": {
-      "title": "Éxito en Eficiencia Tech & SaaS",
-      "challenge": "Dashboards de administración de servicios excesivamente complejos que causaban altas tasas de errores operativos críticos e ineficiencia del personal debido a la sobrecarga de datos.",
-      "idea": "Rediseño integral de UX/UI integrando una capa de IA Generativa para resumir datos complejos al instante, convirtiendo métricas en tiempo real en insights accionables y comandos simplificados.",
-      "outcome": "Reducción del 38% en errores críticos de provisión de servicios y un ahorro del 25% en el tiempo medio necesario para resolver incidencias de nivel 1."
+      "title": "SaaS: Inteligencia Artificial vs. Sobrecarga de Datos",
+      "challenge": "Los administradores de sistemas se enfrentaban a dashboards saturados de información difícil de interpretar. Esta sobrecarga cognitiva provocaba errores críticos en la gestión de servicios y una respuesta lenta ante incidentes graves.",
+      "idea": "Rediseñamos la interfaz UX/UI e implementamos una capa de IA Generativa. En lugar de mostrar datos brutos, el sistema ahora resume métricas complejas en lenguaje natural, proporcionando 'insights' accionables y comandos simplificados para resolver problemas al instante.",
+      "outcome": "Disminuimos en un 38% los errores operativos críticos y ahorramos un 25% del tiempo que los equipos internos dedicaban a resolver incidencias de nivel 1."
     },
     "case_study_04": {
-      "title": "App de Gestión Fiscal y Contable",
-      "challenge": "Comunicación con alta fricción e intercambio fragmentado de documentos entre empresas y contables, provocando retrasos en las presentaciones y una alta carga operativa.",
-      "idea": "Un ecosistema digital colaborativo con una interfaz dual, automatizando la ingesta de datos y creando una fuente única de verdad compartida para el cumplimiento fiscal en tiempo real.",
-      "outcome": "Reducción del 40% en el intercambio de documentos y una mejora del 30% en la eficiencia de los tiempos de presentación para pymes y despachos contables."
+      "title": "Fintech: Ecosistema de Gestión Fiscal Colaborativo",
+      "challenge": "La comunicación entre empresas y asesores fiscales era un caos de emails, llamadas y documentos perdidos. Esta fragmentación generaba retrasos en las presentaciones de impuestos y un coste operativo altísimo para ambas partes.",
+      "idea": "Creamos un ecosistema digital con una interfaz dual (empresa-contable). Implementamos una 'fuente única de verdad' que automatiza la ingesta de facturas y sincroniza los estados fiscales en tiempo real, garantizando que todos trabajen sobre la misma información.",
+      "outcome": "Redujimos el intercambio de documentos innecesarios en un 40% y mejoramos la eficiencia en los tiempos de presentación fiscal en un 30%."
     },
     "case_study_05": {
-      "title": "App Premium de Protección",
-      "challenge": "Perfiles de alto standing sufrían una monitorización fragmentada de sus activos globales, identidades digitales y comunicaciones privadas, careciendo de una visión de centro de mando unificada.",
-      "idea": "Una aplicación de seguridad premium que ofrece supervisión 360° en tiempo real de dispositivos, conexiones y documentos sensibles bajo una arquitectura zero-trust.",
-      "outcome": "Visibilidad del 100% de la huella digital y una respuesta un 60% más rápida ante potenciales amenazas de identidad o intentos de acceso no autorizados."
+      "title": "Cybersecurity: Protección 360° para Perfiles VIP",
+      "challenge": "Clientes de alto standing (HNWI) tenían su identidad y activos digitales dispersos en múltiples plataformas vulnerables. Carecían de un sistema unificado que les permitiera monitorizar su seguridad personal y la de sus documentos sensibles en tiempo real.",
+      "idea": "Desarrollamos una aplicación premium de seguridad bajo una arquitectura 'Zero-Trust'. El sistema funciona como un 'conserje digital' que supervisa constantemente dispositivos, conexiones de red y la integridad de documentos, alertando proactivamente ante cualquier amenaza.",
+      "outcome": "Conseguimos una visibilidad total de la huella digital del usuario y una velocidad de respuesta ante intentos de acceso no autorizados un 60% más rápida."
     },
     "case_study_06": {
-      "title": "Framework de Seguridad B2B",
-      "challenge": "Grandes corporaciones y organismos públicos requerían una postura de seguridad unificada que aprovechara la inteligencia de red de nivel operador y suites de seguridad de primer nivel.",
-      "idea": "Desarrollo de un framework de seguridad holístico que integra protección a nivel de red con una suite de servicios de alta gama, diseñado específicamente para infraestructuras críticas.",
-      "outcome": "Reducción del 55% en el tiempo de mitigación de incidentes y cumplimiento total de los estándares de seguridad soberana para grandes organizaciones públicas y privadas."
+      "title": "B2B: Framework de Seguridad para Infraestructuras Críticas",
+      "challenge": "Grandes corporaciones y organismos públicos necesitaban una capa de seguridad superior que aprovechara la capacidad de la red del operador. Las soluciones estándar de mercado no eran suficientes para proteger sus infraestructuras críticas.",
+      "idea": "Diseñamos un framework de seguridad holístico que integra la inteligencia de red (carrier-grade) con una suite de servicios de defensa de élite. Creamos un panel de control unificado para gestionar la seguridad perimetral y el cumplimiento normativo a gran escala.",
+      "outcome": "Redujimos el tiempo de mitigación de incidentes en un 55% y aseguramos el cumplimiento total de los estándares de seguridad soberana para grandes organizaciones."
     },
     "footer_cta": {
       "line_1": "¿Cansado de hablar de métricas?",
       "line_2": "Vamos a construirlas."
     },
     "buttons": {
-      "view_case_study": "Contactar"
+      "view_case_study": "contactar"
     }
   },
   "footer": {
@@ -157,6 +158,6 @@
     "cookies": "Política de Cookies",
     "linkedin": "LinkedIn",
     "blog": "Blog",
-    "copyright": "© Room 714. Todos los derechos reservados."
+    "copyright": "Room 714. Todos los derechos reservados."
   }
 }

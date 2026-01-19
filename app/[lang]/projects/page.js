@@ -43,8 +43,10 @@ export default async function ProjectsPage({ params }) {
               </div>
             </div>
           </div>
-
-          <p className="font-body text-2xl max-w-2xl text-white">
+          <p className="font-title font-black text-3xl lg:text-4xl text-white mb-2">
+            CXperiences
+          </p>
+          <p className="font-body text-2xl lg:text-3xl max-w-2xl text-white">
             {dict.projects.description}
           </p>
         </div>
@@ -57,10 +59,10 @@ export default async function ProjectsPage({ params }) {
 
       {/* Footer / CTA Final estilo "Tired of talking about metrics?" */}
       <section className="relative z-10 -mt-30 w-full bg-white rounded-t-[50px] p-10 lg:p-16 text-center text-black">
-        <h3 className="font-title font-black text-3xl md:text-5xl mb-4">
+        <h3 className="font-title font-black text-3xl md:text-5xl mb-6">
           {dict.projects.footer_cta.line_1}
         </h3>
-        <h3 className="font-hand text-4xl md:text-7xl mb-8">
+        <h3 className="font-hand text-4xl md:text-7xl mb-10">
           {dict.projects.footer_cta.line_2}
         </h3>
         <div className="flex justify-center">

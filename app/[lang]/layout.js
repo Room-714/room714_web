@@ -208,7 +208,7 @@ export default async function RootLayout({ children, params }) {
 
           {/* COPYRIGHT */}
           <div className="pb-8 bg-[#1A1A1A] text-center text-xs text-white">
-            {dict.footer.copyright}
+            © {new Date().getFullYear()} {dict.footer.copyright}
           </div>
         </footer>
       </body>

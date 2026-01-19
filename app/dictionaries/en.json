@@ -7,156 +7,157 @@
   "home": {
     "hero": {
       "title": "discovery",
-      "description": "We utilise rigorous UX methodology and technical expertise to build scalable, high-performance digital products that meet market demands and exceed business objectives."
+      "description": "We design and build digital products that actually work. No fluff, no buzzwords: just experience engineering and technical execution to drive real business growth."
     },
     "services": {
-      "title": "So what the f*** do you guys actually do?",
+      "title": "So... what the f*** do you guys actually do?",
       "num_1": {
-        "title": "UX & UI design",
-        "description": "We simplify complex platforms, leveraging intelligent design and interaction principles to create intuitive, user-centric interfaces that drive adoption."
+        "title": "UX & UI Design",
+        "description": "We kill complexity. We create interfaces so intuitive your users won’t need a manual—just a reason to use your product."
       },
       "num_2": {
-        "title": "CX Research & Audit",
-        "description": "We align product strategy with business goals, managing the entire lifecycle from ideation and feature prioritisation to market launch and iteration."
+        "title": "Product Management",
+        "description": "We prioritise what matters. We align your strategy with real goals, managing the product from the initial spark until it’s in the customer's hands."
       },
       "num_3": {
-        "title": "Product Management",
-        "description": "We conduct deep-dive customer research and comprehensive experience audits to pinpoint friction points and uncover high-impact opportunities for improvement."
+        "title": "CX Research & Audit",
+        "description": "We find where you're losing money. We analyse user behaviour to strip away friction and uncover high-impact growth opportunities."
       },
       "num_4": {
         "title": "Digital Transformation",
-        "description": "We partner with leadership to define roadmaps, modernise legacy systems, and implement the necessary cultural and technical shifts for long-term digital growth."
+        "description": "Modernising your business from top to bottom. From legacy systems to internal culture, we prime your structure for the digital age."
       },
       "num_5": {
         "title": "Software Development",
-        "description": "We build scalable, high-performance back-end and front-end solutions, ensuring technical integrity and future-proofing the digital product."
+        "description": "Clean, scalable code. We build robust solutions (back and front) that won’t break the moment your business starts to scale."
       }
     },
     "customers": {
       "title": {
         "line1": "But...",
-        "line2": "who the hell hires you people?"
+        "line2": "does anyone actually hire you?"
       },
-      "description": "Surprisingly, we get calls from companies in various sectors, although we tend to be closer to the Telco and IT industries... the truth is, no one is free of sin when we talk about customer experience."
+      "description": "Surprisingly, yes. We work with leaders in Telco and IT, but the truth is, nobody is a saint when it comes to customer experience. If you’ve got a digital headache, we’re your team."
     },
     "buttons": {
-      "discover": "discover more"
+      "discover": "see how we do it",
+      "clients": "contact us"
     }
   },
   "contact": {
     "title": "Let's talk!",
     "interested": {
       "question": "I'm interested in",
-      "interest_1": "site from scratch",
-      "interest_2": "UX/UI design",
-      "interest_3": "product design",
-      "interest_4": "mobile development"
+      "interest_1": "a product from scratch",
+      "interest_2": "UX/UI redesign",
+      "interest_3": "product strategy",
+      "interest_4": "technical development"
     },
     "name": {
-      "title": "What's your name",
-      "placeholder": "enter your name here"
+      "title": "Your name",
+      "placeholder": "what should we call you?"
     },
     "info": {
-      "title": "How can we contact you?",
-      "placeholder": "enter your email here"
+      "title": "How do we reach you?",
+      "placeholder": "your work email"
     },
     "message": {
-      "title": "Let us know how we can help you",
-      "placeholder": "tell us!"
+      "title": "Tell us about the challenge",
+      "placeholder": "what sort of mess are you in?"
     },
     "success": {
       "title": "Done!",
-      "description": "Thanks for reaching out.",
+      "description": "We'll be in touch shortly.",
       "link": "Back to home"
     },
     "buttons": {
-      "send": "Contact us"
+      "send": "get in touch"
     }
   },
   "about": {
-    "title": "we are",
-    "hero_text": "We synergise diverse expertise  to deliver successful digital products, driven by a genuine customer-first strategy and holistic CX approach.",
-    "quotes_line1": "We turn strategic goals into",
-    "quotes_line2": "tangible, market-ready realities",
+    "title": "who we are",
+    "hero_text": "We aren't your average agency. We’re a team of specialists obsessed with delivering digital products that hit the bottom line, not just the aesthetic.",
+    "quotes_line1": "Turning strategic goals into",
+    "quotes_line2": "market-ready realities",
     "rules": {
-      "title_line1": "the rules we actually",
+      "title_line1": "The rules we actually",
       "title_line2": "follow",
       "rule_1": {
-        "title": "Rigorous Partnership",
-        "description_line1": "We are not vendors; we are embedded extensions of your team.",
-        "description_line2": "We commit to full transparency, accountability, and ethical rigour in every phase of the project lifecycle. Our success is measured by the sustained, long-term impact we create within your organisation."
+        "title": "Real Partnership",
+        "description_line1": "Forget the cold client-vendor dynamic. We’re part of your team.",
+        "description_line2": "We work with total transparency and honesty. If something won’t work, we’ll tell you. We thrive on the challenge and commit to your long-term success."
       },
       "rule_2": {
-        "title": "Outcome-Driven Design",
-        "description_line1": "Our expertise is always directed towards achieving quantifiable business metrics—growth, efficiency, and retention.",
-        "description_line2": "We move beyond aesthetics to apply intelligent design principles and validated research that directly translate into commercial value and market advantage."
+        "title": "Profit-Led Design",
+        "description_line1": "Looking good is nice; billing well is better.",
+        "description_line2": "Every design decision we make targets a metric: higher conversion, better retention, or lower OPEX. If it doesn't add value, it doesn't get built."
       },
       "rule_3": {
-        "title": "Methodological Simplicity",
-        "description_line1": "We thrive on solving the most complex digital challenges, yet we maintain a strict focus on delivering zero-friction experiences.",
-        "description_line2": " We simplify complex processes, ensuring that technical complexity is managed internally so the final product remains intuitive, accessible, and easy to scale for your users."
+        "title": "Simplicity Above All",
+        "description_line1": "We solve complex nightmares with simple solutions.",
+        "description_line2": "We manage the technical chaos internally so that, on the outside, your product feels like magic. Scalable, accessible, and friction-free."
       }
     }
   },
   "projects": {
     "title_1": "The work.",
     "title_2": "No fluff.",
-    "description": "Transforming complexity into commercial success.",
-    "subtitle_challenge": "The challenge",
-    "subtitle_solution": "The idea",
-    "subtitle_results": "The outcome",
+    "description": "Where complexity turns into profit.",
+    "subtitle_challenge": "The Challenge",
+    "subtitle_solution": "Our Idea",
+    "subtitle_results": "The Impact",
     "case_study_01": {
-      "title": "Telecoms Operations Success",
-      "challenge": "High friction during customer activation of complex convergent service bundles, leading to low adoption rates and increased support calls.",
-      "idea": "Redesign of the entire digital Purchase and Activation (CX) flow, implementing modular architecture and real-time service activation APIs.",
-      "outcome": "45% increase in convergent bundle activation rates and a 12% uplift in Average Revenue Per User (ARPU)."
+      "title": "Telecoms: Frictionless Service Activation",
+      "challenge": "Technical complexity in activating convergent bundles (fibre, mobile, TV) was creating an insurmountable barrier for customers. The process was so convoluted that most users abandoned their registration midway, flooding the support centre with technical queries and complaints.",
+      "idea": "We completely redesigned the purchase and activation experience (CX) by stripping away unnecessary steps. We implemented a modular architecture connected to real-time APIs that validate service provisioning instantly, allowing users to complete the entire process without external help.",
+      "outcome": "We achieved a 45% increase in successful activations and a 12% uplift in ARPU (Average Revenue Per User) by making it easier for customers to add extra services during the flow."
     },
     "case_study_02": {
-      "title": "Wealth Management Success",
-      "challenge": "A private fund manager required migrating complex client fund contracting from a manual, paper-based system to a seamless, 100% online onboarding flow.",
-      "idea": "Strategic digital transformation integrating e-KYC and advanced digital signing for a zero-friction, compliant customer experience.",
-      "outcome": "95% reduction in account activation time (now under 48 hours) and 41% uplift in digital onboarding completion rates."
+      "title": "Wealth Management: 100% Digital Onboarding",
+      "challenge": "A private fund manager was stuck in an analogue loop of paper-based systems and manual signatures. This dragged out new client onboarding for weeks, leading to high churn rates among high-net-worth individuals who expected a much more agile experience.",
+      "idea": "We executed a full-scale digital transformation of the contracting process. By integrating biometrics (e-KYC) and advanced digital signature systems, we created a 100% online, secure, and legally robust flow that allows clients to open an account in minutes.",
+      "outcome": "We slashed account activation time by 95% (from weeks to under 48 hours) and saw a 41% increase in digital onboarding completion rates."
     },
     "case_study_03": {
-      "title": "Tech & SaaS Efficiency Success",
-      "challenge": "Overly complex service administration dashboards causing high rates of critical operational errors and staff inefficiency due to severe data overload.",
-      "idea": "Complete UX/UI redesign integrating a Generative AI layer to instantly summarise complex data, converting real-time metrics into actionable insights and streamlined commands.",
-      "outcome": "38% reduction in critical service provisioning errors and a 25% saving in average time required for internal teams to resolve tier-1 issues."
+      "title": "SaaS: AI vs. Data Overload",
+      "challenge": "System administrators were drowning in data-heavy dashboards that were nearly impossible to interpret. This cognitive overload led to critical service management errors and dangerously slow response times during major incidents.",
+      "idea": "We redesigned the UX/UI and implemented a Generative AI layer. Instead of showing raw data, the system now summarises complex metrics into natural language, providing actionable insights and simplified commands to resolve issues the moment they arise.",
+      "outcome": "We achieved a 38% reduction in critical operational errors and saved the internal teams 25% of the time previously spent resolving Tier-1 support issues."
     },
     "case_study_04": {
-      "title": "Tax Management & Accounting App",
-      "challenge": "Friction-heavy communication and fragmented document exchange between businesses and accountants, leading to filing delays and high operational overhead.",
-      "idea": "A collaborative digital ecosystem with a dual-interface approach, automating data ingestion and creating a shared single source of truth for real-time tax compliance.",
-      "outcome": "40% reduction in document-related back-and-forth and a 30% improvement in time-to-filing efficiency for both SMEs and accounting firms."
+      "title": "Fintech: Collaborative Tax Ecosystem",
+      "challenge": "Communication between businesses and accountants was a mess of emails, phone calls, and lost documents. This fragmentation caused constant tax filing delays and created a massive operational overhead for both parties.",
+      "idea": "We built a digital ecosystem with a dual-interface approach (business vs. accountant). We implemented a 'single source of truth' that automates data ingestion and syncs tax status in real-time, ensuring everyone is working from the same, accurate set of books.",
+      "outcome": "We reduced unnecessary document back-and-forth by 40% and improved tax filing efficiency by 30% for both SMEs and accounting firms."
     },
     "case_study_05": {
-      "title": "Elite Digital Security & Asset Protection",
-      "challenge": "High-net-worth individuals (HNWIs) faced fragmented security monitoring for their global assets, digital identities, and private communications, lacking a unified command centre view.",
-      "idea": "A premium, concierge-style security application providing 360° real-time supervision of devices, connections, and sensitive documents under a zero-trust architecture.",
-      "outcome": "100% visibility of the digital footprint and a 60% faster response time to potential identity threats or unauthorised access attempts."
+      "title": "Cybersecurity: 360° Shield for VIPs",
+      "challenge": "High-net-worth individuals (HNWIs) had their digital identities and assets scattered across multiple vulnerable platforms. They lacked a unified system to monitor their personal security and sensitive documents in real-time.",
+      "idea": "We developed a premium 'concierge-style' security application built on a Zero-Trust architecture. The system constantly supervises devices, network connections, and document integrity, proactively alerting the user to any potential identity threats.",
+      "outcome": "We provided 100% visibility of the user's digital footprint and increased the response time to unauthorised access attempts by 60%."
     },
     "case_study_06": {
-      "title": "Enterprise & Gov Security Framework",
-      "challenge": "Large organisations and government bodies required a unified security posture that could leverage carrier-grade network intelligence and top-tier security suites.",
-      "idea": "Development of a holistic security framework integrating network-level protection with a high-end service suite, specifically designed for mission-critical infrastructure.",
-      "outcome": "55% reduction in incident mitigation time and full compliance with sovereign security standards for large-scale public and private organisations."
+      "title": "B2B: Critical Infrastructure Security Framework",
+      "challenge": "Large corporations and government bodies required a superior security posture that could leverage the operator's network intelligence. Off-the-shelf solutions weren't enough to protect their mission-critical infrastructure.",
+      "idea": "We designed a holistic security framework that integrates carrier-grade network protection with an elite suite of defence services. We created a unified command centre to manage perimeter security and sovereign compliance at scale.",
+      "outcome": "We reduced incident mitigation time by 55% and ensured full compliance with national security standards for large-scale public and private organisations."
     },
     "footer_cta": {
       "line_1": "Tired of talking about metrics?",
       "line_2": "Let's go build them."
     },
     "buttons": {
-      "view_case_study": "Contact us"
+      "view_case_study": "Start Your Success Story"
     }
   },
   "footer": {
-    "we_are": "We are heeere...",
+    "we_are": "Room 714",
     "legal": "Legal",
-    "terms": "Terms of Service",
+    "terms": "Terms & Conditions",
     "privacy": "Privacy Policy",
     "cookies": "Cookie Policy",
     "linkedin": "LinkedIn",
     "blog": "Blog",
-    "copyright": "© Room 714. All rights reserved."
+    "copyright": "Room 714. All rights reserved."
   }
 }

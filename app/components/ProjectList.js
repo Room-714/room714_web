@@ -7,7 +7,7 @@ export default function ProjectsList({ projects, dict }) {
   const [openId, setOpenId] = useState(projects[0]?.id);
 
   return (
-    <div className="w-full flex flex-col py-10">
+    <div className="w-full flex flex-col py-2">
       {projects.map((project) => (
         <ProjectCard
           key={project.id}
