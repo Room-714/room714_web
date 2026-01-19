@@ -159,5 +159,65 @@
     "linkedin": "LinkedIn",
     "blog": "Blog",
     "copyright": "Room 714. Todos los derechos reservados."
+  },
+  "cookies": {
+    "title": "🍪 Cookies?",
+    "description": "Usamos cookies para mejorar tu experiencia. Al navegar, aceptas nuestra política.",
+    "link": "Leer más",
+    "accept": "Aceptar todo",
+    "decline": "Solo básicas"
+  },
+  "cookiePolicy": {
+    "title": "Política de Cookies",
+    "sec1_title": "¿Qué son las cookies?",
+    "sec1_text": "Las cookies son pequeños archivos de texto que los sitios web almacenan en su dispositivo para que el sitio funcione correctamente, recordar preferencias y analizar el tráfico.",
+    "sec2_title": "¿Cómo las usamos?",
+    "sec2_text": "En Room 714 utilizamos cookies técnicas (necesarias) y analíticas de terceros para entender cómo interactúas con nuestra web y mejorar nuestro servicio.",
+    "sec3_title": "¿Qué cookies utilizamos?",
+    "table_name": "Nombre",
+    "table_provider": "Proveedor",
+    "table_purpose": "Finalidad",
+    "table_duration": "Duración",
+    "desc_consent": "Almacena tu preferencia de consentimiento.",
+    "desc_clarity": "Analítica de comportamiento y sesiones de usuario.",
+    "sec4_title": "Gestión de cookies",
+    "sec4_text": "Puedes revocar tu consentimiento en cualquier momento borrando las cookies de tu navegador o utilizando el botón de configuración de nuestra web.",
+    "last_update": {
+      "text": "Última actualización",
+      "date": "Enero 2026"
+    }
+  },
+  "privacy": {
+    "title": "Política de Privacidad",
+    "intro": "En Room 714 nos tomamos muy en serio la protección de tus datos personales y cumplimos estrictamente con el RGPD.",
+    "responsible_title": "Responsable del tratamiento",
+    "responsible_text": "El responsable de los datos recogidos a través de esta web es Room 714 Digital Product Studio.",
+    "purpose_title": "¿Para qué usamos tus datos?",
+    "purpose_text": "Tratamos la información que nos facilitas con las siguientes finalidades:",
+    "purpose_items": [
+      "Responder a consultas enviadas a través del correo de contacto.",
+      "Analizar el uso de la web mediante cookies para mejorar la experiencia de usuario.",
+      "Gestión de posibles relaciones comerciales y profesionales."
+    ],
+    "rights_title": "Tus derechos",
+    "rights_text": "Puedes ejercer tus derechos de acceso, rectificación, supresión y oposición enviando un email a hello@room714.com.",
+    "last_update": {
+      "text": "Última actualización",
+      "date": "Enero 2026"
+    }
+  },
+  "terms": {
+    "title": "Términos y Condiciones",
+    "acceptance": "El acceso y uso de este sitio web atribuye la condición de usuario e implica la aceptación total de estas condiciones.",
+    "ip_title": "Propiedad Intelectual",
+    "ip_text": "Todos los contenidos de esta web (diseños, textos, logos, vídeos) son propiedad exclusiva de Room 714 o de sus licenciantes. Queda prohibida su reproducción total o parcial sin autorización.",
+    "use_title": "Uso del sitio",
+    "use_text": "El usuario se compromete a hacer un uso adecuado de los contenidos y servicios, absteniéndose de realizar actividades ilícitas o que dañen los sistemas de Room 714 o terceros.",
+    "liability_title": "Responsabilidad",
+    "liability_text": "Room 714 no se hace responsable de los daños derivados de interferencias, omisiones o virus informáticos motivados por causas ajenas al titular de la web.",
+    "last_update": {
+      "text": "Última actualización",
+      "date": "Enero 2026"
+    }
   }
 }

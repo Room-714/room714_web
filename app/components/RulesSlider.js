@@ -55,11 +55,11 @@ export default function RulesSlider({ rules }) {
               `}
             >
               <div className="flex flex-col">
-                <span className="text-gray-500 font-bold font-hand text-sm block">
+                <span className="text-gray-500 font-bold font-hand text-sm md:text-base lg:text-lg block">
                   {rule.id}
                 </span>
 
-                <h4 className="font-body font-black text-2xl md:text-3xl text-black leading-tight">
+                <h4 className="font-body font-black text-xl md:text-2xl lg:text-3xl text-black leading-tight">
                   {rule.title}
                 </h4>
 
@@ -74,7 +74,7 @@ export default function RulesSlider({ rules }) {
                   `}
                 >
                   <div className="overflow-hidden min-h-0">
-                    <p className="font-body text-black text-sm md:text-base leading-relaxed border-t border-gray-100 pt-4">
+                    <p className="font-body text-black text-sm md:text-base lg:text-xl leading-relaxed border-t border-gray-100 pt-4">
                       <span className="font-bold">
                         {rule.description_line1}
                       </span>{" "}

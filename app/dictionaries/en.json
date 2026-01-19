@@ -119,7 +119,7 @@
       "outcome": "We slashed account activation time by 95% (from weeks to under 48 hours) and saw a 41% increase in digital onboarding completion rates."
     },
     "case_study_03": {
-      "title": "SaaS: AI vs. Data Overload",
+      "title": "Enterprise SaaS: AI vs. Data Overload",
       "challenge": "System administrators were drowning in data-heavy dashboards that were nearly impossible to interpret. This cognitive overload led to critical service management errors and dangerously slow response times during major incidents.",
       "idea": "We redesigned the UX/UI and implemented a Generative AI layer. Instead of showing raw data, the system now summarises complex metrics into natural language, providing actionable insights and simplified commands to resolve issues the moment they arise.",
       "outcome": "We achieved a 38% reduction in critical operational errors and saved the internal teams 25% of the time previously spent resolving Tier-1 support issues."
@@ -147,7 +147,7 @@
       "line_2": "Let's go build them."
     },
     "buttons": {
-      "view_case_study": "Start Your Success Story"
+      "view_case_study": "Start Your Story"
     }
   },
   "footer": {
@@ -159,5 +159,65 @@
     "linkedin": "LinkedIn",
     "blog": "Blog",
     "copyright": "Room 714. All rights reserved."
+  },
+  "cookies": {
+    "title": "🍪 Cookies?",
+    "description": "We use cookies to enhance your experience. By continuing to browse, you agree to our policy.",
+    "link": "Learn more",
+    "accept": "Accept all",
+    "decline": "Essential only"
+  },
+  "cookiePolicy": {
+    "title": "Cookie Policy",
+    "sec1_title": "What are cookies?",
+    "sec1_text": "Cookies are small text files that websites store on your device to make the site work correctly, remember preferences, and analyze traffic.",
+    "sec2_title": "How we use them?",
+    "sec2_text": "At Room 714, we use technical cookies (essential) and third-party analytical cookies to understand how you interact with our site and improve our service.",
+    "sec3_title": "What cookies do we use?",
+    "table_name": "Name",
+    "table_provider": "Provider",
+    "table_purpose": "Purpose",
+    "table_duration": "Duration",
+    "desc_consent": "Stores your consent preference.",
+    "desc_clarity": "Behavioral analytics and user sessions.",
+    "sec4_title": "Cookie management",
+    "sec4_text": "You can revoke your consent at any time by clearing your browser cookies or using the settings button on our website.",
+    "last_update": {
+      "text": "Last update",
+      "date": "January 2026"
+    }
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "intro": "At Room 714, we take the protection of your personal data very seriously and strictly comply with GDPR regulations.",
+    "responsible_title": "Data Controller",
+    "responsible_text": "The entity responsible for the data collected through this website is Room 714.",
+    "purpose_title": "How we use your data",
+    "purpose_text": "We process the information you provide us for the following purposes:",
+    "purpose_items": [
+      "Responding to inquiries sent via our contact email.",
+      "Analyzing website usage through cookies to enhance user experience.",
+      "Managing potential business and professional relationships."
+    ],
+    "rights_title": "Your Rights",
+    "rights_text": "You may exercise your rights of access, rectification, erasure, and objection by sending an email to hello@room714.com.",
+    "last_update": {
+      "text": "Last update",
+      "date": "January 2026"
+    }
+  },
+  "terms": {
+    "title": "Terms & Conditions",
+    "acceptance": "Accessing and using this website grants you the status of user and implies full acceptance of these terms and conditions.",
+    "ip_title": "Intellectual Property",
+    "ip_text": "All website content (designs, text, logos, videos) is the exclusive property of Room 714 or its licensors. Total or partial reproduction is prohibited without prior authorization.",
+    "use_title": "Website Use",
+    "use_text": "The user agrees to use the content and services appropriately, refraining from illegal activities or actions that damage Room 714's systems or those of third parties.",
+    "liability_title": "Limitation of Liability",
+    "liability_text": "Room 714 is not responsible for damages resulting from interferences, omissions, or computer viruses caused by factors outside the control of the website owner.",
+    "last_update": {
+      "text": "Last update",
+      "date": "January 2026"
+    }
   }
 }

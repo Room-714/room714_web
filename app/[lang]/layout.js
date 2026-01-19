@@ -2,9 +2,11 @@ import "@/app/globals.css";
 import Link from "next/link";
 import Script from "next/script";
 import Image from "next/image";
-import { getDictionary } from "../dictionaries";
+import { getDictionary } from "@/app/dictionaries";
 import { Montserrat, Montserrat_Alternates, Mynerve } from "next/font/google";
 import { GoogleTagManager } from "@next/third-parties/google";
+import CookieBanner from "@/app/components/CookieBanner";
+import { cookies } from "next/headers"; // Importación necesaria para leer cookies en servidor
 
 const fontMontserrat = Montserrat({
   subsets: ["latin"],
@@ -83,6 +85,10 @@ export default async function RootLayout({ children, params }) {
   const lang = resolvedParams.lang || "en";
   const dict = await getDictionary(lang);
 
+  // Comprobamos el consentimiento desde el servidor
+  const cookieStore = await cookies();
+  const hasConsent = cookieStore.get("cookie_consent")?.value === "true";
+
   // --- DATOS ESTRUCTURADOS (GEO / AI ENGINES) ---
   const jsonLd = {
     "@context": "https://schema.org",
@@ -118,18 +124,21 @@ export default async function RootLayout({ children, params }) {
         />
       </head>
 
-      {/* Herramientas de Marketing y Tracking */}
-      <GoogleTagManager gtmId="GTM-M6HTKWS4" />
-
-      <Script id="microsoft-clarity" strategy="afterInteractive">
-        {`
-          (function(c,l,a,r,i,t,y){
-              c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-              t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-              y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-          })(window, document, "clarity", "script", "v1w8qfn9bx");
-        `}
-      </Script>
+      {/* Carga condicional de Herramientas de Marketing y Tracking */}
+      {hasConsent && (
+        <>
+          <GoogleTagManager gtmId="GTM-M6HTKWS4" />
+          <Script id="microsoft-clarity" strategy="afterInteractive">
+            {`
+              (function(c,l,a,r,i,t,y){
+                  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                  t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+              })(window, document, "clarity", "script", "v1w8qfn9bx");
+            `}
+          </Script>
+        </>
+      )}
 
       <body className="font-body antialiased" suppressHydrationWarning={true}>
         <main>{children}</main>
@@ -163,54 +172,55 @@ export default async function RootLayout({ children, params }) {
                   className="object-contain object-right"
                 />
               </div>
-
-              {/* Links Grid */}
-              <div className="w-[80%] grid grid-cols-2 md:w-full lg:grid-cols-3 justify-items-end gap-y-2 md:gap-y-4 lg:gap-y-8 gap-x-4 md:gap-x-16 text-xs md:text-lg lg:text-2xl font-light text-white">
+              <div className="flex items-center justify-end gap-4">
+                {/* LinkedIn */}
                 <Link
-                  href="/legal"
-                  className="hover:text-white transition-colors"
+                  href="https://www.linkedin.com/company/room-714"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:opacity-70 transition-opacity"
                 >
-                  {dict.footer.legal}
+                  <Image
+                    src="/linkedin.svg"
+                    alt="LinkedIn logo"
+                    width={30}
+                    height={30}
+                    className="filter"
+                  />
                 </Link>
+              </div>
+              {/* Links en una única fila con separadores verticales */}
+              <div className="flex flex-wrap justify-end items-center gap-x-3 md:gap-x-6 text-white text-xs md:text-sm lg:text-base font-light">
                 <Link
                   href="/privacy"
-                  className="hover:text-white transition-colors"
+                  className="hover:text-red-500 transition-colors duration-300"
                 >
                   {dict.footer.privacy}
                 </Link>
+                <span className="w-px h-5 bg-white" aria-hidden="true" />
                 <Link
                   href="/terms"
-                  className="hover:text-white transition-colors"
+                  className="hover:text-red-500 transition-colors duration-300"
                 >
                   {dict.footer.terms}
                 </Link>
+                <span className="w-px h-5 bg-white" aria-hidden="true" />
                 <Link
                   href="/cookies"
-                  className="hover:text-white transition-colors"
+                  className="hover:text-red-500 transition-colors duration-300"
                 >
                   {dict.footer.cookies}
-                </Link>
-                <Link
-                  href="https://linkedin.com"
-                  className="hover:text-white transition-colors"
-                >
-                  {dict.footer.linkedin}
-                </Link>
-                <Link
-                  href="/blog"
-                  className="hover:text-white transition-colors"
-                >
-                  {dict.footer.blog}
                 </Link>
               </div>
             </div>
           </div>
 
           {/* COPYRIGHT */}
-          <div className="py-8 bg-[#1A1A1A] text-center text-xs md:text-base lg:text-lg text-white">
+          <div className="py-8 bg-[#1A1A1A] text-center text-xs md:text-sm lg:text-base text-white">
             © {new Date().getFullYear()} {dict.footer.copyright}
           </div>
         </footer>
+        <CookieBanner dict={dict} lang={lang} />
       </body>
     </html>
   );

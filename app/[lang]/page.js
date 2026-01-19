@@ -20,11 +20,11 @@ export default async function Home({ params }) {
       <Navbar dict={dict} isDark={false} />
 
       {/* Hero Section */}
-      <section className="p-8 bg-white text-center flex flex-col lg:flex-row items-center z-10">
-        <div className="mt-8 flex justify-center w-full">
+      <section className="px-10 bg-white text-center flex flex-col lg:flex-row items-center z-10">
+        <div className="flex pb-10 justify-center w-full">
           <div
             className="relative transition-all duration-300
-                 w-full 
+                 w-[90%] 
                  max-w-200
                  aspect-square
                  overflow-hidden"
@@ -42,11 +42,11 @@ export default async function Home({ params }) {
           </div>
         </div>
 
-        <div className="mt-8 px-4 md:px-12 flex flex-col justify-center items-center w-full">
-          <p className="font-hand font-black text-red-500 text-3xl md:text-4xl lg:text-6xl mb-8 lg:mb-16 px-4 md:px-8 lg:px-24">
+        <div className="px-4 md:px-12 flex flex-col justify-center items-center w-full">
+          <p className="font-hand font-black text-red-500 text-2xl md:text-3xl lg:text-5xl mb-8 lg:mb-16 md:px-4">
             {dict.home.hero.title}
           </p>
-          <p className="font-body text-xl md:text-2xl lg:text-3xl mb-8 lg:mb-16 px-4 md:px-8 lg:px-24">
+          <p className="font-body text-base md:text-xl lg:text-2xl mb-8 lg:mb-16 md:px-4">
             {dict.home.hero.description}
           </p>
           <PrimaryButton
@@ -57,7 +57,7 @@ export default async function Home({ params }) {
       </section>
 
       {/* Contenedor de la flecha con tamaño basado en Tailwind */}
-      <section className="pb-12 bg-white text-center flex flex-col items-center z-10 w-full">
+      <section className="py-12 bg-white text-center flex flex-col items-center z-10 w-full">
         <div className="transition-all duration-300">
           <Image
             src="/arrow.svg"

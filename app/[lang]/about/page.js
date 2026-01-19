@@ -48,7 +48,7 @@ export default async function AboutPage({ params }) {
           <h2 className="font-hand text-2xl md:text-4xl leading-tight">
             {dict.about.quotes_line2}
           </h2>
-          <div className="relative w-[80%] md:w-[60%] h-6 md:h-8">
+          <div className="relative w-[80%] md:w-[60%] lg:w-[40%] h-6 md:h-8">
             <Image
               src="/about/line.svg"
               alt="line decoration"
