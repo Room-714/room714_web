@@ -7,17 +7,17 @@
   "home": {
     "hero": {
       "title": "We design and build digital products that actually work",
-      "description": "No fluff, no buzzwords: just experience engineering and technical execution to drive real business growth."
+      "description": "No fluff: just experience-based knowledge and quality technical execution to drive real business growth."
     },
     "services": {
       "title": "So... what the f*** do you guys actually do?",
       "num_1": {
         "title": "UX & UI Design",
-        "description": "We kill complexity. We create interfaces so intuitive your users won’t need a manual—just a reason to use your product."
+        "description": "We kill complexity. We create interfaces so intuitive your users won't need a manual—just a desire to use your product."
       },
       "num_2": {
         "title": "Product Management",
-        "description": "We prioritise what matters. We align your strategy with real goals, managing the product from the initial spark until it’s in the customer's hands."
+        "description": "We prioritise what matters. We align your strategy with real goals, managing the product from the initial spark until it's in the customer's hands."
       },
       "num_3": {
         "title": "CX Research & Audit",
@@ -29,7 +29,7 @@
       },
       "num_5": {
         "title": "Software Development",
-        "description": "Clean, scalable code. We build robust solutions (back and front) that won’t break the moment your business starts to scale."
+        "description": "Clean, scalable code. We build robust solutions (back and front) that won't break the moment your business starts to scale."
       }
     },
     "customers": {
@@ -37,11 +37,11 @@
         "line1": "But...",
         "line2": "does anyone actually hire you?"
       },
-      "description": "Surprisingly, yes. We work with leaders in Telco and IT, but the truth is, nobody is a saint when it comes to customer experience. If you’ve got a digital headache, we’re your team."
+      "description": "We haven't been around long, but we’ve already landed some clients. We work with leaders in Telco and IT. But we’re open to anything, because the truth is, nobody is a saint when it comes to customer experience. If you’ve got a digital headache, we’re your team."
     },
     "buttons": {
-      "discover": "see how we do it",
-      "clients": "contact us"
+      "discover": "discover more",
+      "clients": "get in touch"
     }
   },
   "contact": {
@@ -58,15 +58,15 @@
       "interest_8": "Generative AI Integration"
     },
     "name": {
-      "title": "Your name",
-      "placeholder": "what should we call you?"
+      "title": "What's your name?",
+      "placeholder": "type your name here"
     },
     "info": {
       "title": "How do we reach you?",
-      "placeholder": "your work email"
+      "placeholder": "type your email here"
     },
     "message": {
-      "title": "Tell us about the challenge",
+      "title": "Tell us how we can help",
       "placeholder": "what sort of mess are you in?"
     },
     "success": {
@@ -84,8 +84,8 @@
     "quotes_line1": "Turning strategic goals into",
     "quotes_line2": "market-ready realities",
     "rules": {
-      "title_line1": "The rules we actually",
-      "title_line2": "follow",
+      "title_line1": "We play by these",
+      "title_line2": "rules",
       "rule_1": {
         "title": "Real Partnership",
         "description_line1": "Forget the cold client-vendor dynamic. We’re part of your team.",
@@ -106,56 +106,56 @@
   "projects": {
     "title_1": "The work.",
     "title_2": "No fluff.",
-    "description": "Where complexity turns into profit.",
+    "description": "Transforming complexity into success.",
     "subtitle_challenge": "The Challenge",
-    "subtitle_solution": "Our Idea",
-    "subtitle_results": "The Impact",
+    "subtitle_solution": "The Idea",
+    "subtitle_results": "The Outcome",
     "case_study_01": {
-      "title": "Telecoms: Frictionless Service Activation",
-      "challenge": "Technical complexity in activating convergent bundles (fibre, mobile, TV) was creating an insurmountable barrier for customers. The process was so convoluted that most users abandoned their registration midway, flooding the support centre with technical queries and complaints.",
-      "idea": "We completely redesigned the purchase and activation experience (CX) by stripping away unnecessary steps. We implemented a modular architecture connected to real-time APIs that validate service provisioning instantly, allowing users to complete the entire process without external help.",
-      "outcome": "We achieved a 45% increase in successful activations and a 12% uplift in ARPU (Average Revenue Per User) by making it easier for customers to add extra services during the flow."
+      "title": "Telecoms: Frictionless Activation Flow",
+      "challenge": "Technical complexity in activating service bundles was creating an insurmountable barrier for customers. The process was so convoluted that most abandoned midway, flooding the support centre with technical queries.",
+      "idea": "We completely redesigned the purchase and activation experience (CX) by stripping away unnecessary steps. We mapped the user journey based on deep customer insights, allowing users to complete the process without external help.",
+      "outcome": "We achieved a 45% increase in successful activations and a 12% uplift in ARPU by making it easier to add extra services during the flow."
     },
     "case_study_02": {
-      "title": "Wealth Management: 100% Digital Onboarding",
-      "challenge": "A private fund manager was stuck in an analogue loop of paper-based systems and manual signatures. This dragged out new client onboarding for weeks, leading to high churn rates among high-net-worth individuals who expected a much more agile experience.",
-      "idea": "We executed a full-scale digital transformation of the contracting process. By integrating biometrics (e-KYC) and advanced digital signature systems, we created a 100% online, secure, and legally robust flow that allows clients to open an account in minutes.",
+      "title": "Wealth Management: Trusted Digital Onboarding",
+      "challenge": "A fund manager was stuck with analogue paper-based systems and physical signatures. This dragged out new client onboarding for weeks, causing high churn rates among high-net-worth profiles looking for agility.",
+      "idea": "We executed a full digital transformation of the onboarding process. By integrating biometrics (e-KYC) and advanced digital signatures, we created a 100% online, secure, and legally robust flow that allows clients to open accounts in minutes.",
       "outcome": "We slashed account activation time by 95% (from weeks to under 48 hours) and saw a 41% increase in digital onboarding completion rates."
     },
     "case_study_03": {
-      "title": "Enterprise SaaS: AI vs. Data Overload",
-      "challenge": "System administrators were drowning in data-heavy dashboards that were nearly impossible to interpret. This cognitive overload led to critical service management errors and dangerously slow response times during major incidents.",
-      "idea": "We redesigned the UX/UI and implemented a Generative AI layer. Instead of showing raw data, the system now summarises complex metrics into natural language, providing actionable insights and simplified commands to resolve issues the moment they arise.",
-      "outcome": "We achieved a 38% reduction in critical operational errors and saved the internal teams 25% of the time previously spent resolving Tier-1 support issues."
+      "title": "B2B Operations: AI vs. Data Overload",
+      "challenge": "System administrators were drowning in data-heavy dashboards that were impossible to interpret. This cognitive overload led to critical service management errors and slow response times during major incidents.",
+      "idea": "We redesigned the UX/UI and implemented a Generative AI layer. Instead of showing raw data, the system now summarises complex metrics into natural language, providing actionable insights and simplified commands to resolve issues instantly.",
+      "outcome": "We achieved a 38% reduction in critical operational errors and saved the internal teams 25% of the time previously spent on Tier-1 support issues."
     },
     "case_study_04": {
       "title": "Fintech: Collaborative Tax Ecosystem",
-      "challenge": "Communication between businesses and accountants was a mess of emails, phone calls, and lost documents. This fragmentation caused constant tax filing delays and created a massive operational overhead for both parties.",
-      "idea": "We built a digital ecosystem with a dual-interface approach (business vs. accountant). We implemented a 'single source of truth' that automates data ingestion and syncs tax status in real-time, ensuring everyone is working from the same, accurate set of books.",
-      "outcome": "We reduced unnecessary document back-and-forth by 40% and improved tax filing efficiency by 30% for both SMEs and accounting firms."
+      "challenge": "Communication between firms and tax advisors was a mess of emails, phone calls, and lost documents. This fragmentation caused constant filing delays and massive operational overhead for both parties.",
+      "idea": "We built an app to support a digital ecosystem with a dual interface (business vs. accountant). It features a 'single source of truth' that automates invoice ingestion and syncs tax status in real-time, ensuring everyone works from the same data.",
+      "outcome": "We reduced unnecessary document back-and-forth by 40% and improved tax filing efficiency by 30%."
     },
     "case_study_05": {
       "title": "Cybersecurity: 360° Shield for VIPs",
       "challenge": "High-net-worth individuals (HNWIs) had their digital identities and assets scattered across multiple vulnerable platforms. They lacked a unified system to monitor their personal security and sensitive documents in real-time.",
-      "idea": "We developed a premium 'concierge-style' security application built on a Zero-Trust architecture. The system constantly supervises devices, network connections, and document integrity, proactively alerting the user to any potential identity threats.",
-      "outcome": "We provided 100% visibility of the user's digital footprint and increased the response time to unauthorised access attempts by 60%."
+      "idea": "We developed a premium mobile security app built on a Zero-Trust architecture. The system acts as a 'digital concierge', constantly supervising devices, network connections, and document integrity, proactively alerting the user to any threat.",
+      "outcome": "We achieved 100% visibility of the user's digital footprint and a 60% faster response time to unauthorised access attempts."
     },
     "case_study_06": {
-      "title": "B2B: Critical Infrastructure Security Framework",
-      "challenge": "Large corporations and government bodies required a superior security posture that could leverage the operator's network intelligence. Off-the-shelf solutions weren't enough to protect their mission-critical infrastructure.",
-      "idea": "We designed a holistic security framework that integrates carrier-grade network protection with an elite suite of defence services. We created a unified command centre to manage perimeter security and sovereign compliance at scale.",
-      "outcome": "We reduced incident mitigation time by 55% and ensured full compliance with national security standards for large-scale public and private organisations."
+      "title": "B2B: Critical Infrastructure Security",
+      "challenge": "Large corporations and government bodies required a superior security posture that could leverage the operator's network. Standard off-the-shelf solutions weren't enough to protect their mission-critical infrastructure.",
+      "idea": "We designed a holistic security framework that integrates carrier-grade network intelligence with an elite third-party defence suite. We created a unified command centre to manage perimeter security and sovereign compliance at scale.",
+      "outcome": "We reduced incident mitigation time by 55% and ensured full compliance with national security standards for large-scale organisations."
     },
     "footer_cta": {
       "line_1": "Tired of talking about metrics?",
       "line_2": "Let's go build them."
     },
     "buttons": {
-      "view_case_study": "Start Your Story"
+      "view_case_study": "get in touch"
     }
   },
   "footer": {
-    "we_are": "We are heeeere...",
+    "we_are": "We're alreeeeady here...",
     "legal": "Legal",
     "terms": "Terms & Conditions",
     "privacy": "Privacy Policy",
@@ -166,61 +166,61 @@
   },
   "cookies": {
     "title": "🍪 Cookies?",
-    "description": "We use cookies to enhance your experience. By continuing to browse, you agree to our policy.",
-    "link": "Learn more",
+    "description": "We use cookies to improve your experience. By browsing, you accept our policy.",
+    "link": "Read more",
     "accept": "Accept all",
-    "decline": "Essential only"
+    "decline": "Necessary only"
   },
   "cookiePolicy": {
     "title": "Cookie Policy",
     "sec1_title": "What are cookies?",
-    "sec1_text": "Cookies are small text files that websites store on your device to make the site work correctly, remember preferences, and analyze traffic.",
-    "sec2_title": "How we use them?",
-    "sec2_text": "At Room 714, we use technical cookies (essential) and third-party analytical cookies to understand how you interact with our site and improve our service.",
-    "sec3_title": "What cookies do we use?",
+    "sec1_text": "Cookies are small text files stored on your device by websites to ensure proper functionality, remember preferences, and analyse traffic.",
+    "sec2_title": "How do we use them?",
+    "sec2_text": "At Room 714, we use technical (necessary) and third-party analytical cookies to understand how you interact with our site and improve our service.",
+    "sec3_title": "Which cookies do we use?",
     "table_name": "Name",
     "table_provider": "Provider",
     "table_purpose": "Purpose",
     "table_duration": "Duration",
-    "desc_consent": "Stores your consent preference.",
-    "desc_clarity": "Behavioral analytics and user sessions.",
+    "desc_consent": "Stores your consent preferences.",
+    "desc_clarity": "Analyses user behaviour and sessions.",
     "sec4_title": "Cookie management",
     "sec4_text": "You can revoke your consent at any time by clearing your browser cookies or using the settings button on our website.",
     "last_update": {
-      "text": "Last update",
+      "text": "Last updated",
       "date": "January 2026"
     }
   },
   "privacy": {
     "title": "Privacy Policy",
-    "intro": "At Room 714, we take the protection of your personal data very seriously and strictly comply with GDPR regulations.",
+    "intro": "At Room 714, we take your personal data protection seriously and strictly comply with GDPR.",
     "responsible_title": "Data Controller",
-    "responsible_text": "The entity responsible for the data collected through this website is Room 714.",
-    "purpose_title": "How we use your data",
-    "purpose_text": "We process the information you provide us for the following purposes:",
+    "responsible_text": "The controller of the data collected through this website is Room 714 Digital Product Studio.",
+    "purpose_title": "Why do we use your data?",
+    "purpose_text": "We process the information you provide for the following purposes:",
     "purpose_items": [
-      "Responding to inquiries sent via our contact email.",
-      "Analyzing website usage through cookies to enhance user experience.",
-      "Managing potential business and professional relationships."
+      "Responding to enquiries sent via contact email.",
+      "Analysing website usage through cookies to improve user experience.",
+      "Managing potential commercial and professional relationships."
     ],
     "rights_title": "Your Rights",
-    "rights_text": "You may exercise your rights of access, rectification, erasure, and objection by sending an email to hello@room714.com.",
+    "rights_text": "You can exercise your rights of access, rectification, deletion, and objection by sending an email to hello@room714.com.",
     "last_update": {
-      "text": "Last update",
+      "text": "Last updated",
       "date": "January 2026"
     }
   },
   "terms": {
     "title": "Terms & Conditions",
-    "acceptance": "Accessing and using this website grants you the status of user and implies full acceptance of these terms and conditions.",
+    "acceptance": "Accessing and using this website attributes the status of user and implies full acceptance of these terms.",
     "ip_title": "Intellectual Property",
-    "ip_text": "All website content (designs, text, logos, videos) is the exclusive property of Room 714 or its licensors. Total or partial reproduction is prohibited without prior authorization.",
-    "use_title": "Website Use",
-    "use_text": "The user agrees to use the content and services appropriately, refraining from illegal activities or actions that damage Room 714's systems or those of third parties.",
-    "liability_title": "Limitation of Liability",
-    "liability_text": "Room 714 is not responsible for damages resulting from interferences, omissions, or computer viruses caused by factors outside the control of the website owner.",
+    "ip_text": "All website content (designs, texts, logos, videos) is the exclusive property of Room 714 or its licensors. Reproduction in whole or in part without authorisation is prohibited.",
+    "use_title": "Site Usage",
+    "use_text": "The user agrees to make appropriate use of the content and services, refraining from illegal activities or actions that damage Room 714's systems or those of third parties.",
+    "liability_title": "Liability",
+    "liability_text": "Room 714 is not responsible for damages resulting from interference, omissions, or computer viruses caused by factors outside the control of the website owner.",
     "last_update": {
-      "text": "Last update",
+      "text": "Last updated",
       "date": "January 2026"
     }
   }
