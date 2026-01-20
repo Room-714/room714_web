@@ -156,12 +156,10 @@
   },
   "footer": {
     "we_are": "We're heeeere...",
-    "legal": "Legal",
+    "text_links": "Stay in the loop. Follow our journey.",
     "terms": "Terms & Conditions",
     "privacy": "Privacy Policy",
     "cookies": "Cookie Policy",
-    "linkedin": "LinkedIn",
-    "blog": "Blog",
     "copyright": "Room 714. All rights reserved."
   },
   "cookies": {

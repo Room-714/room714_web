@@ -142,18 +142,20 @@ export default async function RootLayout({ children, params }) {
 
       <body className="font-body antialiased" suppressHydrationWarning={true}>
         <main>{children}</main>
-        {/* Footer completo */}
-        <footer className="w-full">
-          <div className="max-full flex flex-col bg-[#1A1A1A] md:flex-row md:justify-between items-start md:items-center px-2 py-10">
+
+        {/* FOOTER */}
+        <footer className="w-full bg-[#1A1A1A]">
+          {/* BLOQUE PRINCIPAL */}
+          <div className="max-full flex justify-between items-start py-8 px-2">
             {/* LADO IZQUIERDO: Personaje y frase */}
-            <div className="flex flex-col items-center pl-2 gap-2 mb-6 md:mb-0">
-              <span className="font-hand text-center text-base md:text-xl lg:text-2xl mb-2 text-white">
+            <div className="flex flex-col justify-start items-center pl-2 gap-2">
+              <span className="font-hand text-center text-base sm:text-lg md:text-xl lg:text-2xl mb-2 text-white">
                 {dict.footer.we_are}
               </span>
-              <div className="relative w-36 h-18 sm:w-48 sm:h-24 md:w-64 md:h-32 lg:w-80 lg:h-40">
+              <div className="relative w-40 h-20 sm:w-48 sm:h-24 md:w-64 md:h-32 lg:w-80 lg:h-40">
                 <Image
                   src="/fig-footer.svg"
-                  alt="Logo Footer"
+                  alt="Footer figure"
                   fill
                   sizes="(max-width: 768px) 128px, (max-width: 1024px) 256px, 320px"
                   className="object-contain object-left"
@@ -161,10 +163,11 @@ export default async function RootLayout({ children, params }) {
                 />
               </div>
             </div>
+
             {/* LADO DERECHO: Logo y Links */}
-            <div className="flex flex-col items-end md:items-end -mt-5 pr-2 md:pr-4 md:mt-10 gap-8 w-full md:w-auto">
-              {/* Logo */}
-              <div className="relative w-40 h-12 self-end">
+            <div className="flex flex-col items-end -mt-5 pr-2 pt-1 gap-2 md:pr-4 w-full mw-auto">
+              {/* LOGO */}
+              <div className="relative w-30 h-15 sm:w-36 sm:h-18 md:w-48 md:h-24 lg:w-60 lg:h-30 self-end">
                 <Image
                   src="/logo-dark.svg"
                   alt="Room 714 logo"
@@ -172,51 +175,74 @@ export default async function RootLayout({ children, params }) {
                   className="object-contain object-right"
                 />
               </div>
-              <div className="flex items-center justify-end gap-4">
-                {/* LinkedIn */}
-                <Link
-                  href="https://www.linkedin.com/company/room-714"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:opacity-70 transition-opacity"
-                >
-                  <Image
-                    src="/linkedin.svg"
-                    alt="LinkedIn logo"
-                    width={30}
-                    height={30}
-                    className="filter"
-                  />
-                </Link>
-              </div>
-              {/* Links en una única fila con separadores verticales */}
-              <div className="flex flex-wrap justify-end items-center gap-x-3 md:gap-x-6 text-white text-xs md:text-sm lg:text-base font-light">
-                <Link
-                  href="/privacy"
-                  className="hover:text-red-500 transition-colors duration-300"
-                >
-                  {dict.footer.privacy}
-                </Link>
-                <span className="w-px h-5 bg-white" aria-hidden="true" />
-                <Link
-                  href="/terms"
-                  className="hover:text-red-500 transition-colors duration-300"
-                >
-                  {dict.footer.terms}
-                </Link>
-                <span className="w-px h-5 bg-white" aria-hidden="true" />
-                <Link
-                  href="/cookies"
-                  className="hover:text-red-500 transition-colors duration-300"
-                >
-                  {dict.footer.cookies}
-                </Link>
+
+              {/* SOCIAL LINKS} */}
+              <div>
+                <p className="font-hand text-white text-sm sm:text-base md:text-xl lg:text-2xl mb-3">
+                  {dict.footer.text_links}
+                </p>
+                <div className="flex items-center justify-end gap-4">
+                  {/* LinkedIn */}
+                  <Link
+                    href="https://www.linkedin.com/company/room-714"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 bg-white rounded-full hover:opacity-70 transition-opacity"
+                  >
+                    <Image
+                      src="/linkedin.svg"
+                      alt="LinkedIn logo"
+                      width={30}
+                      height={30}
+                      className="filter"
+                    />
+                  </Link>
+                  {/* Blog */}
+                  <Link
+                    href="/blog"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 bg-white rounded-full hover:opacity-70 transition-opacity"
+                  >
+                    <Image
+                      src="/blog.svg"
+                      alt="LinkedIn logo"
+                      width={30}
+                      height={30}
+                      className="filter"
+                    />
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
 
+          {/* LINKS PRIVACY, COOKIES AND TERMS */}
+          <div className="flex justify-center items-center gap-x-3 md:gap-x-6 text-white text-sm sm:text-base md:text-xl lg:text-2xl font-light">
+            <Link
+              href="/privacy"
+              className="hover:text-red-500 transition-colors duration-300"
+            >
+              {dict.footer.privacy}
+            </Link>
+            <span className="w-px h-5 bg-white" aria-hidden="true" />
+            <Link
+              href="/terms"
+              className="hover:text-red-500 transition-colors duration-300"
+            >
+              {dict.footer.terms}
+            </Link>
+            <span className="w-px h-5 bg-white" aria-hidden="true" />
+            <Link
+              href="/cookies"
+              className="hover:text-red-500 transition-colors duration-300"
+            >
+              {dict.footer.cookies}
+            </Link>
+          </div>
+
           {/* COPYRIGHT */}
-          <div className="py-8 bg-[#1A1A1A] text-center text-xs md:text-sm lg:text-base text-white">
+          <div className="py-8 text-center text-xs sm:text-sm md:text-base lg:text-lg text-white font-title font-light">
             © {new Date().getFullYear()} {dict.footer.copyright}
           </div>
         </footer>
