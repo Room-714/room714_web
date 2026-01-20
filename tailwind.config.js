@@ -8,7 +8,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        body: ["var(--font-montserrat)", "sans-serif"],
+        body: ["var(--font-gantari)", "sans-serif"],
         title: ["var(--font-montserrat-alternates)", "sans-serif"],
         hand: ["var(--font-mynerve)", "cursive"],
       },

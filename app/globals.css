@@ -2,7 +2,7 @@
 
 @theme {
   /* Registramos las fuentes para que Tailwind v4 las reconozca */
-  --font-body: var(--font-montserrat);
+  --font-body: var(--font-gantari);
   --font-title: var(--font-montserrat-alternates);
   --font-hand: var(--font-mynerve);
 }
@@ -16,6 +16,12 @@
     transform: translateX(-50%);
   }
 
+}
+
+html,
+body {
+  /* El 'auto' al final es el respaldo si la imagen no carga */
+  cursor: url('/cursor.svg'), auto;
 }
 
 .animate-infinite-scroll {

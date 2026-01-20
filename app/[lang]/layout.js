@@ -3,10 +3,21 @@ import Link from "next/link";
 import Script from "next/script";
 import Image from "next/image";
 import { getDictionary } from "@/app/dictionaries";
-import { Montserrat, Montserrat_Alternates, Mynerve } from "next/font/google";
+import {
+  Montserrat,
+  Gantari,
+  Montserrat_Alternates,
+  Mynerve,
+} from "next/font/google";
 import { GoogleTagManager } from "@next/third-parties/google";
 import CookieBanner from "@/app/components/CookieBanner";
 import { cookies } from "next/headers"; // Importación necesaria para leer cookies en servidor
+
+const fontGantari = Gantari({
+  subsets: ["latin"],
+  variable: "--font-gantari",
+  weight: ["300", "400", "500", "700"],
+});
 
 const fontMontserrat = Montserrat({
   subsets: ["latin"],
@@ -114,7 +125,7 @@ export default async function RootLayout({ children, params }) {
   return (
     <html
       lang={lang}
-      className={`${fontMontserrat.variable} ${fontAlternates.variable} ${fontMynerve.variable}`}
+      className={`${fontGantari.variable} ${fontMontserrat.variable} ${fontAlternates.variable} ${fontMynerve.variable}`}
     >
       <head>
         {/* Inyección de JSON-LD para motores de búsqueda de IA */}

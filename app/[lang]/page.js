@@ -12,7 +12,7 @@ export default async function Home({ params }) {
   const dict = await getDictionary(lang);
   const services = getServicesData(dict);
   const BLOB_URL =
-    "https://tzhsvjcv6h2qp8xy.public.blob.vercel-storage.com/Animacion%20ejemplo.mp4";
+    "https://tzhsvjcv6h2qp8xy.public.blob.vercel-storage.com/Animacion%20final.mp4";
 
   return (
     <div className="flex flex-col bg-black">
