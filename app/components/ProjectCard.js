@@ -5,12 +5,12 @@ export default function ProjectCard({ project, isOpen, onClick, dict }) {
   return (
     <div
       onClick={onClick}
-      className={`w-full transition-all duration-500 ease-in-out cursor-pointer rounded-4xl overflow-hidden
-        bg-[#F2F2F2] 
-        bg-[linear-gradient(to_right,#d1d1d1_1px,transparent_1px),linear-gradient(to_bottom,#d1d1d1_1px,transparent_1px)]
-        bg-size-[20px_20px]
-        ${isOpen ? "mb-4" : "mb-4 hover:bg-[#ebebeb]"}
-      `}
+      className={`w-full transition-all duration-700 ease-in-out cursor-pointer rounded-4xl overflow-hidden
+  bg-[#F2F2F2] 
+  bg-[linear-gradient(to_right,rgba(0,0,0,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.05)_1px,transparent_1px)]
+  bg-size-[40px_40px]
+  ${isOpen ? "mb-4 shadow-sm" : "mb-4 hover:bg-[#F8F8F8] hover:bg-size[45px_45px]"}
+`}
     >
       {/* LÍNEA ROJA DE ACENTO (Superior) */}
       <div

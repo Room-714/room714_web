@@ -24,10 +24,10 @@ export default async function ProjectsPage({ params }) {
           </h1>
 
           {/* Contenedor para mover la segunda línea a la derecha */}
-          <div className="flex justify-end pr-[5%] md:pr-[10%] mb-8">
+          <div className="flex justify-end pr-[5%] sm:pr-[5%] md:pr-[10%] lg:pr-[10%] mb-8">
             {/* Este div 'inline-flex' hace que el ancho sea solo el del texto */}
             <div className="inline-flex flex-col items-center">
-              <h1 className="font-hand text-6xl md:text-8xl text-gray-400 leading-none">
+              <h1 className="font-hand text-6xl md:text-8xl text-white leading-none">
                 {dict.projects.title_2}
               </h1>
 

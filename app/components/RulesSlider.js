@@ -4,7 +4,9 @@ import Image from "next/image";
 
 export default function RulesSlider({ rules }) {
   const scrollRef = useRef(null);
-  const [activeId, setActiveId] = useState(null);
+
+  // 1. Iniciamos con el ID de la primera regla desplegada por defecto
+  const [activeId, setActiveId] = useState(rules[0]?.id || null);
 
   const handleScroll = () => {
     if (window.innerWidth < 1024 && scrollRef.current) {
@@ -30,14 +32,12 @@ export default function RulesSlider({ rules }) {
   };
 
   return (
-    /* CONTENEDOR PADRE CON ALTO FIJO: 
-       Fijamos h-[600px] (o lo que necesites) para que el layout de la página sea estático.
-    */
     <div className="w-full h-160">
       <div
         ref={scrollRef}
         onScroll={handleScroll}
-        className="w-full no-scrollbar flex overflow-x-auto snap-x snap-mandatory gap-6 px-[10%] py-10 lg:overflow-visible lg:px-24 lg:grid lg:grid-cols-3 lg:gap-10 lg:items-start"
+        /* 2. Añadimos perspective-1000 para que el efecto de rotación 3D se vea profundo */
+        className="w-full no-scrollbar flex overflow-x-auto snap-x snap-mandatory gap-6 px-[10%] py-10 lg:overflow-visible lg:px-24 lg:grid lg:grid-cols-3 lg:gap-10 lg:items-start [perspective:1000px]"
       >
         {rules.map((rule) => {
           const isActive = activeId === rule.id;
@@ -48,11 +48,19 @@ export default function RulesSlider({ rules }) {
               onClick={() => setActiveId(isActive ? null : rule.id)}
               className={`
                 rule-card shrink-0 bg-white rounded-[30px] p-8 cursor-pointer
-                transition-all duration-500 ease-in-out self-start
-                ${isActive ? "shadow-2xl z-10 scale-[1.02]" : "shadow-sm scale-100"}
+                transition-all duration-700 ease-in-out self-start
+                /* 3. Efecto de Giro: rotación en el eje Y y escala */
+                ${
+                  isActive
+                    ? "shadow-2xl z-10 scale-[1.02] [transform:rotateY(0deg)]"
+                    : "shadow-sm scale-100 [transform:rotateY(-15deg)] opacity-80"
+                }
                 w-70 md:w-87.5 lg:w-full
                 snap-center
+                hover:shadow-lg
               `}
+              /* Estilo inline por si Tailwind no reconoce el transform arbitrario */
+              style={{ transformStyle: "preserve-3d" }}
             >
               <div className="flex flex-col">
                 <span className="text-gray-500 font-bold font-hand text-sm md:text-base lg:text-lg block">
@@ -86,7 +94,7 @@ export default function RulesSlider({ rules }) {
                 <div
                   className={`
                     transition-all duration-500 ease-in-out mt-6 self-end
-                    ${isActive ? "w-30 h-30" : "w-24 h-24 md:w-32 md:h-32"}
+                    ${isActive ? "w-50 h-50 rotate-0" : "w-24 h-24 md:w-32 md:h-32 -rotate-12 opacity-50"}
                     relative
                   `}
                 >

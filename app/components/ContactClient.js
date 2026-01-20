@@ -65,16 +65,19 @@ export default function ContactClient({ dict, interests }) {
 
         <div className="w-full lg:w-[60%]">
           {status === "success" ? (
-            <div className="flex flex-col jusfity-center items-end animate-in fade-in duration-500 lg:mb-12">
-              <CheckCircle2 size={60} className="text-red-600 mb-4" />
-              <h1 className="font-hand text-6xl md:text-8xl mb-4 text-white leading-none">
+            <div className="flex flex-col jusfity-center items-end animate-in fade-in duration-500 lg:mt-24 lg:mb-36">
+              <CheckCircle2 size={60} className="text-red-600 mb-8" />
+              <h1 className="font-hand text-5xl sm:text-6xl md:text-7xl lg:text-8xl mb-4 text-white leading-none">
                 {dict.contact.success.title}
               </h1>
-              <p className="font-body text-xl text-gray-400 mb-8 max-w-2xl">
+              <p className="font-body text-xl sm:text-2xl md:text-3xl lg:text-4xl text-gray-400 mb-8 max-w-2xl">
                 {dict.contact.success.description}
               </p>
 
-              <Link href={`/${lang}`} className="text-white font-bold text-sm">
+              <Link
+                href={`/${lang}`}
+                className="text-white font-title text-sm sm:text-base md:text-lg lg:text-xl"
+              >
                 {dict.contact.success.link}
               </Link>
             </div>
@@ -88,7 +91,7 @@ export default function ContactClient({ dict, interests }) {
                 className="w-full flex flex-col gap-8"
               >
                 <div className="flex flex-col gap-4">
-                  <p className="font-body font-bold text-xl uppercase tracking-tighter">
+                  <p className="font-body font-bold text-sm sm:text-base md:text-lg lg:text-xl uppercase">
                     {dict.contact.interested.question}
                   </p>
                   <div className="flex flex-wrap gap-3">
@@ -97,7 +100,7 @@ export default function ContactClient({ dict, interests }) {
                         key={item}
                         type="button"
                         onClick={() => toggleInterest(item)}
-                        className={`px-6 py-1 border rounded-full text-sm font-bold transition-all ${
+                        className={`px-6 py-1 border rounded-full text-xs sm:text-sm md:text-base lg:text-lg font-bold transition-all ${
                           selectedInterests.includes(item)
                             ? "bg-white text-black border-white"
                             : "border-white hover:bg-white/10"
@@ -109,7 +112,7 @@ export default function ContactClient({ dict, interests }) {
                   </div>
                 </div>
                 <div className="flex flex-col gap-3">
-                  <label className="font-body font-bold text-xl uppercase tracking-tighter">
+                  <label className="font-body font-bold text-sm sm:text-base md:text-lg lg:text-xl uppercase">
                     {dict.contact.name.title}
                   </label>
                   <input
@@ -120,7 +123,7 @@ export default function ContactClient({ dict, interests }) {
                   />
                 </div>
                 <div className="flex flex-col gap-3">
-                  <label className="font-body font-bold text-xl uppercase tracking-tighter">
+                  <label className="font-body font-bold text-sm sm:text-base md:text-lg lg:text-xl uppercase">
                     {dict.contact.info.title}
                   </label>
                   <input
@@ -131,7 +134,7 @@ export default function ContactClient({ dict, interests }) {
                   />
                 </div>
                 <div className="flex flex-col gap-3">
-                  <label className="font-body font-bold text-xl uppercase tracking-tighter">
+                  <label className="font-body font-bold text-sm sm:text-base md:text-lg lg:text-xl uppercase">
                     {dict.contact.message.title}
                   </label>
                   <textarea
