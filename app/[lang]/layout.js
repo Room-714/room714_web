@@ -11,7 +11,7 @@ import {
 } from "next/font/google";
 import { GoogleTagManager } from "@next/third-parties/google";
 import CookieBanner from "@/app/components/CookieBanner";
-import { cookies } from "next/headers"; // Importación necesaria para leer cookies en servidor
+import { cookies } from "next/headers";
 
 const fontGantari = Gantari({
   subsets: ["latin"],
@@ -39,6 +39,7 @@ const fontMynerve = Mynerve({
 // --- CONFIGURACIÓN DE METADATOS DINÁMICOS (SEO) ---
 export async function generateMetadata({ params }) {
   const { lang = "en" } = await params;
+  const baseUrl = "https://www.room714.com";
 
   const titles = {
     en: "Room 714 | Digital Product Studio",
@@ -50,20 +51,30 @@ export async function generateMetadata({ params }) {
     es: "Construimos productos digitales escalables y de alto rendimiento mediante metodología UX y excelencia técnica.",
   };
 
-  const baseUrl = "https://www.room714.com";
-
   return {
+    metadataBase: new URL(baseUrl),
     title: {
       default: titles[lang],
       template: `%s | Room 714`,
     },
     description: descriptions[lang],
-    metadataBase: new URL(baseUrl),
     alternates: {
-      canonical: `/${lang}`,
+      canonical: `${baseUrl}/${lang}`, // Siempre absoluta
       languages: {
         "en-US": "/en",
         "es-ES": "/es",
+        "x-default": "/en", // Muy importante para SEO internacional
+      },
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
       },
     },
     openGraph: {
@@ -73,7 +84,7 @@ export async function generateMetadata({ params }) {
       siteName: "Room 714",
       images: [
         {
-          url: "/og-image.png",
+          url: "/og-image.png", // Next.js lo resolverá a absoluta gracias a metadataBase
           width: 1200,
           height: 630,
           alt: "Room 714 Digital Product Studio",
@@ -92,21 +103,20 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function RootLayout({ children, params }) {
-  const resolvedParams = await params;
-  const lang = resolvedParams.lang || "en";
+  const { lang = "en" } = await params;
   const dict = await getDictionary(lang);
-
-  // Comprobamos el consentimiento desde el servidor
   const cookieStore = await cookies();
   const hasConsent = cookieStore.get("cookie_consent")?.value === "true";
 
-  // --- DATOS ESTRUCTURADOS (GEO / AI ENGINES) ---
+  // --- DATOS ESTRUCTURADOS MEJORADOS ---
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
+    "@id": "https://www.room714.com/#organization",
     name: "Room 714",
     image: "https://www.room714.com/og-image.png",
     url: "https://www.room714.com",
+    priceRange: "$$$", // Ayuda a segmentar en búsquedas
     address: {
       "@type": "PostalAddress",
       addressLocality: "Madrid",
@@ -118,8 +128,8 @@ export default async function RootLayout({ children, params }) {
     ],
     description:
       lang === "es"
-        ? "Estudio de producto digital especializado en UX/UI, investigación CX y transformación digital."
-        : "Digital product studio specializing in UX/UI, CX research, and digital transformation.",
+        ? "Estudio de producto digital especializado en UX/UI, investigación CX y desarrollo a medida."
+        : "Digital product studio specializing in UX/UI, CX research, and custom development.",
   };
 
   return (
@@ -128,14 +138,13 @@ export default async function RootLayout({ children, params }) {
       className={`${fontGantari.variable} ${fontMontserrat.variable} ${fontAlternates.variable} ${fontMynerve.variable}`}
     >
       <head>
-        {/* Inyección de JSON-LD para motores de búsqueda de IA */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
 
-      {/* Carga condicional de Herramientas de Marketing y Tracking */}
+      {/* Solo cargamos tracking si hay consentimiento explícito */}
       {hasConsent && (
         <>
           <GoogleTagManager gtmId="GTM-M6HTKWS4" />
@@ -209,7 +218,7 @@ export default async function RootLayout({ children, params }) {
                     />
                   </Link>
                   {/* Blog */}
-                  <Link
+                  {/*<Link
                     href="/blog"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -222,7 +231,7 @@ export default async function RootLayout({ children, params }) {
                       height={30}
                       className="filter"
                     />
-                  </Link>
+                  </Link>*/}
                 </div>
               </div>
             </div>

@@ -6,10 +6,57 @@ import PrimaryButton from "@/app/components/PrimaryButton";
 import ProjectsList from "@/app/components/ProjectList";
 import { getProjectsData } from "@/app/data/Projects";
 
+export async function generateMetadata({ params }) {
+  const { lang } = await params;
+  const titles = {
+    es: "Proyectos | Room 714",
+    en: "Projects | Room 714",
+  };
+  const descriptions = {
+    es: "Descubre cómo transformamos la complejidad en éxito a través de nuestros casos de estudio.",
+    en: "Discover how we transform complexity into success through our case studies.",
+  };
+
+  return {
+    title: titles[lang],
+    description: descriptions[lang],
+  };
+}
+
 export default async function ProjectsPage({ params }) {
   const { lang } = await params;
   const dict = await getDictionary(lang);
   const projects = getProjectsData(dict);
+
+  // 1. Extraemos los casos de estudio del diccionario
+  // Usamos Object.keys para filtrar solo las claves que empiezan por 'case_study_'
+  const projectKeys = Object.keys(dict.projects).filter((key) =>
+    key.startsWith("case_study_"),
+  );
+
+  // 2. Construimos el JSON-LD dinámicamente
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: dict.projects.title_1 + " " + dict.projects.title_2,
+    description: dict.projects.description,
+    itemListElement: projectKeys.map((key, index) => {
+      const project = dict.projects[key];
+      return {
+        "@type": "ListItem",
+        position: index + 1,
+        item: {
+          "@type": "CreativeWork",
+          name: project.title,
+          description: `${project.challenge} ${project.outcome}`, // Combinamos para dar contexto a la IA
+          author: {
+            "@type": "Organization",
+            name: "Room 714",
+          },
+        },
+      };
+    }),
+  };
 
   return (
     <>
@@ -27,9 +74,9 @@ export default async function ProjectsPage({ params }) {
           <div className="flex justify-end pr-[5%] sm:pr-[5%] md:pr-[10%] lg:pr-[10%] mb-8">
             {/* Este div 'inline-flex' hace que el ancho sea solo el del texto */}
             <div className="inline-flex flex-col items-center">
-              <h1 className="font-hand text-6xl md:text-8xl text-white leading-none">
+              <span className="block font-hand text-6xl md:text-8xl text-white leading-none">
                 {dict.projects.title_2}
-              </h1>
+              </span>
 
               {/* La línea ahora se ajusta al 100% del ancho del texto de arriba */}
               <div className="w-full h-8 md:h-12 lg:h-16 relative">
