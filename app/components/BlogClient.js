@@ -49,7 +49,7 @@ export default function BlogClient({ posts, dict, lang }) {
       </nav>
 
       {/* Grid de Posts - Usamos 'visiblePosts' en lugar de 'filteredPosts' */}
-      <section className="max-w-7xl px-4 md:px-8 mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16 mt-10">
+      <section className="w-full px-4 md:px-8 mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16 mt-10">
         {visiblePosts.length > 0 ? (
           visiblePosts.map((post) => (
             <BlogCard key={post.id} post={post} lang={lang} />

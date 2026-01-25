@@ -85,7 +85,7 @@ export default async function PostPage({ params }) {
       <Navbar dict={dict} isDark={false} alternatePaths={alternatePaths} />
 
       {/* Botón de volver con corrección de capa */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-8 sm:px-10 md:px-14 lg:px-22 pt-12 -mb-8 flex justify-start">
+      <div className="relative z-10 w-full max-w-9xl mx-auto px-8 sm:px-10 md:px-14 lg:px-22 pt-12 -mb-8 flex justify-start">
         <Link
           href={`/${lang}/blog`}
           className="group inline-flex items-center gap-2 text-gray-400 hover:text-red-500 transition-colors duration-200 font-title font-bold text-xs sm:text-sm uppercase tracking-widest cursor-pointer"
@@ -146,7 +146,7 @@ export default async function PostPage({ params }) {
         </div>
       </div>
 
-      <article className="max-w-7xl mx-auto py-2 px-8 sm:py-4 sm:px-10 md:py-6 md:px-14 lg:py-8 lg:px-22">
+      <article className="max-w-9xl mx-auto py-2 px-8 sm:py-4 sm:px-10 md:py-6 md:px-14 lg:py-8 lg:px-22">
         {/* Cuerpo del Artículo (HTML del idioma seleccionado) */}
         <div
           className="prose prose-red max-w-none 
@@ -163,7 +163,7 @@ export default async function PostPage({ params }) {
 
       {/* Footer de artículos recientes */}
       <section className="mt-20 bg-gray-300 px-6 py-20 rounded-t-[50px]">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-9xl mx-auto">
           <h2 className="font-title font-black px-4 text-3xl mb-12 text-black">
             {lang === "es" ? "Últimos artículos" : "Latest articles"}
           </h2>
