@@ -14,6 +14,7 @@ export default async function ContactPage({ params }) {
       <div className="bg-white flex flex-col">
         <Navbar dict={dict} isDark={true} />
         <ContactClient dict={dict} interests={interests} />
+        {/* 1. Contenedor del Skyline: Proporcional y siempre visible */}
         <section className="w-full bg-white">
           <div className="w-[60%] ml-auto leading-0 flex">
             <Image
@@ -21,7 +22,7 @@ export default async function ContactPage({ params }) {
               alt="City Skyline"
               width={1920}
               height={400}
-              className="w-full h-auto block -mb-1 md:-mb-3 lg:-mb-5"
+              className="w-full h-auto block"
               priority
             />
           </div>

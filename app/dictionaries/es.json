@@ -1,5 +1,6 @@
 {
   "nav": {
+    "home": "Home",
     "projects": "Proyectos",
     "about": "Nosotros",
     "contact": "Contacto"
@@ -221,5 +222,29 @@
       "text": "Última actualización",
       "date": "Enero 2026"
     }
+  },
+  "blog": {
+    "our": "nuestro",
+    "your": "vuestro",
+    "blog": "blog",
+    "beyond": "amplía la conversación",
+    "headerConfig": {
+      "yourPos": "left-6 -top-20 md:left-10 md:-top-28 lg:left-14 lg:-top-38",
+      "squarePos": "right-48 -bottom-18 sm:right-58 sm:-bottom-21 md:right-78 md:-bottom-28 lg:right-95 lg:-bottom-36",
+      "crossConfig": "w-[50%] -translate-x-2 scale-80 translate-y-4"
+    },
+    "categories": {
+      "all": "Todos",
+      "tech": "Tecnología",
+      "design": "Diseño UX&UI",
+      "product": "Producto",
+      "ux": "Experiencia de Usuario"
+    },
+    "no_results": "No hay artículos en esta categoría",
+    "share_article": "Compartir articulo",
+    "copied": "¡Copiado!",
+    "latest_articles": "Últimos artículos",
+    "back": "Volver al blog",
+    "load_more": "Cargar más"
   }
 }

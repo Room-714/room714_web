@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Post {
+  id           Int               @id @default(autoincrement())
+  date         DateTime          @default(now())
+  image        String
+  published    Boolean           @default(true)
+  translations PostTranslation[]
+}
+
+model PostTranslation {
+  id        Int      @id @default(autoincrement())
+  postId    Int
+  lang      String   // "es" o "en"
+  slug      String   @unique
+  title     String
+  category  String
+  tags      String[] // Postgres permite arrays nativos
+  content   String   @db.Text
+  
+  post      Post     @relation(fields: [postId], references: [id])
+
+  @@unique([postId, lang]) // Un post solo puede tener una traducción por idioma
+}

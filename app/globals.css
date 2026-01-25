@@ -7,6 +7,7 @@
   --font-hand: var(--font-mynerve);
 }
 
+/* --- Animaciones y Estilos Base --- */
 @keyframes scroll {
   0% {
     transform: translateX(0);
@@ -15,23 +16,124 @@
   100% {
     transform: translateX(-50%);
   }
+}
 
+@keyframes infinite-scroll {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-infinite-scroll {
+  animation: infinite-scroll 30s linear infinite;
+  display: flex;
+  will-change: transform;
+}
+
+.animate-infinite-scroll:hover {
+  animation-play-state: paused;
 }
 
 html,
 body {
-  /* El 'auto' al final es el respaldo si la imagen no carga */
   cursor: url('/cursor.svg'), auto;
+  margin: 0;
+  padding: 0;
+  width: 100%;
 }
 
-.animate-infinite-scroll {
-  display: flex;
-  width: max-content;
-  animation: scroll 20s linear infinite;
-  /* Ajusta los segundos para más o menos velocidad */
+/* --- Configuración del Editor Tiptap --- */
+.tiptap {
+  min-height: 500px;
+  outline: none !important;
 }
 
-/* Pausar al pasar el ratón para mejor UX */
-.animate-infinite-scroll:hover {
-  animation-play-state: paused;
+.tiptap p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: #adb5bd;
+  pointer-events: none;
+  height: 0;
+}
+
+/* --- SISTEMA EDITORIAL UNIFICADO (Admin + Público) --- */
+
+/* Contenedor base */
+.prose {
+  max-width: none;
+}
+
+/* H2: Look con barra roja lateral */
+.prose h2 {
+  font-family: var(--font-title), sans-serif !important;
+  color: #1a1a1a !important;
+  font-weight: 900 !important;
+  border-left: 4px solid #ef4444 !important;
+  padding-left: 1.25rem !important;
+  margin-top: 3rem !important;
+  margin-bottom: 1.5rem !important;
+  line-height: 1.2 !important;
+}
+
+/* Listas: Puntos rojos personalizados */
+.prose ul {
+  list-style-type: none !important;
+  padding-left: 0.5rem !important;
+  margin-bottom: 1.5rem !important;
+}
+
+.prose ul li {
+  position: relative !important;
+  padding-left: 1.75rem !important;
+  margin-bottom: 0.75rem !important;
+  list-style: none !important;
+}
+
+.prose ul li::before {
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: 0.7em !important;
+  width: 8px !important;
+  height: 8px !important;
+  background-color: #ef4444 !important;
+  border-radius: 50% !important;
+}
+
+/* Párrafos y espaciado */
+.prose p {
+  margin-top: 1.5rem !important;
+  line-height: 1.7 !important;
+}
+
+/* Blockquotes */
+.prose blockquote {
+  font-style: italic !important;
+  border-left: 4px solid #ef4444 !important;
+  background-color: #f9fafb;
+  padding: 1.5rem !important;
+  color: #4b5563 !important;
+  margin: 2.5rem 0 !important;
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
+/* Links */
+.prose a {
+  color: #ef4444 !important;
+  text-decoration: underline !important;
+  font-weight: 700 !important;
+  transition: opacity 0.2s;
+}
+
+.prose a:hover {
+  opacity: 0.8;
+}
+
+/* Ajustes específicos para el editor en modo Admin para que no colapse */
+.tiptap.prose {
+  padding: 2rem;
 }

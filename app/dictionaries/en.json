@@ -1,5 +1,6 @@
 {
   "nav": {
+    "home": "Home",
     "projects": "Projects",
     "about": "About",
     "contact": "Contact"
@@ -221,5 +222,29 @@
       "text": "Last updated",
       "date": "January 2026"
     }
+  },
+  "blog": {
+    "our": "our",
+    "your": "your",
+    "blog": "blog",
+    "beyond": "beyond the button",
+    "headerConfig": {
+      "yourPos": "left-2 top-20 md:top-25 lg:left-4 lg:top-30",
+      "squarePos": "-right-3 -bottom-18 sm:-bottom-21 md:-right-4 md:-bottom-28 lg:-right-5 lg:-bottom-36",
+      "crossConfig": "w-full translate-x-0 scale-90 translate-y-3"
+    },
+    "categories": {
+      "all": "All",
+      "tech": "Tech Insights",
+      "design": "UX&UI Design",
+      "product": "Product Management",
+      "ux": "User Experience"
+    },
+    "no_results": "No articles found in this category",
+    "share_article": "Share article",
+    "copied": "Copied!",
+    "latest_articles": "Latest articles",
+    "back": "Back to blog",
+    "load_more": "Load more"
   }
 }

@@ -70,8 +70,8 @@ export default async function Home({ params }) {
       </section>
 
       {/* Services Section */}
-      <section className="bg-black rounded-t-[50px] -mt-10 pt-20 pb-8 mb-4 z-20">
-        <div className="flex flex-col items-center">
+      <section className="bg-black rounded-t-[50px] -mt-10 pt-20 pb-8 mb-4 z-20 relative">
+        <div className="block w-full max-w-7xl mx-auto">
           <div className="md:sticky top-12 mb-16 lg:mb-20 h-12 flex items-center justify-center px-4 md:px-8 lg:px-40">
             <h2 className="text-white z-30 font-title font-bold text-2xl md:text-4xl lg:text-5xl text-center px-2 md:px-8 lg:px-16 leading-tight">
               {dict.home.services.title}
@@ -82,8 +82,12 @@ export default async function Home({ params }) {
             return (
               <div
                 key={service.id}
-                className="md:sticky z-40 w-full"
-                style={{ top: "140px", marginBottom: "40px" }}
+                className="md:sticky w-full"
+                style={{
+                  top: "140px",
+                  marginBottom: "40px",
+                  zIndex: 40 + index,
+                }}
               >
                 <ServiceCard
                   number={service.number}
@@ -98,7 +102,7 @@ export default async function Home({ params }) {
       </section>
 
       {/* Customers Section */}
-      <section className="bg-white rounded-t-[50px] -mt-50px px-2 py-10 flex flex-col items-center text-center z-50">
+      <section className="bg-white rounded-t-[50px] overflow-hidden -mt-50px px-2 py-10 flex flex-col items-center text-center z-50">
         <div className="mb-8 p-4">
           <Image
             src="/clients-hero.svg"
@@ -121,30 +125,31 @@ export default async function Home({ params }) {
           {dict.home.customers.description}
         </p>
 
-        {/* Contenedor principal con degradados laterales opcionales para suavizar bordes */}
+        {/* Contenedor principal con ancho forzado */}
         <div className="relative w-full mb-10 overflow-hidden group py-6">
-          {/* Degradados laterales (puedes quitarlos si prefieres bordes limpios) */}
-          <div className="absolute inset-y-0 left-0 w-16 bg-linear-to-r from-white to-transparent z-10 pointer-events-none"></div>
-          <div className="absolute inset-y-0 right-0 w-16 bg-linear-to-l from-white to-transparent z-10 pointer-events-none"></div>
+          {/* Degradados laterales */}
+          <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
+          <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
 
-          <div className="flex animate-infinite-scroll w-max hover:[animation-play-state:paused]">
+          {/* Contenedor de la animación */}
+          <div className="flex w-max animate-infinite-scroll hover:[animation-play-state:paused]">
+            {/* Renderizamos el bloque de logos 2 veces para el loop infinito */}
             {[1, 2].map((block) => (
-              <div key={block} className="flex">
+              <div key={block} className="flex flex-nowrap">
                 {[1, 2, 3, 4].map((num) => (
                   <div
                     key={`${block}-${num}`}
-                    className="flex-none flex justify-center items-center
-                       w-[50vw] md:w-[33vw] lg:w-[25vw] 
-                       px-6 md:px-10 lg:px-14 transition-all duration-300"
+                    className="flex-none flex justify-center items-center 
+                       w-50 md:w-75 lg:w-100 
+                       px-8 md:px-12 lg:px-20"
                   >
-                    {/* Altura aumentada de h-20 (80px) a h-[100px] para ese +25% */}
-                    <div className="relative w-full h-25 transition-all duration-500 transform hover:scale-110">
+                    <div className="relative w-full h-20 md:h-28 lg:h-32 transition-all duration-500 transform hover:scale-110">
                       <Image
                         src={`/clients/client-0${num}.svg`}
                         alt={`Client-0${num}`}
                         fill
                         className="object-contain"
-                        sizes="(max-width: 768px) 50vw, 25vw"
+                        sizes="(max-width: 768px) 200px, (max-width: 1024px) 300px, 400px"
                       />
                     </div>
                   </div>
@@ -164,14 +169,14 @@ export default async function Home({ params }) {
       </section>
 
       {/* 1. Contenedor del Skyline: Proporcional y siempre visible */}
-      <section className="w-full bg-white">
+      <section className="w-full bg-white overflow-hidden">
         <div className="w-[60%] ml-auto leading-0 flex">
           <Image
             src="/skyline.svg"
             alt="City Skyline"
             width={1920}
             height={400}
-            className="w-full h-auto block -mb-1 md:-mb-3 lg:-mb-5"
+            className="w-full h-auto block"
             priority
           />
         </div>

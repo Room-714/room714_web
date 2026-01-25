@@ -85,6 +85,7 @@ export default async function AboutPage({ params }) {
           <RulesSlider rules={rules} />
         </section>
       </main>
+      {/* 1. Contenedor del Skyline: Proporcional y siempre visible */}
       <section className="w-full bg-red-700">
         <div className="w-[60%] ml-auto leading-0 flex">
           <Image
@@ -92,7 +93,7 @@ export default async function AboutPage({ params }) {
             alt="City Skyline"
             width={1920}
             height={400}
-            className="w-full h-auto block -mb-1 md:-mb-3 lg:-mb-5"
+            className="w-full h-auto block"
             priority
           />
         </div>

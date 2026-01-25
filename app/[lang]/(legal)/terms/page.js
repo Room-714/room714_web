@@ -60,7 +60,7 @@ export default async function TermsPage({ params }) {
             alt="City Skyline"
             width={1920}
             height={400}
-            className="w-full h-auto block -mb-1 md:-mb-3 lg:-mb-5"
+            className="w-full h-auto block"
             priority
           />
         </div>

@@ -4,21 +4,33 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 
-export default function Navbar({ dict, isDark = false }) {
+export default function Navbar({
+  dict,
+  isDark = false,
+  alternatePaths = null,
+}) {
   const [isOpen, setIsOpen] = useState(false);
+  const [langOpen, setLangOpen] = useState(false);
 
   const params = useParams();
   const pathname = usePathname();
   const lang = params?.lang || "en";
 
   const getLanguagePath = (targetLang) => {
+    // Si estamos en un post y tenemos las rutas alternativas, las usamos
+    if (alternatePaths && alternatePaths[targetLang]) {
+      return alternatePaths[targetLang];
+    }
+
+    // Si no, usamos la lógica por defecto de reemplazar el código de idioma
     if (!pathname) return `/${targetLang}`;
     return pathname.replace(`/${lang}`, `/${targetLang}`);
   };
 
   const navLinks = [
+    { name: dict.nav.home, href: `/${lang}/` },
     { name: dict.nav.projects, href: `/${lang}/projects` },
     { name: dict.nav.about, href: `/${lang}/about` },
     { name: dict.nav.contact, href: `/${lang}/contact` },
@@ -45,15 +57,15 @@ export default function Navbar({ dict, isDark = false }) {
       </Link>
 
       {/* MENÚ DESKTOP + SELECTOR IDIOMA */}
-      <div className="hidden md:flex items-center gap-8 lg:gap-12">
-        <nav className="flex items-center gap-8 lg:gap-10">
+      <div className="hidden md:flex items-center gap-7 lg:gap-10">
+        <nav className="flex items-center gap-6 lg:gap-8">
           {navLinks.map((link) => {
             const isActive = pathname === link.href;
             return (
               <Link
                 key={link.name}
                 href={link.href}
-                className={`font-title md:text-xl lg:text-2xl lg:font-medium tracking-wider transition-all duration-300 ${
+                className={`font-title md:text-lg lg:text-xl lg:font-medium transition-all duration-300 ${
                   isActive ? "text-red-600 font-bold" : "hover:text-red-500"
                 }`}
               >
@@ -64,28 +76,48 @@ export default function Navbar({ dict, isDark = false }) {
         </nav>
 
         {/* Selector de Idioma Desktop */}
-        <div className="flex items-center gap-3 border-l pl-8 border-gray-500/30 font-body text-sm tracking-widest uppercase">
-          <Link
-            href={getLanguagePath("en")}
-            className={`transition-all ${
-              lang === "en"
-                ? "text-red-600 font-bold"
-                : "opacity-50 hover:opacity-100"
-            }`}
+        <div className="relative border-l pl-8 border-gray-500/30 font-hand text-lg uppercase">
+          {/* Botón que controla el dropdown */}
+          <button
+            onClick={() => setLangOpen(!langOpen)}
+            className="flex items-center gap-2 hover:text-red-600 transition-colors py-1"
           >
-            EN
-          </Link>
-          <span className="opacity-20">|</span>
-          <Link
-            href={getLanguagePath("es")}
-            className={`transition-all ${
-              lang === "es"
-                ? "text-red-600 font-bold"
-                : "opacity-50 hover:opacity-100"
-            }`}
-          >
-            ES
-          </Link>
+            <span className="font-bold">{lang}</span>
+            <ChevronDown
+              size={14}
+              className={`transition-transform duration-300 ${langOpen ? "rotate-180" : ""}`}
+            />
+          </button>
+
+          {/* Menú Desplegable */}
+          {langOpen && (
+            <>
+              {/* Cierre al hacer clic fuera */}
+              <div
+                className="fixed inset-0 z-40 cursor-default"
+                onClick={() => setLangOpen(false)}
+              />
+
+              <div className="absolute right-0 mt-4 w-32 bg-white border border-gray-200 rounded-xl shadow-xl overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-200">
+                <div className="flex flex-col py-1">
+                  {["en", "es"].map((l) => (
+                    <Link
+                      key={l}
+                      href={getLanguagePath(l)}
+                      onClick={() => setLangOpen(false)}
+                      className={`px-4 py-3 text-left transition-colors hover:bg-gray-50 text-[12px] ${
+                        lang === l
+                          ? "text-red-600 font-bold bg-red-50/50"
+                          : "text-gray-600 hover:text-black"
+                      }`}
+                    >
+                      {l === "en" ? "ENGLISH" : "ESPAÑOL"}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
 
