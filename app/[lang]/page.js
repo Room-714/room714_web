@@ -71,7 +71,7 @@ export default async function Home({ params }) {
 
       {/* Services Section */}
       <section className="bg-black rounded-t-[50px] -mt-10 pt-20 pb-8 mb-4 z-20 relative">
-        <div className="block w-full max-w-7xl mx-auto">
+        <div className="block w-full mx-auto">
           <div className="md:sticky top-12 mb-16 lg:mb-20 h-12 flex items-center justify-center px-4 md:px-8 lg:px-40">
             <h2 className="text-white z-30 font-title font-bold text-2xl md:text-4xl lg:text-5xl text-center px-2 md:px-8 lg:px-16 leading-tight">
               {dict.home.services.title}
