@@ -30,7 +30,7 @@ export default function BlogClient({ posts, dict, lang }) {
 
   return (
     <div className="w-full bg-gray-300 p-5 pb-20 rounded-t-[50px] -mt-10 relative z-10">
-      <nav className="relative w-full max-w-7xl mx-auto px-4 md:px-8 mt-10">
+      <nav className="relative w-full mx-auto px-4 md:px-8 mt-10">
         <div className="flex items-center justify-start overflow-x-auto no-scrollbar pb-4">
           {categories.map((cat) => (
             <button

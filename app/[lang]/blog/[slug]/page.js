@@ -100,7 +100,7 @@ export default async function PostPage({ params }) {
       </div>
 
       {/* Contenedor principal del Hero - Quitamos items-start y usamos items-stretch */}
-      <div className="flex flex-col w-full items-stretch md:flex-row-reverse max-w-7xl mx-auto md:py-12 px-2 sm:px-4 md:px-8 lg:px-16">
+      <div className="flex flex-col w-full items-stretch md:flex-row-reverse max-w-9xl mx-auto md:py-12 px-2 sm:px-4 md:px-8 lg:px-16">
         {/* 1. La Imagen */}
         <div className="w-full md:w-1/2 lg:w-2/5 px-6 mb-8 md:mb-0">
           <div className="relative w-full aspect-4/3 sm:aspect-video md:aspect-square rounded-4xl overflow-hidden shadow-2xl">
