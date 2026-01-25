@@ -167,7 +167,7 @@ export default async function RootLayout({ children, params }) {
           {/* FOOTER */}
           <footer className="w-full bg-[#1A1A1A] relative z-10 -mt-1">
             {/* BLOQUE PRINCIPAL */}
-            <div className="w-full max-w-7xl mx-auto flex justify-between items-start py-8 px-6">
+            <div className="w-full mx-auto flex justify-between items-start py-8 px-6">
               {/* LADO IZQUIERDO: Personaje y frase */}
               <div className="flex flex-col justify-start items-center pl-2 gap-2">
                 <span className="font-hand text-center text-base sm:text-lg md:text-xl lg:text-2xl mb-2 text-white">
