@@ -18,8 +18,10 @@ export async function generateMetadata({ params }) {
 
   const description = content?.replace(/<[^>]*>/g, "").slice(0, 160);
 
-  const imageUrl = `https://room714.com${image}`;
-  const pageUrl = `https://room714.com/${lang}/blog/${slug}`;
+  const imageUrl = image.startsWith("http")
+    ? image
+    : `https://room714.com${image}`;
+  const pageUrl = `https://www.room714.com/${lang}/blog/${slug}`;
 
   return {
     title: `${title} | Room 714`,
