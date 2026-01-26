@@ -20,7 +20,7 @@ export async function generateMetadata({ params }) {
 
   const imageUrl = image.startsWith("http")
     ? image
-    : `https://room714.com${image}`;
+    : `https://www.room714.com${image.startsWith("/") ? "" : "/"}${image}`;
   const pageUrl = `https://www.room714.com/${lang}/blog/${slug}`;
 
   return {
