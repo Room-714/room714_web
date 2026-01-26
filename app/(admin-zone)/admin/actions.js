@@ -24,10 +24,15 @@ function slugify(text) {
  * Envía la información del post a Make.com para su publicación en LinkedIn
  */
 async function notifySocialMediaWebhook(postData, imageUrl) {
-  const webhookUrl =
-    "https://hook.eu2.make.com/3h4o9e3j55lzjoavg68du7y24f0gav3m";
+  // 1. Usar process.env para que funcione en Vercel y local
+  const webhookUrl = process.env.MAKE_WEBHOOK_URL;
 
-  // Limpiamos el HTML del contenido para el resumen de RRSS
+  if (!webhookUrl) {
+    console.error("⚠️ MAKE_WEBHOOK_URL no está definida en el entorno");
+    return;
+  }
+
+  // 2. Limpiamos el HTML para LinkedIn
   const cleanSummary = postData.content_es
     ? postData.content_es.replace(/<[^>]*>?/gm, "").substring(0, 250) + "..."
     : "";
@@ -35,13 +40,13 @@ async function notifySocialMediaWebhook(postData, imageUrl) {
   const payload = {
     title: postData.title_es,
     summary: cleanSummary,
-    url: `https://tuweb.com/blog/${slugify(postData.title_es)}`,
+    // 3. Asegúrate de poner tu dominio real aquí
+    url: `https://beyondthebutton.com/es/blog/${slugify(postData.title_es)}`,
     image: imageUrl,
     date: postData.date,
   };
 
   try {
-    console.log("📤 Enviando datos a Make...");
     const response = await fetch(webhookUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -49,12 +54,10 @@ async function notifySocialMediaWebhook(postData, imageUrl) {
     });
 
     if (response.ok) {
-      console.log("✅ Webhook ejecutado con éxito");
-    } else {
-      console.error("⚠️ Make respondió con error:", response.status);
+      console.log("✅ Webhook enviado a Make con éxito");
     }
   } catch (error) {
-    console.error("❌ Error de red al conectar con el Webhook:", error);
+    console.error("❌ Error conectando con Make:", error);
   }
 }
 
