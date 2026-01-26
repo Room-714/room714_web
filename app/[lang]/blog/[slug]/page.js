@@ -31,7 +31,7 @@ export async function generateMetadata({ params }) {
       description: description,
       url: pageUrl,
       siteName: "Room 714",
-      images: [{ url: imageUrl, width: 1200, height: 630 }],
+      images: [{ url: imageUrl, width: 1200, height: 630, alt: title }],
       locale: lang === "es" ? "es_ES" : "en_US",
       type: "article",
     },
