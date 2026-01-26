@@ -24,7 +24,6 @@ function slugify(text) {
  * Envía la información del post a Make.com para su publicación en LinkedIn
  */
 async function notifySocialMediaWebhook(postData, imageUrl) {
-  // 1. Usar process.env para que funcione en Vercel y local
   const webhookUrl = process.env.MAKE_WEBHOOK_URL;
 
   if (!webhookUrl) {
@@ -32,7 +31,7 @@ async function notifySocialMediaWebhook(postData, imageUrl) {
     return;
   }
 
-  // 2. Limpiamos el HTML para LinkedIn
+  // 1. Limpiamos el HTML para un resumen limpio
   const cleanSummary = postData.content_es
     ? postData.content_es.replace(/<[^>]*>?/gm, "").substring(0, 250) + "..."
     : "";
@@ -40,10 +39,12 @@ async function notifySocialMediaWebhook(postData, imageUrl) {
   const payload = {
     title: postData.title_es,
     summary: cleanSummary,
-    // 3. Asegúrate de poner tu dominio real aquí
-    url: `https://beyondthebutton.com/es/blog/${slugify(postData.title_es)}`,
+    // 2. CAMBIO CLAVE: Usamos tu dominio real room714.com
+    url: `https://www.room714.com/es/blog/${slugify(postData.title_es)}`,
     image: imageUrl,
     date: postData.date,
+    // 3. NUEVO: Enviamos los tags por si quieres usarlos en Make
+    tags: postData.tags_es,
   };
 
   try {
@@ -55,12 +56,13 @@ async function notifySocialMediaWebhook(postData, imageUrl) {
 
     if (response.ok) {
       console.log("✅ Webhook enviado a Make con éxito");
+    } else {
+      console.error("⚠️ Make respondió con error:", response.status);
     }
   } catch (error) {
-    console.error("❌ Error conectando con Make:", error);
+    console.error("❌ Error de red al conectar con el Webhook:", error);
   }
 }
-
 /**
  * Obtiene la lista de todos los posts
  */
