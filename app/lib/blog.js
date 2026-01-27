@@ -2,7 +2,15 @@ import { prisma } from "./prisma";
 
 export async function getAllPosts(lang = "es") {
   try {
+    const now = new Date(); // El "ahora" del servidor
+
     const posts = await prisma.post.findMany({
+      where: {
+        published: true, // Filtro 1: Debe estar publicado
+        date: {
+          lte: now, // Filtro 2: La fecha debe ser menor o igual a "ahora"
+        },
+      },
       include: {
         translations: {
           where: { lang: lang },
@@ -19,7 +27,7 @@ export async function getAllPosts(lang = "es") {
         id: post.id,
         date: post.date,
         image: post.image,
-        category: post.category, // <--- CORREGIDO: Viene de 'post', no de 'translation'
+        category: post.category,
         slug: translation?.slug,
         title: translation?.title,
         tags: translation?.tags,
