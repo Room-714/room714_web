@@ -1,5 +1,5 @@
 import { prisma } from "@/app/lib/prisma";
-import { triggerLinkedInNotification } from "@/app/admin/components/actions";
+import { triggerLinkedInNotification } from "@/app/admin/actions";
 import { NextResponse } from "next/server";
 
 export async function GET(request) {
