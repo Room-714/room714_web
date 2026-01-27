@@ -112,11 +112,11 @@ export default function RichTextEditor({ content, onChange }) {
         </MenuButton>
       </div>
 
-      {/* ÁREA DE TEXTO */}
-      <div className="bg-white border border-gray-200 rounded-b-xl shadow-inner min-h-[600px]">
+      {/* ÁREA DE TEXTO CON ALTURA LIMITADA Y SCROLL */}
+      <div className="bg-white overflow-y-auto max-h-75 min-h-37.5 custom-scrollbar">
         <EditorContent
           editor={editor}
-          className="p-10 prose prose-red max-w-none focus:outline-none min-h-[600px] selection:bg-red-100"
+          className="px-6 prose prose-sm prose-red max-w-none focus:outline-none selection:bg-red-100"
         />
       </div>
     </div>

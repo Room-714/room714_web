@@ -235,11 +235,11 @@
       "crossConfig": "w-[50%] -translate-x-2 scale-80 translate-y-4"
     },
     "categories": {
-      "all": "Todos",
-      "tech": "Tecnología",
-      "design": "Diseño UX&UI",
-      "product": "Producto",
-      "ux": "Experiencia de Usuario"
+      "ALL": "Todos",
+      "TECH": "Tecnología",
+      "DESIGN": "Diseño UX&UI",
+      "PRODUCT": "Producto",
+      "UX": "Experiencia de Usuario"
     },
     "no_results": "No hay artículos en esta categoría",
     "share_article": "Compartir articulo",

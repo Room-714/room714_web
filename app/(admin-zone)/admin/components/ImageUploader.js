@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
 import { upload } from "@vercel/blob/client";
-// 1. Cambiamos el nombre de la importación aquí:
 import NextImage from "next/image";
+import { UploadCloud, Loader2 } from "lucide-react"; // Importamos los iconos
 
 export default function ImageUploader({
   onUploadSuccess,
@@ -16,9 +16,8 @@ export default function ImageUploader({
     if (!file) return;
 
     setUploading(true);
-
     try {
-      // --- Lógica del Canvas para Redimensionar (Mantener igual) ---
+      // --- Lógica del Canvas (Se mantiene igual) ---
       const img = new Image();
       img.src = URL.createObjectURL(file);
       await new Promise((resolve) => (img.onload = resolve));
@@ -45,13 +44,9 @@ export default function ImageUploader({
         canvas.toBlob(res, "image/jpeg", 0.8),
       );
 
-      // --- NUEVA LÓGICA DE NOMBRE DE ARCHIVO ---
-      // Usamos un timestamp para el número secuencial (nn) para evitar colisiones
       const datePrefix = postDate || new Date().toISOString().split("T")[0];
       const seconds = new Date().getSeconds().toString().padStart(2, "0");
       const milliseconds = new Date().getMilliseconds().toString().slice(0, 2);
-
-      // Nombre final: blog/aaaa-mm-dd-nn.jpg
       const fileName = `blog/${datePrefix}-${seconds}${milliseconds}.jpg`;
 
       const newBlob = await upload(fileName, blob, {
@@ -69,37 +64,61 @@ export default function ImageUploader({
   };
 
   return (
-    <div className="flex flex-col gap-4 p-4 border-2 border-dashed border-gray-200 rounded-xl bg-white">
-      <label className="text-xs font-bold uppercase text-gray-400">
-        Imagen del Post (1:1)
-      </label>
-
-      {currentImage && (
-        <div className="relative w-32 h-32 overflow-hidden rounded-lg shadow-md border border-gray-100">
-          {/* 3. Usamos el nuevo nombre del componente aquí */}
-          <NextImage
-            src={currentImage}
-            alt="Preview"
-            fill
-            className="object-cover"
-            sizes="128px"
-          />
-        </div>
+    <label className="relative flex flex-col items-center justify-center w-full h-full cursor-pointer group transition-all">
+      {/* 1. Imagen de fondo (si existe) */}
+      {currentImage && !uploading && (
+        <NextImage
+          src={currentImage}
+          alt="Preview"
+          fill
+          className="object-cover rounded-2xl"
+          sizes="(max-width: 768px) 100vw, 400px"
+        />
       )}
 
+      {/* 2. Overlay / Interfaz de usuario */}
+      <div
+        className={`
+        absolute inset-0 flex flex-col items-center justify-center gap-2 p-4 rounded-2xl transition-colors
+        ${currentImage ? "bg-black/40 group-hover:bg-black/60" : "bg-white"}
+      `}
+      >
+        {uploading ? (
+          <>
+            <Loader2 className="w-10 h-10 text-red-500 animate-spin" />
+            <p className="text-xs font-black uppercase text-red-500">
+              Subiendo...
+            </p>
+          </>
+        ) : (
+          <>
+            <UploadCloud
+              className={`w-10 h-10 ${currentImage ? "text-white" : "text-gray-300"}`}
+            />
+            <div className="text-center">
+              <p
+                className={`text-sm font-black uppercase ${currentImage ? "text-white" : "text-black"}`}
+              >
+                {currentImage ? "Cambiar Imagen" : "Subir Imagen"}
+              </p>
+              <p
+                className={`text-[10px] uppercase font-bold ${currentImage ? "text-gray-200" : "text-gray-400"}`}
+              >
+                JPG o PNG (800x800 px)
+              </p>
+            </div>
+          </>
+        )}
+      </div>
+
+      {/* 3. Input oculto */}
       <input
         type="file"
         accept="image/*"
         onChange={handleFileChange}
         disabled={uploading}
-        className="..."
+        className="hidden" // Escondemos el input feo del sistema
       />
-
-      {uploading && (
-        <p className="text-xs text-orange-500 animate-pulse font-bold text-center">
-          Subiendo...
-        </p>
-      )}
-    </div>
+    </label>
   );
 }

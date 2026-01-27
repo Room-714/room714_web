@@ -235,11 +235,11 @@
       "crossConfig": "w-full translate-x-0 scale-90 translate-y-3"
     },
     "categories": {
-      "all": "All",
-      "tech": "Tech Insights",
-      "design": "UX&UI Design",
-      "product": "Product Management",
-      "ux": "User Experience"
+      "ALL": "All",
+      "TECH": "Tech Insights",
+      "DESIGN": "UX&UI Design",
+      "PRODUCT": "Product Management",
+      "UX": "User Experience"
     },
     "no_results": "No articles found in this category",
     "share_article": "Share article",

@@ -7,25 +7,38 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Category {
+  TECH
+  DESIGN
+  PRODUCT
+  UX
+}
+
 model Post {
   id           Int               @id @default(autoincrement())
-  date         DateTime          @default(now())
   image        String
-  published    Boolean           @default(true)
+  category     Category
+  // 1. Añade @default(now()) temporalmente para que Prisma pueda rellenar los 8 posts existentes
+  date         DateTime          @default(now()) 
+  // 2. Añade @default(false) para el booleano
+  published    Boolean           @default(false)
+  // 3. Añade @default(now()) también aquí temporalmente
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @default(now()) @updatedAt
+  
   translations PostTranslation[]
 }
 
 model PostTranslation {
-  id        Int      @id @default(autoincrement())
-  postId    Int
-  lang      String   // "es" o "en"
-  slug      String   @unique
-  title     String
-  category  String
-  tags      String[] // Postgres permite arrays nativos
-  content   String   @db.Text
+  id      Int      @id @default(autoincrement())
+  postId  Int
+  lang    String   
+  slug    String   @unique
+  title   String
+  tags    String[] 
+  content String   @db.Text
   
-  post      Post     @relation(fields: [postId], references: [id])
+  post    Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
 
-  @@unique([postId, lang]) // Un post solo puede tener una traducción por idioma
+  @@unique([postId, lang])
 }

@@ -13,16 +13,15 @@ export async function getAllPosts(lang = "es") {
       },
     });
 
-    // Mapeamos los datos para que tengan el formato que espera tu frontend
     return posts.map((post) => {
       const translation = post.translations[0];
       return {
         id: post.id,
         date: post.date,
         image: post.image,
+        category: post.category, // <--- CORREGIDO: Viene de 'post', no de 'translation'
         slug: translation?.slug,
         title: translation?.title,
-        category: translation?.category,
         tags: translation?.tags,
         content: translation?.content,
       };
@@ -35,7 +34,6 @@ export async function getAllPosts(lang = "es") {
 
 export async function getPostBySlug(slug, lang = "es") {
   try {
-    // 1. Buscamos la traducción actual y su post
     const currentTranslation = await prisma.postTranslation.findFirst({
       where: { slug: slug, lang: lang },
       include: { post: { include: { translations: true } } },
@@ -43,7 +41,6 @@ export async function getPostBySlug(slug, lang = "es") {
 
     if (!currentTranslation) return null;
 
-    // 2. Extraemos los slugs para los botones de idioma (alternates)
     const alternateSlugs = {
       es: currentTranslation.post.translations.find((t) => t.lang === "es")
         ?.slug,
@@ -53,14 +50,14 @@ export async function getPostBySlug(slug, lang = "es") {
 
     return {
       id: currentTranslation.post.id,
-      date: currentTranslation.post.date.toISOString().split("T")[0], // Formato YYYY-MM-DD
+      date: currentTranslation.post.date.toISOString().split("T")[0],
       image: currentTranslation.post.image,
+      category: currentTranslation.post.category, // <--- CORREGIDO: Viene del modelo padre 'post'
       slug: currentTranslation.slug,
       title: currentTranslation.title,
-      category: currentTranslation.category,
       tags: currentTranslation.tags,
       content: currentTranslation.content,
-      alternateSlugs, // Esto es vital para tu Navbar y SEO
+      alternateSlugs,
     };
   } catch (error) {
     console.error("Error:", error);

@@ -2,7 +2,6 @@
 
 import { prisma } from "@/app/lib/prisma";
 import { revalidatePath } from "next/cache";
-import { CATEGORY_LABELS } from "@/app/data/BlogCategories";
 
 /**
  * Genera un slug amigable para URL
@@ -21,17 +20,16 @@ function slugify(text) {
 }
 
 /**
- * Envía la información del post a Make.com para su publicación en LinkedIn
+ * Lógica de Webhook para LinkedIn (Make.com)
+ * Ahora exportada para llamarla independientemente
  */
-async function notifySocialMediaWebhook(postData, imageUrl) {
+export async function triggerLinkedInNotification(postData, imageUrl) {
   const webhookUrl = process.env.MAKE_WEBHOOK_URL;
-
   if (!webhookUrl) {
-    console.error("⚠️ MAKE_WEBHOOK_URL no está definida en el entorno");
-    return;
+    console.error("⚠️ MAKE_WEBHOOK_URL no definida");
+    return { success: false, error: "Webhook URL no configurada" };
   }
 
-  // 1. Limpiamos el HTML para un resumen limpio
   const cleanSummary = postData.content_es
     ? postData.content_es.replace(/<[^>]*>?/gm, "").substring(0, 250) + "..."
     : "";
@@ -39,11 +37,9 @@ async function notifySocialMediaWebhook(postData, imageUrl) {
   const payload = {
     title: postData.title_es,
     summary: cleanSummary,
-    // 2. CAMBIO CLAVE: Usamos tu dominio real room714.com
     url: `https://www.room714.com/es/blog/${slugify(postData.title_es)}`,
     image: imageUrl,
     date: postData.date,
-    // 3. NUEVO: Enviamos los tags por si quieres usarlos en Make
     tags: postData.tags_es,
   };
 
@@ -53,25 +49,20 @@ async function notifySocialMediaWebhook(postData, imageUrl) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
-
-    if (response.ok) {
-      console.log("✅ Webhook enviado a Make con éxito");
-    } else {
-      console.error("⚠️ Make respondió con error:", response.status);
-    }
+    return { success: response.ok };
   } catch (error) {
-    console.error("❌ Error de red al conectar con el Webhook:", error);
+    console.error("❌ Error Webhook:", error);
+    return { success: false, error: error.message };
   }
 }
+
 /**
  * Obtiene la lista de todos los posts
  */
 export async function getPostsList() {
   try {
     const posts = await prisma.post.findMany({
-      include: {
-        translations: true,
-      },
+      include: { translations: true },
       orderBy: { date: "desc" },
     });
     return { success: true, posts };
@@ -81,7 +72,7 @@ export async function getPostsList() {
 }
 
 /**
- * Crea o actualiza un post y notifica a redes sociales
+ * ACCIÓN PRINCIPAL: Crea o actualiza el contenido (Siempre devuelve el objeto post)
  */
 export async function savePost(data) {
   try {
@@ -90,13 +81,13 @@ export async function savePost(data) {
       date,
       image,
       category_id,
+      published, // Recibido del form
       title_es,
       tags_es,
       content_es,
       title_en,
       tags_en,
       content_en,
-      publishToLinkedIn, // Recibimos el flag desde el form
     } = data;
 
     const translationsData = [
@@ -104,7 +95,6 @@ export async function savePost(data) {
         lang: "es",
         title: title_es,
         slug: slugify(title_es),
-        category: CATEGORY_LABELS[category_id].es,
         content: content_es,
         tags: tags_es
           .split(",")
@@ -115,7 +105,6 @@ export async function savePost(data) {
         lang: "en",
         title: title_en,
         slug: slugify(title_en),
-        category: CATEGORY_LABELS[category_id].en,
         content: content_en,
         tags: tags_en
           .split(",")
@@ -124,57 +113,46 @@ export async function savePost(data) {
       },
     ];
 
-    let result;
+    const postPayload = {
+      date: new Date(date),
+      published: Boolean(published),
+      image,
+      category: category_id,
+      translations: {
+        deleteMany: id ? {} : undefined,
+        create: translationsData,
+      },
+    };
 
+    let post;
     if (id) {
-      result = await prisma.post.update({
+      post = await prisma.post.update({
         where: { id: Number(id) },
-        data: {
-          date: new Date(date),
-          image,
-          translations: {
-            deleteMany: {},
-            create: translationsData,
-          },
-        },
+        data: postPayload,
+        include: { translations: true }, // Incluimos para el retorno
       });
     } else {
-      result = await prisma.post.create({
-        data: {
-          date: new Date(date),
-          image,
-          translations: {
-            create: translationsData,
-          },
-        },
+      post = await prisma.post.create({
+        data: postPayload,
+        include: { translations: true },
       });
-    }
-
-    // Disparamos la automatización solo si se solicita
-    // Por ahora, mientras haces pruebas en Make, puedes quitar el 'if' para que siempre envíe
-    if (publishToLinkedIn) {
-      await notifySocialMediaWebhook(data, image);
     }
 
     revalidatePath("/", "layout");
-    return { success: true, id: result.id };
+    return { success: true, post }; // Retornamos el objeto post completo
   } catch (error) {
     console.error("Error en savePost:", error);
-    return {
-      success: false,
-      error: "Error al procesar el post: " + error.message,
-    };
+    return { success: false, error: error.message };
   }
 }
 
 /**
- * Elimina un post y sus traducciones
+ * Elimina un post
  */
 export async function deletePost(id) {
   try {
     await prisma.postTranslation.deleteMany({ where: { postId: id } });
     await prisma.post.delete({ where: { id } });
-
     revalidatePath("/", "layout");
     return { success: true };
   } catch (error) {

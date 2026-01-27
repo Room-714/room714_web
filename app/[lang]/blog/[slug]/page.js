@@ -123,7 +123,7 @@ export default async function PostPage({ params }) {
             {" "}
             {/* Un pequeño padding para alinear visualmente con el borde de la foto */}
             <span className="text-red-500 text-base sm:text-lg md:text-xl lg:text-2xl font-hand">
-              {category}
+              {dict.blog.categories?.[category] || category}
             </span>
             <h1 className="font-title font-black text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-black my-4 leading-tight">
               {title}
@@ -194,7 +194,7 @@ export default async function PostPage({ params }) {
             ${index >= 4 ? "md:hidden lg:block" : ""}
           `}
               >
-                <BlogCard post={article} lang={lang} />
+                <BlogCard post={article} lang={lang} dict={dict.blog} />
               </div>
             ))}
           </div>
