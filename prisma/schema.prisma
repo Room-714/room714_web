@@ -15,18 +15,16 @@ enum Category {
 }
 
 model Post {
-  id           Int               @id @default(autoincrement())
-  image        String
-  category     Category
-  // 1. Añade @default(now()) temporalmente para que Prisma pueda rellenar los 8 posts existentes
-  date         DateTime          @default(now()) 
-  // 2. Añade @default(false) para el booleano
-  published    Boolean           @default(false)
-  // 3. Añade @default(now()) también aquí temporalmente
-  createdAt    DateTime          @default(now())
-  updatedAt    DateTime          @default(now()) @updatedAt
+  id             Int               @id @default(autoincrement())
+  image          String
+  category       Category
+  date           DateTime
+  published      Boolean           @default(false)
+  published_sent Boolean           @default(false)
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
   
-  translations PostTranslation[]
+  translations   PostTranslation[]
 }
 
 model PostTranslation {
