@@ -38,7 +38,7 @@ export default function Navbar({
 
   return (
     <header
-      className={`relative z-50 flex justify-between items-center px-6 py-8 md:px-10 md:py-10 lg:px-24 lg:py-12 transition-all duration-300 ${
+      className={`relative z-50 flex justify-between items-center px-6 py-6 sm:px-8 sm:py-8 md:px-10 md:py-10 lg:px-16 lg:py-16 transition-all duration-300 ${
         isDark ? "bg-black text-white" : "bg-white text-black"
       }`}
     >

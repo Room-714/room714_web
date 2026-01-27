@@ -160,8 +160,11 @@ export default async function RootLayout({ children, params }) {
         </>
       )}
 
-      <body className="font-body antialiased" suppressHydrationWarning={true}>
-        <div className="relative w-full overflow-x-clip">
+      <body
+        className="font-body antialiased bg-[#1A1A1A]"
+        suppressHydrationWarning={true}
+      >
+        <div className="relative w-full mx-auto max-w-7xl overflow-x-clip">
           <main className="relative">{children}</main>
 
           {/* FOOTER */}
@@ -221,8 +224,6 @@ export default async function RootLayout({ children, params }) {
                     {/* Blog */}
                     <Link
                       href="/blog"
-                      target="_blank"
-                      rel="noopener noreferrer"
                       className="p-2 bg-white rounded-full hover:opacity-70 transition-opacity"
                     >
                       <Image

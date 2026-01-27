@@ -32,12 +32,12 @@ export default function RulesSlider({ rules }) {
   };
 
   return (
-    <div className="w-full h-160">
+    <div className="w-full h-180">
       <div
         ref={scrollRef}
         onScroll={handleScroll}
         /* 2. Añadimos perspective-1000 para que el efecto de rotación 3D se vea profundo */
-        className="w-full no-scrollbar flex overflow-x-auto snap-x snap-mandatory gap-6 px-[10%] py-10 lg:overflow-visible lg:px-24 lg:grid lg:grid-cols-3 lg:gap-10 lg:items-start [perspective:1000px]"
+        className="w-full no-scrollbar flex overflow-x-auto snap-x snap-mandatory gap-6 px-[10%] py-10 lg:overflow-visible lg:px-24 lg:grid lg:grid-cols-3 lg:gap-10 lg:items-start perspective:1000px"
       >
         {rules.map((rule) => {
           const isActive = activeId === rule.id;
@@ -49,11 +49,10 @@ export default function RulesSlider({ rules }) {
               className={`
                 rule-card shrink-0 bg-white rounded-[30px] p-8 cursor-pointer
                 transition-all duration-700 ease-in-out self-start
-                /* 3. Efecto de Giro: rotación en el eje Y y escala */
                 ${
                   isActive
-                    ? "shadow-2xl z-10 scale-[1.02] [transform:rotateY(0deg)]"
-                    : "shadow-sm scale-100 [transform:rotateY(-15deg)] opacity-80"
+                    ? "shadow-2xl z-10 scale-[1.02] transform-[rotateY(0deg)]"
+                    : "shadow-sm scale-100 transform-[rotateY(-15deg)] opacity-80"
                 }
                 w-70 md:w-87.5 lg:w-full
                 snap-center

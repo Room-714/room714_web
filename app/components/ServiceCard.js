@@ -6,8 +6,9 @@ export default function ServiceCard({ number, title, description, image }) {
       {/* Contenedor de Imagen: Ajusta el tamaño según dispositivo */}
       <div
         className="relative aspect-square shrink-0 
-                      w-[95%]
-                      md:w-1/3 md:max-w-none
+                      w-[95%] max-w-3/4
+                      sm:w-2/3
+                      md:w-1/3
                       lg:w-1/4 
                       mt-8 md:mt-0"
       >
@@ -24,17 +25,17 @@ export default function ServiceCard({ number, title, description, image }) {
       {/* Contenedor de Texto */}
       <div className="w-full flex flex-col justify-center text-black px-4 pb-8 md:px-0 md:pb-0 mt-4 md:mt-0">
         {/* Número con estilo sutil */}
-        <span className="font-hand text-sm md:text-lg lg:text-3xl block tracking-widest">
+        <span className="font-hand text-base sm:text-xl md:text-2xl lg:text-3xl block tracking-widest">
           {number}
         </span>
 
         {/* Título: Crece en pantallas grandes */}
-        <h3 className="font-title font-bold text-xl md:text-3xl lg:text-5xl mb-2 lg:mb-8 leading-tight uppercase">
+        <h3 className="font-title font-bold text-2xl sm:text-3xl md:text-3xl lg:text-5xl mb-2 lg:mb-8 leading-tight uppercase">
           {title}
         </h3>
 
         {/* Descripción: Ajuste de lectura */}
-        <p className="font-body text-sm leading-4.8 md:text-xl md:leading-6 lg:text-3xl lg:leading-9 lg:pr-20">
+        <p className="font-body text-lg leading-5 sm:text-2xl sm:leading-7 md:text-2xl md:leading-8 lg:text-3xl lg:leading-9 lg:pr-20">
           {description}
         </p>
       </div>

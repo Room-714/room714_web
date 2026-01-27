@@ -41,7 +41,6 @@ export async function generateMetadata({ params }) {
       description: description,
       images: [imageUrl],
     },
-    // 3. ESTO ES NUEVO: Le dice a Google que existen versiones en otros idiomas
     alternates: {
       languages: {
         "es-ES": `https://room714.com/es/blog/${post.alternateSlugs.es}`,
@@ -80,17 +79,17 @@ export default async function PostPage({ params }) {
 
   const latestArticles = allPosts
     .filter((p) => p.id !== post.id) // Ahora sí, allPosts es un Array
-    .slice(0, 3);
+    .slice(0, 6);
 
   return (
     <main className="flex flex-col bg-white">
       <Navbar dict={dict} isDark={false} alternatePaths={alternatePaths} />
 
       {/* Botón de volver con corrección de capa */}
-      <div className="relative z-10 w-full max-w-9xl mx-auto px-8 sm:px-10 md:px-14 lg:px-22 pt-12 -mb-8 flex justify-start">
+      <div className="relative z-10 w-full px-8 sm:px-10 md:px-14 lg:px-22 py-6 flex justify-start">
         <Link
           href={`/${lang}/blog`}
-          className="group inline-flex items-center gap-2 text-gray-400 hover:text-red-500 transition-colors duration-200 font-title font-bold text-xs sm:text-sm uppercase tracking-widest cursor-pointer"
+          className="group inline-flex items-center gap-2 text-gray-400 hover:text-red-500 transition-colors duration-200 font-title text-xs sm:text-sm uppercase tracking-widest cursor-pointer"
         >
           <ArrowLeft
             size={18}
@@ -102,7 +101,7 @@ export default async function PostPage({ params }) {
       </div>
 
       {/* Contenedor principal del Hero - Quitamos items-start y usamos items-stretch */}
-      <div className="flex flex-col w-full items-stretch md:flex-row-reverse max-w-9xl mx-auto md:py-12 px-2 sm:px-4 md:px-8 lg:px-16">
+      <div className="flex flex-col w-full items-stretch md:flex-row-reverse px-2 sm:px-4 md:px-8 lg:px-16">
         {/* 1. La Imagen */}
         <div className="w-full md:w-1/2 lg:w-2/5 px-6 mb-8 md:mb-0">
           <div className="relative w-full aspect-4/3 sm:aspect-video md:aspect-square rounded-4xl overflow-hidden shadow-2xl">
@@ -123,13 +122,13 @@ export default async function PostPage({ params }) {
           <div className="pt-2">
             {" "}
             {/* Un pequeño padding para alinear visualmente con el borde de la foto */}
-            <span className="text-red-500 text-base sm:text-lg md:text-xl font-hand">
+            <span className="text-red-500 text-base sm:text-lg md:text-xl lg:text-2xl font-hand">
               {category}
             </span>
-            <h1 className="font-title font-black text-xl sm:text-2xl md:text-3xl lg:text-4xl text-black my-4 leading-tight">
+            <h1 className="font-title font-black text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-black my-4 leading-tight">
               {title}
             </h1>
-            <span className="text-gray-400 text-sm sm:text-base font-medium">
+            <span className="text-gray-400 text-sm sm:text-base md:text-lg lg:text-xl font-medium">
               {post.date}
             </span>
           </div>
@@ -139,7 +138,7 @@ export default async function PostPage({ params }) {
             {tags.map((tag, index) => (
               <span
                 key={index}
-                className="text-xs sm:text-sm font-title text-red-500 border border-red-500 px-3 py-1 rounded-full"
+                className="text-xs sm:text-sm md:text-base lg:text-lg font-title text-red-500 border border-red-500 px-3 py-1 rounded-full"
               >
                 #{tag}
               </span>
@@ -148,30 +147,55 @@ export default async function PostPage({ params }) {
         </div>
       </div>
 
-      <article className="max-w-9xl mx-auto py-2 px-8 sm:py-4 sm:px-10 md:py-6 md:px-14 lg:py-8 lg:px-22">
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+  .prose h2 {
+    line-height: 1.625 !important; 
+    margin-top: 2.5rem !important;
+    margin-bottom: 1.25rem !important;
+  }
+`,
+        }}
+      />
+
+      <article className="py-2 px-8 sm:py-4 sm:px-10 md:py-6 md:px-14 lg:py-8 lg:px-22">
         {/* Cuerpo del Artículo (HTML del idioma seleccionado) */}
         <div
           className="prose prose-red max-w-none 
-             prose-base sm:prose-lg md:prose-xl lg:prose-2xl
              font-body text-black leading-relaxed
+             text-lg sm:text-xl lg:text-2xl 
+             prose-headings:text-black prose-headings:font-title prose-headings:font-black
+             prose-h1:text-4xl sm:prose-h1:text-5xl lg:prose-h1:text-6xl
+             prose-h2:text-3xl sm:prose-h2:text-4xl
              prose-strong:text-black prose-strong:font-bold
-             prose-headings:font-title prose-headings:font-black
-             prose-img:rounded-xl" // Opcional: redondea las imágenes del post
+             prose-img:rounded-xl"
           dangerouslySetInnerHTML={{ __html: content }}
         />
 
         <ShareButton title={title} lang={lang} dict={dict.blog} />
       </article>
 
-      {/* Footer de artículos recientes */}
-      <section className="mt-20 bg-gray-300 px-6 py-20 rounded-t-[50px]">
-        <div className="max-w-9xl mx-auto">
-          <h2 className="font-title font-black px-4 text-3xl mb-12 text-black">
-            {lang === "es" ? "Últimos artículos" : "Latest articles"}
+      {/* Footer de artículos recientes con Diccionario */}
+      <section className="mt-20 bg-gray-300 px-6 sm:px-8 md:px-10 lg:px-16 py-10 sm:py-14 md:py-16 lg:py-18 rounded-t-[50px]">
+        <div>
+          <h2 className="font-title font-black px-4 sm:px-6 md:px-8 lg:px-10 text-xl sm:text-2xl md:text-3xl lg:text-4xl pb-6 md:pb-10 text-black">
+            {/* Usamos la clave del diccionario para el título */}
+            {dict.blog.latest_articles}
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-            {latestArticles.map((article) => (
-              <BlogCard key={article.id} post={article} lang={lang} />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            {latestArticles.slice(0, 6).map((article, index) => (
+              <div
+                key={article.id}
+                className={`
+            {/* Lógica de visibilidad por breakpoint */}
+            ${index >= 3 ? "hidden md:block" : ""} 
+            ${index >= 4 ? "md:hidden lg:block" : ""}
+          `}
+              >
+                <BlogCard post={article} lang={lang} />
+              </div>
             ))}
           </div>
         </div>

@@ -7,4 +7,5 @@ export const getInterests = (dict) => [
   dict.contact.interested.interest_6,
   dict.contact.interested.interest_7,
   dict.contact.interested.interest_8,
+  dict.contact.interested.interest_9,
 ];
