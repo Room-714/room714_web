@@ -158,7 +158,7 @@ export default function AdminPage() {
         {new Date(post.date).toLocaleDateString()}
         {new Date(post.date) > new Date() && post.published && " • 09:00 AM"}
       </p>
-      <p className="font-bold text-sm truncate uppercase italic">
+      <p className="font-bold text-sm truncate">
         {post.translations?.find((t) => t.lang === "es")?.title || "Sin título"}
       </p>
     </button>
@@ -210,14 +210,14 @@ export default function AdminPage() {
                 (p) => p.published && new Date(p.date) > new Date(),
               ).length > 0 && (
                 <div className="mb-6">
-                  <p className="text-[9px] font-black text-blue-600 uppercase tracking-widest pl-2 mb-2 flex items-center">
-                    <span className="w-1.5 h-1.5 bg-blue-600 rounded-full mr-2 animate-pulse" />
-                    Próximamente (Cron)
+                  <p className="text-xs font-black text-red-700 pl-2 mb-2 flex items-center">
+                    <span className="w-1.5 h-1.5 bg-red-700 rounded-full mr-2 animate-pulse" />
+                    Próximamente
                   </p>
                   {currentPosts
                     .filter((p) => p.published && new Date(p.date) > new Date())
                     .map((post) =>
-                      renderPostButton(post, "border-l-4 border-blue-500"),
+                      renderPostButton(post, "border-l-4 border-red-700"),
                     )}
                 </div>
               )}
@@ -225,7 +225,7 @@ export default function AdminPage() {
               {/* --- GRUPO 2: BORRADORES --- */}
               {currentPosts.filter((p) => !p.published).length > 0 && (
                 <div className="mb-6">
-                  <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest pl-2 mb-2">
+                  <p className="text-sm font-black text-gray-600 pl-2 mb-2">
                     Borradores
                   </p>
                   {currentPosts
@@ -241,13 +241,13 @@ export default function AdminPage() {
 
               {/* --- GRUPO 3: PUBLICADOS (HISTORIAL) --- */}
               <div>
-                <p className="text-[9px] font-black text-green-600 uppercase tracking-widest pl-2 mb-2">
-                  En vivo (Web & LinkedIn)
+                <p className="text-sm font-black text-green-700 pl-2 mb-2">
+                  Publicados: Web & LinkedIn
                 </p>
                 {currentPosts
                   .filter((p) => p.published && new Date(p.date) <= new Date())
                   .map((post) =>
-                    renderPostButton(post, "border-l-4 border-green-500"),
+                    renderPostButton(post, "border-l-4 border-green-700"),
                   )}
               </div>
             </div>
