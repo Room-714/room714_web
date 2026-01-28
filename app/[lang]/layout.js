@@ -164,7 +164,7 @@ export default async function RootLayout({ children, params }) {
         className="font-body antialiased bg-[#1A1A1A]"
         suppressHydrationWarning={true}
       >
-        <div className="relative w-full mx-auto max-w-8xl overflow-x-clip">
+        <div className="relative w-full mx-auto max-w-360 overflow-x-clip">
           <main className="relative">{children}</main>
 
           {/* FOOTER */}

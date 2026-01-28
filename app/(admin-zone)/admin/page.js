@@ -137,7 +137,7 @@ export default function AdminPage() {
 
   return (
     // CONTENEDOR PRINCIPAL: Altura fija de pantalla y sin scroll
-    <main className="h-screen w-full max-w-7xl mx-auto  bg-gray-100 overflow-hidden text-black font-sans flex flex-col p-4 md:p-8">
+    <main className="h-screen w-full max-w-360 mx-auto  bg-gray-100 overflow-hidden text-black font-sans flex flex-col p-4 md:p-8">
       {showModal && lastSavedPost && (
         <PublishWorkflowModal
           post={lastSavedPost}
@@ -346,7 +346,7 @@ function PublishWorkflowModal({ post, onClose, onConfirm }) {
   const [selectedDate, setSelectedDate] = useState(minDate);
 
   return (
-    <div className="fixed inset-0 bg-black/90 backdrop-blur-md z-[200] flex items-center justify-center p-4 animate-in fade-in duration-300">
+    <div className="fixed inset-0 bg-black/90 backdrop-blur-md z-200 flex items-center justify-center p-4 animate-in fade-in duration-300">
       <div className="bg-white rounded-[40px] p-10 max-w-sm w-full shadow-2xl text-center">
         <h2 className="text-3xl font-black uppercase italic mb-2 text-black">
           {showScheduler ? "Calendario" : "¿Publicamos?"}
