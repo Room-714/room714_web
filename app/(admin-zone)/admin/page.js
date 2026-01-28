@@ -135,6 +135,35 @@ export default function AdminPage() {
   const currentPosts = posts.slice(0, visibleLimit);
   const hasMore = posts.length > visibleLimit;
 
+  const now = new Date();
+
+  // Filtramos por estado y fecha
+  const scheduledPosts = posts.filter(
+    (p) => p.published && new Date(p.date) > now,
+  );
+  const draftPosts = posts.filter((p) => !p.published);
+  const livePosts = posts.filter((p) => p.published && new Date(p.date) <= now);
+
+  const renderPostButton = (post, extraClasses = "") => (
+    <button
+      key={post.id}
+      onClick={() => handleEdit(post)}
+      className={`w-full text-left p-4 rounded-2xl mb-1 transition-all ${
+        formData.id === post.id ? "bg-gray-200 text-black" : "hover:bg-gray-100"
+      } ${extraClasses}`}
+    >
+      <p
+        className={`text-xs font-mono mb-1 ${formData.id === post.id ? "text-gray-700" : "text-gray-500"}`}
+      >
+        {new Date(post.date).toLocaleDateString()}
+        {new Date(post.date) > new Date() && post.published && " • 09:00 AM"}
+      </p>
+      <p className="font-bold text-sm truncate uppercase italic">
+        {post.translations?.find((t) => t.lang === "es")?.title || "Sin título"}
+      </p>
+    </button>
+  );
+
   return (
     // CONTENEDOR PRINCIPAL: Altura fija de pantalla y sin scroll
     <main className="h-screen w-full max-w-400 mx-auto  bg-gray-100 overflow-hidden text-black font-sans flex flex-col p-4 md:p-8">
@@ -152,12 +181,12 @@ export default function AdminPage() {
           {/* LOGO AREA */}
           <div className="flex-none pl-2">
             <Image
-              src="/logo.svg" // O la ruta de tu logo: /logo-room714.svg
+              src="/logo.svg"
               alt="Room714 Logo"
               width={120}
               height={40}
               className="object-contain h-auto w-[50%]"
-              priority // Para que cargue de inmediato
+              priority
             />
           </div>
           <div className="font-hand text-xl text-red-500 text-right">
@@ -170,41 +199,59 @@ export default function AdminPage() {
             >
               + nuevo post
             </button>
-            <h3 className="font-black pl-4 mt-4 text-xl">
-              Últimas publicaciones
-            </h3>
+            <h3 className="font-black pl-4 mt-4 text-xl">Publicaciones</h3>
           </div>
 
           {/* Listado con scroll interno independiente */}
           <div className="flex-1 min-h-0 bg-white shadow-sm border border-gray-200 rounded-2xl overflow-hidden flex flex-col">
             <div className="overflow-y-auto flex-1 p-2">
-              {currentPosts.map((post) => (
-                <button
-                  key={post.id}
-                  onClick={() => handleEdit(post)}
-                  className={`w-full text-left p-4 rounded-2xl mb-1 transition-all ${
-                    formData.id === post.id
-                      ? "bg-gray-200 text-black"
-                      : "hover:bg-gray-100"
-                  }`}
-                >
-                  <p
-                    className={`text-xs font-mono mb-1 ${formData.id === post.id ? "text-gray-700" : "text-gray-500"}`}
-                  >
-                    {new Date(post.date).toLocaleDateString()}{" "}
-                    {!post.published && (
-                      <span className="text-red-500 font-bold ml-1">
-                        [BORRADOR]
-                      </span>
+              {/* --- GRUPO 1: PROGRAMADOS --- */}
+              {currentPosts.filter(
+                (p) => p.published && new Date(p.date) > new Date(),
+              ).length > 0 && (
+                <div className="mb-6">
+                  <p className="text-[9px] font-black text-blue-600 uppercase tracking-widest pl-2 mb-2 flex items-center">
+                    <span className="w-1.5 h-1.5 bg-blue-600 rounded-full mr-2 animate-pulse" />
+                    Próximamente (Cron)
+                  </p>
+                  {currentPosts
+                    .filter((p) => p.published && new Date(p.date) > new Date())
+                    .map((post) =>
+                      renderPostButton(post, "border-l-4 border-blue-500"),
                     )}
+                </div>
+              )}
+
+              {/* --- GRUPO 2: BORRADORES --- */}
+              {currentPosts.filter((p) => !p.published).length > 0 && (
+                <div className="mb-6">
+                  <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest pl-2 mb-2">
+                    Borradores
                   </p>
-                  <p className="font-bold text-sm truncate">
-                    {post.translations?.find((t) => t.lang === "es")?.title ||
-                      "Sin título"}
-                  </p>
-                </button>
-              ))}
+                  {currentPosts
+                    .filter((p) => !p.published)
+                    .map((post) =>
+                      renderPostButton(
+                        post,
+                        "border-l-4 border-gray-300 opacity-70",
+                      ),
+                    )}
+                </div>
+              )}
+
+              {/* --- GRUPO 3: PUBLICADOS (HISTORIAL) --- */}
+              <div>
+                <p className="text-[9px] font-black text-green-600 uppercase tracking-widest pl-2 mb-2">
+                  En vivo (Web & LinkedIn)
+                </p>
+                {currentPosts
+                  .filter((p) => p.published && new Date(p.date) <= new Date())
+                  .map((post) =>
+                    renderPostButton(post, "border-l-4 border-green-500"),
+                  )}
+              </div>
             </div>
+
             {hasMore && (
               <button
                 onClick={() => setVisibleLimit((v) => v + 5)}
@@ -348,7 +395,7 @@ function PublishWorkflowModal({ post, onClose, onConfirm }) {
   return (
     <div className="fixed inset-0 bg-black/90 backdrop-blur-md z-200 flex items-center justify-center p-4 animate-in fade-in duration-300">
       <div className="bg-white rounded-[40px] p-10 max-w-sm w-full shadow-2xl text-center">
-        <h2 className="text-3xl font-black uppercase italic mb-2 text-black">
+        <h2 className="text-3xl font-black mb-2 text-black">
           {showScheduler ? "Calendario" : "¿Publicamos?"}
         </h2>
 
@@ -362,13 +409,13 @@ function PublishWorkflowModal({ post, onClose, onConfirm }) {
                   scheduleDate: new Date().toISOString(), // Ahora mismo
                 })
               }
-              className="w-full bg-black text-white font-black py-5 rounded-2xl hover:scale-[1.02] transition-transform uppercase italic"
+              className="w-full bg-black text-white font-black py-5 rounded-2xl hover:scale-[1.02] transition-transform"
             >
               🚀 En Vivo Ahora
             </button>
             <button
               onClick={() => setShowScheduler(true)}
-              className="w-full bg-blue-50 text-blue-600 font-black py-5 rounded-2xl hover:bg-blue-100 transition-colors uppercase italic"
+              className="w-full bg-blue-50 text-blue-600 font-black py-5 rounded-2xl hover:bg-blue-100 transition-colors"
             >
               📅 Programar Mañana+
             </button>
@@ -376,7 +423,7 @@ function PublishWorkflowModal({ post, onClose, onConfirm }) {
         ) : (
           <div className="space-y-4 mt-4">
             <div className="bg-gray-50 p-6 rounded-3xl border-2 border-blue-100 space-y-4">
-              <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest">
+              <p className="text-[10px] font-black text-blue-600">
                 Día de publicación
               </p>
               <input
@@ -401,7 +448,7 @@ function PublishWorkflowModal({ post, onClose, onConfirm }) {
                     ).toISOString(),
                   })
                 }
-                className="w-full bg-blue-600 text-white font-black py-4 rounded-xl uppercase italic shadow-lg hover:bg-blue-700 transition-colors"
+                className="w-full bg-blue-600 text-white font-black py-4 rounded-xl shadow-lg hover:bg-blue-700 transition-colors"
               >
                 Confirmar Fecha
               </button>
@@ -416,7 +463,7 @@ function PublishWorkflowModal({ post, onClose, onConfirm }) {
         )}
 
         <div className="py-6 border-t mt-4 flex items-center justify-between px-2">
-          <span className="text-[10px] font-black uppercase text-gray-400 tracking-tighter">
+          <span className="text-[10px] font-black text-gray-600">
             Notificar en LinkedIn
           </span>
           <label className="relative inline-flex items-center cursor-pointer">
@@ -426,13 +473,13 @@ function PublishWorkflowModal({ post, onClose, onConfirm }) {
               onChange={(e) => setLinkedIn(e.target.checked)}
               className="sr-only peer"
             />
-            <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full"></div>
+            <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full"></div>
           </label>
         </div>
 
         <button
           onClick={onClose}
-          className="w-full py-4 text-xs font-bold text-gray-300 hover:text-red-500 uppercase transition-colors"
+          className="w-full py-4 text-xs font-bold text-gray-300 hover:text-red-500 transition-colors"
         >
           Cancelar todo
         </button>
