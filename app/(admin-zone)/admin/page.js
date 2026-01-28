@@ -137,7 +137,7 @@ export default function AdminPage() {
 
   return (
     // CONTENEDOR PRINCIPAL: Altura fija de pantalla y sin scroll
-    <main className="h-screen w-full max-w-360 mx-auto  bg-gray-100 overflow-hidden text-black font-sans flex flex-col p-4 md:p-8">
+    <main className="h-screen w-full max-w-400 mx-auto  bg-gray-100 overflow-hidden text-black font-sans flex flex-col p-4 md:p-8">
       {showModal && lastSavedPost && (
         <PublishWorkflowModal
           post={lastSavedPost}
