@@ -161,10 +161,28 @@ export default async function RootLayout({ children, params }) {
       )}
 
       <body
-        className="font-body antialiased bg-[#1A1A1A]"
+        className="font-body antialiased bg-[#1A1A1A] min-h-screen relative"
         suppressHydrationWarning={true}
       >
-        <div className="relative w-full mx-auto max-w-400 overflow-x-clip">
+        {/* CAPA 1: EL VÍDEO (FIJO AL FONDO DE TODO) */}
+        <div className="fixed inset-0 w-full h-full -z-10">
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="w-full h-full object-cover"
+          >
+            {/* Verifica que esta ruta sea exacta en tu carpeta public */}
+            <source src="/videos/background.mp4" type="video/mp4" />
+          </video>
+          {/* Oscurecemos un poco el vídeo para que no distraiga en los laterales */}
+          <div className="absolute inset-0" />
+        </div>
+
+        {/* CAPA 2: TU CONTENEDOR CENTRAL (EL QUE TAPA EL VÍDEO) */}
+        {/* Importante: Aquí mantenemos el bg-[#1A1A1A] SÓLIDO */}
+        <div className="relative z-10 w-full mx-auto max-w-400 min-h-screen shadow-[0_0_100px_rgba(0,0,0,0.1)] bg-[#1A1A1A] overflow-x-clip">
           <main className="relative">{children}</main>
 
           {/* FOOTER */}
