@@ -233,100 +233,290 @@
     "back": "Back",
     "start_over": "Start over",
     "cta": "Let's talk about your project",
+    "analyzing": "Analyzing your case...",
+    "analyzing_sub": "Preparing your personalized diagnosis",
+
     "q1": "Which situation best describes your case?",
     "q1_a": "I have an idea but don't know how to bring it to life",
     "q1_b": "I have a product but users aren't engaging as expected",
     "q1_c": "My product works but doesn't look professional",
     "q1_d": "I need to build or scale something technical",
+
     "q2_product": "What concerns you the most right now?",
     "q2_product_a": "I'm not sure if my idea has a market",
     "q2_product_b": "I have a validated idea but don't know where to start building",
     "q2_product_c": "My product exists but isn't growing as it should",
+
+    "q3_product_validation": "Have you done anything to validate your idea?",
+    "q3_product_validation_a": "It's just an idea in my head — I haven't talked to anyone",
+    "q3_product_validation_b": "I've talked to people but haven't tested anything real",
+    "q3_product_validation_c": "I have a prototype or landing page but it's not taking off",
+
     "q3_product": "Where are you right now?",
     "q3_product_a": "Starting from scratch — nothing built yet",
     "q3_product_b": "I have something but need to pivot or change direction",
     "q3_product_c": "The product works but I need to scale",
+
+    "q3_product_growth": "Where do you think the bottleneck is?",
+    "q3_product_growth_a": "I don't have a clear roadmap or priorities",
+    "q3_product_growth_b": "Users come in but don't stay or convert",
+    "q3_product_growth_c": "The technology can't keep up with growth",
+
     "q2_ux": "What signals are you seeing?",
     "q2_ux_a": "Users sign up but leave quickly",
     "q2_ux_b": "I keep getting complaints about usability",
     "q2_ux_c": "No clear data, just a gut feeling something's off",
+
     "q3_ux": "Do you have data on your users' behaviour?",
     "q3_ux_a": "Yes, I have analytics but can't make sense of them",
     "q3_ux_b": "I have some direct user feedback",
     "q3_ux_c": "No, I barely have any information",
+
+    "q3_ux_scope": "How widespread are the usability issues?",
+    "q3_ux_scope_a": "There are specific flows that don't work well",
+    "q3_ux_scope_b": "It's a general problem — the whole experience is confusing",
+    "q3_ux_scope_c": "I'm not sure, I need someone to analyse it",
+
     "q2_design": "What aspect worries you the most?",
     "q2_design_a": "The look doesn't reflect the quality of what I offer",
     "q2_design_b": "The interfaces are outdated or inconsistent",
     "q2_design_c": "I have a dashboard or SaaS that needs a visual overhaul",
+
+    "q3_design_brand": "What do you currently have in terms of visual identity?",
+    "q3_design_brand_a": "I have a logo and colours but they're not applied consistently",
+    "q3_design_brand_b": "Practically nothing — I need to build the digital brand from scratch",
+    "q3_design_brand_c": "I have a brand but the interfaces don't reflect it well",
+
+    "q3_design_ui": "What's the current state of your interfaces?",
+    "q3_design_ui_a": "Every screen looks like a different product — no consistency",
+    "q3_design_ui_b": "The design is old and doesn't represent who we are now",
+    "q3_design_ui_c": "It's not just visual — the brand needs a refresh too",
+
+    "q3_design_dashboard": "What type of user uses your dashboard?",
+    "q3_design_dashboard_a": "Internal users in my company (backoffice, operations)",
+    "q3_design_dashboard_b": "External clients who pay for the service",
+    "q3_design_dashboard_c": "Both — and each profile needs different things",
+
     "q2_tech": "What do you need exactly?",
     "q2_tech_a": "Build a product or platform from scratch",
     "q2_tech_b": "Modernise a legacy system that's falling apart",
     "q2_tech_c": "Integrate artificial intelligence into my product",
+
+    "q3_tech_build": "Do you have your own tech team?",
+    "q3_tech_build_a": "No — I need you to build everything",
+    "q3_tech_build_b": "Yes, but I need reinforcement or expertise we don't have",
+    "q3_tech_build_c": "Yes, but we need someone to define the architecture first",
+
+    "q3_tech_legacy": "What's the current state of your system?",
+    "q3_tech_legacy_a": "It works but every change breaks something and takes weeks",
+    "q3_tech_legacy_b": "It's in a language or framework that nobody maintains anymore",
+    "q3_tech_legacy_c": "It's a monolith and we need to split into services to scale",
+
+    "q3_tech_ai": "What kind of AI are you interested in?",
+    "q3_tech_ai_a": "Chatbots or conversational assistants for my customers",
+    "q3_tech_ai_b": "Intelligent automation of internal processes",
+    "q3_tech_ai_c": "I'm not sure — I need help identifying the right use case",
+
+    "q4_situation": "Last question: what's your situation right now?",
+    "q4_situation_a": "I have a budget and need to move forward now",
+    "q4_situation_b": "I'm exploring options — haven't decided anything yet",
+    "q4_situation_c": "I need a diagnosis or proposal to convince someone internally",
+
     "results": {
       "result_product_scratch": {
         "title": "You need to build your product from scratch",
         "description": "You have the idea, we have the method. We'll help you define the value proposition, validate with real users, and build an MVP that lets you go to market with confidence.",
         "services": ["Product Management", "CX Research", "Software Development"]
       },
+      "result_product_scratch_urgent": {
+        "title": "You need to build your product from scratch — fast",
+        "description": "You have the idea and the resources. Let's go straight to defining the value proposition, validating with real users, and building an MVP as quickly as possible without sacrificing quality.",
+        "services": ["Product Management", "CX Research", "Software Development", "MVP Sprint"]
+      },
+      "result_product_scratch_internal": {
+        "title": "You need a business case for your product",
+        "description": "The idea is there but you need data to back the investment. We'll prepare a diagnosis with effort estimation, roadmap, and a value proposition you can present internally.",
+        "services": ["Product Strategy", "Business Case", "CX Research"]
+      },
       "result_product_pivot": {
         "title": "Your product needs a change of direction",
         "description": "Sometimes the problem isn't execution — it's direction. We'll help you identify what's failing in your proposition and redefine your strategy to reconnect with your market.",
         "services": ["Product Strategy", "UX Research", "UX/UI Redesign"]
+      },
+      "result_product_pivot_urgent": {
+        "title": "Your product needs to pivot — and time is running out",
+        "description": "The market won't wait. We'll quickly identify what's failing, redefine the value proposition, and execute the key changes to reconnect with your users as soon as possible.",
+        "services": ["Product Strategy", "UX Research", "UX/UI Redesign", "Pivot Sprint"]
+      },
+      "result_product_pivot_internal": {
+        "title": "You need evidence to justify the pivot",
+        "description": "You know something's wrong but need data to convince the team. We'll prepare an analysis with metrics, user insights, and a well-founded pivot proposal.",
+        "services": ["CX Research & Audit", "Product Strategy", "Business Case"]
       },
       "result_product_scale": {
         "title": "It's time to scale",
         "description": "Your product works, but you need to prepare the architecture, experience, and technology for the next level of growth.",
         "services": ["Product Strategy", "Software Development", "CX Audit"]
       },
+      "result_product_scale_urgent": {
+        "title": "You need to scale now — growth won't wait",
+        "description": "Your product works and demand is growing. We'll reinforce architecture, experience, and operations so you don't miss the window to scale at the critical moment.",
+        "services": ["Software Development", "Architecture & DevOps", "Product Strategy"]
+      },
+      "result_product_scale_internal": {
+        "title": "You need a scaling plan to present",
+        "description": "The product has traction but investment is needed to scale. We'll prepare a technical and product roadmap with estimated costs and clear phases.",
+        "services": ["Product Strategy", "Architecture & DevOps", "Business Case"]
+      },
       "result_product_strategy": {
         "title": "You need a clear product strategy",
         "description": "The product exists but isn't growing. You need to align vision, metrics, and roadmap to turn potential into measurable results.",
         "services": ["Product Strategy", "CX Research & Audit"]
+      },
+      "result_product_strategy_urgent": {
+        "title": "You need a product strategy — now",
+        "description": "The product exists but metrics aren't keeping up and there's pressure for results. We'll define priorities, key metrics, and an actionable roadmap for the coming weeks.",
+        "services": ["Product Strategy", "CX Research & Audit", "Strategy Sprint"]
+      },
+      "result_product_strategy_internal": {
+        "title": "You need a documented product strategy",
+        "description": "There's potential but a plan is needed to convince stakeholders. We'll help you build a strategic document with data, benchmarks, and a roadmap that justifies the investment.",
+        "services": ["Product Strategy", "CX Research & Audit", "Business Case"]
       },
       "result_ux_audit": {
         "title": "You need a user experience audit",
         "description": "Your users are telling you something through their behaviour. We need to analyse the data, identify friction points, and give you a concrete action plan.",
         "services": ["CX Research & Audit", "UX Analysis"]
       },
+      "result_ux_audit_urgent": {
+        "title": "You need an urgent UX audit",
+        "description": "The data shows a clear problem and action is needed. We'll do a quick but rigorous analysis of the critical points and deliver a prioritised action plan.",
+        "services": ["CX Research & Audit", "UX Analysis", "Audit Sprint"]
+      },
+      "result_ux_audit_internal": {
+        "title": "You need a UX audit to justify changes",
+        "description": "You sense the problems but need evidence. We'll deliver a professional report with findings, impact metrics, and prioritised recommendations you can present.",
+        "services": ["CX Research & Audit", "UX Analysis", "Executive Report"]
+      },
       "result_ux_redesign": {
         "title": "Your product needs a UX redesign",
         "description": "The functionality is there, but the experience isn't. We'll redesign key flows so your users can achieve their goals without frustration.",
         "services": ["UX/UI Redesign", "CX Research"]
+      },
+      "result_ux_redesign_urgent": {
+        "title": "Your product needs a UX redesign — ASAP",
+        "description": "Users are getting frustrated and leaving. We'll tackle the most critical flows first with an iterative redesign that starts delivering results from the first weeks.",
+        "services": ["UX/UI Redesign", "CX Research", "Redesign Sprint"]
+      },
+      "result_ux_redesign_internal": {
+        "title": "You need a well-founded UX redesign proposal",
+        "description": "You know the experience is failing but need to convince others. We'll prepare a diagnosis with the key problems and a redesign proposal with estimated impact.",
+        "services": ["UX/UI Redesign", "CX Research", "Business Case"]
       },
       "result_ux_research": {
         "title": "You need to research your users",
         "description": "Without data, there are no smart decisions. We'll help you understand who your users are, what they need, and where you're missing opportunities.",
         "services": ["CX Research & Audit", "Product Strategy"]
       },
+      "result_ux_research_urgent": {
+        "title": "You need to research your users — fast",
+        "description": "You're making decisions blind and can't keep going like this. We'll set up agile research with actionable results in days, not months.",
+        "services": ["CX Research & Audit", "Product Strategy", "Research Sprint"]
+      },
+      "result_ux_research_internal": {
+        "title": "You need user data to back decisions",
+        "description": "Decisions are being made by opinion, not data. We'll help you set up research and deliver a report that puts the user at the centre of the conversation.",
+        "services": ["CX Research & Audit", "Product Strategy", "Executive Report"]
+      },
       "result_design_brand": {
         "title": "Your digital image needs to match your quality",
         "description": "First impressions matter. We'll redesign your digital presence to reflect the real quality of what you offer and build the trust you deserve.",
         "services": ["UX/UI Redesign", "Brand & Visual Design"]
+      },
+      "result_design_brand_urgent": {
+        "title": "Your digital image needs a transformation — now",
+        "description": "First impressions are costing you clients. We'll redesign your digital presence quickly and effectively to truly reflect who you are.",
+        "services": ["Brand & Visual Design", "UX/UI Redesign", "Brand Sprint"]
+      },
+      "result_design_brand_internal": {
+        "title": "You need a digital rebranding proposal",
+        "description": "The current image isn't convincing but you need to justify the change. We'll prepare a visual proposal with perception analysis, benchmarks, and clear creative direction.",
+        "services": ["Brand & Visual Design", "UX/UI Redesign", "Executive Report"]
       },
       "result_design_ui": {
         "title": "Your interfaces need an update",
         "description": "Outdated or inconsistent interfaces drive users away. We'll create a coherent, modern design system that improves the perception of your product.",
         "services": ["UX/UI Redesign", "Design System"]
       },
+      "result_design_ui_urgent": {
+        "title": "Your interfaces need an urgent update",
+        "description": "Visual inconsistency is eroding your users' trust. We'll create a design system and update key interfaces with a fast, iterative approach.",
+        "services": ["Design System", "UX/UI Redesign", "UI Sprint"]
+      },
+      "result_design_ui_internal": {
+        "title": "You need a UI modernisation proposal",
+        "description": "The interfaces need a facelift but you need to convince stakeholders first. We'll prepare a visual analysis with a design system proposal and effort estimation.",
+        "services": ["Design System", "UX/UI Redesign", "Executive Report"]
+      },
       "result_design_dashboard": {
         "title": "Your dashboard or SaaS needs a redesign",
         "description": "Complex dashboards kill productivity. We'll simplify the interface so your users find what they need without drowning in data.",
         "services": ["Dashboard / SaaS Redesign", "UX/UI Design"]
+      },
+      "result_design_dashboard_urgent": {
+        "title": "Your dashboard needs a redesign — urgently",
+        "description": "Your dashboard's complexity is costing productivity and satisfaction. We'll tackle the most critical flows first for quick, visible results.",
+        "services": ["Dashboard / SaaS Redesign", "UX/UI Design", "Redesign Sprint"]
+      },
+      "result_design_dashboard_internal": {
+        "title": "You need a redesign proposal for your dashboard",
+        "description": "The dashboard needs improvement but you need to justify it. We'll deliver a usability analysis with a redesign proposal, expected impact metrics, and execution phases.",
+        "services": ["Dashboard / SaaS Redesign", "UX/UI Design", "Executive Report"]
       },
       "result_tech_build": {
         "title": "You need custom development",
         "description": "Clean code, scalable architecture, and iterative delivery. We'll build your platform with the technical solidity your business needs to grow.",
         "services": ["Software Development", "Architecture & DevOps"]
       },
+      "result_tech_build_urgent": {
+        "title": "You need custom development — urgently",
+        "description": "It needs to be built and it needs to be done right, but fast. We'll set up a dedicated team from day one with short sprints and continuous delivery.",
+        "services": ["Software Development", "Architecture & DevOps", "Dedicated Team"]
+      },
+      "result_tech_build_internal": {
+        "title": "You need a technical proposal for your platform",
+        "description": "You know what needs to be built but need a plan that convinces. We'll prepare a proposal with architecture, tech stack, phases, and effort estimation.",
+        "services": ["Software Development", "Architecture & DevOps", "Technical Proposal"]
+      },
       "result_tech_legacy": {
         "title": "It's time to modernise your system",
         "description": "Legacy systems are a ticking time bomb. We'll help you migrate and modernise your stack without disrupting your operations.",
         "services": ["System Modernisation", "Software Development"]
       },
+      "result_tech_legacy_urgent": {
+        "title": "Your legacy system needs immediate attention",
+        "description": "Every passing day the risk grows. We'll plan a progressive migration that stabilises the critical parts first while modernising the rest in parallel.",
+        "services": ["System Modernisation", "Software Development", "Migration Plan"]
+      },
+      "result_tech_legacy_internal": {
+        "title": "You need a modernisation plan to present",
+        "description": "The legacy system is a known risk but it needs to be quantified. We'll prepare a technical diagnosis with tech debt, risks, migration plan, and estimated costs.",
+        "services": ["System Modernisation", "Software Development", "Technical Diagnosis"]
+      },
       "result_tech_ai": {
         "title": "AI can supercharge your product",
         "description": "Artificial intelligence isn't magic, but applied well it transforms products. We'll help you identify real use cases and integrate generative AI in a practical way.",
         "services": ["Generative AI Integration", "Software Development"]
+      },
+      "result_tech_ai_urgent": {
+        "title": "You want to integrate AI — and the time is now",
+        "description": "The window of opportunity with AI is narrow. We'll identify the highest-impact use case and implement it fast so you start seeing results as soon as possible.",
+        "services": ["Generative AI Integration", "Software Development", "AI Sprint"]
+      },
+      "result_tech_ai_internal": {
+        "title": "You need a business case for AI integration",
+        "description": "AI generates expectations but you need data to justify the investment. We'll prepare an analysis of viable use cases, expected impact, and a realistic roadmap.",
+        "services": ["Generative AI Integration", "AI Consulting", "Business Case"]
       }
     }
   },
