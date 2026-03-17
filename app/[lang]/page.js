@@ -51,7 +51,7 @@ export default async function Home({ params }) {
           </p>
           <PrimaryButton
             text={dict.home.buttons.discover}
-            href={`/${lang}/about`}
+            href={`/${lang}/diagnostic`}
           />
         </div>
       </section>
