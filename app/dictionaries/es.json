@@ -3,6 +3,7 @@
     "home": "Home",
     "projects": "Proyectos",
     "about": "Nosotros",
+    "diagnostic": "Diagnóstico",
     "contact": "Contacto"
   },
   "home": {
@@ -222,6 +223,111 @@
     "last_update": {
       "text": "Última actualización",
       "date": "Enero 2026"
+    }
+  },
+  "diagnostic": {
+    "title": "Descubre qué necesitas",
+    "subtitle": "Responde a unas preguntas rápidas y te diremos cómo podemos ayudarte.",
+    "step": "Paso",
+    "of": "de",
+    "back": "Volver",
+    "start_over": "Empezar de nuevo",
+    "cta": "Hablemos de tu proyecto",
+    "q1": "¿Qué situación describe mejor tu caso?",
+    "q1_a": "Tengo una idea pero no sé cómo materializarla",
+    "q1_b": "Tengo un producto pero los usuarios no lo usan como espero",
+    "q1_c": "Mi producto funciona pero no transmite profesionalidad",
+    "q1_d": "Necesito construir o escalar algo técnico",
+    "q2_product": "¿Qué es lo que más te preocupa ahora mismo?",
+    "q2_product_a": "No tengo claro si mi idea tiene mercado",
+    "q2_product_b": "Tengo una idea validada pero no sé por dónde empezar a construirla",
+    "q2_product_c": "Mi producto existe pero no crece como debería",
+    "q3_product": "¿En qué punto te encuentras?",
+    "q3_product_a": "Estoy empezando de cero, no hay nada construido",
+    "q3_product_b": "Ya tengo algo pero necesito pivotar o cambiar el enfoque",
+    "q3_product_c": "El producto funciona pero necesito escalar",
+    "q2_ux": "¿Qué señales estás viendo?",
+    "q2_ux_a": "Los usuarios se registran pero abandonan rápido",
+    "q2_ux_b": "Recibo quejas constantes sobre la usabilidad",
+    "q2_ux_c": "No tengo datos claros, solo intuición de que algo falla",
+    "q3_ux": "¿Tienes datos sobre el comportamiento de tus usuarios?",
+    "q3_ux_a": "Sí, tengo analytics pero no sé interpretarlos",
+    "q3_ux_b": "Tengo algo de feedback directo de usuarios",
+    "q3_ux_c": "No, apenas tengo información",
+    "q2_design": "¿Qué aspecto te preocupa más?",
+    "q2_design_a": "La imagen no refleja la calidad de lo que ofrezco",
+    "q2_design_b": "Las interfaces están anticuadas o son inconsistentes",
+    "q2_design_c": "Tengo un dashboard o SaaS que necesita un lavado de cara",
+    "q2_tech": "¿Qué necesitas exactamente?",
+    "q2_tech_a": "Construir un producto o plataforma desde cero",
+    "q2_tech_b": "Modernizar un sistema antiguo que se cae a pedazos",
+    "q2_tech_c": "Integrar inteligencia artificial en mi producto",
+    "results": {
+      "result_product_scratch": {
+        "title": "Necesitas construir tu producto desde cero",
+        "description": "Tienes la idea, nosotros tenemos el método. Te ayudamos a definir la propuesta de valor, validar con usuarios reales y construir un MVP que te permita salir al mercado con confianza.",
+        "services": ["Product Management", "CX Research", "Software Development"]
+      },
+      "result_product_pivot": {
+        "title": "Tu producto necesita un cambio de rumbo",
+        "description": "A veces el problema no es la ejecución, sino la dirección. Te ayudamos a identificar qué está fallando en tu propuesta y a redefinir la estrategia para reconectar con tu mercado.",
+        "services": ["Product Strategy", "UX Research", "Rediseño UX/UI"]
+      },
+      "result_product_scale": {
+        "title": "Es hora de escalar",
+        "description": "Tu producto funciona, pero necesitas preparar la arquitectura, la experiencia y la tecnología para el siguiente nivel de crecimiento.",
+        "services": ["Product Strategy", "Software Development", "CX Audit"]
+      },
+      "result_product_strategy": {
+        "title": "Necesitas una estrategia de producto clara",
+        "description": "El producto existe pero no crece. Necesitas alinear visión, métricas y roadmap para convertir potencial en resultados medibles.",
+        "services": ["Product Strategy", "CX Research & Audit"]
+      },
+      "result_ux_audit": {
+        "title": "Necesitas una auditoría de experiencia de usuario",
+        "description": "Tus usuarios te están diciendo algo con su comportamiento. Necesitamos analizar los datos, identificar las fricciones y darte un plan de acción concreto.",
+        "services": ["CX Research & Audit", "UX Analysis"]
+      },
+      "result_ux_redesign": {
+        "title": "Tu producto necesita un rediseño UX",
+        "description": "La funcionalidad está ahí, pero la experiencia no acompaña. Rediseñamos los flujos clave para que tus usuarios consigan lo que buscan sin frustrarse.",
+        "services": ["Rediseño UX/UI", "CX Research"]
+      },
+      "result_ux_research": {
+        "title": "Necesitas investigar a tus usuarios",
+        "description": "Sin datos no hay decisiones acertadas. Te ayudamos a investigar quiénes son tus usuarios, qué necesitan y dónde estás perdiendo oportunidades.",
+        "services": ["CX Research & Audit", "Product Strategy"]
+      },
+      "result_design_brand": {
+        "title": "Tu imagen digital necesita estar a la altura",
+        "description": "La primera impresión importa. Rediseñamos tu presencia digital para que refleje la calidad real de lo que ofreces y genere la confianza que mereces.",
+        "services": ["Rediseño UX/UI", "Brand & Visual Design"]
+      },
+      "result_design_ui": {
+        "title": "Tus interfaces necesitan una actualización",
+        "description": "Interfaces anticuadas o inconsistentes alejan a los usuarios. Creamos un sistema de diseño coherente y moderno que mejore la percepción de tu producto.",
+        "services": ["Rediseño UX/UI", "Design System"]
+      },
+      "result_design_dashboard": {
+        "title": "Tu dashboard o SaaS necesita un rediseño",
+        "description": "Los dashboards complejos matan la productividad. Simplificamos la interfaz para que tus usuarios encuentren lo que necesitan sin perderse en datos.",
+        "services": ["Dashboard / SaaS Redesign", "UX/UI Design"]
+      },
+      "result_tech_build": {
+        "title": "Necesitas desarrollo a medida",
+        "description": "Código limpio, arquitectura escalable y entregas iterativas. Construimos tu plataforma con la solidez técnica que tu negocio necesita para crecer.",
+        "services": ["Software Development", "Architecture & DevOps"]
+      },
+      "result_tech_legacy": {
+        "title": "Es hora de modernizar tu sistema",
+        "description": "Los sistemas legacy son una bomba de relojería. Te ayudamos a migrar y modernizar tu stack sin interrumpir tu operación.",
+        "services": ["Modernización de Sistemas", "Software Development"]
+      },
+      "result_tech_ai": {
+        "title": "La IA puede potenciar tu producto",
+        "description": "La inteligencia artificial no es magia, pero bien aplicada transforma productos. Te ayudamos a identificar casos de uso reales e integrar IA generativa de forma práctica.",
+        "services": ["Integración de IA Generativa", "Software Development"]
+      }
     }
   },
   "blog": {

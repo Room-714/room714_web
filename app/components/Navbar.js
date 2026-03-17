@@ -33,7 +33,7 @@ export default function Navbar({
     { name: dict.nav.home, href: `/${lang}/` },
     { name: dict.nav.projects, href: `/${lang}/projects` },
     { name: dict.nav.about, href: `/${lang}/about` },
-    { name: dict.nav.contact, href: `/${lang}/contact` },
+    { name: dict.nav.diagnostic, href: `/${lang}/diagnostic` },
   ];
 
   return (

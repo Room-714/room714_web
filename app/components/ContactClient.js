@@ -1,8 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { Send, CheckCircle2, Loader2, AlertCircle } from "lucide-react";
 import PrimaryButton from "@/app/components/PrimaryButton";
 
@@ -10,7 +10,18 @@ export default function ContactClient({ dict, interests }) {
   const [status, setStatus] = useState("idle");
   const [selectedInterests, setSelectedInterests] = useState([]);
   const params = useParams();
+  const searchParams = useSearchParams();
   const lang = params?.lang || "en";
+
+  // Pre-fill interests from query params (e.g. from diagnostic page)
+  useEffect(() => {
+    const prefilledInterests = searchParams.getAll("interest");
+    if (prefilledInterests.length > 0) {
+      setSelectedInterests(
+        prefilledInterests.filter((i) => interests.includes(i)),
+      );
+    }
+  }, [searchParams, interests]);
 
   const toggleInterest = (interest) => {
     setSelectedInterests((prev) =>
