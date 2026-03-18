@@ -12,7 +12,7 @@ export async function proxy(request) {
   if (hostname && hostname.includes("room714.es")) {
     return NextResponse.redirect(
       `https://www.room714.com${pathname}${request.nextUrl.search}`,
-      301, // Muy importante: 301 indica mudanza permanente para SEO
+      { status: 301 },
     );
   }
 
