@@ -5,15 +5,14 @@ let locales = ["en", "es"];
 
 export async function proxy(request) {
   const { pathname } = request.nextUrl;
-  const hostname = request.headers.get("host");
+  const hostname = request.headers.get("host") || "";
 
-  // 1. REDIRECCIÓN DE DOMINIO (.es -> .com)
-  // Esto "fuerza" a Google a unificar ambos dominios en el .com
-  if (hostname && hostname.includes("room714.es")) {
-    return NextResponse.redirect(
-      `https://www.room714.com${pathname}${request.nextUrl.search}`,
-      { status: 301 },
-    );
+  // 1. REDIRECCIÓN DE DOMINIO (.es -> .com) CON STATUS 301
+  // Forzamos el 301 para que Google valide el cambio de dirección
+  if (hostname.includes("room714.es")) {
+    // Si podemos, lo mandamos directo a /en para evitar múltiples saltos
+    const destination = `https://www.room714.com/en${pathname}${request.nextUrl.search}`;
+    return NextResponse.redirect(destination, { status: 301 });
   }
 
   // 2. PROTECCIÓN DE ADMIN
@@ -30,23 +29,23 @@ export async function proxy(request) {
     return NextResponse.next();
   }
 
-  // 3. EXCLUIR RUTAS DE AUTENTICACIÓN DEL IDIOMA
+  // 3. EXCLUIR RUTAS DE AUTENTICACIÓN
   if (pathname.startsWith("/auth")) {
     return NextResponse.next();
   }
 
-  // 4. LÓGICA DE IDIOMAS
+  // 4. LÓGICA DE IDIOMAS (Para el tráfico que ya está en el .com)
   const pathnameHasLocale = locales.some(
     (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`,
   );
 
   if (pathnameHasLocale) return NextResponse.next();
 
-  // Si no tiene idioma, redirigimos al default (en)
-  const locale = "en";
+  // Redirección por defecto a /en si no hay idioma
   const url = request.nextUrl.clone();
-  url.pathname = `/${locale}${pathname}`;
+  url.pathname = `/en${pathname}`;
 
+  // Usamos 301 aquí también para consolidar la estructura en Google
   return NextResponse.redirect(url, { status: 301 });
 }
 
