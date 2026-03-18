@@ -47,7 +47,7 @@ export async function proxy(request) {
   const url = request.nextUrl.clone();
   url.pathname = `/${locale}${pathname}`;
 
-  return NextResponse.redirect(url);
+  return NextResponse.redirect(url, { status: 301 });
 }
 
 export default proxy;
