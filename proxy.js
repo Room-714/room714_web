@@ -5,8 +5,18 @@ let locales = ["en", "es"];
 
 export async function proxy(request) {
   const { pathname } = request.nextUrl;
+  const hostname = request.headers.get("host");
 
-  // 1. PROTECCIÓN DE ADMIN
+  // 1. REDIRECCIÓN DE DOMINIO (.es -> .com)
+  // Esto "fuerza" a Google a unificar ambos dominios en el .com
+  if (hostname && hostname.includes("room714.es")) {
+    return NextResponse.redirect(
+      `https://www.room714.com${pathname}${request.nextUrl.search}`,
+      301, // Muy importante: 301 indica mudanza permanente para SEO
+    );
+  }
+
+  // 2. PROTECCIÓN DE ADMIN
   if (pathname.startsWith("/admin")) {
     const session = await getToken({
       req: request,
@@ -20,19 +30,19 @@ export async function proxy(request) {
     return NextResponse.next();
   }
 
-  // --- NUEVO: EXCLUIR RUTAS DE AUTENTICACIÓN DEL IDIOMA ---
-  // Si la ruta es /auth/login, no le pongas /en/ delante
+  // 3. EXCLUIR RUTAS DE AUTENTICACIÓN DEL IDIOMA
   if (pathname.startsWith("/auth")) {
     return NextResponse.next();
   }
 
-  // 2. LÓGICA DE IDIOMAS
+  // 4. LÓGICA DE IDIOMAS
   const pathnameHasLocale = locales.some(
     (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`,
   );
 
   if (pathnameHasLocale) return NextResponse.next();
 
+  // Si no tiene idioma, redirigimos al default (en)
   const locale = "en";
   const url = request.nextUrl.clone();
   url.pathname = `/${locale}${pathname}`;

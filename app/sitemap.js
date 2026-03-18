@@ -8,6 +8,12 @@ export default async function sitemap() {
     pages.map((page) => ({
       url: `${baseUrl}/${lang}${page}`,
       lastModified: new Date().toISOString(),
+      alternates: {
+        languages: {
+          en: `${baseUrl}/en${page}`,
+          es: `${baseUrl}/es${page}`,
+        },
+      },
       changeFrequency: page === "" ? "daily" : "monthly",
       priority: page === "" ? 1 : 0.8,
     })),
