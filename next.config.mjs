@@ -1,8 +1,37 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // 1. Optimización de imágenes (necesaria si usas dominios externos para fotos)
+  // 1. Redirecciones de Dominio (SEO Force 301)
+  async redirects() {
+    return [
+      {
+        // Redirige cualquier ruta de room714.es (con o sin www) al .com
+        source: "/:path*",
+        has: [
+          {
+            type: "host",
+            value: "room714.es",
+          },
+        ],
+        destination: "https://www.room714.com/en/:path*",
+        permanent: true, // Esto genera el código 301 que Google exige
+      },
+      {
+        source: "/:path*",
+        has: [
+          {
+            type: "host",
+            value: "www.room714.es",
+          },
+        ],
+        destination: "https://www.room714.com/en/:path*",
+        permanent: true,
+      },
+    ];
+  },
+
+  // 2. Optimización de imágenes
   images: {
-    formats: ["image/avif", "image/webp"], // Prioriza formatos de última generación
+    formats: ["image/avif", "image/webp"],
     remotePatterns: [
       {
         protocol: "https",
@@ -12,7 +41,7 @@ const nextConfig = {
     ],
   },
 
-  // 2. Seguridad: Evita que otros sitios incrusten tu web en un iframe
+  // 3. Seguridad
   async headers() {
     return [
       {
@@ -27,7 +56,6 @@ const nextConfig = {
     ];
   },
 
-  // 3. Limpieza de consola: Ignora warnings de hidratación por extensiones de navegador
   reactStrictMode: true,
 };
 
