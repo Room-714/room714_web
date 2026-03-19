@@ -4,6 +4,39 @@ import Navbar from "@/app/components/Navbar";
 import RulesSlider from "@/app/components/RulesSlider";
 import { getRules } from "@/app/data/Rules";
 
+const baseUrl = "https://www.room714.com";
+
+export async function generateMetadata({ params }) {
+  const { lang = "en" } = await params;
+  const titles = {
+    en: "About Us — How We Work",
+    es: "Nosotros — Cómo Trabajamos",
+  };
+  const descriptions = {
+    en: "Meet Room 714: a digital product studio combining UX research, design, and engineering to build products that scale.",
+    es: "Conoce Room 714: un estudio de producto digital que combina investigación UX, diseño e ingeniería para crear productos escalables.",
+  };
+
+  return {
+    title: titles[lang],
+    description: descriptions[lang],
+    alternates: {
+      canonical: `${baseUrl}/${lang}/about`,
+      languages: {
+        "en-US": `${baseUrl}/en/about`,
+        "es-ES": `${baseUrl}/es/about`,
+        "x-default": `${baseUrl}/en/about`,
+      },
+    },
+    openGraph: {
+      title: titles[lang],
+      description: descriptions[lang],
+      url: `${baseUrl}/${lang}/about`,
+      type: "website",
+    },
+  };
+}
+
 export default async function AboutPage({ params }) {
   const { lang } = await params;
   const dict = await getDictionary(lang);

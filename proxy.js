@@ -41,11 +41,21 @@ export async function proxy(request) {
 
   if (pathnameHasLocale) return NextResponse.next();
 
-  // Redirección por defecto a /en si no hay idioma
-  const url = request.nextUrl.clone();
-  url.pathname = `/en${pathname}`;
+  // Detectar idioma preferido del navegador
+  const acceptLanguage = request.headers.get("accept-language") || "";
+  const preferred = acceptLanguage
+    .split(",")
+    .map((part) => {
+      const [lang, q] = part.trim().split(";q=");
+      return { lang: lang.split("-")[0].toLowerCase(), q: q ? parseFloat(q) : 1 };
+    })
+    .sort((a, b) => b.q - a.q)
+    .find((item) => locales.includes(item.lang));
 
-  // Usamos 301 aquí también para consolidar la estructura en Google
+  const locale = preferred?.lang || "en";
+  const url = request.nextUrl.clone();
+  url.pathname = `/${locale}${pathname}`;
+
   return NextResponse.redirect(url, { status: 301 });
 }
 

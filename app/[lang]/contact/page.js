@@ -4,6 +4,39 @@ import Image from "next/image";
 import ContactClient from "@/app/components/ContactClient";
 import { getInterests } from "@/app/data/Interests";
 
+const baseUrl = "https://www.room714.com";
+
+export async function generateMetadata({ params }) {
+  const { lang = "en" } = await params;
+  const titles = {
+    en: "Contact Us",
+    es: "Contacto",
+  };
+  const descriptions = {
+    en: "Get in touch with Room 714. Tell us about your project and we'll help you find the right solution.",
+    es: "Contacta con Room 714. Cuéntanos tu proyecto y te ayudaremos a encontrar la solución adecuada.",
+  };
+
+  return {
+    title: titles[lang],
+    description: descriptions[lang],
+    alternates: {
+      canonical: `${baseUrl}/${lang}/contact`,
+      languages: {
+        "en-US": `${baseUrl}/en/contact`,
+        "es-ES": `${baseUrl}/es/contact`,
+        "x-default": `${baseUrl}/en/contact`,
+      },
+    },
+    openGraph: {
+      title: titles[lang],
+      description: descriptions[lang],
+      url: `${baseUrl}/${lang}/contact`,
+      type: "website",
+    },
+  };
+}
+
 export default async function ContactPage({ params }) {
   const { lang } = await params;
   const dict = await getDictionary(lang);

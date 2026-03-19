@@ -11,6 +11,7 @@ import {
 } from "next/font/google";
 import { GoogleTagManager } from "@next/third-parties/google";
 import CookieBanner from "@/app/components/CookieBanner";
+import BreadcrumbSchema from "@/app/components/BreadcrumbSchema";
 import { cookies } from "next/headers";
 
 const fontGantari = Gantari({
@@ -142,6 +143,7 @@ export default async function RootLayout({ children, params }) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <BreadcrumbSchema />
       </head>
 
       {/* Solo cargamos tracking si hay consentimiento explícito */}

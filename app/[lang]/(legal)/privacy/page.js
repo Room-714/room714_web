@@ -2,6 +2,17 @@ import { getDictionary } from "@/app/dictionaries";
 import Navbar from "@/app/components/Navbar";
 import Image from "next/image";
 
+export async function generateMetadata({ params }) {
+  const { lang = "en" } = await params;
+  return {
+    title: lang === "es" ? "Política de Privacidad" : "Privacy Policy",
+    description: lang === "es"
+      ? "Política de privacidad de Room 714."
+      : "Room 714 privacy policy.",
+    robots: { index: false, follow: true },
+  };
+}
+
 export default async function PrivacyPage({ params }) {
   const { lang } = await params;
   const dict = await getDictionary(lang);

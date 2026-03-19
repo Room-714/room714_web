@@ -5,6 +5,39 @@ import Navbar from "@/app/components/Navbar";
 import BlogClient from "@/app/components/BlogClient";
 import { CATEGORY_IDS } from "@/app/data/BlogCategories";
 
+const baseUrl = "https://www.room714.com";
+
+export async function generateMetadata({ params }) {
+  const { lang = "en" } = await params;
+  const titles = {
+    en: "Blog — Insights on Digital Product, UX & Technology",
+    es: "Blog — Ideas sobre Producto Digital, UX y Tecnología",
+  };
+  const descriptions = {
+    en: "Articles on product strategy, UX design, software development, and digital transformation by Room 714.",
+    es: "Artículos sobre estrategia de producto, diseño UX, desarrollo de software y transformación digital de Room 714.",
+  };
+
+  return {
+    title: titles[lang],
+    description: descriptions[lang],
+    alternates: {
+      canonical: `${baseUrl}/${lang}/blog`,
+      languages: {
+        "en-US": `${baseUrl}/en/blog`,
+        "es-ES": `${baseUrl}/es/blog`,
+        "x-default": `${baseUrl}/en/blog`,
+      },
+    },
+    openGraph: {
+      title: titles[lang],
+      description: descriptions[lang],
+      url: `${baseUrl}/${lang}/blog`,
+      type: "website",
+    },
+  };
+}
+
 export default async function BlogPage({ params }) {
   const { lang } = await params;
   const dict = await getDictionary(lang);

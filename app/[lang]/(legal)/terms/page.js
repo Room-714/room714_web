@@ -2,6 +2,17 @@ import { getDictionary } from "@/app/dictionaries";
 import Navbar from "@/app/components/Navbar";
 import Image from "next/image";
 
+export async function generateMetadata({ params }) {
+  const { lang = "en" } = await params;
+  return {
+    title: lang === "es" ? "Términos y Condiciones" : "Terms and Conditions",
+    description: lang === "es"
+      ? "Términos y condiciones de uso de Room 714."
+      : "Room 714 terms and conditions.",
+    robots: { index: false, follow: true },
+  };
+}
+
 export default async function TermsPage({ params }) {
   const { lang } = await params;
   const dict = await getDictionary(lang);

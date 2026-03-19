@@ -74,6 +74,41 @@ export default async function PostPage({ params }) {
     en: `/en/blog/${alternateSlugs.en}`,
   };
 
+  // JSON-LD structured data for blog post
+  const plainText = content?.replace(/<[^>]*>/g, "").slice(0, 500) || "";
+  const imageUrl = image?.startsWith("http")
+    ? image
+    : `https://www.room714.com${image?.startsWith("/") ? "" : "/"}${image}`;
+
+  const blogJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: title,
+    description: plainText.slice(0, 160),
+    image: imageUrl,
+    datePublished: date,
+    dateModified: date,
+    author: {
+      "@type": "Organization",
+      name: "Room 714",
+      url: "https://www.room714.com",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Room 714",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://www.room714.com/og-image.png",
+      },
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://www.room714.com/${lang}/blog/${slug}`,
+    },
+    articleBody: plainText,
+    inLanguage: lang === "es" ? "es-ES" : "en-US",
+  };
+
   // 3. Artículos relacionados
   const allPosts = await getAllPosts(lang); // Esperamos a que lleguen los datos
 
@@ -83,6 +118,10 @@ export default async function PostPage({ params }) {
 
   return (
     <main className="flex flex-col bg-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogJsonLd) }}
+      />
       <Navbar dict={dict} isDark={false} alternatePaths={alternatePaths} />
 
       {/* Botón de volver con corrección de capa */}
