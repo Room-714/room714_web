@@ -136,7 +136,7 @@ export default async function Home({ params }) {
             {/* Renderizamos el bloque de logos 2 veces para el loop infinito */}
             {[1, 2].map((block) => (
               <div key={block} className="flex flex-nowrap">
-                {[1, 2, 3, 4].map((num) => (
+                {[1, 2, 3, 4, 5, 6].map((num) => (
                   <div
                     key={`${block}-${num}`}
                     className="flex-none flex justify-center items-center 
