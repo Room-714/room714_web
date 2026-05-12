@@ -5,6 +5,18 @@ import { fetchAndStoreCoverImage } from "@/app/lib/sources/unsplash";
 import { generatePostDraft } from "./generator";
 import { sendDraftReadyEmail } from "@/app/lib/notifications/draftReady";
 
+function nextPublishDate() {
+  const candidate = new Date();
+  candidate.setUTCHours(9, 0, 0, 0);
+  if (candidate <= new Date()) {
+    candidate.setUTCDate(candidate.getUTCDate() + 1);
+  }
+  while ([0, 6].includes(candidate.getUTCDay())) {
+    candidate.setUTCDate(candidate.getUTCDate() + 1);
+  }
+  return candidate;
+}
+
 function slugifyFallback(text) {
   return text
     .toString()
@@ -31,6 +43,7 @@ async function ensureUniqueSlug(slug, lang) {
 
 export async function generateDraftForToday({ categoryOverride, sendEmail = true } = {}) {
   const today = new Date();
+  const publishDate = nextPublishDate();
   const category = categoryOverride ?? categoryForDate(today);
 
   if (!category) {
@@ -63,7 +76,7 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
     data: {
       image: cover.url,
       category,
-      date: today,
+      date: publishDate,
       published: true,
       published_sent: false,
       translations: {
@@ -107,6 +120,7 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
     slug_es: translationEs.slug,
     image: cover.url,
     imageAttribution: cover.attribution,
+    scheduledFor: publishDate.toISOString(),
     trendingItemsUsed: trending.length,
     recentPostsConsidered: recentPosts.length,
     usage: draft.usage,
