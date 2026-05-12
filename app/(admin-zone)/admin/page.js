@@ -12,6 +12,7 @@ import ImageUploader from "./components/ImageUploader";
 import { signOut } from "next-auth/react";
 import { CATEGORY_IDS, CATEGORY_LABELS } from "@/app/data/BlogCategories";
 import PublishWorkflowModal from "./components/PublishWorkflowModal";
+import RegenerateModal from "./components/RegenerateModal";
 
 export default function AdminPage() {
   const [posts, setPosts] = useState([]);
@@ -19,6 +20,7 @@ export default function AdminPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [lastSavedPost, setLastSavedPost] = useState(null);
+  const [showRegenerate, setShowRegenerate] = useState(false);
 
   const [formData, setFormData] = useState({
     id: null,
@@ -101,6 +103,37 @@ export default function AdminPage() {
     setIsSubmitting(false);
   };
 
+  const handleRegenerated = async () => {
+    setShowRegenerate(false);
+    const currentId = formData.id;
+    await loadPosts();
+    if (currentId) {
+      // Recargar el post desde el listado actualizado para refrescar el formulario
+      const refreshed = await getPostsList();
+      if (refreshed?.success) {
+        const updated = refreshed.posts.find((p) => p.id === currentId);
+        if (updated) handleEdit(updated);
+      }
+    }
+  };
+
+  const handleReject = async () => {
+    if (!formData.id) return;
+    const confirmed = window.confirm(
+      `¿Rechazar y borrar este post?\n\n"${formData.title_es}"\n\nEsta acción no se puede deshacer.`,
+    );
+    if (!confirmed) return;
+    setIsSubmitting(true);
+    const result = await deletePost(formData.id);
+    if (result?.success) {
+      resetForm();
+      await loadPosts();
+    } else {
+      alert("Error al rechazar el post");
+    }
+    setIsSubmitting(false);
+  };
+
   const handleFinalAction = async (options) => {
     const { shouldPublish, linkedIn, scheduleDate } = options;
 
@@ -173,6 +206,14 @@ export default function AdminPage() {
           post={lastSavedPost}
           onClose={() => setShowModal(false)}
           onConfirm={handleFinalAction}
+        />
+      )}
+
+      {showRegenerate && formData.id && (
+        <RegenerateModal
+          postId={formData.id}
+          onClose={() => setShowRegenerate(false)}
+          onRegenerated={handleRegenerated}
         />
       )}
 
@@ -367,13 +408,35 @@ export default function AdminPage() {
                 </div>
               </div>
 
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-black text-white font-black py-8 rounded-2xl hover:bg-blue-600 transition-all uppercase tracking-[0.2em] shadow-2xl disabled:bg-gray-400"
-              >
-                {isSubmitting ? "Procesando..." : "Finalizar Publicación"}
-              </button>
+              <div className="flex flex-col md:flex-row gap-3">
+                {formData.id && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={handleReject}
+                      disabled={isSubmitting}
+                      className="md:w-1/4 bg-white border-2 border-red-500 text-red-500 font-black py-8 rounded-2xl hover:bg-red-500 hover:text-white transition-all uppercase tracking-[0.2em] disabled:opacity-50"
+                    >
+                      Rechazar (borrar)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setShowRegenerate(true)}
+                      disabled={isSubmitting}
+                      className="md:w-1/4 bg-white border-2 border-sky-500 text-sky-500 font-black py-8 rounded-2xl hover:bg-sky-500 hover:text-white transition-all uppercase tracking-[0.2em] disabled:opacity-50"
+                    >
+                      Regenerar
+                    </button>
+                  </>
+                )}
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="flex-1 bg-black text-white font-black py-8 rounded-2xl hover:bg-blue-600 transition-all uppercase tracking-[0.2em] shadow-2xl disabled:bg-gray-400"
+                >
+                  {isSubmitting ? "Procesando..." : "Finalizar Publicación"}
+                </button>
+              </div>
             </form>
           </div>
         </div>

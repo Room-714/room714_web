@@ -1,12 +1,22 @@
 import { prisma } from "@/app/lib/prisma";
 import { triggerLinkedInNotification } from "@/app/(admin-zone)/admin/actions";
+import { isMadridHour } from "@/app/lib/time/madrid";
 import { NextResponse } from "next/server";
+
+const TARGET_HOUR = 10;
 
 export async function GET(request) {
   // 1. Verificación de Seguridad para Vercel Cron
   const authHeader = request.headers.get("authorization");
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return new Response("No autorizado", { status: 401 });
+  }
+
+  if (!isMadridHour(TARGET_HOUR)) {
+    return NextResponse.json({
+      message: "Saltado: no es la hora correcta en Madrid",
+      targetHour: `${TARGET_HOUR}:00 Madrid`,
+    });
   }
 
   try {
