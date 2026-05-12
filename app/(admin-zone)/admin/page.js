@@ -101,6 +101,23 @@ export default function AdminPage() {
     setIsSubmitting(false);
   };
 
+  const handleReject = async () => {
+    if (!formData.id) return;
+    const confirmed = window.confirm(
+      `¿Rechazar y borrar este post?\n\n"${formData.title_es}"\n\nEsta acción no se puede deshacer.`,
+    );
+    if (!confirmed) return;
+    setIsSubmitting(true);
+    const result = await deletePost(formData.id);
+    if (result?.success) {
+      resetForm();
+      await loadPosts();
+    } else {
+      alert("Error al rechazar el post");
+    }
+    setIsSubmitting(false);
+  };
+
   const handleFinalAction = async (options) => {
     const { shouldPublish, linkedIn, scheduleDate } = options;
 
@@ -367,13 +384,25 @@ export default function AdminPage() {
                 </div>
               </div>
 
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-black text-white font-black py-8 rounded-2xl hover:bg-blue-600 transition-all uppercase tracking-[0.2em] shadow-2xl disabled:bg-gray-400"
-              >
-                {isSubmitting ? "Procesando..." : "Finalizar Publicación"}
-              </button>
+              <div className="flex flex-col md:flex-row gap-3">
+                {formData.id && (
+                  <button
+                    type="button"
+                    onClick={handleReject}
+                    disabled={isSubmitting}
+                    className="md:w-1/3 bg-white border-2 border-red-500 text-red-500 font-black py-8 rounded-2xl hover:bg-red-500 hover:text-white transition-all uppercase tracking-[0.2em] disabled:opacity-50"
+                  >
+                    Rechazar (borrar)
+                  </button>
+                )}
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="flex-1 bg-black text-white font-black py-8 rounded-2xl hover:bg-blue-600 transition-all uppercase tracking-[0.2em] shadow-2xl disabled:bg-gray-400"
+                >
+                  {isSubmitting ? "Procesando..." : "Finalizar Publicación"}
+                </button>
+              </div>
             </form>
           </div>
         </div>
