@@ -4,18 +4,9 @@ import { getTrendingForCategory } from "@/app/lib/sources/medium";
 import { fetchAndStoreCoverImage } from "@/app/lib/sources/unsplash";
 import { generatePostDraft } from "./generator";
 import { sendDraftReadyEmail } from "@/app/lib/notifications/draftReady";
+import { nextMadridSlot } from "@/app/lib/time/madrid";
 
-function nextPublishDate() {
-  const candidate = new Date();
-  candidate.setUTCHours(9, 0, 0, 0);
-  if (candidate <= new Date()) {
-    candidate.setUTCDate(candidate.getUTCDate() + 1);
-  }
-  while ([0, 6].includes(candidate.getUTCDay())) {
-    candidate.setUTCDate(candidate.getUTCDate() + 1);
-  }
-  return candidate;
-}
+const PUBLISH_HOUR_MADRID = 10;
 
 function slugifyFallback(text) {
   return text
@@ -43,7 +34,7 @@ async function ensureUniqueSlug(slug, lang) {
 
 export async function generateDraftForToday({ categoryOverride, sendEmail = true } = {}) {
   const today = new Date();
-  const publishDate = nextPublishDate();
+  const publishDate = nextMadridSlot(PUBLISH_HOUR_MADRID);
   const category = categoryOverride ?? categoryForDate(today);
 
   if (!category) {

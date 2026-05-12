@@ -12,6 +12,7 @@ import ImageUploader from "./components/ImageUploader";
 import { signOut } from "next-auth/react";
 import { CATEGORY_IDS, CATEGORY_LABELS } from "@/app/data/BlogCategories";
 import PublishWorkflowModal from "./components/PublishWorkflowModal";
+import RegenerateModal from "./components/RegenerateModal";
 
 export default function AdminPage() {
   const [posts, setPosts] = useState([]);
@@ -19,6 +20,7 @@ export default function AdminPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [lastSavedPost, setLastSavedPost] = useState(null);
+  const [showRegenerate, setShowRegenerate] = useState(false);
 
   const [formData, setFormData] = useState({
     id: null,
@@ -99,6 +101,20 @@ export default function AdminPage() {
       loadPosts();
     }
     setIsSubmitting(false);
+  };
+
+  const handleRegenerated = async () => {
+    setShowRegenerate(false);
+    const currentId = formData.id;
+    await loadPosts();
+    if (currentId) {
+      // Recargar el post desde el listado actualizado para refrescar el formulario
+      const refreshed = await getPostsList();
+      if (refreshed?.success) {
+        const updated = refreshed.posts.find((p) => p.id === currentId);
+        if (updated) handleEdit(updated);
+      }
+    }
   };
 
   const handleReject = async () => {
@@ -190,6 +206,14 @@ export default function AdminPage() {
           post={lastSavedPost}
           onClose={() => setShowModal(false)}
           onConfirm={handleFinalAction}
+        />
+      )}
+
+      {showRegenerate && formData.id && (
+        <RegenerateModal
+          postId={formData.id}
+          onClose={() => setShowRegenerate(false)}
+          onRegenerated={handleRegenerated}
         />
       )}
 
@@ -386,14 +410,24 @@ export default function AdminPage() {
 
               <div className="flex flex-col md:flex-row gap-3">
                 {formData.id && (
-                  <button
-                    type="button"
-                    onClick={handleReject}
-                    disabled={isSubmitting}
-                    className="md:w-1/3 bg-white border-2 border-red-500 text-red-500 font-black py-8 rounded-2xl hover:bg-red-500 hover:text-white transition-all uppercase tracking-[0.2em] disabled:opacity-50"
-                  >
-                    Rechazar (borrar)
-                  </button>
+                  <>
+                    <button
+                      type="button"
+                      onClick={handleReject}
+                      disabled={isSubmitting}
+                      className="md:w-1/4 bg-white border-2 border-red-500 text-red-500 font-black py-8 rounded-2xl hover:bg-red-500 hover:text-white transition-all uppercase tracking-[0.2em] disabled:opacity-50"
+                    >
+                      Rechazar (borrar)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setShowRegenerate(true)}
+                      disabled={isSubmitting}
+                      className="md:w-1/4 bg-white border-2 border-sky-500 text-sky-500 font-black py-8 rounded-2xl hover:bg-sky-500 hover:text-white transition-all uppercase tracking-[0.2em] disabled:opacity-50"
+                    >
+                      Regenerar
+                    </button>
+                  </>
                 )}
                 <button
                   type="submit"

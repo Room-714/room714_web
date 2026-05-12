@@ -1,17 +1,13 @@
 import { NextResponse } from "next/server";
 import { generateDraftForToday } from "@/app/lib/ai/orchestrator";
+import { isAuthorizedAdmin } from "@/app/lib/auth";
 
 export const maxDuration = 300;
 
 const VALID_CATEGORIES = ["TECH", "PRODUCT", "UX", "DESIGN"];
 
-function isAuthorized(request) {
-  const authHeader = request.headers.get("authorization");
-  return authHeader === `Bearer ${process.env.CRON_SECRET}`;
-}
-
 async function handle(request, options) {
-  if (!isAuthorized(request)) {
+  if (!(await isAuthorizedAdmin(request))) {
     return new Response("No autorizado", { status: 401 });
   }
 
