@@ -84,6 +84,14 @@ Ejemplo de hook bueno:
 Ejemplo de hook malo:
 "Hoy quiero hablaros de un tema muy importante: la IA en producto digital."
 
+## Internal linking (SEO)
+- En cada post embedde **1-2 enlaces inline** a posts antiguos de Room 714 relacionados con el tema.
+- Formato exacto: \`<a href="/es/blog/{slug}">texto natural</a>\` (en EN: \`/en/blog/{slug}\`).
+- USA SOLO slugs que aparecen literalmente en la lista de "Posts recientes" que se te proporciona. NO inventes slugs.
+- El texto del enlace debe leerse natural en la frase (no "haz click aquí", no el título completo).
+- Coloca los enlaces dentro de párrafos <p>, normalmente en las secciones H2 cuando aportan contexto adicional.
+- Si ninguno de los posts recientes encaja temáticamente, NO fuerces enlaces.
+
 ## Hashtags LinkedIn
 - 3-5 hashtags.
 - Mezcla específicos (#JTBD, #ProductoDigital, #SLM) con generales (#IA, #UX, #Producto).

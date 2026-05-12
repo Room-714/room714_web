@@ -40,6 +40,41 @@ export async function getAllPosts(lang = "es") {
   }
 }
 
+export async function getPostsByCategory(category, lang = "es") {
+  try {
+    const now = new Date();
+
+    const posts = await prisma.post.findMany({
+      where: {
+        published: true,
+        category,
+        date: { lte: now },
+      },
+      include: {
+        translations: { where: { lang } },
+      },
+      orderBy: { date: "desc" },
+    });
+
+    return posts.map((post) => {
+      const translation = post.translations[0];
+      return {
+        id: post.id,
+        date: post.date,
+        image: post.image,
+        category: post.category,
+        slug: translation?.slug,
+        title: translation?.title,
+        tags: translation?.tags,
+        metaDescription: translation?.metaDescription,
+      };
+    });
+  } catch (error) {
+    console.error("Error fetching posts by category:", error);
+    return [];
+  }
+}
+
 export async function getPostBySlug(slug, lang = "es") {
   try {
     const now = new Date();

@@ -1,9 +1,10 @@
 import { getAllPosts } from "@/app/lib/blog";
+import { listAllCategoryRoutes } from "@/app/lib/categoryRoutes";
 
 export default async function sitemap() {
   const baseUrl = "https://www.room714.com";
   const languages = ["en", "es"];
-  const pages = ["", "/about", "/projects", "/contact", "/diagnostic"];
+  const pages = ["", "/about", "/projects", "/contact", "/diagnostic", "/blog"];
 
   // 1. Páginas estáticas para cada idioma
   const routes = languages.flatMap((lang) =>
@@ -16,10 +17,18 @@ export default async function sitemap() {
           es: `${baseUrl}/es${page}`,
         },
       },
-      changeFrequency: page === "" ? "daily" : "monthly",
-      priority: page === "" ? 1 : 0.8,
+      changeFrequency: page === "" || page === "/blog" ? "daily" : "monthly",
+      priority: page === "" ? 1 : page === "/blog" ? 0.9 : 0.8,
     })),
   );
+
+  // 1b. Páginas de categoría del blog
+  const categoryRoutes = listAllCategoryRoutes().map((r) => ({
+    url: `${baseUrl}${r.url}`,
+    lastModified: new Date().toISOString(),
+    changeFrequency: "daily",
+    priority: 0.85,
+  }));
 
   // 2. Ruta raíz (/) que suele redirigir al idioma por defecto
   const root = {
@@ -58,5 +67,5 @@ export default async function sitemap() {
     console.error("Sitemap: error fetching blog posts", error);
   }
 
-  return [root, ...routes, ...blogRoutes];
+  return [root, ...routes, ...categoryRoutes, ...blogRoutes];
 }

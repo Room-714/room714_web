@@ -18,14 +18,20 @@ export async function getRecentPosts(limit = 10) {
     orderBy: { createdAt: "desc" },
     take: limit,
     include: {
-      translations: { where: { lang: "es" } },
+      translations: true,
     },
   });
 
-  return posts.map((p) => ({
-    date: p.date.toISOString().split("T")[0],
-    category: p.category,
-    title: p.translations[0]?.title ?? "(sin título)",
-    tags: p.translations[0]?.tags ?? [],
-  }));
+  return posts.map((p) => {
+    const es = p.translations.find((t) => t.lang === "es");
+    const en = p.translations.find((t) => t.lang === "en");
+    return {
+      date: p.date.toISOString().split("T")[0],
+      category: p.category,
+      title: es?.title ?? en?.title ?? "(sin título)",
+      tags: es?.tags ?? [],
+      slug_es: es?.slug ?? null,
+      slug_en: en?.slug ?? null,
+    };
+  });
 }

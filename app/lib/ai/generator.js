@@ -140,10 +140,12 @@ function buildUserPrompt({ category, trending, recentPosts }) {
   const recentText =
     recentPosts.length > 0
       ? recentPosts
-          .map(
-            (p) =>
-              `- [${p.category}] "${p.title}" (${p.date}) — tags: ${p.tags.join(", ")}`,
-          )
+          .map((p) => {
+            const slugs = [];
+            if (p.slug_es) slugs.push(`slug_es: ${p.slug_es}`);
+            if (p.slug_en) slugs.push(`slug_en: ${p.slug_en}`);
+            return `- [${p.category}] "${p.title}" (${p.date}) — ${slugs.join(" | ")}`;
+          })
           .join("\n")
       : "(No hay posts recientes en la base de datos.)";
 
@@ -155,9 +157,24 @@ Estos son los titulares y resúmenes de artículos que están sonando esta seman
 
 ${trendingText}
 
-## Posts recientes de Room 714 (NO repetir tema)
+## Posts recientes de Room 714 (NO repetir tema Y enlazar 1-2 como internal links)
 
 ${recentText}
+
+## INTERNAL LINKING (SEO)
+
+Dentro de content_es y content_en, **enlaza inline 1-2 posts** de la lista de arriba que tengan conexión natural con el tema que vas a escribir. Esto mejora el SEO y la experiencia del lector.
+
+Formato exacto del enlace (HTML inline dentro de los <p> del contenido):
+- En content_es: \`<a href="/es/blog/SLUG_ES">texto natural del enlace</a>\`
+- En content_en: \`<a href="/en/blog/SLUG_EN">link text</a>\`
+
+REGLAS CRÍTICAS:
+- USA SOLO los slugs que aparecen literalmente en la lista de arriba (slug_es / slug_en). NO inventes ni modifiques slugs.
+- El texto del enlace debe fluir natural en la frase, no ser "haz click aquí" ni el título completo.
+- Coloca el enlace donde aporte contexto adicional, normalmente en el cuerpo de un párrafo de las secciones H2.
+- 1 enlace mínimo, 2 máximo. Si ninguno de los recientes encaja, NO fuerces el enlace.
+- En content_en usa SOLO slugs slug_en (NO slug_es).
 
 ## Tu tarea
 
@@ -165,11 +182,33 @@ ${recentText}
 2. Escribe un post original con la voz de Room 714, siguiendo la guía editorial y los ejemplos.
 3. Asegúrate de que el tema no se solapa con los posts recientes listados.
 4. Genera ambas versiones (ES y EN) coherentes pero NO traducción literal: cada una en su idioma nativo.
+5. Embedde 1-2 internal links a posts recientes relacionados (sección INTERNAL LINKING).
 
 Llama al tool create_blog_post con los campos correspondientes.`;
 }
 
-function validateGenerated(data) {
+function sanitizeInvalidLinks(html, validSlugs, lang) {
+  if (!html) return html;
+  const prefix = `/${lang}/blog/`;
+  return html.replace(
+    /<a\s+href="([^"]+)"[^>]*>([^<]*)<\/a>/g,
+    (match, href, text) => {
+      if (!href.startsWith(prefix)) return text;
+      const slug = href.slice(prefix.length).split(/[?#]/)[0];
+      if (validSlugs.has(slug)) return match;
+      return text;
+    },
+  );
+}
+
+function countInternalLinks(html, lang) {
+  if (!html) return 0;
+  const prefix = `/${lang}/blog/`;
+  const matches = html.match(new RegExp(`<a\\s+href="${prefix}[^"]+`, "g"));
+  return matches ? matches.length : 0;
+}
+
+function validateGenerated(data, { recentPosts = [] } = {}) {
   const required = [
     "title_es",
     "title_en",
@@ -207,6 +246,20 @@ function validateGenerated(data) {
   if (!data.content_en.includes("<p>") || !data.content_en.includes("<h2>")) {
     throw new Error("content_en no parece HTML válido (faltan <p> o <h2>)");
   }
+
+  const validSlugsEs = new Set(
+    recentPosts.map((p) => p.slug_es).filter(Boolean),
+  );
+  const validSlugsEn = new Set(
+    recentPosts.map((p) => p.slug_en).filter(Boolean),
+  );
+  data.content_es = sanitizeInvalidLinks(data.content_es, validSlugsEs, "es");
+  data.content_en = sanitizeInvalidLinks(data.content_en, validSlugsEn, "en");
+  data.internalLinks = {
+    es: countInternalLinks(data.content_es, "es"),
+    en: countInternalLinks(data.content_en, "en"),
+  };
+
   return data;
 }
 
@@ -219,10 +272,12 @@ function buildUserPromptFromIdea({ category, chosenIdea, trending, recentPosts }
   const recentText =
     recentPosts.length > 0
       ? recentPosts
-          .map(
-            (p) =>
-              `- [${p.category}] "${p.title}" (${p.date}) — tags: ${p.tags.join(", ")}`,
-          )
+          .map((p) => {
+            const slugs = [];
+            if (p.slug_es) slugs.push(`slug_es: ${p.slug_es}`);
+            if (p.slug_en) slugs.push(`slug_en: ${p.slug_en}`);
+            return `- [${p.category}] "${p.title}" (${p.date}) — ${slugs.join(" | ")}`;
+          })
           .join("\n")
       : "(No hay posts recientes en la BD.)";
 
@@ -240,15 +295,24 @@ Tu trabajo es desarrollar exactamente este ángulo en un post completo siguiendo
 
 ${trendingText}
 
-## Posts recientes de Room 714 (NO repetir tema)
+## Posts recientes de Room 714 (NO repetir tema Y enlazar 1-2 como internal links)
 
 ${recentText}
+
+## INTERNAL LINKING (SEO)
+
+Dentro de content_es y content_en, **enlaza inline 1-2 posts** de la lista de arriba que tengan conexión natural con el tema. Formato exacto:
+- En content_es: \`<a href="/es/blog/SLUG_ES">texto natural</a>\`
+- En content_en: \`<a href="/en/blog/SLUG_EN">link text</a>\`
+
+USA SOLO los slugs literales de la lista (slug_es / slug_en). NO inventes. 1-2 enlaces; si ninguno encaja con naturalidad, NO fuerces.
 
 ## Tu tarea
 
 1. Desarrolla el ángulo elegido en un post completo siguiendo la guía editorial.
 2. Genera ambas versiones (ES y EN) coherentes pero NO traducción literal: cada una en su idioma nativo.
 3. Asegúrate de que no se solapa con los posts recientes listados.
+4. Embedde 1-2 internal links a posts recientes relacionados (sección INTERNAL LINKING).
 
 Llama al tool create_blog_post con los campos correspondientes.`;
 }
@@ -275,7 +339,7 @@ export async function generatePostDraft({ category, trending, recentPosts }) {
     throw new Error("Claude no llamó al tool create_blog_post");
   }
 
-  const validated = validateGenerated(toolUse.input);
+  const validated = validateGenerated(toolUse.input, { recentPosts });
 
   return {
     ...validated,
@@ -320,7 +384,7 @@ export async function generatePostFromIdea({
     throw new Error("Claude no llamó al tool create_blog_post");
   }
 
-  const validated = validateGenerated(toolUse.input);
+  const validated = validateGenerated(toolUse.input, { recentPosts });
 
   return {
     ...validated,
