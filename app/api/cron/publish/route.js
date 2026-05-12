@@ -45,9 +45,12 @@ export async function GET(request) {
 
       const postData = {
         title_es: esData.title,
+        slug_es: esData.slug,
         content_es: esData.content,
         tags_es: esData.tags.join(","),
         date: post.date.toISOString().split("T")[0], // Formato YYYY-MM-DD
+        linkedin_post_es: esData.linkedinPost,
+        linkedin_hashtags_es: esData.linkedinHashtags,
       };
 
       // 4. Disparamos el Webhook (Make.com -> LinkedIn)

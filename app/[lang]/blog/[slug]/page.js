@@ -14,9 +14,11 @@ export async function generateMetadata({ params }) {
 
   if (!post) return { title: "Post not found" };
 
-  const { title, content, image, alternateSlugs } = post;
+  const { title, content, image, alternateSlugs, metaDescription } = post;
 
-  const description = content?.replace(/<[^>]*>/g, "").slice(0, 160);
+  const description =
+    metaDescription ||
+    content?.replace(/<[^>]*>/g, "").slice(0, 160);
 
   const imageUrl = image.startsWith("http")
     ? image
@@ -67,6 +69,7 @@ export default async function PostPage({ params }) {
     date,
     image,
     alternateSlugs,
+    metaDescription,
   } = post;
 
   const alternatePaths = {
@@ -84,7 +87,7 @@ export default async function PostPage({ params }) {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     headline: title,
-    description: plainText.slice(0, 160),
+    description: metaDescription || plainText.slice(0, 160),
     image: imageUrl,
     datePublished: date,
     dateModified: date,

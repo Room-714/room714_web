@@ -30,12 +30,16 @@ model Post {
 model PostTranslation {
   id      Int      @id @default(autoincrement())
   postId  Int
-  lang    String   
+  lang    String
   slug    String   @unique
   title   String
-  tags    String[] 
+  tags    String[]
   content String   @db.Text
-  
+
+  linkedinPost     String?  @db.Text
+  linkedinHashtags String[] @default([])
+  metaDescription  String?
+
   post    Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   @@unique([postId, lang])

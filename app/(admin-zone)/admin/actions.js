@@ -34,13 +34,27 @@ export async function triggerLinkedInNotification(postData, imageUrl) {
     ? postData.content_es.replace(/<[^>]*>?/gm, "").substring(0, 250) + "..."
     : "";
 
+  const slugForUrl = postData.slug_es || slugify(postData.title_es);
+  const postUrl = `https://www.room714.com/es/blog/${slugForUrl}`;
+  const hashtagsString = (postData.linkedin_hashtags_es ?? [])
+    .map((h) => (h.startsWith("#") ? h : `#${h}`))
+    .join(" ");
+
   const payload = {
+    // Campos originales (mantenidos para compatibilidad con el scenario actual de Make)
     title: postData.title_es,
     summary: cleanSummary,
-    url: `https://www.room714.com/es/blog/${slugify(postData.title_es)}`,
+    url: postUrl,
     image: imageUrl,
     date: postData.date,
     tags: postData.tags_es,
+
+    // Campos nuevos para LinkedIn nativo
+    linkedin_post: postData.linkedin_post_es || cleanSummary,
+    linkedin_hashtags: postData.linkedin_hashtags_es ?? [],
+    linkedin_hashtags_string: hashtagsString,
+    // El link del post se publica como primer comentario en lugar de en el post
+    link_for_first_comment: postUrl,
   };
 
   try {
@@ -112,6 +126,26 @@ export async function savePost(data) {
           .filter((t) => t !== ""),
       },
     ];
+
+    if (id) {
+      const existing = await prisma.postTranslation.findMany({
+        where: { postId: Number(id) },
+        select: {
+          lang: true,
+          linkedinPost: true,
+          linkedinHashtags: true,
+          metaDescription: true,
+        },
+      });
+      for (const t of translationsData) {
+        const prev = existing.find((e) => e.lang === t.lang);
+        if (prev) {
+          t.linkedinPost = prev.linkedinPost;
+          t.linkedinHashtags = prev.linkedinHashtags ?? [];
+          t.metaDescription = prev.metaDescription;
+        }
+      }
+    }
 
     const postPayload = {
       date: new Date(date),

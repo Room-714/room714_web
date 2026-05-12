@@ -83,6 +83,7 @@ export async function getPostBySlug(slug, lang = "es") {
       title: currentTranslation.title,
       tags: currentTranslation.tags,
       content: currentTranslation.content,
+      metaDescription: currentTranslation.metaDescription,
       alternateSlugs,
     };
   } catch (error) {

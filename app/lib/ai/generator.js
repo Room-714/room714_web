@@ -49,6 +49,35 @@ const POST_TOOL = {
         description:
           "Frase corta en inglés (3-6 palabras) para buscar imagen en Unsplash.",
       },
+      meta_description_es: {
+        type: "string",
+        description:
+          "Meta description en español (140-160 chars). Resume el ángulo central de forma punzante para CTR en Google. Sin punto final si es ajustada.",
+      },
+      meta_description_en: {
+        type: "string",
+        description: "Meta description en inglés (140-160 chars).",
+      },
+      linkedin_post_es: {
+        type: "string",
+        description:
+          "Post nativo de LinkedIn en español (1000-1800 chars). Empieza con un HOOK punzante en la primera línea (lo que se ve antes del 'ver más'). Después dos saltos de línea y desarrollo en 3-5 párrafos cortos. Tono coloquial-profesional, NO formal. SIN enlaces. NO incluyas hashtags al final (van en otro campo). Termina con una pregunta o invitación a comentar.",
+      },
+      linkedin_post_en: {
+        type: "string",
+        description: "Post nativo de LinkedIn en inglés. Mismo formato que linkedin_post_es.",
+      },
+      linkedin_hashtags_es: {
+        type: "array",
+        items: { type: "string" },
+        description:
+          "3-5 hashtags en español (formato #SinEspacios). Mezcla específicos (#JTBD, #ProductoDigital) con generales (#IA, #UX). Sin acentos.",
+      },
+      linkedin_hashtags_en: {
+        type: "array",
+        items: { type: "string" },
+        description: "3-5 hashtags en inglés.",
+      },
     },
     required: [
       "title_es",
@@ -60,6 +89,12 @@ const POST_TOOL = {
       "content_es",
       "content_en",
       "image_query",
+      "meta_description_es",
+      "meta_description_en",
+      "linkedin_post_es",
+      "linkedin_post_en",
+      "linkedin_hashtags_es",
+      "linkedin_hashtags_en",
     ],
   },
 };
@@ -145,6 +180,12 @@ function validateGenerated(data) {
     "content_es",
     "content_en",
     "image_query",
+    "meta_description_es",
+    "meta_description_en",
+    "linkedin_post_es",
+    "linkedin_post_en",
+    "linkedin_hashtags_es",
+    "linkedin_hashtags_en",
   ];
   for (const key of required) {
     if (data[key] === undefined || data[key] === null || data[key] === "") {
@@ -153,6 +194,12 @@ function validateGenerated(data) {
   }
   if (!Array.isArray(data.tags_es) || !Array.isArray(data.tags_en)) {
     throw new Error("tags_es y tags_en deben ser arrays");
+  }
+  if (
+    !Array.isArray(data.linkedin_hashtags_es) ||
+    !Array.isArray(data.linkedin_hashtags_en)
+  ) {
+    throw new Error("linkedin_hashtags deben ser arrays");
   }
   if (!data.content_es.includes("<p>") || !data.content_es.includes("<h2>")) {
     throw new Error("content_es no parece HTML válido (faltan <p> o <h2>)");

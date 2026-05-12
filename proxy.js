@@ -63,6 +63,6 @@ export default proxy;
 
 export const config = {
   matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico|.*\\.svg$|.*\\.png$|.*\\.jpg$|.*\\.mp4$|.*\\.webm$|.*\\.ogg$).*)",
+    "/((?!api|llms\\.txt|robots\\.txt|sitemap\\.xml|_next/static|_next/image|favicon.ico|.*\\.svg$|.*\\.png$|.*\\.jpg$|.*\\.mp4$|.*\\.webm$|.*\\.ogg$).*)",
   ],
 };
