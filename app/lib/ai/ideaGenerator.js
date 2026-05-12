@@ -57,11 +57,12 @@ function buildUserPrompt({ category, currentTitle, trending, recentPosts }) {
   const trendingText =
     trending.length > 0
       ? trending
-          .slice(0, 12)
-          .map(
-            (it, i) =>
-              `${i + 1}. "${it.title}"${it.description ? `\n   ${it.description}` : ""}`,
-          )
+          .slice(0, 18)
+          .map((it, i) => {
+            const source = it.source ? ` — ${it.source}` : "";
+            const desc = it.description ? `\n   ${it.description}` : "";
+            return `${i + 1}. "${it.title}"${source}${desc}`;
+          })
           .join("\n\n")
       : "(Sin tendencias disponibles para esta categoría. Usa tu criterio.)";
 
@@ -83,7 +84,7 @@ function buildUserPrompt({ category, currentTitle, trending, recentPosts }) {
 
 El usuario ha visto este ángulo y prefiere explorar alternativas. NO repitas su tema/ángulo.
 
-## Tendencias actuales en Medium (categoría ${category})
+## Tendencias actuales en varios medios (categoría ${category})
 
 ${trendingText}
 

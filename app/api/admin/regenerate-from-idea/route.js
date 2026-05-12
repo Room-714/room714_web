@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/app/lib/prisma";
 import { getRecentPosts } from "@/app/lib/ai/topicRotation";
-import { getTrendingForCategory } from "@/app/lib/sources/medium";
+import { getCrossSourceTrending } from "@/app/lib/sources/aggregator";
 import { generatePostFromIdea } from "@/app/lib/ai/generator";
 import { fetchAndStoreCoverImage } from "@/app/lib/sources/unsplash";
 import { isAuthorizedAdmin } from "@/app/lib/auth";
@@ -65,7 +65,7 @@ export async function POST(request) {
     }
 
     const [trending, recentPosts] = await Promise.all([
-      getTrendingForCategory(post.category),
+      getCrossSourceTrending(post.category),
       getRecentPosts(10),
     ]);
 

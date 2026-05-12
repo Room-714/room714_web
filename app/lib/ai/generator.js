@@ -90,16 +90,16 @@ ${ex.content_es}`,
   ];
 }
 
+function formatTrendingItem(it, i) {
+  const source = it.source ? ` — ${it.source}` : "";
+  const desc = it.description ? `\n   ${it.description}` : "";
+  return `${i + 1}. "${it.title}"${source}${desc}`;
+}
+
 function buildUserPrompt({ category, trending, recentPosts }) {
   const trendingText =
     trending.length > 0
-      ? trending
-          .slice(0, 12)
-          .map(
-            (it, i) =>
-              `${i + 1}. "${it.title}"${it.description ? `\n   ${it.description}` : ""}`,
-          )
-          .join("\n\n")
+      ? trending.slice(0, 18).map(formatTrendingItem).join("\n\n")
       : "(No se pudieron obtener artículos en tendencia para esta categoría. Usa tu criterio editorial.)";
 
   const recentText =
@@ -114,9 +114,9 @@ function buildUserPrompt({ category, trending, recentPosts }) {
 
   return `Hoy toca generar un post para la categoría: **${category}**
 
-## Tendencias actuales en Medium (categoría ${category})
+## Tendencias actuales en varios medios (categoría ${category})
 
-Estos son los titulares y resúmenes de artículos que están sonando esta semana en Medium para los tags relacionados. ÚSALOS COMO INSPIRACIÓN TEMÁTICA, no como fuente. Identifica un tema o tensión recurrente y escribe la opinión ORIGINAL de Room 714 sobre ese tema. NO copies frases, NO traduzcas artículos, NO atribuyas ideas concretas a Room 714 que sean de otros.
+Estos son los titulares y resúmenes de artículos que están sonando esta semana en Medium, dev.to, Hacker News, Nielsen Norman Group y/o Smashing Magazine para esta categoría. El campo "— Fuente" indica de dónde sale cada uno. ÚSALOS COMO INSPIRACIÓN TEMÁTICA, no como fuente. Identifica un tema o tensión recurrente (ojo: las ideas con más fuerza son las que aparecen en VARIOS medios) y escribe la opinión ORIGINAL de Room 714 sobre ese tema. NO copies frases, NO traduzcas artículos, NO atribuyas ideas concretas a Room 714 que sean de otros.
 
 ${trendingText}
 
@@ -166,13 +166,7 @@ function validateGenerated(data) {
 function buildUserPromptFromIdea({ category, chosenIdea, trending, recentPosts }) {
   const trendingText =
     trending.length > 0
-      ? trending
-          .slice(0, 8)
-          .map(
-            (it, i) =>
-              `${i + 1}. "${it.title}"${it.description ? `\n   ${it.description}` : ""}`,
-          )
-          .join("\n\n")
+      ? trending.slice(0, 10).map(formatTrendingItem).join("\n\n")
       : "(Sin tendencias disponibles. Apóyate solo en la idea elegida.)";
 
   const recentText =
@@ -195,7 +189,7 @@ function buildUserPromptFromIdea({ category, chosenIdea, trending, recentPosts }
 
 Tu trabajo es desarrollar exactamente este ángulo en un post completo siguiendo la guía editorial Room 714. El título final puede ser igual o una variante mejorada del orientativo. NO cambies el ángulo.
 
-## Tendencias actuales en Medium (categoría ${category}) — contexto adicional
+## Tendencias actuales en varios medios (categoría ${category}) — contexto adicional
 
 ${trendingText}
 

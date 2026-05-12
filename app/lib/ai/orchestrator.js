@@ -1,6 +1,9 @@
 import { prisma } from "@/app/lib/prisma";
 import { categoryForDate, getRecentPosts } from "./topicRotation";
-import { getTrendingForCategory } from "@/app/lib/sources/medium";
+import {
+  getCrossSourceTrending,
+  summarizeSources,
+} from "@/app/lib/sources/aggregator";
 import { fetchAndStoreCoverImage } from "@/app/lib/sources/unsplash";
 import { generatePostDraft } from "./generator";
 import { sendDraftReadyEmail } from "@/app/lib/notifications/draftReady";
@@ -45,7 +48,7 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
   }
 
   const [trending, recentPosts] = await Promise.all([
-    getTrendingForCategory(category),
+    getCrossSourceTrending(category),
     getRecentPosts(10),
   ]);
 
@@ -113,6 +116,7 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
     imageAttribution: cover.attribution,
     scheduledFor: publishDate.toISOString(),
     trendingItemsUsed: trending.length,
+    trendingBySources: summarizeSources(trending),
     recentPostsConsidered: recentPosts.length,
     usage: draft.usage,
     email: emailResult,

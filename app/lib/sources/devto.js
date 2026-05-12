@@ -6,27 +6,17 @@ import {
   sortByDateDesc,
 } from "./_rss";
 
-export const SOURCE_NAME = "Medium";
+export const SOURCE_NAME = "dev.to";
 
 const CATEGORY_TAGS = {
-  TECH: [
-    "technology",
-    "artificial-intelligence",
-    "software-engineering",
-    "programming",
-  ],
-  PRODUCT: [
-    "product-management",
-    "startup",
-    "jobs-to-be-done",
-    "product-strategy",
-  ],
-  UX: ["ux", "ux-design", "user-experience", "usability"],
-  DESIGN: ["design", "design-thinking", "ui-design", "product-design"],
+  TECH: ["ai", "programming", "webdev", "machinelearning"],
+  PRODUCT: ["startup", "productmanagement", "business", "entrepreneurship"],
+  UX: ["ux", "userexperience", "accessibility", "usability"],
+  DESIGN: ["design", "ui", "css", "productdesign"],
 };
 
 async function fetchTag(tag) {
-  const xml = await fetchRss(`https://medium.com/feed/tag/${tag}`);
+  const xml = await fetchRss(`https://dev.to/feed/tag/${tag}`);
   if (!xml) return [];
   return parseRssItems(xml).map((it) => ({
     ...it,
