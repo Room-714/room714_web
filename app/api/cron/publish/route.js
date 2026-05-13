@@ -1,9 +1,15 @@
 import { prisma } from "@/app/lib/prisma";
 import { triggerLinkedInNotification } from "@/app/(admin-zone)/admin/actions";
-import { isMadridHour } from "@/app/lib/time/madrid";
+import { getMadridHour } from "@/app/lib/time/madrid";
 import { NextResponse } from "next/server";
 
-const TARGET_HOUR = 10;
+// Mapeo: hora Madrid → source que se publica en ese tick
+// 10:00 Madrid → posts auto-generados (cron de generación los crea con date=10:00)
+// 17:00 Madrid → posts manuales (creados desde admin)
+const SOURCE_BY_HOUR = {
+  10: "AUTO",
+  17: "MANUAL",
+};
 
 export async function GET(request) {
   // 1. Verificación de Seguridad para Vercel Cron
@@ -12,21 +18,26 @@ export async function GET(request) {
     return new Response("No autorizado", { status: 401 });
   }
 
-  if (!isMadridHour(TARGET_HOUR)) {
+  const madridHour = getMadridHour();
+  const sourceFilter = SOURCE_BY_HOUR[madridHour];
+
+  if (!sourceFilter) {
     return NextResponse.json({
-      message: "Saltado: no es la hora correcta en Madrid",
-      targetHour: `${TARGET_HOUR}:00 Madrid`,
+      message: "Saltado: no es ninguna hora de publicación en Madrid",
+      madridHour,
+      validHours: Object.keys(SOURCE_BY_HOUR),
     });
   }
 
   try {
     const now = new Date();
 
-    // 2. Buscamos posts: Publicados + Fecha alcanzada + No notificados aún
+    // 2. Buscamos posts del source correspondiente a esta hora
     const postsToProcess = await prisma.post.findMany({
       where: {
         published: true,
         published_sent: false,
+        source: sourceFilter,
         date: { lte: now },
       },
       include: { translations: true },

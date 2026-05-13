@@ -21,6 +21,11 @@ export function isMadridHour(targetHour) {
   return parseInt(hour, 10) === targetHour;
 }
 
+export function getMadridHour(date = new Date()) {
+  const { hour } = getMadridParts(date);
+  return parseInt(hour, 10);
+}
+
 export function isMadridWeekday() {
   const { weekday } = getMadridParts(new Date());
   return !["Sat", "Sun"].includes(weekday);

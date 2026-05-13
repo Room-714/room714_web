@@ -73,6 +73,7 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
       date: publishDate,
       published: true,
       published_sent: false,
+      source: "AUTO",
       translations: {
         create: [
           {
