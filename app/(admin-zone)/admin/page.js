@@ -178,25 +178,32 @@ export default function AdminPage() {
   const draftPosts = posts.filter((p) => !p.published);
   const livePosts = posts.filter((p) => p.published && new Date(p.date) <= now);
 
-  const renderPostButton = (post, extraClasses = "") => (
-    <button
-      key={post.id}
-      onClick={() => handleEdit(post)}
-      className={`w-full text-left p-4 rounded-2xl mb-1 transition-all ${
-        formData.id === post.id ? "bg-gray-200 text-black" : "hover:bg-gray-100"
-      } ${extraClasses}`}
-    >
-      <p
-        className={`text-xs font-mono mb-1 ${formData.id === post.id ? "text-gray-700" : "text-gray-500"}`}
+  const renderPostButton = (post, extraClasses = "") => {
+    const isFuture = new Date(post.date) > new Date();
+    const publishTime = post.source === "AUTO" ? "10:00 AM" : "5:00 PM";
+    return (
+      <button
+        key={post.id}
+        onClick={() => handleEdit(post)}
+        className={`w-full text-left p-4 rounded-2xl mb-1 transition-all ${
+          formData.id === post.id
+            ? "bg-gray-200 text-black"
+            : "hover:bg-gray-100"
+        } ${extraClasses}`}
       >
-        {new Date(post.date).toLocaleDateString()}
-        {new Date(post.date) > new Date() && post.published && " • 09:00 AM"}
-      </p>
-      <p className="font-bold text-sm truncate">
-        {post.translations?.find((t) => t.lang === "es")?.title || "Sin título"}
-      </p>
-    </button>
-  );
+        <p
+          className={`text-xs font-mono mb-1 ${formData.id === post.id ? "text-gray-700" : "text-gray-500"}`}
+        >
+          {new Date(post.date).toLocaleDateString()}
+          {isFuture && post.published && ` • ${publishTime}`}
+        </p>
+        <p className="font-bold text-sm truncate">
+          {post.translations?.find((t) => t.lang === "es")?.title ||
+            "Sin título"}
+        </p>
+      </button>
+    );
+  };
 
   return (
     // CONTENEDOR PRINCIPAL: Altura fija de pantalla y sin scroll
