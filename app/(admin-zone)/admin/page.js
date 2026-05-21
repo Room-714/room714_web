@@ -21,6 +21,7 @@ export default function AdminPage() {
   const [showModal, setShowModal] = useState(false);
   const [lastSavedPost, setLastSavedPost] = useState(null);
   const [showRegenerate, setShowRegenerate] = useState(false);
+  const [mobileView, setMobileView] = useState("list");
 
   const [formData, setFormData] = useState({
     id: null,
@@ -74,6 +75,7 @@ export default function AdminPage() {
   const handleEdit = (post) => {
     const es = post.translations?.find((t) => t.lang === "es") || {};
     const en = post.translations?.find((t) => t.lang === "en") || {};
+    setMobileView("editor");
     setFormData({
       id: post.id,
       date: post.date
@@ -224,9 +226,42 @@ export default function AdminPage() {
         />
       )}
 
-      <div className="w-full h-full grid grid-cols-1 lg:grid-cols-4 gap-8 overflow-hidden">
+      {/* SELECTOR DE VISTA EN MÓVIL */}
+      <div className="lg:hidden flex-none mb-4 flex gap-2 bg-white p-1 rounded-2xl border border-gray-200">
+        <button
+          onClick={() => setMobileView("list")}
+          className={`flex-1 py-2 text-xs font-black uppercase rounded-xl transition-colors ${
+            mobileView === "list"
+              ? "bg-black text-white"
+              : "text-gray-500 hover:bg-gray-100"
+          }`}
+        >
+          Posts
+          {draftPosts.length > 0 && (
+            <span className="ml-2 inline-flex items-center justify-center min-w-5 h-5 px-1.5 text-[10px] rounded-full bg-red-500 text-white">
+              {draftPosts.length}
+            </span>
+          )}
+        </button>
+        <button
+          onClick={() => setMobileView("editor")}
+          className={`flex-1 py-2 text-xs font-black uppercase rounded-xl transition-colors ${
+            mobileView === "editor"
+              ? "bg-black text-white"
+              : "text-gray-500 hover:bg-gray-100"
+          }`}
+        >
+          Editor
+        </button>
+      </div>
+
+      <div className="w-full flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-4 gap-8 overflow-hidden">
         {/* COLUMNA IZQUIERDA: MENÚ FIJO */}
-        <div className="lg:col-span-1 flex flex-col h-full overflow-hidden">
+        <div
+          className={`lg:col-span-1 lg:flex flex-col h-full overflow-hidden ${
+            mobileView === "list" ? "flex" : "hidden"
+          }`}
+        >
           {/* LOGO AREA */}
           <div className="flex-none pl-2">
             <Image
@@ -243,7 +278,10 @@ export default function AdminPage() {
           </div>
           <div className="flex flex-col gap-4 flex-none my-4">
             <button
-              onClick={resetForm}
+              onClick={() => {
+                resetForm();
+                setMobileView("editor");
+              }}
               className="bg-black text-white px-2 py-4 rounded-2xl hover:bg-red-500 font-bold transition-colors uppercase"
             >
               + nuevo post
@@ -322,8 +360,12 @@ export default function AdminPage() {
         </div>
 
         {/* COLUMNA DERECHA: FORMULARIO CON SCROLL */}
-        <div className="lg:col-span-3 h-full overflow-y-auto pr-2 custom-scrollbar">
-          <div className="bg-white p-8 rounded-3xl shadow-xl border border-gray-200 mb-8">
+        <div
+          className={`lg:col-span-3 lg:block h-full overflow-y-auto pr-0 lg:pr-2 custom-scrollbar ${
+            mobileView === "editor" ? "block" : "hidden"
+          }`}
+        >
+          <div className="bg-white p-4 md:p-8 rounded-3xl shadow-xl border border-gray-200 mb-8">
             <form onSubmit={handleSubmit} className="space-y-8">
               {/* Sección Categoría e Imagen */}
               <div className="bg-gray-50 p-6 rounded-2xl border border-gray-200 grid grid-cols-1 md:grid-cols-2 gap-8">
