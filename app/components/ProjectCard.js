@@ -34,15 +34,13 @@ export default function ProjectCard({ project, isOpen, onClick, dict, priority =
           </div>
 
           <div className="flex items-center gap-3 flex-none">
-            {project.status && dict.projects.status?.[project.status] && (
+            {project.status === "in_progress" && dict.projects.status?.in_progress && (
               <span
-                className={`font-hand text-sm md:text-base lg:text-xl px-3 py-0.5 -rotate-2 select-none border-2 border-dashed rounded-md transition-opacity duration-500 ${
-                  project.status === "in_progress"
-                    ? "text-amber-600 border-amber-500"
-                    : "text-green-700 border-green-600"
-                } ${isOpen ? "opacity-100" : "opacity-60"}`}
+                className={`font-hand text-sm md:text-base lg:text-xl px-3 py-0.5 -rotate-2 select-none border-2 border-dashed rounded-md text-red-500 border-red-500 transition-opacity duration-500 ${
+                  isOpen ? "opacity-100" : "opacity-60"
+                }`}
               >
-                {dict.projects.status[project.status]}
+                {dict.projects.status.in_progress}
               </span>
             )}
 
