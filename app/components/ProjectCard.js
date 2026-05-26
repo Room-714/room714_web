@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { ChevronDown } from "lucide-react";
 
-export default function ProjectCard({ project, isOpen, onClick, dict }) {
+export default function ProjectCard({ project, isOpen, onClick, dict, priority = false }) {
   return (
     <div
       onClick={onClick}
@@ -19,8 +19,8 @@ export default function ProjectCard({ project, isOpen, onClick, dict }) {
 
       <div className="py-4 px-6">
         {/* CABECERA: Título Horizontal */}
-        <div className="flex justify-between items-center">
-          <div className="flex justify-start items-start gap-4">
+        <div className="flex justify-between items-center gap-3">
+          <div className="flex justify-start items-start gap-4 min-w-0">
             <span
               className={`font-black font-hand text-lg md:text-2xl lg:text-4xl ${isOpen ? "text-red-500 pt-2" : "text-gray-400"}`}
             >
@@ -33,13 +33,27 @@ export default function ProjectCard({ project, isOpen, onClick, dict }) {
             </h3>
           </div>
 
-          <div
-            className={`transition-transform duration-500 ${isOpen ? "rotate-180" : "rotate-0"}`}
-          >
-            <ChevronDown
-              size={24}
-              className={isOpen ? "text-red-500" : "text-gray-400"}
-            />
+          <div className="flex items-center gap-3 flex-none">
+            {project.status && dict.projects.status?.[project.status] && (
+              <span
+                className={`font-hand text-sm md:text-base lg:text-xl px-3 py-0.5 -rotate-2 select-none border-2 border-dashed rounded-md transition-opacity duration-500 ${
+                  project.status === "in_progress"
+                    ? "text-amber-600 border-amber-500"
+                    : "text-green-700 border-green-600"
+                } ${isOpen ? "opacity-100" : "opacity-60"}`}
+              >
+                {dict.projects.status[project.status]}
+              </span>
+            )}
+
+            <div
+              className={`transition-transform duration-500 ${isOpen ? "rotate-180" : "rotate-0"}`}
+            >
+              <ChevronDown
+                size={24}
+                className={isOpen ? "text-red-500" : "text-gray-400"}
+              />
+            </div>
           </div>
         </div>
 
@@ -55,6 +69,8 @@ export default function ProjectCard({ project, isOpen, onClick, dict }) {
                   src={project.image}
                   alt={project.title}
                   fill
+                  sizes="(max-width: 768px) 90vw, 33vw"
+                  priority={priority}
                   className="object-contain"
                 />
               </div>
@@ -81,7 +97,9 @@ export default function ProjectCard({ project, isOpen, onClick, dict }) {
 
                 <div>
                   <p className="font-hand text-xl md:text-2xl lg:text-3xl font-black text-red-500 mb-1">
-                    {dict.projects.subtitle_results}
+                    {project.status === "in_progress"
+                      ? dict.projects.subtitle_results_expected
+                      : dict.projects.subtitle_results}
                   </p>
                   <p className="text-gray-900 text-base leading-5 md:text-lg md:leading-6 lg:text-2xl lg:leading-8">
                     {project.outcome}

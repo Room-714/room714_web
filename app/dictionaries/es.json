@@ -113,6 +113,11 @@
     "subtitle_challenge": "El reto",
     "subtitle_solution": "La idea",
     "subtitle_results": "El resultado",
+    "subtitle_results_expected": "Resultados esperados",
+    "status": {
+      "completed": "Finalizado",
+      "in_progress": "En progreso"
+    },
     "case_study_01": {
       "title": "Telecoms: Optimización del Flujo de Activación",
       "challenge": "La complejidad técnica en la activación de paquetes de soluciones creaba una barrera insalvable para los clientes. El proceso era tan confuso que la mayoría abandonaba a mitad del registro, saturando el centro de atención al cliente con llamadas de soporte técnico.",
@@ -153,19 +158,19 @@
       "title": "Telco: Capa Semántica para una IA Fiable",
       "challenge": "Sistemas internos del operador repartidos en silos, cada uno con su lenguaje. Cualquier intento de aprovechar la IA chocaba con la misma realidad: los modelos respondían sobre datos parciales o contradictorios, generando alucinaciones difíciles de detectar y respuestas en las que no se podía confiar para automatizar nada.",
       "idea": "Construimos un conjunto de datos canónicos sobre los que se apoya una capa semántica que aísla la IA de las particularidades de los sistemas actuales. La capa expone los conceptos del negocio con definiciones únicas, fuentes de verdad y permisos, de modo que el modelo siempre opera sobre un mismo diccionario — y la empresa puede ir evolucionando sus sistemas por debajo sin romper lo que ya funciona.",
-      "outcome": "Redujimos en un 62% las alucinaciones del asistente interno y conseguimos que el 89% de las consultas IA se respondan contra dato canónico, dejando la operación lista para evolucionar los sistemas existentes sin frenar lo que ya está en producción."
+      "outcome": "Esperamos reducir drásticamente las alucinaciones del asistente interno y que el grueso de las consultas IA se resuelvan contra dato canónico, dejando la operación lista para evolucionar los sistemas existentes sin frenar lo que ya está en producción."
     },
     "case_study_08": {
       "title": "Retail Alimentación: Un Carrito que Decide por Sí Solo",
       "challenge": "En un e-commerce de fruta y verdura el catálogo cambia a diario: roturas de stock, ajustes de precio, productos que entran y salen de temporada. Mantener el carrito sincronizado obligaba al equipo a meter mano constantemente, y aun así los clientes se topaban con productos no disponibles o precios desfasados al pagar.",
       "idea": "Diseñamos un carrito inteligente que delega en un agente IA las decisiones operativas del día a día. El agente lee el contexto en tiempo real — stock, precios, calendario de temporada — y aplica ajustes por su cuenta cuando aparece una condición que lo justifica. Sólo escala al equipo lo excepcional; lo rutinario se gestiona solo.",
-      "outcome": "El carrito gestiona el 78% de los ajustes diarios de catálogo de forma autónoma y los carritos abandonados por productos no disponibles o precios desfasados cayeron un 31%, liberando al equipo de la operativa rutinaria."
+      "outcome": "El objetivo es que el carrito gestione de forma autónoma la mayor parte de los ajustes diarios de catálogo y reducir notablemente los abandonos por productos no disponibles o precios desfasados, liberando al equipo de la operativa rutinaria."
     },
     "case_study_09": {
       "title": "Telecoms B2B: Inferencia IA Fuera del SaaS",
       "challenge": "El coste de la inferencia IA en SaaS sube a un ritmo que ya compromete la rentabilidad de muchas iniciativas. Los clientes B2B del operador buscaban una alternativa privada, predecible y soberana — pero ningún proveedor combinaba hoy red, capacidad de cómputo y modelos en un mismo paquete.",
       "idea": "Especificamos el plan estratégico para que el operador evolucione su nube privada hacia un servicio de inferencia IA dirigido a clientes B2B: dimensionamiento de cómputo, fases de migración, modelo de TCO frente al SaaS de hyperscalers, integración con la red carrier-grade existente y roadmap de adopción por segmentos de cliente.",
-      "outcome": "El plan dimensiona un TCO un 47% inferior al SaaS de hyperscaler al volumen objetivo del operador y fija un roadmap de 18 meses para que la oferta esté operativa antes del salto previsto en la demanda B2B."
+      "outcome": "El plan apunta a un TCO sustancialmente inferior al SaaS de hyperscaler al volumen objetivo del operador y a un roadmap de adopción que ponga la oferta operativa antes del salto previsto en la demanda B2B."
     },
     "footer_cta": {
       "line_1": "¿Cansado de hablar de métricas?",

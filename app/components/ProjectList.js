@@ -8,13 +8,14 @@ export default function ProjectsList({ projects, dict }) {
 
   return (
     <div className="w-full flex flex-col py-2">
-      {projects.map((project) => (
+      {projects.map((project, index) => (
         <ProjectCard
           key={project.id}
           project={project}
           dict={dict}
           isOpen={openId === project.id}
           onClick={() => setOpenId(project.id)}
+          priority={index === 0}
         />
       ))}
     </div>

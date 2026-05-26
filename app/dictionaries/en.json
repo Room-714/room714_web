@@ -113,6 +113,11 @@
     "subtitle_challenge": "The Challenge",
     "subtitle_solution": "The Idea",
     "subtitle_results": "The Outcome",
+    "subtitle_results_expected": "Expected Outcomes",
+    "status": {
+      "completed": "Completed",
+      "in_progress": "In progress"
+    },
     "case_study_01": {
       "title": "Telecoms: Frictionless Activation Flow",
       "challenge": "Technical complexity in activating service bundles was creating an insurmountable barrier for customers. The process was so convoluted that most abandoned midway, flooding the support centre with technical queries.",
@@ -153,19 +158,19 @@
       "title": "Telecoms: A Semantic Layer for Reliable AI",
       "challenge": "The operator's internal systems were scattered across silos, each speaking its own language. Any attempt to leverage AI hit the same wall: models answered based on partial or contradictory data, producing hallucinations that were hard to spot and answers nobody could trust to automate anything.",
       "idea": "We built a set of canonical data underpinning a semantic layer that insulates the AI from the quirks of the existing systems. The layer exposes business concepts with single definitions, sources of truth and permissions, so the model always operates on the same dictionary — leaving the business free to evolve its underlying systems without breaking what already works.",
-      "outcome": "We cut hallucinations from the internal assistant by 62% and got 89% of AI queries answered against canonical data, leaving operations ready to evolve existing systems without slowing down what's already in production."
+      "outcome": "We expect to drastically reduce hallucinations from the internal assistant and have the bulk of AI queries resolved against canonical data, leaving operations ready to evolve existing systems without slowing down what's already in production."
     },
     "case_study_08": {
       "title": "Food Retail: A Shopping Cart That Thinks for Itself",
       "challenge": "In a fruit and veg e-commerce, the catalogue shifts daily: stock outages, price adjustments, products coming in and out of season. Keeping the cart in sync forced the team to constantly intervene, and customers still ran into unavailable items or stale prices at checkout.",
       "idea": "We designed a smart cart that hands the day-to-day operational calls over to an AI agent. The agent reads context in real time — stock, prices, seasonal calendar — and applies adjustments on its own when conditions justify it. Only the exceptional gets escalated to humans; the routine handles itself.",
-      "outcome": "The cart now handles 78% of daily catalogue adjustments autonomously, and abandoned carts caused by unavailable items or stale prices dropped by 31%, freeing the team from the routine grind."
+      "outcome": "The goal is for the cart to autonomously handle most daily catalogue adjustments and to noticeably reduce abandoned carts caused by unavailable items or stale prices, freeing the team from the routine grind."
     },
     "case_study_09": {
       "title": "Telecoms B2B: AI Inference Out of the SaaS",
       "challenge": "AI inference costs in SaaS mode are climbing at a pace that already squeezes the unit economics of many initiatives. The operator's B2B customers were looking for a private, predictable and sovereign alternative — but no provider yet packaged network, compute capacity and models together.",
       "idea": "We mapped out the strategic plan for the operator to evolve its private cloud into an AI inference service aimed at B2B customers: compute sizing, migration phases, TCO model versus hyperscaler SaaS, integration with the existing carrier-grade network, and an adoption roadmap by customer segment.",
-      "outcome": "The plan sets a TCO 47% lower than hyperscaler SaaS at the operator's target volume and locks in an 18-month roadmap to have the offering operational before the expected jump in B2B demand."
+      "outcome": "The plan targets a TCO substantially lower than hyperscaler SaaS at the operator's target volume and an adoption roadmap that gets the offering operational before the expected jump in B2B demand."
     },
     "footer_cta": {
       "line_1": "Tired of talking about metrics?",
