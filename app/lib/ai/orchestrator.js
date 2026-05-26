@@ -4,7 +4,10 @@ import {
   getCrossSourceTrending,
   summarizeSources,
 } from "@/app/lib/sources/aggregator";
-import { fetchAndStoreCoverImage } from "@/app/lib/sources/unsplash";
+import {
+  fetchAndStoreCoverImage,
+  fallbackQueryForCategory,
+} from "@/app/lib/sources/unsplash";
 import { generatePostDraft } from "./generator";
 import { sendDraftReadyEmail } from "@/app/lib/notifications/draftReady";
 import { nextMadridSlot } from "@/app/lib/time/madrid";
@@ -55,7 +58,9 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
   const draft = await generatePostDraft({ category, trending, recentPosts });
 
   const datePrefix = today.toISOString().split("T")[0];
-  const cover = await fetchAndStoreCoverImage(draft.image_query, datePrefix);
+  const cover = await fetchAndStoreCoverImage(draft.image_query, datePrefix, {
+    fallbackQuery: fallbackQueryForCategory(category),
+  });
 
   const slugEs = await ensureUniqueSlug(
     draft.slug_es || slugifyFallback(draft.title_es),
