@@ -22,6 +22,7 @@ export default function AdminPage() {
   const [lastSavedPost, setLastSavedPost] = useState(null);
   const [showRegenerate, setShowRegenerate] = useState(false);
   const [mobileView, setMobileView] = useState("list");
+  const [isGenerating, setIsGenerating] = useState(false);
 
   const [formData, setFormData] = useState({
     id: null,
@@ -151,6 +152,40 @@ export default function AdminPage() {
     setShowModal(false);
     if (!formData.id) resetForm();
     loadPosts();
+  };
+
+  const handleGenerateAi = async () => {
+    const confirmed = window.confirm(
+      "¿Generar un post automático con IA ahora?\n\nTarda hasta 2 minutos y consume tokens. Se creará como publicado en la próxima franja de 10:00 (Madrid) y aparecerá en 'Próximamente' para que lo valides.",
+    );
+    if (!confirmed) return;
+    setIsGenerating(true);
+    try {
+      const res = await fetch("/api/admin/generate-draft", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sendEmail: false }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(`Error generando post: ${data.error || res.statusText}`);
+        return;
+      }
+      if (data.skipped) {
+        alert(`No se generó: ${data.reason}`);
+        return;
+      }
+      const refreshed = await getPostsList();
+      if (refreshed?.success) {
+        setPosts(refreshed.posts || []);
+        const newPost = refreshed.posts.find((p) => p.id === data.postId);
+        if (newPost) handleEdit(newPost);
+      }
+    } catch (error) {
+      alert(`Error generando post: ${error.message}`);
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   const resetForm = () =>
@@ -285,6 +320,13 @@ export default function AdminPage() {
               className="bg-black text-white px-2 py-4 rounded-2xl hover:bg-red-500 font-bold transition-colors uppercase"
             >
               + nuevo post
+            </button>
+            <button
+              onClick={handleGenerateAi}
+              disabled={isGenerating}
+              className="bg-white border-2 border-black text-black px-2 py-4 rounded-2xl hover:bg-black hover:text-white font-bold transition-colors uppercase disabled:opacity-50 disabled:cursor-wait"
+            >
+              {isGenerating ? "Generando…" : "Generar post IA"}
             </button>
             <h3 className="font-black pl-4 mt-4 text-xl">Publicaciones</h3>
           </div>
