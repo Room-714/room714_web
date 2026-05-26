@@ -3,7 +3,10 @@ import { prisma } from "@/app/lib/prisma";
 import { getRecentPosts } from "@/app/lib/ai/topicRotation";
 import { getCrossSourceTrending } from "@/app/lib/sources/aggregator";
 import { generatePostFromIdea } from "@/app/lib/ai/generator";
-import { fetchAndStoreCoverImage } from "@/app/lib/sources/unsplash";
+import {
+  fetchAndStoreCoverImage,
+  fallbackQueryForCategory,
+} from "@/app/lib/sources/unsplash";
 import { isAuthorizedAdmin } from "@/app/lib/auth";
 
 export const maxDuration = 300;
@@ -77,7 +80,9 @@ export async function POST(request) {
     });
 
     const datePrefix = new Date().toISOString().split("T")[0];
-    const cover = await fetchAndStoreCoverImage(draft.image_query, datePrefix);
+    const cover = await fetchAndStoreCoverImage(draft.image_query, datePrefix, {
+      fallbackQuery: fallbackQueryForCategory(post.category),
+    });
 
     const slugEs = await ensureUniqueSlug(
       draft.slug_es || slugifyFallback(draft.title_es),

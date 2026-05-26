@@ -37,10 +37,45 @@ async function triggerDownloadTracking(downloadLocation) {
   }
 }
 
-export async function fetchAndStoreCoverImage(query, datePrefix) {
-  const results = await searchUnsplash(query);
+const CATEGORY_FALLBACK_QUERY = {
+  TECH: "technology",
+  DESIGN: "design",
+  PRODUCT: "product",
+  UX: "user experience",
+};
+
+export function fallbackQueryForCategory(category) {
+  return CATEGORY_FALLBACK_QUERY[category] ?? "abstract";
+}
+
+function buildFallbackQueries(originalQuery, extraFallback) {
+  const words = (originalQuery ?? "").trim().split(/\s+/).filter(Boolean);
+  const variants = [];
+  for (let i = 1; i < words.length; i++) {
+    variants.push(words.slice(i).join(" "));
+  }
+  if (extraFallback) variants.push(extraFallback);
+  return variants;
+}
+
+export async function fetchAndStoreCoverImage(query, datePrefix, options = {}) {
+  const { fallbackQuery } = options;
+  const queries = [query, ...buildFallbackQueries(query, fallbackQuery)];
+
+  let results = [];
+  for (const q of queries) {
+    const r = await searchUnsplash(q);
+    if (r.length > 0) {
+      results = r;
+      if (q !== query) {
+        console.warn(`Unsplash: query original "${query}" sin resultados, usando fallback "${q}"`);
+      }
+      break;
+    }
+    console.warn(`Unsplash: sin resultados para "${q}"`);
+  }
   if (results.length === 0) {
-    throw new Error(`Unsplash: sin resultados para "${query}"`);
+    throw new Error(`Unsplash: sin resultados para ninguna variante (${queries.join(" | ")})`);
   }
 
   const pick = results[Math.floor(Math.random() * Math.min(results.length, 5))];
