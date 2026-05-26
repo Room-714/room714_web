@@ -47,4 +47,28 @@ export const getProjectsData = (dict) => [
     outcome: dict.projects.case_study_06.outcome,
     image: "/project/project-6.svg",
   },
+  {
+    id: "07",
+    title: dict.projects.case_study_07.title,
+    challenge: dict.projects.case_study_07.challenge,
+    idea: dict.projects.case_study_07.idea,
+    outcome: dict.projects.case_study_07.outcome,
+    image: "/project/project-7.png",
+  },
+  {
+    id: "08",
+    title: dict.projects.case_study_08.title,
+    challenge: dict.projects.case_study_08.challenge,
+    idea: dict.projects.case_study_08.idea,
+    outcome: dict.projects.case_study_08.outcome,
+    image: "/project/project-8.png",
+  },
+  {
+    id: "09",
+    title: dict.projects.case_study_09.title,
+    challenge: dict.projects.case_study_09.challenge,
+    idea: dict.projects.case_study_09.idea,
+    outcome: dict.projects.case_study_09.outcome,
+    image: "/project/project-9.png",
+  },
 ];
