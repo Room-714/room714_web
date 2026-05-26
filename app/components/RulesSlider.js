@@ -37,7 +37,7 @@ export default function RulesSlider({ rules }) {
         ref={scrollRef}
         onScroll={handleScroll}
         /* 2. Añadimos perspective-1000 para que el efecto de rotación 3D se vea profundo */
-        className="w-full no-scrollbar flex overflow-x-auto snap-x snap-mandatory gap-6 px-[10%] py-10 lg:overflow-visible lg:px-24 lg:grid lg:grid-cols-3 lg:gap-10 lg:items-start perspective:1000px"
+        className="w-full no-scrollbar flex overflow-x-auto snap-x snap-mandatory gap-6 px-[10%] py-10 lg:overflow-visible lg:px-12 xl:px-24 lg:grid lg:grid-cols-4 lg:gap-6 xl:gap-8 lg:items-start perspective:1000px"
       >
         {rules.map((rule) => {
           const isActive = activeId === rule.id;
@@ -98,9 +98,10 @@ export default function RulesSlider({ rules }) {
                   `}
                 >
                   <Image
-                    src={`/rules-${rule.id}.svg`}
+                    src={rule.image}
                     alt={`Icono ${rule.title}`}
                     fill
+                    sizes="(max-width: 1024px) 50vw, 25vw"
                     className="object-contain transition-all duration-500"
                   />
                 </div>

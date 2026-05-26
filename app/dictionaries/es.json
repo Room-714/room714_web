@@ -83,16 +83,16 @@
   },
   "about": {
     "title": "quiénes somos",
-    "hero_text": "No somos una agencia al uso. Somos un equipo de especialistas obsesionados con entregar productos digitales que impactan en la cuenta de resultados, no solo en la estética.",
+    "hero_text": "No somos una agencia al uso. Somos un equipo de especialistas en producto, diseño, usabilidad y tecnología — obsesionados con entregar productos digitales que impactan en la cuenta de resultados, no solo en la estética.",
     "quotes_line1": "Convertimos objetivos estratégicos en",
     "quotes_line2": "realidades listas para triunfar",
     "rules": {
-      "title_line1": "Seguimos estas",
-      "title_line2": "reglas",
+      "title_line1": "Defendemos estos",
+      "title_line2": "valores",
       "rule_1": {
-        "title": "Partnership Real",
-        "description_line1": "Olvídate de la relación cliente-proveedor fría. Somos parte de tu equipo.",
-        "description_line2": "Trabajamos con total transparencia y honestidad. Si algo no va a funcionar, te lo diremos. Nos va la marcha y nos comprometemos con tu éxito a largo plazo."
+        "title": "Producto, no entregables",
+        "description_line1": "No te entregamos un dosier de pantallas. Te entregamos un producto que sirve.",
+        "description_line2": "Roadmap, JTBD, métricas y prioridades en la mesa antes que cualquier diseño. Si la idea no aguanta esa conversación, el resto da igual."
       },
       "rule_2": {
         "title": "Diseño para el Negocio",
@@ -100,9 +100,14 @@
         "description_line2": "Cada decisión de diseño que tomamos busca una métrica: más conversión, más retención o menos costes operativos. Si no aporta valor, no se hace."
       },
       "rule_3": {
-        "title": "Simplicidad ante todo",
-        "description_line1": "Resolvemos marrones complejos con soluciones sencillas.",
-        "description_line2": "Gestionamos la complejidad técnica por dentro para que, por fuera, tu producto sea tan fácil de usar que parezca magia. Escalable, accesible y sin fricciones."
+        "title": "Usabilidad sin manual",
+        "description_line1": "Si hay que explicar cómo se usa, lo hemos hecho mal.",
+        "description_line2": "Matamos la complejidad para que tu producto sea tan claro que el usuario sepa qué hacer en la primera pantalla. Lo demás es decoración."
+      },
+      "rule_4": {
+        "title": "Tecnología que aguanta",
+        "description_line1": "Código limpio, arquitectura sólida y sentido común técnico.",
+        "description_line2": "Construimos pensando en cómo va a escalar y cómo va a convivir con lo que ya tienes — incluida la IA que ya está empezando a operar dentro de los procesos."
       }
     }
   },
