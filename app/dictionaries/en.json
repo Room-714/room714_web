@@ -83,16 +83,16 @@
   },
   "about": {
     "title": "who we are",
-    "hero_text": "We aren't your average agency. We’re a team of specialists obsessed with delivering digital products that hit the bottom line, not just the aesthetic.",
+    "hero_text": "We aren't your average agency. We’re a team of product, design, usability and engineering specialists — obsessed with delivering digital products that hit the bottom line, not just the aesthetic.",
     "quotes_line1": "Turning strategic goals into",
     "quotes_line2": "market-ready realities",
     "rules": {
-      "title_line1": "We play by these",
-      "title_line2": "rules",
+      "title_line1": "We stand by these",
+      "title_line2": "values",
       "rule_1": {
-        "title": "Real Partnership",
-        "description_line1": "Forget the cold client-vendor dynamic. We’re part of your team.",
-        "description_line2": "We work with total transparency and honesty. If something won’t work, we’ll tell you. We thrive on the challenge and commit to your long-term success."
+        "title": "Product, not deliverables",
+        "description_line1": "We don't hand you a binder of screens. We hand you a product that works.",
+        "description_line2": "Roadmap, JTBD, metrics and priorities on the table before any design happens. If the idea doesn't survive that conversation, nothing else matters."
       },
       "rule_2": {
         "title": "Profit-Led Design",
@@ -100,9 +100,14 @@
         "description_line2": "Every design decision we make targets a metric: higher conversion, better retention, or lower OPEX. If it doesn't add value, it doesn't get built."
       },
       "rule_3": {
-        "title": "Simplicity Above All",
-        "description_line1": "We solve complex nightmares with simple solutions.",
-        "description_line2": "We manage the technical chaos internally so that, on the outside, your product feels like magic. Scalable, accessible, and friction-free."
+        "title": "Usability without a manual",
+        "description_line1": "If we have to explain how to use it, we built it wrong.",
+        "description_line2": "We kill complexity so your product is so clear the user knows what to do on the first screen. Everything else is decoration."
+      },
+      "rule_4": {
+        "title": "Tech that holds up",
+        "description_line1": "Clean code, solid architecture and technical common sense.",
+        "description_line2": "We build with how it'll scale in mind, and how it'll coexist with what you already have — including the AI already starting to operate inside your processes."
       }
     }
   },
