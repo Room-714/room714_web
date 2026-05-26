@@ -9,7 +9,7 @@
   "home": {
     "hero": {
       "title": "We design and build digital products that actually work",
-      "description": "No fluff: just experience-based knowledge and quality technical execution to drive real business growth."
+      "description": "No fluff: experience and quality technical execution to build products that hold up in the real world — demanding customers, shifting processes and AI agents already operating inside companies."
     },
     "services": {
       "title": "So... what the f*** do you guys actually do?",
@@ -27,11 +27,11 @@
       },
       "num_4": {
         "title": "Digital Transformation",
-        "description": "Modernising your business from top to bottom. From legacy systems to internal culture, we prime your structure for the digital age."
+        "description": "Modernising your business from top to bottom. From legacy systems to internal culture and information structure, we prime your organisation for a digital world where AI is already part of the landscape."
       },
       "num_5": {
         "title": "Software Development",
-        "description": "Clean, scalable code. We build robust solutions (back and front) that won't break the moment your business starts to scale."
+        "description": "Clean, scalable code. We build robust solutions — back, front and integrations with agents or models when the case calls for it — that won't break the moment your business starts to scale."
       }
     },
     "customers": {
@@ -39,7 +39,7 @@
         "line1": "But...",
         "line2": "does anyone actually hire you?"
       },
-      "description": "We haven't been around long, but we’ve already landed some clients. We work with leaders in Telco and IT. But we’re open to anything, because the truth is, nobody is a saint when it comes to customer experience. If you’ve got a digital headache, we’re your team."
+      "description": "We haven't been around long, but we’ve already landed some clients. We work with leaders in Telco and IT. But we’re open to anything, because the truth is, nobody is a saint when it comes to customer experience. If you’ve got a digital headache — from a flow bleeding users to an assistant that needs real context to stop hallucinating — we’re your team."
     },
     "buttons": {
       "discover": "discover more",
@@ -57,7 +57,7 @@
       "interest_5": "CX Audit & Research",
       "interest_6": "Custom Software Development",
       "interest_7": "SaaS or Dashboard Redesign",
-      "interest_8": "Generative AI Integration",
+      "interest_8": "AI and Agents Integration",
       "interest_9": "Other"
     },
     "name": {
@@ -148,6 +148,24 @@
       "challenge": "Large corporations and government bodies required a superior security posture that could leverage the operator's network. Standard off-the-shelf solutions weren't enough to protect their mission-critical infrastructure.",
       "idea": "We designed a holistic security framework that integrates carrier-grade network intelligence with an elite third-party defence suite. We created a unified command centre to manage perimeter security and sovereign compliance at scale.",
       "outcome": "We reduced incident mitigation time by 55% and ensured full compliance with national security standards for large-scale organisations."
+    },
+    "case_study_07": {
+      "title": "Telecoms: A Semantic Layer for Reliable AI",
+      "challenge": "The operator's internal systems were scattered across silos, each speaking its own language. Any attempt to leverage AI hit the same wall: models answered based on partial or contradictory data, producing hallucinations that were hard to spot and answers nobody could trust to automate anything.",
+      "idea": "We built a set of canonical data underpinning a semantic layer that insulates the AI from the quirks of the existing systems. The layer exposes business concepts with single definitions, sources of truth and permissions, so the model always operates on the same dictionary — leaving the business free to evolve its underlying systems without breaking what already works.",
+      "outcome": "We cut hallucinations from the internal assistant by 62% and got 89% of AI queries answered against canonical data, leaving operations ready to evolve existing systems without slowing down what's already in production."
+    },
+    "case_study_08": {
+      "title": "Food Retail: A Shopping Cart That Thinks for Itself",
+      "challenge": "In a fruit and veg e-commerce, the catalogue shifts daily: stock outages, price adjustments, products coming in and out of season. Keeping the cart in sync forced the team to constantly intervene, and customers still ran into unavailable items or stale prices at checkout.",
+      "idea": "We designed a smart cart that hands the day-to-day operational calls over to an AI agent. The agent reads context in real time — stock, prices, seasonal calendar — and applies adjustments on its own when conditions justify it. Only the exceptional gets escalated to humans; the routine handles itself.",
+      "outcome": "The cart now handles 78% of daily catalogue adjustments autonomously, and abandoned carts caused by unavailable items or stale prices dropped by 31%, freeing the team from the routine grind."
+    },
+    "case_study_09": {
+      "title": "Telecoms B2B: AI Inference Out of the SaaS",
+      "challenge": "AI inference costs in SaaS mode are climbing at a pace that already squeezes the unit economics of many initiatives. The operator's B2B customers were looking for a private, predictable and sovereign alternative — but no provider yet packaged network, compute capacity and models together.",
+      "idea": "We mapped out the strategic plan for the operator to evolve its private cloud into an AI inference service aimed at B2B customers: compute sizing, migration phases, TCO model versus hyperscaler SaaS, integration with the existing carrier-grade network, and an adoption roadmap by customer segment.",
+      "outcome": "The plan sets a TCO 47% lower than hyperscaler SaaS at the operator's target volume and locks in an 18-month roadmap to have the offering operational before the expected jump in B2B demand."
     },
     "footer_cta": {
       "line_1": "Tired of talking about metrics?",

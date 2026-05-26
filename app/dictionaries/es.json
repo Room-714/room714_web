@@ -9,7 +9,7 @@
   "home": {
     "hero": {
       "title": "Diseñamos y construimos productos digitales que funcionan",
-      "description": "Sin palabras vacías: sólo conocimiento basado en la experiencia y una ejecución técnica de calidad para que tu negocio crezca de verdad."
+      "description": "Sin palabras vacías: experiencia y ejecución técnica para construir productos que aguantan el mundo real — clientes exigentes, procesos cambiantes y agentes IA que ya están operando dentro de las empresas."
     },
     "services": {
       "title": "Vale, pero... ¿qué c*** hacéis vosotros exactamente?",
@@ -27,11 +27,11 @@
       },
       "num_4": {
         "title": "Transformación Digital",
-        "description": "Modernizamos tu empresa de arriba a abajo. Desde sistemas antiguos hasta la cultura interna, preparamos tu estructura para el mundo digital."
+        "description": "Modernizamos tu empresa de arriba a abajo. Desde sistemas antiguos hasta la cultura interna y la estructura de información, preparamos tu organización para un mundo digital donde la IA ya forma parte del paisaje."
       },
       "num_5": {
         "title": "Software Development",
-        "description": "Código limpio y escalable. Construimos soluciones robustas (back y front) que no se rompen cuando tu negocio empieza a crecer rápido."
+        "description": "Código limpio y escalable. Construimos soluciones robustas — back, front e integraciones con agentes o modelos cuando el caso lo pide — que no se rompen cuando tu negocio empieza a crecer rápido."
       }
     },
     "customers": {
@@ -39,7 +39,7 @@
         "line1": "Pero...",
         "line2": "¿os contrata alguien?"
       },
-      "description": "Aunque llevamos muy poco tiempo, ya tenemos algún cliente. Trabajamos con líderes en Telco e IT. Pero no renunciamos a nada, porque la verdad es que nadie está libre de pecado cuando hablamos de experiencia de cliente. Si tienes un problema digital, somos tu equipo."
+      "description": "Aunque llevamos muy poco tiempo, ya tenemos algún cliente. Trabajamos con líderes en Telco e IT. Pero no renunciamos a nada, porque la verdad es que nadie está libre de pecado cuando hablamos de experiencia de cliente. Si tienes un problema digital — desde un flujo que pierde usuarios hasta un asistente que necesita contexto para no alucinar — somos tu equipo."
     },
     "buttons": {
       "discover": "descubrir más",
@@ -57,7 +57,7 @@
       "interest_5": "Auditoría de CX / Research",
       "interest_6": "Desarrollo de software a medida",
       "interest_7": "Rediseñar un Dashboard / SaaS",
-      "interest_8": "Integración de IA Generativa",
+      "interest_8": "Integración de IA y agentes",
       "interest_9": "Otra cosa"
     },
     "name": {
@@ -148,6 +148,24 @@
       "challenge": "Grandes corporaciones y organismos públicos necesitaban una capa de seguridad superior que aprovechara la capacidad de la red del operador. Las soluciones estándar de mercado no eran suficientes para proteger sus infraestructuras críticas.",
       "idea": "Diseñamos un framework de seguridad holístico que integra la inteligencia de red (carrier-grade) con una suite de servicios de defensa de un tercero. Creamos un panel de control unificado para gestionar la seguridad perimetral y el cumplimiento normativo a gran escala.",
       "outcome": "Redujimos el tiempo de mitigación de incidentes en un 55% y aseguramos el cumplimiento total de los estándares de seguridad soberana para grandes organizaciones."
+    },
+    "case_study_07": {
+      "title": "Telco: Capa Semántica para una IA Fiable",
+      "challenge": "Sistemas internos del operador repartidos en silos, cada uno con su lenguaje. Cualquier intento de aprovechar la IA chocaba con la misma realidad: los modelos respondían sobre datos parciales o contradictorios, generando alucinaciones difíciles de detectar y respuestas en las que no se podía confiar para automatizar nada.",
+      "idea": "Construimos un conjunto de datos canónicos sobre los que se apoya una capa semántica que aísla la IA de las particularidades de los sistemas actuales. La capa expone los conceptos del negocio con definiciones únicas, fuentes de verdad y permisos, de modo que el modelo siempre opera sobre un mismo diccionario — y la empresa puede ir evolucionando sus sistemas por debajo sin romper lo que ya funciona.",
+      "outcome": "Redujimos en un 62% las alucinaciones del asistente interno y conseguimos que el 89% de las consultas IA se respondan contra dato canónico, dejando la operación lista para evolucionar los sistemas existentes sin frenar lo que ya está en producción."
+    },
+    "case_study_08": {
+      "title": "Retail Alimentación: Un Carrito que Decide por Sí Solo",
+      "challenge": "En un e-commerce de fruta y verdura el catálogo cambia a diario: roturas de stock, ajustes de precio, productos que entran y salen de temporada. Mantener el carrito sincronizado obligaba al equipo a meter mano constantemente, y aun así los clientes se topaban con productos no disponibles o precios desfasados al pagar.",
+      "idea": "Diseñamos un carrito inteligente que delega en un agente IA las decisiones operativas del día a día. El agente lee el contexto en tiempo real — stock, precios, calendario de temporada — y aplica ajustes por su cuenta cuando aparece una condición que lo justifica. Sólo escala al equipo lo excepcional; lo rutinario se gestiona solo.",
+      "outcome": "El carrito gestiona el 78% de los ajustes diarios de catálogo de forma autónoma y los carritos abandonados por productos no disponibles o precios desfasados cayeron un 31%, liberando al equipo de la operativa rutinaria."
+    },
+    "case_study_09": {
+      "title": "Telecoms B2B: Inferencia IA Fuera del SaaS",
+      "challenge": "El coste de la inferencia IA en SaaS sube a un ritmo que ya compromete la rentabilidad de muchas iniciativas. Los clientes B2B del operador buscaban una alternativa privada, predecible y soberana — pero ningún proveedor combinaba hoy red, capacidad de cómputo y modelos en un mismo paquete.",
+      "idea": "Especificamos el plan estratégico para que el operador evolucione su nube privada hacia un servicio de inferencia IA dirigido a clientes B2B: dimensionamiento de cómputo, fases de migración, modelo de TCO frente al SaaS de hyperscalers, integración con la red carrier-grade existente y roadmap de adopción por segmentos de cliente.",
+      "outcome": "El plan dimensiona un TCO un 47% inferior al SaaS de hyperscaler al volumen objetivo del operador y fija un roadmap de 18 meses para que la oferta esté operativa antes del salto previsto en la demanda B2B."
     },
     "footer_cta": {
       "line_1": "¿Cansado de hablar de métricas?",
