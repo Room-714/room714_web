@@ -1,74 +1,25 @@
-export const getProjectsData = (dict) => [
-  {
-    id: "01",
-    title: dict.projects.case_study_01.title,
-    challenge: dict.projects.case_study_01.challenge,
-    idea: dict.projects.case_study_01.idea,
-    outcome: dict.projects.case_study_01.outcome,
-    image: "/project/project-1.svg",
-  },
-  {
-    id: "02",
-    title: dict.projects.case_study_02.title,
-    challenge: dict.projects.case_study_02.challenge,
-    idea: dict.projects.case_study_02.idea,
-    outcome: dict.projects.case_study_02.outcome,
-    image: "/project/project-2.svg",
-  },
-  {
-    id: "03",
-    title: dict.projects.case_study_03.title,
-    challenge: dict.projects.case_study_03.challenge,
-    idea: dict.projects.case_study_03.idea,
-    outcome: dict.projects.case_study_03.outcome,
-    image: "/project/project-3.svg",
-  },
-  {
-    id: "04",
-    title: dict.projects.case_study_04.title,
-    challenge: dict.projects.case_study_04.challenge,
-    idea: dict.projects.case_study_04.idea,
-    outcome: dict.projects.case_study_04.outcome,
-    image: "/project/project-4.svg",
-  },
-  {
-    id: "05",
-    title: dict.projects.case_study_05.title,
-    challenge: dict.projects.case_study_05.challenge,
-    idea: dict.projects.case_study_05.idea,
-    outcome: dict.projects.case_study_05.outcome,
-    image: "/project/project-5.svg",
-  },
-  {
-    id: "06",
-    title: dict.projects.case_study_06.title,
-    challenge: dict.projects.case_study_06.challenge,
-    idea: dict.projects.case_study_06.idea,
-    outcome: dict.projects.case_study_06.outcome,
-    image: "/project/project-6.svg",
-  },
-  {
-    id: "07",
-    title: dict.projects.case_study_07.title,
-    challenge: dict.projects.case_study_07.challenge,
-    idea: dict.projects.case_study_07.idea,
-    outcome: dict.projects.case_study_07.outcome,
-    image: "/project/project-7.png",
-  },
-  {
-    id: "08",
-    title: dict.projects.case_study_08.title,
-    challenge: dict.projects.case_study_08.challenge,
-    idea: dict.projects.case_study_08.idea,
-    outcome: dict.projects.case_study_08.outcome,
-    image: "/project/project-8.png",
-  },
-  {
-    id: "09",
-    title: dict.projects.case_study_09.title,
-    challenge: dict.projects.case_study_09.challenge,
-    idea: dict.projects.case_study_09.idea,
-    outcome: dict.projects.case_study_09.outcome,
-    image: "/project/project-9.png",
-  },
+const PROJECT_META = [
+  { id: "01", image: "/project/project-1.svg", status: "completed" },
+  { id: "02", image: "/project/project-2.svg", status: "completed" },
+  { id: "03", image: "/project/project-3.svg", status: "completed" },
+  { id: "04", image: "/project/project-4.svg", status: "completed" },
+  { id: "05", image: "/project/project-5.svg", status: "completed" },
+  { id: "06", image: "/project/project-6.svg", status: "completed" },
+  { id: "07", image: "/project/project-7.png", status: "in_progress" },
+  { id: "08", image: "/project/project-8.png", status: "in_progress" },
+  { id: "09", image: "/project/project-9.png", status: "in_progress" },
 ];
+
+export const getProjectsData = (dict) =>
+  PROJECT_META.map(({ id, image, status }) => {
+    const cs = dict.projects[`case_study_${id}`];
+    return {
+      id,
+      image,
+      status,
+      title: cs.title,
+      challenge: cs.challenge,
+      idea: cs.idea,
+      outcome: cs.outcome,
+    };
+  });
