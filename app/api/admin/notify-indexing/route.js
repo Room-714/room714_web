@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { isAuthorizedAdmin } from "@/app/lib/auth";
 import { notifyUrlUpdated } from "@/app/lib/seo/indexingApi";
+import { notifyIndexNow } from "@/app/lib/seo/indexNow";
 
 export const maxDuration = 60;
 
@@ -18,14 +19,25 @@ export async function POST(request) {
     );
   }
 
+  const out = { google: null, indexnow: null };
+
   try {
-    const result = await notifyUrlUpdated(url);
-    return NextResponse.json({ success: true, result });
+    out.google = await notifyUrlUpdated(url);
   } catch (err) {
-    console.error("[notify-indexing] Fallo:", err);
-    return NextResponse.json(
-      { success: false, error: err.message, stack: err.stack },
-      { status: 500 },
-    );
+    console.error("[notify-indexing] Google falló:", err);
+    out.google = { error: err.message };
   }
+
+  try {
+    out.indexnow = await notifyIndexNow(url);
+  } catch (err) {
+    console.error("[notify-indexing] IndexNow falló:", err);
+    out.indexnow = { error: err.message };
+  }
+
+  const success = !out.google?.error && !out.indexnow?.error;
+  return NextResponse.json(
+    { success, ...out },
+    { status: success ? 200 : 500 },
+  );
 }
