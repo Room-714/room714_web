@@ -1,16 +1,20 @@
 // app/page.js
 import { getDictionary } from "@/app/dictionaries";
 import Image from "next/image";
+import Link from "next/link";
 import { Phone } from "lucide-react";
 import ServiceCard from "@/app/components/ServiceCard";
 import PrimaryButton from "@/app/components/PrimaryButton";
 import Navbar from "@/app/components/Navbar";
+import BlogCard from "@/app/components/BlogCard";
 import { getServicesData } from "@/app/data/Services";
+import { getAllPosts } from "@/app/lib/blog";
 
 export default async function Home({ params }) {
   const { lang } = await params;
   const dict = await getDictionary(lang);
   const services = getServicesData(dict);
+  const latestPosts = (await getAllPosts(lang)).slice(0, 3);
   const BLOB_URL =
     "https://tzhsvjcv6h2qp8xy.public.blob.vercel-storage.com/Animacion%20final.mp4";
 
@@ -168,8 +172,38 @@ export default async function Home({ params }) {
         </div>
       </section>
 
+      {/* Últimos del blog */}
+      {latestPosts.length > 0 && (
+        <section className="bg-gray-300 rounded-t-[50px] -mt-10 px-4 md:px-8 py-20 relative z-50">
+          <div className="mx-auto max-w-7xl">
+            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12">
+              <h2 className="font-title font-black text-3xl md:text-5xl lg:text-6xl text-black leading-tight">
+                {dict.home.latest.title}
+              </h2>
+              <Link
+                href={`/${lang}/blog`}
+                className="font-hand text-xl md:text-2xl text-red-500 hover:text-red-700 transition-colors"
+              >
+                {dict.home.latest.viewAll}
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+              {latestPosts.map((post) => (
+                <BlogCard
+                  key={post.id}
+                  post={post}
+                  lang={lang}
+                  dict={dict.blog}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* 1. Contenedor del Skyline: Proporcional y siempre visible */}
-      <section className="w-full bg-white overflow-hidden">
+      <section className="w-full bg-gray-300 overflow-hidden">
         <div className="w-[60%] ml-auto leading-0 flex">
           <Image
             src="/skyline.svg"

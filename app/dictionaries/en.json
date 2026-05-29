@@ -3,6 +3,7 @@
     "home": "Home",
     "projects": "Projects",
     "about": "About",
+    "blog": "Blog",
     "diagnostic": "Diagnostic",
     "contact": "Contact"
   },
@@ -44,6 +45,10 @@
     "buttons": {
       "discover": "discover more",
       "clients": "get in touch"
+    },
+    "latest": {
+      "title": "Latest from the blog",
+      "viewAll": "Read the blog →"
     }
   },
   "contact": {

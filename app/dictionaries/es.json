@@ -3,6 +3,7 @@
     "home": "Home",
     "projects": "Proyectos",
     "about": "Nosotros",
+    "blog": "Blog",
     "diagnostic": "Diagnóstico",
     "contact": "Contacto"
   },
@@ -44,6 +45,10 @@
     "buttons": {
       "discover": "descubrir más",
       "clients": "contactar"
+    },
+    "latest": {
+      "title": "Lo último del blog",
+      "viewAll": "Ver todo el blog →"
     }
   },
   "contact": {
