@@ -1,6 +1,7 @@
 import { prisma } from "@/app/lib/prisma";
 import { triggerLinkedInNotification } from "@/app/(admin-zone)/admin/actions";
 import { getMadridHour } from "@/app/lib/time/madrid";
+import { notifyUrlUpdated, buildPostUrls } from "@/app/lib/seo/indexingApi";
 import { NextResponse } from "next/server";
 
 // Mapeo: hora Madrid → source que se publica en ese tick
@@ -79,6 +80,19 @@ export async function GET(request) {
         results.push(
           `Post ID ${post.id} ("${esData.title}"): Notificación enviada.`,
         );
+
+        // 6. Notificar a Google Indexing API (best-effort, no rompe el flujo)
+        const enData = post.translations.find((t) => t.lang === "en");
+        const urls = buildPostUrls(esData.slug, enData?.slug);
+        for (const url of urls) {
+          try {
+            await notifyUrlUpdated(url);
+            results.push(`  → Indexing API: ${url}`);
+          } catch (err) {
+            console.error(`Indexing API falló para ${url}:`, err.message);
+            results.push(`  → Indexing API ERR (${url}): ${err.message}`);
+          }
+        }
       } else {
         results.push(
           `Post ID ${post.id}: Error en notificación (${notification.error})`,
