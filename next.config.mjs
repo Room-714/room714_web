@@ -1,18 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // 0. Rewrites (corren antes que los redirects).
-  // /indexnow.txt sirve el contenido de /api/indexnow desde la raíz del
-  // dominio para que IndexNow considere TODO el sitio como scope verificado
-  // (el spec define el scope por la ruta padre del keyLocation).
-  async rewrites() {
-    return [
-      {
-        source: "/indexnow.txt",
-        destination: "/api/indexnow",
-      },
-    ];
-  },
-
   // 1. Redirecciones de Dominio (SEO Force 301)
   async redirects() {
     return [
