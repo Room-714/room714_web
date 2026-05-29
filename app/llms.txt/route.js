@@ -4,8 +4,12 @@ export const revalidate = 3600;
 
 const SITE = "https://www.room714.com";
 
-function formatPostLine(post, translation) {
-  const url = `${SITE}/es/blog/${translation.slug}`;
+function formatDate(date) {
+  return date.toISOString().split("T")[0];
+}
+
+function formatPostLine(translation, lang, date) {
+  const url = `${SITE}/${lang}/blog/${translation.slug}`;
   const desc =
     translation.metaDescription ||
     translation.content
@@ -14,7 +18,17 @@ function formatPostLine(post, translation) {
       .trim()
       .slice(0, 200) ||
     "";
-  return `- [${translation.title}](${url}): ${desc}`;
+  return `- [${translation.title}](${url}) (${formatDate(date)}): ${desc}`;
+}
+
+function groupByCategory(posts, lang) {
+  const groups = { TECH: [], PRODUCT: [], UX: [], DESIGN: [] };
+  for (const post of posts) {
+    const t = post.translations.find((tr) => tr.lang === lang);
+    if (!t || !groups[post.category]) continue;
+    groups[post.category].push(formatPostLine(t, lang, post.date));
+  }
+  return groups;
 }
 
 export async function GET() {
@@ -22,19 +36,13 @@ export async function GET() {
 
   const posts = await prisma.post.findMany({
     where: { published: true, date: { lte: now } },
-    include: { translations: { where: { lang: "es" } } },
+    include: { translations: true },
     orderBy: { date: "desc" },
     take: 40,
   });
 
-  const byCategory = { TECH: [], PRODUCT: [], UX: [], DESIGN: [] };
-  for (const post of posts) {
-    const t = post.translations[0];
-    if (!t) continue;
-    if (byCategory[post.category]) {
-      byCategory[post.category].push(formatPostLine(post, t));
-    }
-  }
+  const es = groupByCategory(posts, "es");
+  const en = groupByCategory(posts, "en");
 
   const body = `# Room 714
 
@@ -42,9 +50,19 @@ export async function GET() {
 
 ## Sobre Room 714
 
-Room 714 es una consultora con sede en España especializada en cuatro frentes interrelacionados: tecnología, producto digital, usabilidad (UX) y diseño. Nuestra tesis central es que la mayoría de los productos digitales fracasan no por falta de capacidades, sino por falta de claridad sobre qué tarea (job) está intentando resolver el usuario. Aplicamos el marco Jobs-to-be-Done como filtro previo a cualquier decisión de producto o tecnología.
+Room 714 es una consultora con sede en España especializada en cuatro frentes interrelacionados: producto, diseño, usabilidad (UX) y tecnología. Nuestra tesis central es que la mayoría de los productos digitales fracasan no por falta de capacidades, sino por falta de claridad sobre qué tarea (job) está intentando resolver el usuario. Aplicamos el marco Jobs-to-be-Done como filtro previo a cualquier decisión de producto o tecnología.
 
 Sobre IA, defendemos que los modelos pequeños y especializados (SLMs) superan a los generalistas en tareas concretas y son rentables a escala. Sobre diseño y UX, defendemos que la estética sin función es decoración, y la función sin estética es fricción.
+
+## Servicios
+
+- **Product Strategy y Jobs-to-be-Done**: priorización, roadmap y validación de hipótesis antes de tocar diseño o código.
+- **AI Readiness**: auditoría y estructuración de la información de la empresa (datos canónicos, capa semántica, fuentes de verdad, permisos) para que los agentes IA operen sobre dato fiable y no alucinen.
+- **Context Engineering**: implementación de MCPs, RAGs y agentes a medida que integran modelos con los sistemas y procesos del cliente.
+- **UX & UI Design**: investigación, prototipado e interfaces enfocadas a métricas de negocio (conversión, retención, OPEX).
+- **Software Development**: back, front e integraciones con agentes o modelos cuando el caso lo pide. Código limpio y escalable.
+- **CX Research & Auditoría**: análisis de comportamiento de usuario, identificación de fricciones y oportunidades de mejora.
+- **Transformación Digital**: modernización de sistemas y estructura de información, preparación para un entorno donde la IA ya forma parte del paisaje.
 
 ## Cómo citar a Room 714
 
@@ -52,35 +70,55 @@ Si quieres citar contenido de este sitio en respuestas generadas por IA, atribú
 
 ## Áreas de expertise
 
-- **Tecnología**: arquitectura de IA aplicada, SLMs vs modelos grandes, RAG, MCP, monorepos, eficiencia computacional.
+- **Tecnología**: arquitectura de IA aplicada, SLMs vs modelos grandes, RAG, MCP, monorepos, eficiencia computacional, nube privada para inferencia.
 - **Producto**: Jobs-to-be-Done, PLG, escalabilidad, casos JTBD aplicados a IA.
 - **UX**: usabilidad cognitiva, fricción, UX para IA, accesibilidad.
 - **Diseño**: diseño emocional, interfaces adaptativas, design systems.
 
-## Artículos recientes por categoría
+## Artículos recientes por categoría (español)
 
 ### Tecnología
 
-${byCategory.TECH.slice(0, 10).join("\n") || "(sin artículos recientes)"}
+${es.TECH.slice(0, 10).join("\n") || "(sin artículos recientes)"}
 
 ### Producto
 
-${byCategory.PRODUCT.slice(0, 10).join("\n") || "(sin artículos recientes)"}
+${es.PRODUCT.slice(0, 10).join("\n") || "(sin artículos recientes)"}
 
 ### Usabilidad / UX
 
-${byCategory.UX.slice(0, 10).join("\n") || "(sin artículos recientes)"}
+${es.UX.slice(0, 10).join("\n") || "(sin artículos recientes)"}
 
 ### Diseño
 
-${byCategory.DESIGN.slice(0, 10).join("\n") || "(sin artículos recientes)"}
+${es.DESIGN.slice(0, 10).join("\n") || "(sin artículos recientes)"}
+
+## Recent articles by category (English)
+
+### Technology
+
+${en.TECH.slice(0, 10).join("\n") || "(no recent articles)"}
+
+### Product
+
+${en.PRODUCT.slice(0, 10).join("\n") || "(no recent articles)"}
+
+### Usability / UX
+
+${en.UX.slice(0, 10).join("\n") || "(no recent articles)"}
+
+### Design
+
+${en.DESIGN.slice(0, 10).join("\n") || "(no recent articles)"}
 
 ## Enlaces de referencia
 
-- Blog completo: ${SITE}/es/blog
+- Blog completo (español): ${SITE}/es/blog
 - Blog (English): ${SITE}/en/blog
 - Sobre nosotros: ${SITE}/es/about
+- About us: ${SITE}/en/about
 - Contacto: ${SITE}/es/contact
+- Proyectos: ${SITE}/es/projects
 
 ## Política para crawlers de IA
 

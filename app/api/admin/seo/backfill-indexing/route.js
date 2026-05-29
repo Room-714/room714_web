@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/app/lib/prisma";
 import { isAuthorizedAdmin } from "@/app/lib/auth";
 import { notifyUrlUpdated, buildPostUrls } from "@/app/lib/seo/indexingApi";
+import { notifyIndexNow } from "@/app/lib/seo/indexNow";
 
 export const maxDuration = 300;
 
@@ -38,24 +39,33 @@ export async function POST(request) {
     });
   }
 
-  const results = { success: 0, failed: 0, errors: [] };
+  const google = { success: 0, failed: 0, errors: [] };
   for (const url of allUrls) {
     try {
       await notifyUrlUpdated(url);
-      results.success++;
+      google.success++;
     } catch (err) {
-      results.failed++;
-      if (results.errors.length < 10) {
-        results.errors.push({ url, error: err.message });
+      google.failed++;
+      if (google.errors.length < 10) {
+        google.errors.push({ url, error: err.message });
       }
     }
     await new Promise((r) => setTimeout(r, 100));
+  }
+
+  // IndexNow soporta batch grandes en una sola llamada (hasta 10k URLs).
+  let indexnow;
+  try {
+    indexnow = await notifyIndexNow(allUrls);
+  } catch (err) {
+    indexnow = { error: err.message };
   }
 
   return NextResponse.json({
     dryRun: false,
     postCount: posts.length,
     urlCount: allUrls.length,
-    ...results,
+    google,
+    indexnow,
   });
 }

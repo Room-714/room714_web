@@ -2,6 +2,7 @@ import { prisma } from "@/app/lib/prisma";
 import { triggerLinkedInNotification } from "@/app/(admin-zone)/admin/actions";
 import { getMadridHour } from "@/app/lib/time/madrid";
 import { notifyUrlUpdated, buildPostUrls } from "@/app/lib/seo/indexingApi";
+import { notifyIndexNow } from "@/app/lib/seo/indexNow";
 import { NextResponse } from "next/server";
 
 // Mapeo: hora Madrid → source que se publica en ese tick
@@ -92,6 +93,15 @@ export async function GET(request) {
             console.error(`Indexing API falló para ${url}:`, err.message);
             results.push(`  → Indexing API ERR (${url}): ${err.message}`);
           }
+        }
+
+        // 7. Notificar a IndexNow (Bing/Yandex), batch único best-effort
+        try {
+          const inow = await notifyIndexNow(urls);
+          results.push(`  → IndexNow: ${inow.count} URLs (status ${inow.status})`);
+        } catch (err) {
+          console.error("IndexNow falló:", err.message);
+          results.push(`  → IndexNow ERR: ${err.message}`);
         }
       } else {
         results.push(
