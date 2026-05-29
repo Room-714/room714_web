@@ -16,7 +16,7 @@ export async function notifyIndexNow(urls) {
     body: JSON.stringify({
       host: HOST,
       key,
-      keyLocation: `https://${HOST}/${key}.txt`,
+      keyLocation: `https://${HOST}/indexnow.txt`,
       urlList,
     }),
   });
