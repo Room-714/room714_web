@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/app/lib/prisma";
 import { isAuthorizedAdmin } from "@/app/lib/auth";
 import { notifyUrlUpdated, buildPostUrls } from "@/app/lib/seo/indexingApi";
-import { notifyIndexNow } from "@/app/lib/seo/indexNow";
+// IndexNow desactivado: ver app/api/cron/publish/route.js.
+// import { notifyIndexNow } from "@/app/lib/seo/indexNow";
 
 export const maxDuration = 300;
 
@@ -53,19 +54,18 @@ export async function POST(request) {
     await new Promise((r) => setTimeout(r, 100));
   }
 
-  // IndexNow soporta batch grandes en una sola llamada (hasta 10k URLs).
-  let indexnow;
-  try {
-    indexnow = await notifyIndexNow(allUrls);
-  } catch (err) {
-    indexnow = { error: err.message };
-  }
+  // IndexNow desactivado — reactivar cuando se resuelva el i18n redirect.
+  // let indexnow;
+  // try {
+  //   indexnow = await notifyIndexNow(allUrls);
+  // } catch (err) {
+  //   indexnow = { error: err.message };
+  // }
 
   return NextResponse.json({
     dryRun: false,
     postCount: posts.length,
     urlCount: allUrls.length,
     google,
-    indexnow,
   });
 }
