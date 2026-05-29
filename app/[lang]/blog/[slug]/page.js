@@ -112,12 +112,23 @@ export default async function PostPage({ params }) {
     inLanguage: lang === "es" ? "es-ES" : "en-US",
   };
 
-  // 3. Artículos relacionados
-  const allPosts = await getAllPosts(lang); // Esperamos a que lleguen los datos
-
-  const latestArticles = allPosts
-    .filter((p) => p.id !== post.id) // Ahora sí, allPosts es un Array
-    .slice(0, 6);
+  // 3. Artículos relacionados: misma categoría primero, fallback cronológico
+  const RELATED_LIMIT = 6;
+  const allPosts = await getAllPosts(lang);
+  const others = allPosts.filter((p) => p.id !== post.id);
+  const sameCategory = others
+    .filter((p) => p.category === post.category)
+    .slice(0, RELATED_LIMIT);
+  const fillNeeded = RELATED_LIMIT - sameCategory.length;
+  const relatedArticles =
+    fillNeeded > 0
+      ? [
+          ...sameCategory,
+          ...others
+            .filter((p) => p.category !== post.category)
+            .slice(0, fillNeeded),
+        ]
+      : sameCategory;
 
   return (
     <main className="flex flex-col bg-white">
@@ -222,12 +233,11 @@ export default async function PostPage({ params }) {
       <section className="mt-20 bg-gray-300 px-6 sm:px-8 md:px-10 lg:px-16 py-10 sm:py-14 md:py-16 lg:py-18 rounded-t-[50px]">
         <div>
           <h2 className="font-title font-black px-4 sm:px-6 md:px-8 lg:px-10 text-xl sm:text-2xl md:text-3xl lg:text-4xl pb-6 md:pb-10 text-black">
-            {/* Usamos la clave del diccionario para el título */}
-            {dict.blog.latest_articles}
+            {dict.blog.related_articles}
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {latestArticles.slice(0, 6).map((article, index) => (
+            {relatedArticles.map((article, index) => (
               <div
                 key={article.id}
                 className={`
