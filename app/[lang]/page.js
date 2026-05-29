@@ -14,7 +14,7 @@ export default async function Home({ params }) {
   const { lang } = await params;
   const dict = await getDictionary(lang);
   const services = getServicesData(dict);
-  const latestPosts = (await getAllPosts(lang)).slice(0, 3);
+  const latestPosts = (await getAllPosts(lang)).slice(0, 4);
   const BLOB_URL =
     "https://tzhsvjcv6h2qp8xy.public.blob.vercel-storage.com/Animacion%20final.mp4";
 
@@ -188,7 +188,7 @@ export default async function Home({ params }) {
               </Link>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
               {latestPosts.map((post) => (
                 <BlogCard
                   key={post.id}
