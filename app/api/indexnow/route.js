@@ -1,5 +1,6 @@
 // IndexNow ownership proof. Returns the IndexNow key so Bing/Yandex
-// can verify domain ownership when we POST URL notifications.
+// can verify domain ownership when we POST URL notifications. Hosted
+// under /api/ to bypass Vercel's framework-level i18n auto-redirect.
 export const revalidate = 86400;
 
 const KEY = "38dfc9af13f339525c11b480779e3599";
