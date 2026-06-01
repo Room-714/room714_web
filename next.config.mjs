@@ -27,11 +27,21 @@ const nextConfig = {
         permanent: true,
       },
       {
-        // URL legacy '/legal' que Google sigue recordando desde una versión
-        // antigua del sitio. Apunta a la página de privacidad en EN para
-        // alinearse con el auto-redirect i18n de Vercel para paths en raíz.
+        // URL legacy '/legal' que Google sigue recordando. El i18n
+        // auto-redirect de Vercel manda /legal a /en/legal primero, por
+        // eso cubrimos también las variantes con locale.
         source: "/legal",
         destination: "/en/privacy",
+        permanent: true,
+      },
+      {
+        source: "/en/legal",
+        destination: "/en/privacy",
+        permanent: true,
+      },
+      {
+        source: "/es/legal",
+        destination: "/es/privacy",
         permanent: true,
       },
     ];
