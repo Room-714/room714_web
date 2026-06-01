@@ -26,6 +26,14 @@ const nextConfig = {
         destination: "https://www.room714.com/en/:path*",
         permanent: true,
       },
+      {
+        // URL legacy '/legal' que Google sigue recordando desde una versión
+        // antigua del sitio. Apunta a la página de privacidad en EN para
+        // alinearse con el auto-redirect i18n de Vercel para paths en raíz.
+        source: "/legal",
+        destination: "/en/privacy",
+        permanent: true,
+      },
     ];
   },
 
