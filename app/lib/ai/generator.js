@@ -119,7 +119,7 @@ ${ex.content_es}`,
     },
     {
       type: "text",
-      text: `# Ejemplos de posts publicados por Room 714 (referencia de tono y estructura)\n\n${examplesText}`,
+      text: `# Ejemplos de posts publicados por Room 714 (referencia de TONO, VOZ y ÁNGULO crítico ÚNICAMENTE)\n\n**IMPORTANTE sobre estos ejemplos**: son posts cortos (350-500 palabras) de la fase anterior del blog. La nueva pauta editorial pide posts de **1500-2500 palabras** con 3-4 secciones H2 y subsecciones H3 cuando hagan falta. Usa estos ejemplos para entender el tono Room 714, las analogías ("portaaviones", "impuesto de lujo"), el ángulo crítico-pragmático y la estructura (apertura punzante, viñetas tempranas, H2 con dos puntos, blockquote opcional, cierre con CTA hacia Room 714). NO los uses como referencia de longitud — multiplica.\n\n${examplesText}`,
       cache_control: { type: "ephemeral" },
     },
   ];
@@ -157,13 +157,13 @@ Estos son los titulares y resúmenes de artículos que están sonando esta seman
 
 ${trendingText}
 
-## Posts recientes de Room 714 (NO repetir tema Y enlazar 1-2 como internal links)
+## Posts recientes de Room 714 (NO repetir tema Y enlazar 2-3 como internal links)
 
 ${recentText}
 
 ## INTERNAL LINKING (SEO)
 
-Dentro de content_es y content_en, **enlaza inline 1-2 posts** de la lista de arriba que tengan conexión natural con el tema que vas a escribir. Esto mejora el SEO y la experiencia del lector.
+Dentro de content_es y content_en, **enlaza inline 2-3 posts** de la lista de arriba que tengan conexión natural con el tema que vas a escribir. Esto mejora el SEO y la experiencia del lector.
 
 Formato exacto del enlace (HTML inline dentro de los <p> del contenido):
 - En content_es: \`<a href="/es/blog/SLUG_ES">texto natural del enlace</a>\`
@@ -173,7 +173,7 @@ REGLAS CRÍTICAS:
 - USA SOLO los slugs que aparecen literalmente en la lista de arriba (slug_es / slug_en). NO inventes ni modifiques slugs.
 - El texto del enlace debe fluir natural en la frase, no ser "haz click aquí" ni el título completo.
 - Coloca el enlace donde aporte contexto adicional, normalmente en el cuerpo de un párrafo de las secciones H2.
-- 1 enlace mínimo, 2 máximo. Si ninguno de los recientes encaja, NO fuerces el enlace.
+- 2 enlaces mínimo, 3 máximo. Si ninguno de los recientes encaja, NO fuerces el enlace.
 - En content_en usa SOLO slugs slug_en (NO slug_es).
 
 ## Tu tarea
@@ -182,7 +182,7 @@ REGLAS CRÍTICAS:
 2. Escribe un post original con la voz de Room 714, siguiendo la guía editorial y los ejemplos.
 3. Asegúrate de que el tema no se solapa con los posts recientes listados.
 4. Genera ambas versiones (ES y EN) coherentes pero NO traducción literal: cada una en su idioma nativo.
-5. Embedde 1-2 internal links a posts recientes relacionados (sección INTERNAL LINKING).
+5. Embedde 2-3 internal links a posts recientes relacionados (sección INTERNAL LINKING).
 
 Llama al tool create_blog_post con los campos correspondientes.`;
 }
@@ -295,13 +295,13 @@ Tu trabajo es desarrollar exactamente este ángulo en un post completo siguiendo
 
 ${trendingText}
 
-## Posts recientes de Room 714 (NO repetir tema Y enlazar 1-2 como internal links)
+## Posts recientes de Room 714 (NO repetir tema Y enlazar 2-3 como internal links)
 
 ${recentText}
 
 ## INTERNAL LINKING (SEO)
 
-Dentro de content_es y content_en, **enlaza inline 1-2 posts** de la lista de arriba que tengan conexión natural con el tema. Formato exacto:
+Dentro de content_es y content_en, **enlaza inline 2-3 posts** de la lista de arriba que tengan conexión natural con el tema. Formato exacto:
 - En content_es: \`<a href="/es/blog/SLUG_ES">texto natural</a>\`
 - En content_en: \`<a href="/en/blog/SLUG_EN">link text</a>\`
 
@@ -312,7 +312,7 @@ USA SOLO los slugs literales de la lista (slug_es / slug_en). NO inventes. 1-2 e
 1. Desarrolla el ángulo elegido en un post completo siguiendo la guía editorial.
 2. Genera ambas versiones (ES y EN) coherentes pero NO traducción literal: cada una en su idioma nativo.
 3. Asegúrate de que no se solapa con los posts recientes listados.
-4. Embedde 1-2 internal links a posts recientes relacionados (sección INTERNAL LINKING).
+4. Embedde 2-3 internal links a posts recientes relacionados (sección INTERNAL LINKING).
 
 Llama al tool create_blog_post con los campos correspondientes.`;
 }
@@ -322,7 +322,7 @@ export async function generatePostDraft({ category, trending, recentPosts }) {
 
   const response = await client.messages.create({
     model: MODEL,
-    max_tokens: 4096,
+    max_tokens: 16000,
     system: buildCachedSystemBlocks(),
     tools: [POST_TOOL],
     tool_choice: { type: "tool", name: "create_blog_post" },
@@ -362,7 +362,7 @@ export async function generatePostFromIdea({
 
   const response = await client.messages.create({
     model: MODEL,
-    max_tokens: 4096,
+    max_tokens: 16000,
     system: buildCachedSystemBlocks(),
     tools: [POST_TOOL],
     tool_choice: { type: "tool", name: "create_blog_post" },

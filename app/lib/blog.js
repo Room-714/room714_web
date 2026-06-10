@@ -26,6 +26,7 @@ export async function getAllPosts(lang = "es") {
       return {
         id: post.id,
         date: post.date,
+        updatedAt: post.updatedAt,
         image: post.image,
         category: post.category,
         slug: translation?.slug,
