@@ -4,7 +4,7 @@ import { listAllCategoryRoutes } from "@/app/lib/categoryRoutes";
 export default async function sitemap() {
   const baseUrl = "https://www.room714.com";
   const languages = ["en", "es"];
-  const pages = ["", "/about", "/projects", "/contact", "/diagnostic", "/blog"];
+  const pages = ["", "/about", "/projects", "/contact", "/diagnostic", "/blog", "/careers"];
 
   // 1. Páginas estáticas para cada idioma
   const routes = languages.flatMap((lang) =>
