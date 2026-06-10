@@ -76,11 +76,21 @@ export async function POST(request) {
   const arrayBuffer = await cv.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
 
-  const ts = new Date().toISOString().replace(/[:.]/g, "-");
-  const fileName = `careers/${ts}-${position.toLowerCase()}.pdf`;
+  // Subcarpeta por posición + filename original sanitizado. addRandomSuffix
+  // garantiza unicidad si dos candidatos suben CVs con el mismo nombre.
+  const sanitizedName =
+    cv.name
+      .normalize("NFD")
+      .replace(/[̀-ͯ]/g, "")
+      .replace(/[^a-zA-Z0-9._-]/g, "-")
+      .replace(/-+/g, "-")
+      .replace(/^-|-$/g, "") || "cv.pdf";
+  const folder = position.toLowerCase();
+  const fileName = `careers/${folder}/${sanitizedName}`;
   const blob = await put(fileName, buffer, {
     access: "public",
     contentType: "application/pdf",
+    addRandomSuffix: true,
   });
   const cvBlobUrl = blob.url;
 
