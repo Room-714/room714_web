@@ -58,25 +58,40 @@ const POST_TOOL = {
         type: "string",
         description: "Meta description en inglés (140-160 chars).",
       },
-      linkedin_post_es: {
-        type: "string",
-        description:
-          "Post nativo de LinkedIn en español (1000-1800 chars). Empieza con un HOOK punzante en la primera línea (lo que se ve antes del 'ver más'). Después dos saltos de línea y desarrollo en 3-5 párrafos cortos. Tono coloquial-profesional, NO formal. SIN enlaces. NO incluyas hashtags al final (van en otro campo). Termina con una pregunta o invitación a comentar.",
-      },
-      linkedin_post_en: {
-        type: "string",
-        description: "Post nativo de LinkedIn en inglés. Mismo formato que linkedin_post_es.",
-      },
-      linkedin_hashtags_es: {
+      linkedin_variants: {
         type: "array",
-        items: { type: "string" },
         description:
-          "3-5 hashtags en español (formato #SinEspacios). Mezcla específicos (#JTBD, #ProductoDigital) con generales (#IA, #UX). Sin acentos.",
-      },
-      linkedin_hashtags_en: {
-        type: "array",
-        items: { type: "string" },
-        description: "3-5 hashtags en inglés.",
+          "Exactamente 3 variantes de post nativo de LinkedIn en español que apuntan al mismo artículo del blog desde ángulos distintos. NO traducciones: tres tomas distintas sobre el mismo tema.",
+        minItems: 3,
+        maxItems: 3,
+        items: {
+          type: "object",
+          properties: {
+            angle: {
+              type: "string",
+              enum: ["data", "polemica", "conclusion"],
+              description:
+                "Ángulo del que tira la variante. 'data': empieza con un número/hecho/cifra concreta. 'polemica': afirmación contraintuitiva o crítica con el sector. 'conclusion': lección práctica/accionable que se llevan a la oficina.",
+            },
+            text: {
+              type: "string",
+              description:
+                "Post nativo de LinkedIn en español (1000-1800 chars). Empieza con un HOOK punzante en la primera línea (lo que se ve antes del 'ver más'). Tono coloquial-profesional. 3-5 párrafos cortos separados por doble salto de línea. SIN enlaces. SIN hashtags al final (van en otro campo). Termina con una pregunta o invitación a comentar. El hook debe ser ÚNICO en cada variante — distinto framing del mismo artículo.",
+            },
+            hashtags: {
+              type: "array",
+              items: { type: "string" },
+              description:
+                "3-5 hashtags (formato #SinEspacios). Pueden coincidir entre variantes en algunos generales; mezcla específicos (#JTBD, #ProductoDigital) con generales (#IA, #UX). Sin acentos.",
+            },
+            image_query: {
+              type: "string",
+              description:
+                "Frase corta en inglés (3-6 palabras) para buscar UNA imagen en Unsplash que ilustre ESTA variante en particular. Las 3 image_query del post deben ser distintas entre sí: cada variante tira de una metáfora visual diferente para que las 3 publicaciones de LinkedIn no parezcan copia. Pensadas para devolver fotografías abstractas/profesionales, NO ilustraciones obvias del tema.",
+            },
+          },
+          required: ["angle", "text", "hashtags", "image_query"],
+        },
       },
     },
     required: [
@@ -91,10 +106,7 @@ const POST_TOOL = {
       "image_query",
       "meta_description_es",
       "meta_description_en",
-      "linkedin_post_es",
-      "linkedin_post_en",
-      "linkedin_hashtags_es",
-      "linkedin_hashtags_en",
+      "linkedin_variants",
     ],
   },
 };
@@ -221,10 +233,7 @@ function validateGenerated(data, { recentPosts = [] } = {}) {
     "image_query",
     "meta_description_es",
     "meta_description_en",
-    "linkedin_post_es",
-    "linkedin_post_en",
-    "linkedin_hashtags_es",
-    "linkedin_hashtags_en",
+    "linkedin_variants",
   ];
   for (const key of required) {
     if (data[key] === undefined || data[key] === null || data[key] === "") {
@@ -235,10 +244,15 @@ function validateGenerated(data, { recentPosts = [] } = {}) {
     throw new Error("tags_es y tags_en deben ser arrays");
   }
   if (
-    !Array.isArray(data.linkedin_hashtags_es) ||
-    !Array.isArray(data.linkedin_hashtags_en)
+    !Array.isArray(data.linkedin_variants) ||
+    data.linkedin_variants.length !== 3
   ) {
-    throw new Error("linkedin_hashtags deben ser arrays");
+    throw new Error("linkedin_variants debe ser un array con exactamente 3 variantes");
+  }
+  for (const [i, v] of data.linkedin_variants.entries()) {
+    if (!v.text || !v.angle || !v.image_query || !Array.isArray(v.hashtags)) {
+      throw new Error(`linkedin_variants[${i}] incompleto`);
+    }
   }
   if (!data.content_es.includes("<p>") || !data.content_es.includes("<h2>")) {
     throw new Error("content_es no parece HTML válido (faltan <p> o <h2>)");

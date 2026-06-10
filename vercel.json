@@ -27,6 +27,14 @@
     {
       "path": "/api/cron/cleanup-candidates",
       "schedule": "0 3 * * *"
+    },
+    {
+      "path": "/api/cron/publish-linkedin",
+      "schedule": "0 8 * * 1-5"
+    },
+    {
+      "path": "/api/cron/publish-linkedin",
+      "schedule": "0 9 * * 1-5"
     }
   ]
 }

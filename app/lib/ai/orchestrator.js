@@ -12,6 +12,7 @@ import { generatePostDraft } from "./generator";
 import { backlinkOldPosts } from "./backlinker";
 import { sendDraftReadyEmail } from "@/app/lib/notifications/draftReady";
 import { nextMadridSlot } from "@/app/lib/time/madrid";
+import { variantScheduleFor } from "@/app/lib/time/linkedinSchedule";
 
 const PUBLISH_HOUR_MADRID = 10;
 
@@ -72,6 +73,30 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
     "en",
   );
 
+  // Fetch 3 imágenes adicionales para las variantes de LinkedIn (una por
+  // variante, con su image_query propia). Best-effort: si alguna falla,
+  // usamos la imagen del post como fallback.
+  const variants = draft.linkedin_variants || [];
+  const variantSchedules = variantScheduleFor(publishDate);
+  const variantImages = await Promise.all(
+    variants.map(async (v, idx) => {
+      try {
+        const img = await fetchAndStoreCoverImage(
+          v.image_query,
+          `${datePrefix}-li${idx + 1}`,
+          { fallbackQuery: fallbackQueryForCategory(category) },
+        );
+        return img.url;
+      } catch (err) {
+        console.error(
+          `Imagen variante ${idx + 1} falló (query "${v.image_query}"):`,
+          err.message,
+        );
+        return cover.url;
+      }
+    }),
+  );
+
   const post = await prisma.post.create({
     data: {
       image: cover.url,
@@ -89,8 +114,6 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
             tags: draft.tags_es,
             content: draft.content_es,
             metaDescription: draft.meta_description_es,
-            linkedinPost: draft.linkedin_post_es,
-            linkedinHashtags: draft.linkedin_hashtags_es,
           },
           {
             lang: "en",
@@ -99,13 +122,22 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
             tags: draft.tags_en,
             content: draft.content_en,
             metaDescription: draft.meta_description_en,
-            linkedinPost: draft.linkedin_post_en,
-            linkedinHashtags: draft.linkedin_hashtags_en,
           },
         ],
       },
+      linkedinVariants: {
+        create: variants.map((v, idx) => ({
+          variant: idx + 1,
+          angle: v.angle,
+          text: v.text,
+          hashtags: v.hashtags || [],
+          imageBlobUrl: variantImages[idx],
+          imageQuery: v.image_query,
+          scheduledFor: variantSchedules[idx],
+        })),
+      },
     },
-    include: { translations: true },
+    include: { translations: true, linkedinVariants: true },
   });
 
   const translationEs = post.translations.find((t) => t.lang === "es");
@@ -152,5 +184,10 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
     usage: draft.usage,
     email: emailResult,
     backlinks,
+    linkedinVariants: post.linkedinVariants.map((v) => ({
+      variant: v.variant,
+      angle: v.angle,
+      scheduledFor: v.scheduledFor.toISOString(),
+    })),
   };
 }

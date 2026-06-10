@@ -45,7 +45,7 @@ export async function GET(request) {
         source: sourceFilter,
         date: { lte: now },
       },
-      include: { translations: true },
+      include: { translations: true, linkedinVariants: true },
     });
 
     if (postsToProcess.length === 0) {
@@ -55,62 +55,67 @@ export async function GET(request) {
     const results = [];
 
     for (const post of postsToProcess) {
-      // 3. Extraemos la traducción al español para la notificación
       const esData =
         post.translations.find((t) => t.lang === "es") || post.translations[0];
+      const enData = post.translations.find((t) => t.lang === "en");
+      const hasVariants = post.linkedinVariants.length > 0;
 
-      const postData = {
-        title_es: esData.title,
-        slug_es: esData.slug,
-        content_es: esData.content,
-        tags_es: esData.tags.join(","),
-        date: post.date.toISOString().split("T")[0], // Formato YYYY-MM-DD
-        linkedin_post_es: esData.linkedinPost,
-        linkedin_hashtags_es: esData.linkedinHashtags,
-      };
-
-      // 4. Disparamos el Webhook (Make.com -> LinkedIn)
-      const notification = await triggerLinkedInNotification(
-        postData,
-        post.image,
-      );
-
-      if (notification.success) {
-        // 5. Marcamos como enviado para que el cron no lo vuelva a procesar en 10 min
+      // Si el post tiene variantes de LinkedIn (flujo nuevo, AUTO posts a
+      // partir de PR B), NO disparamos el webhook aquí — lo hace el cron
+      // /api/cron/publish-linkedin variante a variante en su día. Sólo
+      // marcamos published_sent=true y notificamos Google Indexing API.
+      if (hasVariants) {
         await prisma.post.update({
           where: { id: post.id },
           data: { published_sent: true },
         });
         results.push(
-          `Post ID ${post.id} ("${esData.title}"): Notificación enviada.`,
+          `Post ID ${post.id} ("${esData.title}"): publicado (variantes LinkedIn a su cron).`,
         );
-
-        // 6. Notificar a Google Indexing API (best-effort, no rompe el flujo)
-        const enData = post.translations.find((t) => t.lang === "en");
-        const urls = buildPostUrls(esData.slug, enData?.slug);
-        for (const url of urls) {
-          try {
-            await notifyUrlUpdated(url);
-            results.push(`  → Indexing API: ${url}`);
-          } catch (err) {
-            console.error(`Indexing API falló para ${url}:`, err.message);
-            results.push(`  → Indexing API ERR (${url}): ${err.message}`);
-          }
-        }
-
-        // 7. IndexNow desactivado — descomentar cuando se pueda servir el
-        //    keyLocation desde la raíz del dominio.
-        // try {
-        //   const inow = await notifyIndexNow(urls);
-        //   results.push(`  → IndexNow: ${inow.count} URLs (status ${inow.status})`);
-        // } catch (err) {
-        //   console.error("IndexNow falló:", err.message);
-        //   results.push(`  → IndexNow ERR: ${err.message}`);
-        // }
       } else {
-        results.push(
-          `Post ID ${post.id}: Error en notificación (${notification.error})`,
+        // Flujo legacy (MANUAL posts u otros sin variantes): disparamos el
+        // webhook de LinkedIn directo desde aquí.
+        const postData = {
+          title_es: esData.title,
+          slug_es: esData.slug,
+          content_es: esData.content,
+          tags_es: esData.tags.join(","),
+          date: post.date.toISOString().split("T")[0],
+          linkedin_post_es: esData.linkedinPost,
+          linkedin_hashtags_es: esData.linkedinHashtags,
+        };
+
+        const notification = await triggerLinkedInNotification(
+          postData,
+          post.image,
         );
+
+        if (notification.success) {
+          await prisma.post.update({
+            where: { id: post.id },
+            data: { published_sent: true },
+          });
+          results.push(
+            `Post ID ${post.id} ("${esData.title}"): LinkedIn legacy enviado.`,
+          );
+        } else {
+          results.push(
+            `Post ID ${post.id}: Error en notificación (${notification.error})`,
+          );
+          continue;
+        }
+      }
+
+      // Notificar a Google Indexing API (para ambos flujos)
+      const urls = buildPostUrls(esData.slug, enData?.slug);
+      for (const url of urls) {
+        try {
+          await notifyUrlUpdated(url);
+          results.push(`  → Indexing API: ${url}`);
+        } catch (err) {
+          console.error(`Indexing API falló para ${url}:`, err.message);
+          results.push(`  → Indexing API ERR (${url}): ${err.message}`);
+        }
       }
     }
 

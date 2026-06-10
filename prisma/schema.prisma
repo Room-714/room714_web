@@ -30,7 +30,28 @@ model Post {
   createdAt      DateTime          @default(now())
   updatedAt      DateTime          @updatedAt
 
-  translations   PostTranslation[]
+  translations     PostTranslation[]
+  linkedinVariants LinkedInVariant[]
+}
+
+model LinkedInVariant {
+  id           Int       @id @default(autoincrement())
+  postId       Int
+  variant      Int       // 1, 2, 3
+  angle        String    // "data" | "polemica" | "conclusion"
+  text         String    @db.Text
+  hashtags     String[]  @default([])
+  imageBlobUrl String
+  imageQuery   String?
+  scheduledFor DateTime
+  sent         Boolean   @default(false)
+  sentAt       DateTime?
+  createdAt    DateTime  @default(now())
+
+  post         Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, variant])
+  @@index([scheduledFor, sent])
 }
 
 model PostTranslation {
