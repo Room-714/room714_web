@@ -78,7 +78,6 @@ export default function CareersWizard({ dict, lang }) {
       formData.append("country", country);
       formData.append("education", education);
       formData.append("acceptedPrivacy", "true");
-      formData.append("lang", lang);
       formData.append("cv", cv);
 
       const res = await fetch("/api/careers/submit", {

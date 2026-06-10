@@ -1,9 +1,8 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { put } from "@vercel/blob";
 import { prisma } from "@/app/lib/prisma";
 import { summarizeCv } from "@/app/lib/ai/cvSummary";
 import { sendCandidateSummaryEmail } from "@/app/lib/notifications/candidateReady";
-import { sendCandidateThanksEmail } from "@/app/lib/notifications/candidateThanks";
 
 export const maxDuration = 60;
 
@@ -31,7 +30,6 @@ export async function POST(request) {
   const country = String(form.get("country") || "").toUpperCase();
   const education = String(form.get("education") || "").toUpperCase();
   const acceptedPrivacy = form.get("acceptedPrivacy") === "true";
-  const lang = form.get("lang") === "en" ? "en" : "es";
   const cv = form.get("cv");
 
   if (!VALID_POSITIONS.has(position)) {
@@ -72,49 +70,49 @@ export async function POST(request) {
     return NextResponse.json({ success: true });
   }
 
-  let cvBlobUrl;
-  let candidateId;
-  let aiSummary = null;
-  let contact = null;
-  let emailSent = false;
+  // Camino feliz: subir CV + insertar fila ANTES de responder (estos pasos
+  // son rápidos y queremos garantizar persistencia de los datos del
+  // candidato antes de devolverle el thanks).
+  const arrayBuffer = await cv.arrayBuffer();
+  const buffer = Buffer.from(arrayBuffer);
 
-  try {
-    const arrayBuffer = await cv.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
+  const ts = new Date().toISOString().replace(/[:.]/g, "-");
+  const fileName = `careers/${ts}-${position.toLowerCase()}.pdf`;
+  const blob = await put(fileName, buffer, {
+    access: "public",
+    contentType: "application/pdf",
+  });
+  const cvBlobUrl = blob.url;
 
-    const ts = new Date().toISOString().replace(/[:.]/g, "-");
-    const fileName = `careers/${ts}-${position.toLowerCase()}.pdf`;
-    const blob = await put(fileName, buffer, {
-      access: "public",
-      contentType: "application/pdf",
-    });
-    cvBlobUrl = blob.url;
+  const candidate = await prisma.candidate.create({
+    data: {
+      position,
+      country,
+      education,
+      cvBlobUrl,
+      expiresAt: new Date(Date.now() + RETENTION_MS),
+    },
+  });
 
-    const candidate = await prisma.candidate.create({
-      data: {
-        position,
-        country,
-        education,
-        cvBlobUrl,
-        expiresAt: new Date(Date.now() + RETENTION_MS),
-      },
-    });
-    candidateId = candidate.id;
+  // Trabajo lento (resumen IA + email a RRHH + update de la fila) se
+  // ejecuta después de devolver la respuesta. El candidato ve la página
+  // de gracias en < 2 s sin esperar 20+ s del análisis IA.
+  after(async () => {
+    let aiSummary = null;
+    let emailSent = false;
 
     try {
-      const analysis = await summarizeCv({
+      aiSummary = await summarizeCv({
         pdfBase64: buffer.toString("base64"),
         position,
       });
-      aiSummary = analysis.summary;
-      contact = analysis.contact;
     } catch (err) {
       console.error("CV summary falló:", err);
     }
 
     try {
       const emailResult = await sendCandidateSummaryEmail({
-        candidateId,
+        candidateId: candidate.id,
         position,
         country,
         education,
@@ -126,27 +124,17 @@ export async function POST(request) {
       console.error("Email a RRHH falló:", err);
     }
 
-    if (contact?.email) {
+    if (aiSummary || emailSent) {
       try {
-        await sendCandidateThanksEmail({
-          to: contact.email,
-          name: contact.name,
-          lang,
+        await prisma.candidate.update({
+          where: { id: candidate.id },
+          data: { aiSummary, emailSent },
         });
       } catch (err) {
-        console.error("Email de gracias al candidato falló:", err);
+        console.error("Update post-procesado falló:", err);
       }
     }
-
-    if (aiSummary || emailSent) {
-      await prisma.candidate.update({
-        where: { id: candidateId },
-        data: { aiSummary, emailSent },
-      });
-    }
-  } catch (err) {
-    console.error("Error procesando candidato:", err);
-  }
+  });
 
   return NextResponse.json({ success: true });
 }
