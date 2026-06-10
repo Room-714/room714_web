@@ -35,6 +35,7 @@ export default function Navbar({
     { name: dict.nav.about, href: `/${lang}/about` },
     { name: dict.nav.blog, href: `/${lang}/blog` },
     { name: dict.nav.diagnostic, href: `/${lang}/diagnostic` },
+    { name: dict.nav.careers, href: `/${lang}/careers` },
   ];
 
   return (

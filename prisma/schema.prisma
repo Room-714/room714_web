@@ -50,3 +50,30 @@ model PostTranslation {
 
   @@unique([postId, lang])
 }
+
+enum CandidatePosition {
+  DEVELOPER
+  DESIGNER
+  PRODUCT_MANAGER
+}
+
+enum CandidateEducation {
+  GRADO
+  MASTER
+  DOCTORADO
+  OTHER
+}
+
+model Candidate {
+  id          Int                 @id @default(autoincrement())
+  createdAt   DateTime            @default(now())
+  position    CandidatePosition
+  country     String
+  education   CandidateEducation
+  cvBlobUrl   String
+  aiSummary   String?             @db.Text
+  emailSent   Boolean             @default(false)
+  expiresAt   DateTime
+
+  @@index([expiresAt])
+}

@@ -5,6 +5,7 @@
     "about": "About",
     "blog": "Blog",
     "diagnostic": "Diagnostic",
+    "careers": "Careers",
     "contact": "Contact"
   },
   "home": {
@@ -189,6 +190,66 @@
       "view_case_study": "get in touch"
     }
   },
+  "careers": {
+    "hero": {
+      "title": "Join Room 714",
+      "tagline": "the team that puts product before hype",
+      "lead": "If you work in product, design, usability or engineering and the usual playbook bores you, drop us your CV. A human will read it — and so will an AI. No theatre: if we fit, we’ll talk."
+    },
+    "disclaimer": {
+      "label": "Before you start",
+      "body": "Anything you send is kept for a maximum of 3 months for selection processes. After that, it’s deleted automatically. Full detail in our privacy policy, which you’ll need to accept before uploading the CV."
+    },
+    "step": "Step",
+    "back": "Back",
+    "next": "Next",
+    "steps": {
+      "position": {
+        "title": "Where do you see yourself with us?",
+        "tag": "Position",
+        "options": {
+          "DEVELOPER": "Developer",
+          "DESIGNER": "Designer",
+          "PRODUCT_MANAGER": "Product Manager"
+        }
+      },
+      "country": {
+        "title": "Where do you currently live?",
+        "placeholder": "Select your country"
+      },
+      "education": {
+        "title": "What is your main qualification?",
+        "options": {
+          "GRADO": "Bachelor’s Degree",
+          "MASTER": "Master’s Degree",
+          "DOCTORADO": "PhD",
+          "OTHER": "Other qualification"
+        }
+      },
+      "cv": {
+        "title": "Upload your CV and accept the terms",
+        "dropzone": "Click to select the PDF",
+        "requirements": "PDF only, 5MB max",
+        "replace": "click to replace",
+        "privacyPrefix": "I have read and accept the ",
+        "privacyLink": "privacy policy",
+        "privacySuffix": ", including the retention of my CV for a maximum of 3 months.",
+        "submit": "Submit application",
+        "submitting": "Sending…"
+      }
+    },
+    "errors": {
+      "notPdf": "The file must be a PDF.",
+      "tooLarge": "The PDF must be 5MB or smaller.",
+      "generic": "Something went wrong. Please try again in a few seconds."
+    },
+    "thanks": {
+      "title": "Thanks for your interest!",
+      "subtitle": "We’ve got it from here.",
+      "body": "We received your information. If it fits one of our open or upcoming processes, we’ll reach out directly. In the meantime, our blog is the fastest way to see how we think.",
+      "cta": "Back to home"
+    }
+  },
   "footer": {
     "we_are": "We're heeeere...",
     "text_links": "Stay in the loop. Follow our journey.",
@@ -238,9 +299,11 @@
     ],
     "rights_title": "Your Rights",
     "rights_text": "You can exercise your rights of access, rectification, deletion, and objection by sending an email to hello@room714.com.",
+    "cv_title": "Job applications and CVs",
+    "cv_text": "If you send us your CV through our Careers page, we retain the data it contains (including the PDF itself) for a maximum of 3 months for the sole purpose of evaluating you for current or future selection processes. After that period, the CV and all associated data are automatically deleted. You can request early deletion by writing to rrhh@room714.com.",
     "last_update": {
       "text": "Last updated",
-      "date": "January 2026"
+      "date": "June 2026"
     }
   },
   "terms": {
