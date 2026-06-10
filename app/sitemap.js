@@ -48,7 +48,11 @@ export default async function sitemap() {
       .filter((post) => post.slug)
       .map((post) => ({
         url: `${baseUrl}/es/blog/${post.slug}`,
-        lastModified: post.date ? new Date(post.date).toISOString() : new Date().toISOString(),
+        lastModified: post.updatedAt
+          ? new Date(post.updatedAt).toISOString()
+          : post.date
+            ? new Date(post.date).toISOString()
+            : new Date().toISOString(),
         changeFrequency: "weekly",
         priority: 0.6,
       }));
@@ -57,7 +61,11 @@ export default async function sitemap() {
       .filter((post) => post.slug)
       .map((post) => ({
         url: `${baseUrl}/en/blog/${post.slug}`,
-        lastModified: post.date ? new Date(post.date).toISOString() : new Date().toISOString(),
+        lastModified: post.updatedAt
+          ? new Date(post.updatedAt).toISOString()
+          : post.date
+            ? new Date(post.date).toISOString()
+            : new Date().toISOString(),
         changeFrequency: "weekly",
         priority: 0.6,
       }));

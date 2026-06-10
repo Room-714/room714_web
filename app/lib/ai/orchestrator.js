@@ -9,6 +9,7 @@ import {
   fallbackQueryForCategory,
 } from "@/app/lib/sources/unsplash";
 import { generatePostDraft } from "./generator";
+import { backlinkOldPosts } from "./backlinker";
 import { sendDraftReadyEmail } from "@/app/lib/notifications/draftReady";
 import { nextMadridSlot } from "@/app/lib/time/madrid";
 
@@ -108,6 +109,24 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
   });
 
   const translationEs = post.translations.find((t) => t.lang === "es");
+  const translationEn = post.translations.find((t) => t.lang === "en");
+
+  // Backlink bidireccional: edita 2-3 posts antiguos para que enlacen al
+  // nuevo. Best-effort — un fallo aquí no rompe la publicación.
+  let backlinks = { skipped: true };
+  try {
+    backlinks = await backlinkOldPosts({
+      newPostId: post.id,
+      newPostCategory: category,
+      newPostTitle: translationEs.title,
+      newSlugEs: translationEs.slug,
+      newSlugEn: translationEn?.slug || translationEs.slug,
+      newContentEs: translationEs.content,
+    });
+  } catch (err) {
+    console.error("Backlink falló:", err.message);
+    backlinks = { error: err.message };
+  }
 
   let emailResult = { skipped: true };
   if (sendEmail) {
@@ -132,5 +151,6 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
     recentPostsConsidered: recentPosts.length,
     usage: draft.usage,
     email: emailResult,
+    backlinks,
   };
 }
