@@ -7,7 +7,7 @@ El resumen debe incluir, en este orden y sin saltarse ninguno:
 1. **Datos de contacto**: nombre completo, email, teléfono (si aparecen). Si falta alguno, márcalo como "no indicado".
 2. **Perfil profesional**: una frase de 1-2 líneas describiendo qué tipo de profesional es (senior backend, mid product designer, etc.).
 3. **Experiencia clave**: 3-5 bullets con los puestos y empresas más relevantes (los últimos 5-7 años máximo). Indica años aproximados en cada uno.
-4. **Formación**: titulación + universidad. Si hay varios títulos, listar los más relevantes.
+4. **Formación**: para cada titulación universitaria (Grado, Máster o Doctorado), indica en una línea separada el **nombre completo del título** y la **universidad** que lo emite. Ejemplos del formato esperado: "Grado en Ingeniería Informática — Universidad Politécnica de Madrid", "Máster en Diseño de Producto — IED Madrid", "Doctorado en Ciencias de la Computación — Universidad Complutense de Madrid". Si no aparece la universidad, indica "(universidad no indicada)". Lista TODAS las titulaciones universitarias relevantes, ordenadas de menor a mayor nivel (Grado, Máster, Doctorado).
 5. **Stack técnico / herramientas**: lista plana, separada por comas, sólo las relevantes para el puesto al que opta.
 6. **Idiomas**: nivel declarado.
 7. **Fit con Room 714**: 2-3 líneas valorando encaje con la posición a la que aplica (que se indica en el contexto). Sé honesto: si no encaja bien, dilo.

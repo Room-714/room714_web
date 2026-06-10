@@ -75,7 +75,7 @@ export async function sendCandidateSummaryEmail({
   </p>
 
   <p style="margin-top: 30px; font-size: 12px; color: #999;">
-    El CV se borra automáticamente 3 meses después de la recepción según política de privacidad.
+    El CV se borra automáticamente 1 mes después de la recepción según política de privacidad.
   </p>
 </div>
       `,

@@ -59,15 +59,15 @@ export default function Navbar({
       </Link>
 
       {/* MENÚ DESKTOP + SELECTOR IDIOMA */}
-      <div className="hidden md:flex items-center gap-7 lg:gap-10">
-        <nav className="flex items-center gap-6 lg:gap-8">
+      <div className="hidden md:flex items-center gap-4 lg:gap-6 xl:gap-10">
+        <nav className="flex items-center gap-3 lg:gap-5 xl:gap-8">
           {navLinks.map((link) => {
             const isActive = pathname === link.href;
             return (
               <Link
                 key={link.name}
                 href={link.href}
-                className={`font-title md:text-lg lg:text-xl lg:font-medium transition-all duration-300 ${
+                className={`font-title text-sm lg:text-base xl:text-xl tracking-tight lg:font-medium transition-all duration-300 ${
                   isActive ? "text-red-600 font-bold" : "hover:text-red-500"
                 }`}
               >
@@ -78,7 +78,7 @@ export default function Navbar({
         </nav>
 
         {/* Selector de Idioma Desktop */}
-        <div className="relative border-l pl-8 border-gray-500/30 font-hand text-lg uppercase">
+        <div className="relative border-l pl-4 lg:pl-6 xl:pl-8 border-gray-500/30 font-hand text-base lg:text-lg uppercase">
           {/* Botón que controla el dropdown */}
           <button
             onClick={() => setLangOpen(!langOpen)}

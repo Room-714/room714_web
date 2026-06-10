@@ -198,7 +198,7 @@
     },
     "disclaimer": {
       "label": "Before you start",
-      "body": "Anything you send is kept for a maximum of 3 months for selection processes. After that, it’s deleted automatically. Full detail in our privacy policy, which you’ll need to accept before uploading the CV."
+      "body": "Anything you send is kept for a maximum of 1 month for selection processes. After that, it’s deleted automatically. Full detail in our privacy policy, which you’ll need to accept before uploading the CV."
     },
     "step": "Step",
     "back": "Back",
@@ -214,8 +214,9 @@
         }
       },
       "country": {
-        "title": "Where do you currently live?",
-        "placeholder": "Select your country"
+        "title": "Do you currently live in Spain?",
+        "yes": "Yes",
+        "no": "No"
       },
       "education": {
         "title": "What is your main qualification?",
@@ -233,7 +234,7 @@
         "replace": "click to replace",
         "privacyPrefix": "I have read and accept the ",
         "privacyLink": "privacy policy",
-        "privacySuffix": ", including the retention of my CV for a maximum of 3 months.",
+        "privacySuffix": ", including the retention of my CV for a maximum of 1 month.",
         "submit": "Submit application",
         "submitting": "Sending…"
       }
@@ -300,7 +301,7 @@
     "rights_title": "Your Rights",
     "rights_text": "You can exercise your rights of access, rectification, deletion, and objection by sending an email to hello@room714.com.",
     "cv_title": "Job applications and CVs",
-    "cv_text": "If you send us your CV through our Careers page, we retain the data it contains (including the PDF itself) for a maximum of 3 months for the sole purpose of evaluating you for current or future selection processes. After that period, the CV and all associated data are automatically deleted. You can request early deletion by writing to rrhh@room714.com.",
+    "cv_text": "If you send us your CV through our Careers page, we retain the data it contains (including the PDF itself) for a maximum of 1 month for the sole purpose of evaluating you for current or future selection processes. After that period, the CV and all associated data are automatically deleted. You can request early deletion by writing to rrhh@room714.com.",
     "last_update": {
       "text": "Last updated",
       "date": "June 2026"

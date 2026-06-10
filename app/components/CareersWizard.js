@@ -1,13 +1,23 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Check, Upload, Loader2 } from "lucide-react";
-import PrimaryButton from "@/app/components/PrimaryButton";
-import { COUNTRIES } from "@/app/data/Countries";
+import {
+  ArrowLeft,
+  Check,
+  Upload,
+  Loader2,
+  Code2,
+  PenTool,
+  Compass,
+} from "lucide-react";
 
-const POSITION_OPTIONS = ["DEVELOPER", "DESIGNER", "PRODUCT_MANAGER"];
+const POSITION_OPTIONS = [
+  { id: "DEVELOPER", icon: Code2 },
+  { id: "DESIGNER", icon: PenTool },
+  { id: "PRODUCT_MANAGER", icon: Compass },
+];
 const EDUCATION_OPTIONS = ["GRADO", "MASTER", "DOCTORADO", "OTHER"];
 const MAX_CV_BYTES = 5 * 1024 * 1024;
 
@@ -30,15 +40,6 @@ export default function CareersWizard({ dict, lang }) {
 
   const t = dict.careers;
   const totalSteps = 4;
-
-  const sortedCountries = useMemo(() => {
-    return [...COUNTRIES].sort((a, b) =>
-      a[lang === "es" ? "es" : "en"].localeCompare(
-        b[lang === "es" ? "es" : "en"],
-        lang === "es" ? "es" : "en",
-      ),
-    );
-  }, [lang]);
 
   const goNext = () => setStep((s) => Math.min(s + 1, totalSteps));
   const goBack = () => setStep((s) => Math.max(s - 1, 1));
@@ -63,13 +64,6 @@ export default function CareersWizard({ dict, lang }) {
       return;
     }
     setCv(file);
-  };
-
-  const canAdvanceFrom = (s) => {
-    if (s === 1) return !!position;
-    if (s === 2) return !!country;
-    if (s === 3) return !!education;
-    return false;
   };
 
   const canSubmit = !!cv && acceptedPrivacy && !submitting;
@@ -177,24 +171,29 @@ export default function CareersWizard({ dict, lang }) {
               {t.steps.position.title}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {POSITION_OPTIONS.map((p) => (
+              {POSITION_OPTIONS.map(({ id, icon: Icon }) => (
                 <button
-                  key={p}
+                  key={id}
                   onClick={() => {
-                    setPosition(p);
+                    setPosition(id);
                     goNext();
                   }}
-                  className={`group p-6 rounded-2xl border-2 text-left transition-all ${
-                    position === p
+                  className={`group flex flex-col items-center justify-center p-6 rounded-2xl border-2 transition-all ${
+                    position === id
                       ? "border-red-500 bg-red-50"
                       : "border-gray-200 hover:border-black"
                   }`}
                 >
-                  <p className="font-hand text-red-500 text-base md:text-lg mb-2">
-                    {t.steps.position.tag}
-                  </p>
-                  <p className="font-title font-black text-lg md:text-xl text-black leading-tight">
-                    {t.steps.position.options[p]}
+                  <Icon
+                    className={`w-10 h-10 md:w-12 md:h-12 mb-4 transition-colors ${
+                      position === id
+                        ? "text-red-500"
+                        : "text-black group-hover:text-red-500"
+                    }`}
+                    strokeWidth={1.6}
+                  />
+                  <p className="font-title font-black text-base md:text-lg text-black text-center leading-tight">
+                    {t.steps.position.options[id]}
                   </p>
                 </button>
               ))}
@@ -214,24 +213,26 @@ export default function CareersWizard({ dict, lang }) {
             <h2 className="font-title font-black text-2xl md:text-4xl lg:text-5xl text-black mb-8 leading-tight">
               {t.steps.country.title}
             </h2>
-            <select
-              value={country}
-              onChange={(e) => setCountry(e.target.value)}
-              className="w-full bg-white border-2 border-gray-200 rounded-2xl px-6 py-4 font-body text-lg text-black focus:border-black focus:outline-none transition-colors"
-            >
-              <option value="">{t.steps.country.placeholder}</option>
-              {sortedCountries.map((c) => (
-                <option key={c.code} value={c.code}>
-                  {lang === "es" ? c.es : c.en}
-                </option>
+            <div className="grid grid-cols-2 gap-4">
+              {[
+                { value: "ES", label: t.steps.country.yes },
+                { value: "OTHER", label: t.steps.country.no },
+              ].map((opt) => (
+                <button
+                  key={opt.value}
+                  onClick={() => {
+                    setCountry(opt.value);
+                    goNext();
+                  }}
+                  className={`p-8 rounded-2xl border-2 transition-all font-title font-black text-2xl md:text-3xl ${
+                    country === opt.value
+                      ? "border-red-500 bg-red-50 text-red-500"
+                      : "border-gray-200 text-black hover:border-black"
+                  }`}
+                >
+                  {opt.label}
+                </button>
               ))}
-            </select>
-            <div className="mt-8 flex justify-end">
-              <PrimaryButton
-                text={t.next}
-                onClick={goNext}
-                disabled={!canAdvanceFrom(2)}
-              />
             </div>
           </motion.div>
         )}

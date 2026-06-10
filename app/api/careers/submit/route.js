@@ -8,11 +8,12 @@ export const maxDuration = 60;
 
 const VALID_POSITIONS = new Set(["DEVELOPER", "DESIGNER", "PRODUCT_MANAGER"]);
 const VALID_EDUCATIONS = new Set(["GRADO", "MASTER", "DOCTORADO", "OTHER"]);
-const QUALIFIED_EDUCATIONS = new Set(["GRADO", "MASTER"]);
+const QUALIFIED_EDUCATIONS = new Set(["GRADO", "MASTER", "DOCTORADO"]);
 const QUALIFIED_COUNTRY = "ES";
+const VALID_COUNTRIES = new Set(["ES", "OTHER"]);
 
 const MAX_CV_BYTES = 5 * 1024 * 1024;
-const RETENTION_MS = 90 * 24 * 60 * 60 * 1000; // 90 días ≈ 3 meses
+const RETENTION_MS = 30 * 24 * 60 * 60 * 1000; // 30 días ≈ 1 mes
 
 export async function POST(request) {
   let form;
@@ -34,7 +35,7 @@ export async function POST(request) {
   if (!VALID_POSITIONS.has(position)) {
     return NextResponse.json({ error: "Posición no válida" }, { status: 400 });
   }
-  if (!country || country.length !== 2) {
+  if (!VALID_COUNTRIES.has(country)) {
     return NextResponse.json({ error: "País no válido" }, { status: 400 });
   }
   if (!VALID_EDUCATIONS.has(education)) {
