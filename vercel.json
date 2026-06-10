@@ -35,6 +35,14 @@
     {
       "path": "/api/cron/publish-linkedin",
       "schedule": "0 9 * * 1-5"
+    },
+    {
+      "path": "/api/cron/publish-linkedin",
+      "schedule": "0 14 * * 1-5"
+    },
+    {
+      "path": "/api/cron/publish-linkedin",
+      "schedule": "0 15 * * 1-5"
     }
   ]
 }
