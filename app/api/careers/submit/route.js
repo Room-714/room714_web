@@ -3,6 +3,7 @@ import { put } from "@vercel/blob";
 import { prisma } from "@/app/lib/prisma";
 import { summarizeCv } from "@/app/lib/ai/cvSummary";
 import { sendCandidateSummaryEmail } from "@/app/lib/notifications/candidateReady";
+import { sendCandidateThanksEmail } from "@/app/lib/notifications/candidateThanks";
 
 export const maxDuration = 60;
 
@@ -30,6 +31,7 @@ export async function POST(request) {
   const country = String(form.get("country") || "").toUpperCase();
   const education = String(form.get("education") || "").toUpperCase();
   const acceptedPrivacy = form.get("acceptedPrivacy") === "true";
+  const lang = form.get("lang") === "en" ? "en" : "es";
   const cv = form.get("cv");
 
   if (!VALID_POSITIONS.has(position)) {
@@ -73,6 +75,7 @@ export async function POST(request) {
   let cvBlobUrl;
   let candidateId;
   let aiSummary = null;
+  let contact = null;
   let emailSent = false;
 
   try {
@@ -99,10 +102,12 @@ export async function POST(request) {
     candidateId = candidate.id;
 
     try {
-      aiSummary = await summarizeCv({
+      const analysis = await summarizeCv({
         pdfBase64: buffer.toString("base64"),
         position,
       });
+      aiSummary = analysis.summary;
+      contact = analysis.contact;
     } catch (err) {
       console.error("CV summary falló:", err);
     }
@@ -121,6 +126,18 @@ export async function POST(request) {
       console.error("Email a RRHH falló:", err);
     }
 
+    if (contact?.email) {
+      try {
+        await sendCandidateThanksEmail({
+          to: contact.email,
+          name: contact.name,
+          lang,
+        });
+      } catch (err) {
+        console.error("Email de gracias al candidato falló:", err);
+      }
+    }
+
     if (aiSummary || emailSent) {
       await prisma.candidate.update({
         where: { id: candidateId },
@@ -129,8 +146,6 @@ export async function POST(request) {
     }
   } catch (err) {
     console.error("Error procesando candidato:", err);
-    // Mantenemos respuesta de éxito al usuario (acabamos de subir CV; si falla
-    // el análisis IA es problema nuestro, no del candidato). Pero registramos.
   }
 
   return NextResponse.json({ success: true });

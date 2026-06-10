@@ -206,11 +206,10 @@
     "steps": {
       "position": {
         "title": "Where do you see yourself with us?",
-        "tag": "Position",
         "options": {
-          "DEVELOPER": "Developer",
-          "DESIGNER": "Designer",
-          "PRODUCT_MANAGER": "Product Manager"
+          "DEVELOPER": { "line1": "Software", "line2": "Developer" },
+          "DESIGNER": { "line1": "UX&UI", "line2": "Designer" },
+          "PRODUCT_MANAGER": { "line1": "Product", "line2": "Manager" }
         }
       },
       "country": {

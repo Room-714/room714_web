@@ -78,6 +78,7 @@ export default function CareersWizard({ dict, lang }) {
       formData.append("country", country);
       formData.append("education", education);
       formData.append("acceptedPrivacy", "true");
+      formData.append("lang", lang);
       formData.append("cv", cv);
 
       const res = await fetch("/api/careers/submit", {
@@ -193,7 +194,9 @@ export default function CareersWizard({ dict, lang }) {
                     strokeWidth={1.6}
                   />
                   <p className="font-title font-black text-base md:text-lg text-black text-center leading-tight">
-                    {t.steps.position.options[id]}
+                    {t.steps.position.options[id].line1}
+                    <br />
+                    {t.steps.position.options[id].line2}
                   </p>
                 </button>
               ))}

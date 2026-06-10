@@ -206,11 +206,10 @@
     "steps": {
       "position": {
         "title": "¿En qué te ves trabajando con nosotros?",
-        "tag": "Posición",
         "options": {
-          "DEVELOPER": "Desarrollador",
-          "DESIGNER": "Diseñador",
-          "PRODUCT_MANAGER": "Product Manager"
+          "DEVELOPER": { "line1": "Desarrollador", "line2": "Software" },
+          "DESIGNER": { "line1": "Diseñador", "line2": "UX&UI" },
+          "PRODUCT_MANAGER": { "line1": "Product", "line2": "Manager" }
         }
       },
       "country": {

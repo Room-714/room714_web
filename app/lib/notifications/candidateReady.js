@@ -49,7 +49,7 @@ export async function sendCandidateSummaryEmail({
 
   try {
     const { error } = await resend.emails.send({
-      from: "Room 714 Careers <onboarding@resend.dev>",
+      from: "Room 714 Careers <rrhh@room714.com>",
       to: [to],
       subject: `Nuevo CV: ${positionLabel} (${country})`,
       html: `

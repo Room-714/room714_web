@@ -1,8 +1,13 @@
 import { getAnthropicClient, MODEL } from "./anthropic";
 
-const SYSTEM_PROMPT = `Eres un analista de RRHH de Room 714, una consultora de producto digital, diseño, usabilidad y tecnología en España. Tu tarea es analizar un CV en PDF y producir un resumen ejecutivo conciso para el equipo de selección.
+const SYSTEM_PROMPT = `Eres un analista de RRHH de Room 714, una consultora de producto digital, diseño, usabilidad y tecnología en España. Tu tarea es analizar un CV en PDF y devolver dos cosas:
 
-El resumen debe incluir, en este orden y sin saltarse ninguno:
+1. Un resumen ejecutivo en markdown para el equipo de selección.
+2. Los datos de contacto del candidato extraídos del CV.
+
+Devuelve siempre tu análisis llamando al tool 'submit_cv_analysis' con los dos campos. NO escribas texto fuera del tool.
+
+ESTRUCTURA OBLIGATORIA DEL RESUMEN EJECUTIVO (campo executiveSummary):
 
 1. **Datos de contacto**: nombre completo, email, teléfono (si aparecen). Si falta alguno, márcalo como "no indicado".
 2. **Perfil profesional**: una frase de 1-2 líneas describiendo qué tipo de profesional es (senior backend, mid product designer, etc.).
@@ -13,21 +18,61 @@ El resumen debe incluir, en este orden y sin saltarse ninguno:
 7. **Fit con Room 714**: 2-3 líneas valorando encaje con la posición a la que aplica (que se indica en el contexto). Sé honesto: si no encaja bien, dilo.
 8. **Banderas (opcional)**: cualquier red flag o nota destacable (gaps largos, cambios frecuentes, claims dudosos, idioma del CV inconsistente, etc.).
 
-Formato de salida: Markdown plano, sin disclaimers, sin meta-comentarios sobre tu propio proceso. Directo al grano.`;
+CAMPO contact:
+- Extrae nombre completo, email y teléfono del CV. Si alguno no aparece, devuélvelo como null. NO inventes ningún dato.`;
+
+const ANALYSIS_TOOL = {
+  name: "submit_cv_analysis",
+  description:
+    "Devuelve el análisis estructurado del CV: resumen ejecutivo en markdown y datos de contacto extraídos.",
+  input_schema: {
+    type: "object",
+    properties: {
+      executiveSummary: {
+        type: "string",
+        description:
+          "Resumen ejecutivo del CV en formato markdown, siguiendo la estructura definida en las instrucciones del sistema.",
+      },
+      contact: {
+        type: "object",
+        description: "Datos de contacto extraídos del CV.",
+        properties: {
+          name: {
+            type: ["string", "null"],
+            description: "Nombre completo tal como aparece en el CV.",
+          },
+          email: {
+            type: ["string", "null"],
+            description: "Email tal como aparece en el CV.",
+          },
+          phone: {
+            type: ["string", "null"],
+            description: "Teléfono tal como aparece en el CV.",
+          },
+        },
+        required: ["name", "email", "phone"],
+      },
+    },
+    required: ["executiveSummary", "contact"],
+  },
+};
 
 export async function summarizeCv({ pdfBase64, position }) {
   const client = getAnthropicClient();
 
-  const positionLabel = {
-    DEVELOPER: "Desarrollador / Developer",
-    DESIGNER: "Diseñador / Designer",
-    PRODUCT_MANAGER: "Product Manager",
-  }[position] || position;
+  const positionLabel =
+    {
+      DEVELOPER: "Desarrollador / Developer",
+      DESIGNER: "Diseñador / Designer",
+      PRODUCT_MANAGER: "Product Manager",
+    }[position] || position;
 
   const response = await client.messages.create({
     model: MODEL,
-    max_tokens: 2000,
+    max_tokens: 2500,
     system: SYSTEM_PROMPT,
+    tools: [ANALYSIS_TOOL],
+    tool_choice: { type: "tool", name: "submit_cv_analysis" },
     messages: [
       {
         role: "user",
@@ -42,16 +87,24 @@ export async function summarizeCv({ pdfBase64, position }) {
           },
           {
             type: "text",
-            text: `Posición a la que aplica el candidato: **${positionLabel}**.\n\nProduce el resumen ejecutivo siguiendo la estructura definida en las instrucciones.`,
+            text: `Posición a la que aplica el candidato: **${positionLabel}**.\n\nProduce el análisis llamando a submit_cv_analysis.`,
           },
         ],
       },
     ],
   });
 
-  const textBlock = response.content.find((b) => b.type === "text");
-  if (!textBlock) {
-    throw new Error("Anthropic no devolvió texto en la respuesta");
+  const toolUse = response.content.find((b) => b.type === "tool_use");
+  if (!toolUse) {
+    throw new Error("Anthropic no devolvió tool_use en la respuesta");
   }
-  return textBlock.text;
+  const { executiveSummary, contact } = toolUse.input;
+  return {
+    summary: executiveSummary,
+    contact: {
+      name: contact?.name || null,
+      email: contact?.email || null,
+      phone: contact?.phone || null,
+    },
+  };
 }
