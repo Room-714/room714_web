@@ -47,6 +47,9 @@ export async function sendCandidateSummaryEmail({
     ? `<p>${markdownToBasicHtml(aiSummary)}</p>`
     : "<p><em>No se pudo generar resumen automático.</em></p>";
 
+  const baseUrl = process.env.NEXTAUTH_URL || "https://www.room714.com";
+  const manageUrl = `${baseUrl}/admin/candidates/${candidateId}`;
+
   try {
     const { error } = await resend.emails.send({
       from: "Room 714 Careers <rrhh@room714.com>",
@@ -69,8 +72,8 @@ export async function sendCandidateSummaryEmail({
   </div>
 
   <p style="margin-top: 24px;">
-    <a href="${cvBlobUrl}" style="background:#000;color:#fff;padding:12px 20px;text-decoration:none;border-radius:8px;font-weight:bold;display:inline-block;">
-      Descargar CV original (PDF)
+    <a href="${manageUrl}" style="background:#000;color:#fff;padding:12px 20px;text-decoration:none;border-radius:8px;font-weight:bold;display:inline-block;">
+      Ver y gestionar CV &rarr;
     </a>
   </p>
 
