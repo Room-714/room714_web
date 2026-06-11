@@ -9,16 +9,17 @@ export async function GET(request, { params }) {
   }
 
   const { id } = await params;
-  const candidateId = Number(id);
-  if (!Number.isInteger(candidateId)) {
+  // Solo IDs decimales positivos; Number("") o "0x10" colarían valores raros.
+  if (!/^\d+$/.test(id)) {
     return new Response("No encontrado", { status: 404 });
   }
+  const candidateId = Number(id);
 
   const candidate = await prisma.candidate.findUnique({
     where: { id: candidateId },
     select: { cvBlobUrl: true },
   });
-  if (!candidate) {
+  if (!candidate || !candidate.cvBlobUrl) {
     return new Response("No encontrado", { status: 404 });
   }
 
@@ -33,7 +34,7 @@ export async function GET(request, { params }) {
   return new Response(blobRes.body, {
     headers: {
       "Content-Type": "application/pdf",
-      "Content-Disposition": "inline",
+      "Content-Disposition": 'inline; filename="cv.pdf"',
       "X-Frame-Options": "SAMEORIGIN",
       "Cache-Control": "private, no-store",
     },
