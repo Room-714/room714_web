@@ -63,7 +63,11 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: "/:path*",
+        // Clickjacking protection en todo el sitio EXCEPTO el proxy de CVs,
+        // que necesita SAMEORIGIN (lo pone su propio route handler) para
+        // poder incrustarse en el <iframe> del detalle. Un X-Frame-Options
+        // duplicado/conflictivo hace que el navegador bloquee el iframe.
+        source: "/((?!api/admin/candidates/).*)",
         headers: [
           {
             key: "X-Frame-Options",
