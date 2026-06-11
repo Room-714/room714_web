@@ -25,7 +25,10 @@ export default function LoginPage() {
       setError("Credenciales incorrectas");
       setLoading(false);
     } else {
-      router.push("/admin");
+      const callbackUrl =
+        new URLSearchParams(window.location.search).get("callbackUrl") ||
+        "/admin";
+      router.push(callbackUrl);
       router.refresh();
     }
   };

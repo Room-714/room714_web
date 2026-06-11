@@ -24,6 +24,10 @@ export async function proxy(request) {
 
     if (!session) {
       const loginUrl = new URL("/auth/login", request.url);
+      loginUrl.searchParams.set(
+        "callbackUrl",
+        `${pathname}${request.nextUrl.search}`,
+      );
       return NextResponse.redirect(loginUrl);
     }
     return NextResponse.next();
