@@ -25,9 +25,9 @@ export default function LoginPage() {
       setError("Credenciales incorrectas");
       setLoading(false);
     } else {
-      const callbackUrl =
-        new URLSearchParams(window.location.search).get("callbackUrl") ||
-        "/admin";
+      const raw = new URLSearchParams(window.location.search).get("callbackUrl");
+      // Solo rutas internas (un único "/" inicial) para evitar open-redirect.
+      const callbackUrl = raw && /^\/(?!\/)/.test(raw) ? raw : "/admin";
       router.push(callbackUrl);
       router.refresh();
     }

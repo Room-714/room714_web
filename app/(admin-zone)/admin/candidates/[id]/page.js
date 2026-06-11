@@ -7,10 +7,9 @@ export const dynamic = "force-dynamic";
 
 export default async function CandidateDetailPage({ params }) {
   const { id } = await params;
-  const candidateId = Number(id);
 
-  const candidate = Number.isInteger(candidateId)
-    ? await prisma.candidate.findUnique({ where: { id: candidateId } })
+  const candidate = /^\d+$/.test(id)
+    ? await prisma.candidate.findUnique({ where: { id: Number(id) } })
     : null;
 
   if (!candidate) {

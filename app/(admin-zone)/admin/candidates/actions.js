@@ -4,15 +4,24 @@ import { del } from "@vercel/blob";
 import { prisma } from "@/app/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/app/lib/authOptions";
 
 // Borrado manual de un candidato: replica la lógica del cron
 // (cleanup-candidates) para uno solo. La ruta del action vive bajo /admin,
 // así que el proxy ya exige sesión antes de invocarla.
 export async function deleteCandidate(id) {
-  const candidateId = Number(id);
-  if (!Number.isInteger(candidateId)) {
+  // Defensa en profundidad: además del proxy, exigimos sesión aquí porque
+  // es un borrado irreversible de datos personales.
+  const session = await getServerSession(authOptions);
+  if (!session) {
     redirect("/admin/candidates");
   }
+
+  if (!/^\d+$/.test(String(id))) {
+    redirect("/admin/candidates");
+  }
+  const candidateId = Number(id);
 
   const candidate = await prisma.candidate.findUnique({
     where: { id: candidateId },

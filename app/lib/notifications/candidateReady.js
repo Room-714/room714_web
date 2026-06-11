@@ -1,17 +1,5 @@
 import { Resend } from "resend";
-
-const POSITION_LABEL = {
-  DEVELOPER: "Desarrollador",
-  DESIGNER: "Diseñador",
-  PRODUCT_MANAGER: "Product Manager",
-};
-
-const EDUCATION_LABEL = {
-  GRADO: "Grado Universitario",
-  MASTER: "Máster Universitario",
-  DOCTORADO: "Doctorado",
-  OTHER: "Otra",
-};
+import { POSITION_LABEL, EDUCATION_LABEL } from "@/app/lib/candidateLabels";
 
 function markdownToBasicHtml(md) {
   return md
