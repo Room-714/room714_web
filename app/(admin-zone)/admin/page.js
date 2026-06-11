@@ -8,6 +8,7 @@ import {
   triggerLinkedInNotification,
 } from "./actions";
 import Image from "next/image";
+import Link from "next/link";
 import ImageUploader from "./components/ImageUploader";
 import { signOut } from "next-auth/react";
 import { CATEGORY_IDS, CATEGORY_LABELS } from "@/app/data/BlogCategories";
@@ -328,6 +329,12 @@ export default function AdminPage() {
             >
               {isGenerating ? "Generando…" : "Generar post IA"}
             </button>
+            <Link
+              href="/admin/candidates"
+              className="bg-white border-2 border-black text-black px-2 py-4 rounded-2xl hover:bg-black hover:text-white font-bold transition-colors uppercase text-center"
+            >
+              CVs recibidos
+            </Link>
             <h3 className="font-black pl-4 mt-4 text-xl">Publicaciones</h3>
           </div>
 
