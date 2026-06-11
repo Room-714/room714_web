@@ -12,31 +12,36 @@
 
 ---
 
-### Task 1: Middleware de auth + login respeta callbackUrl
+### Task 1: proxy.js redirige con callbackUrl + login lo respeta
+
+> **Corrección (descubierta en ejecución):** Next.js 16 usa `proxy.js`, no `middleware.js`, y ya existe `proxy.js` en la raíz que **ya protege `/admin`** (redirige a `/auth/login` sin sesión). Su `matcher` excluye `/api`, así que el proxy del PDF no se ve afectado y se protege solo con `isAuthorizedAdmin`. Por tanto NO se crea ningún `middleware.js`; solo se añade `callbackUrl` al redirect existente.
 
 **Files:**
-- Create: `middleware.js`
+- Modify: `proxy.js:25-28`
 - Modify: `app/(admin-zone)/auth/login/page.js`
 
-- [ ] **Step 1: Crear el middleware**
+- [ ] **Step 1: Añadir callbackUrl al redirect de admin en proxy.js**
 
-Create `middleware.js` (en la raíz del proyecto, junto a `next.config.mjs`):
+En `proxy.js`, dentro del bloque `if (!session)`, reemplazar:
 
 ```js
-import { withAuth } from "next-auth/middleware";
+    if (!session) {
+      const loginUrl = new URL("/auth/login", request.url);
+      return NextResponse.redirect(loginUrl);
+    }
+```
 
-// Protege todo /admin. Usuario no autenticado -> redirige a /auth/login
-// con ?callbackUrl=<ruta original>. Funciona porque CredentialsProvider
-// fuerza sesiones JWT, que es lo que lee withAuth.
-export default withAuth({
-  pages: {
-    signIn: "/auth/login",
-  },
-});
+por:
 
-export const config = {
-  matcher: ["/admin/:path*"],
-};
+```js
+    if (!session) {
+      const loginUrl = new URL("/auth/login", request.url);
+      loginUrl.searchParams.set(
+        "callbackUrl",
+        `${pathname}${request.nextUrl.search}`,
+      );
+      return NextResponse.redirect(loginUrl);
+    }
 ```
 
 - [ ] **Step 2: Hacer que el login vuelva a la URL de origen**
@@ -83,8 +88,8 @@ Expected: redirige a `/auth/login?callbackUrl=%2Fadmin`. Tras login correcto, vu
 - [ ] **Step 5: Commit**
 
 ```bash
-git add middleware.js "app/(admin-zone)/auth/login/page.js"
-git commit -m "feat(admin): proteger /admin con middleware next-auth y honrar callbackUrl"
+git add proxy.js "app/(admin-zone)/auth/login/page.js"
+git commit -m "feat(admin): proxy redirige a login con callbackUrl y login lo respeta"
 ```
 
 ---
