@@ -110,15 +110,26 @@ body {
   line-height: 1.7 !important;
 }
 
-/* Blockquotes */
+/* Blockquotes: nota manuscrita al margen, alineada a la derecha */
 .prose blockquote {
-  font-style: italic !important;
-  border-left: 4px solid #ef4444 !important;
-  background-color: #f9fafb;
-  padding: 1.5rem !important;
-  color: #4b5563 !important;
-  margin: 2.5rem 0 !important;
-  border-radius: 0 0.5rem 0.5rem 0;
+  font-family: var(--font-hand), cursive !important;
+  font-style: normal !important;
+  font-size: 1.85rem !important;
+  line-height: 1.45 !important;
+  text-align: right !important;
+  color: #374151 !important;
+  background-color: transparent !important;
+  border-left: none !important;
+  border-right: 4px solid #ef4444 !important;
+  border-radius: 0 !important;
+  padding: 0.25rem 1.5rem 0.25rem 0 !important;
+  margin: 3rem 0 3rem auto !important;
+  max-width: 85%;
+}
+
+.prose blockquote p {
+  margin-top: 0 !important;
+  line-height: 1.45 !important;
 }
 
 /* Links */
