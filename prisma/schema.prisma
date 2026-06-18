@@ -34,6 +34,18 @@ model Post {
   linkedinVariants LinkedInVariant[]
 }
 
+model PostRedirect {
+  id        Int      @id @default(autoincrement())
+  fromSlug  String
+  toSlug    String?  // null = sin destino (404/410)
+  lang      String   // "es" | "en"
+  reason    String?  // motivo opcional para debug (fused-into, pruned, etc.)
+  createdAt DateTime @default(now())
+
+  @@unique([fromSlug, lang])
+  @@index([lang])
+}
+
 model LinkedInVariant {
   id           Int       @id @default(autoincrement())
   postId       Int
