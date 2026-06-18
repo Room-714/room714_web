@@ -1,12 +1,24 @@
 import Image from "next/image";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import BlogCard from "@/app/components/BlogCard";
 import { getDictionary } from "@/app/dictionaries";
 import Navbar from "@/app/components/Navbar";
 import ShareButton from "@/app/components/ShareButton";
 import { getPostBySlug, getAllPosts } from "@/app/lib/blog";
+import { prisma } from "@/app/lib/prisma";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
+
+async function maybeRedirect(slug, lang) {
+  const r = await prisma.postRedirect.findUnique({
+    where: { fromSlug_lang: { fromSlug: slug, lang } },
+  });
+  if (!r) return null;
+  if (r.toSlug) {
+    permanentRedirect(`/${lang}/blog/${r.toSlug}`);
+  }
+  notFound();
+}
 
 export async function generateMetadata({ params }) {
   const { slug, lang } = await params;
@@ -55,6 +67,10 @@ export async function generateMetadata({ params }) {
 export default async function PostPage({ params }) {
   const { slug, lang } = await params;
   const dict = await getDictionary(lang);
+
+  // 0. Chequeo de redirect: si el slug aparece en PostRedirect, lanzamos
+  //    permanentRedirect (308) al toSlug. Esto cubre fusiones y podas.
+  await maybeRedirect(slug, lang);
 
   // 1. Buscamos el post (la función ya nos da el idioma correcto)
   const post = await getPostBySlug(slug, lang);
