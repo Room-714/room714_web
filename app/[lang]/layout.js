@@ -78,6 +78,9 @@ export async function generateMetadata({ params }) {
         "max-snippet": -1,
       },
     },
+    verification: {
+      google: "K7UJlm_Q0B9ceNoSoa4Vxk56C16FKSffjUx2SZhLi2o",
+    },
     openGraph: {
       title: titles[lang],
       description: descriptions[lang],
