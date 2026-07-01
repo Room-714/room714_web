@@ -331,39 +331,96 @@ USA SOLO los slugs literales de la lista (slug_es / slug_en). NO inventes. 1-2 e
 Llama al tool create_blog_post con los campos correspondientes.`;
 }
 
-export async function generatePostDraft({ category, trending, recentPosts }) {
+// Presupuesto de tokens de salida. Dos artículos HTML de 1500-2500 palabras
+// (ES + EN) + 3 variantes de LinkedIn caben de sobra en 32k; el valor anterior
+// (16k) se truncaba en generaciones largas, cortando linkedin_variants (último
+// campo del schema) y haciendo fallar la validación.
+const MAX_OUTPUT_TOKENS = 32000;
+
+// 2 intentos = 1 reintento. Cada intento es una generación completa (streaming,
+// ~1-2 min), así que dos caben holgados en el maxDuration=300 de las rutas
+// cron/admin. Cubre truncados puntuales y no-conformidades del modelo (el
+// schema minItems/maxItems NO se aplica en tool use, así que la validación es
+// la única garantía de las 3 variantes).
+const MAX_GENERATION_ATTEMPTS = 2;
+
+// Llama al tool create_blog_post con streaming (obligatorio por encima de ~16k
+// tokens para no chocar con el timeout HTTP del SDK), detecta el truncado por
+// max_tokens de forma explícita y reintenta si la generación no valida.
+async function generateViaCreateBlogPostTool({ userPrompt, recentPosts }) {
   const client = getAnthropicClient();
+  let lastError;
 
-  const response = await client.messages.create({
-    model: MODEL,
-    max_tokens: 16000,
-    system: buildCachedSystemBlocks(),
-    tools: [POST_TOOL],
-    tool_choice: { type: "tool", name: "create_blog_post" },
-    messages: [
-      {
-        role: "user",
-        content: buildUserPrompt({ category, trending, recentPosts }),
-      },
-    ],
-  });
+  for (let attempt = 1; attempt <= MAX_GENERATION_ATTEMPTS; attempt += 1) {
+    let response;
+    try {
+      const stream = client.messages.stream({
+        model: MODEL,
+        max_tokens: MAX_OUTPUT_TOKENS,
+        system: buildCachedSystemBlocks(),
+        tools: [POST_TOOL],
+        tool_choice: { type: "tool", name: "create_blog_post" },
+        messages: [{ role: "user", content: userPrompt }],
+      });
+      response = await stream.finalMessage();
+    } catch (err) {
+      lastError = err;
+      console.error(
+        `generatePost intento ${attempt}/${MAX_GENERATION_ATTEMPTS} — error de API: ${err.message}`,
+      );
+      continue;
+    }
 
-  const toolUse = response.content.find((b) => b.type === "tool_use");
-  if (!toolUse) {
-    throw new Error("Claude no llamó al tool create_blog_post");
+    // El truncado por presupuesto de tokens deja el JSON del tool a medias
+    // (típicamente sin las 3 variantes). Detectarlo aquí evita el fallo
+    // confuso "linkedin_variants debe ser un array con exactamente 3 variantes".
+    if (response.stop_reason === "max_tokens") {
+      lastError = new Error(
+        `Respuesta truncada por max_tokens (output_tokens=${response.usage?.output_tokens}). ` +
+          `El post + variantes no cupo en ${MAX_OUTPUT_TOKENS} tokens.`,
+      );
+      console.error(
+        `generatePost intento ${attempt}/${MAX_GENERATION_ATTEMPTS}: ${lastError.message}`,
+      );
+      continue;
+    }
+
+    const toolUse = response.content.find((b) => b.type === "tool_use");
+    if (!toolUse) {
+      lastError = new Error("Claude no llamó al tool create_blog_post");
+      console.error(
+        `generatePost intento ${attempt}/${MAX_GENERATION_ATTEMPTS}: ${lastError.message}`,
+      );
+      continue;
+    }
+
+    try {
+      const validated = validateGenerated(toolUse.input, { recentPosts });
+      return {
+        ...validated,
+        usage: {
+          input_tokens: response.usage.input_tokens,
+          output_tokens: response.usage.output_tokens,
+          cache_creation_input_tokens: response.usage.cache_creation_input_tokens,
+          cache_read_input_tokens: response.usage.cache_read_input_tokens,
+        },
+      };
+    } catch (err) {
+      lastError = err;
+      console.error(
+        `generatePost intento ${attempt}/${MAX_GENERATION_ATTEMPTS} — validación falló: ${err.message}`,
+      );
+    }
   }
 
-  const validated = validateGenerated(toolUse.input, { recentPosts });
+  throw new Error(
+    `No se pudo generar un borrador válido tras ${MAX_GENERATION_ATTEMPTS} intentos: ${lastError?.message}`,
+  );
+}
 
-  return {
-    ...validated,
-    usage: {
-      input_tokens: response.usage.input_tokens,
-      output_tokens: response.usage.output_tokens,
-      cache_creation_input_tokens: response.usage.cache_creation_input_tokens,
-      cache_read_input_tokens: response.usage.cache_read_input_tokens,
-    },
-  };
+export async function generatePostDraft({ category, trending, recentPosts }) {
+  const userPrompt = buildUserPrompt({ category, trending, recentPosts });
+  return generateViaCreateBlogPostTool({ userPrompt, recentPosts });
 }
 
 export async function generatePostFromIdea({
@@ -372,41 +429,11 @@ export async function generatePostFromIdea({
   trending,
   recentPosts,
 }) {
-  const client = getAnthropicClient();
-
-  const response = await client.messages.create({
-    model: MODEL,
-    max_tokens: 16000,
-    system: buildCachedSystemBlocks(),
-    tools: [POST_TOOL],
-    tool_choice: { type: "tool", name: "create_blog_post" },
-    messages: [
-      {
-        role: "user",
-        content: buildUserPromptFromIdea({
-          category,
-          chosenIdea,
-          trending,
-          recentPosts,
-        }),
-      },
-    ],
+  const userPrompt = buildUserPromptFromIdea({
+    category,
+    chosenIdea,
+    trending,
+    recentPosts,
   });
-
-  const toolUse = response.content.find((b) => b.type === "tool_use");
-  if (!toolUse) {
-    throw new Error("Claude no llamó al tool create_blog_post");
-  }
-
-  const validated = validateGenerated(toolUse.input, { recentPosts });
-
-  return {
-    ...validated,
-    usage: {
-      input_tokens: response.usage.input_tokens,
-      output_tokens: response.usage.output_tokens,
-      cache_creation_input_tokens: response.usage.cache_creation_input_tokens,
-      cache_read_input_tokens: response.usage.cache_read_input_tokens,
-    },
-  };
+  return generateViaCreateBlogPostTool({ userPrompt, recentPosts });
 }
