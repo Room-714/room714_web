@@ -24,6 +24,7 @@ export default function AdminPage() {
   const [showRegenerate, setShowRegenerate] = useState(false);
   const [mobileView, setMobileView] = useState("list");
   const [isGenerating, setIsGenerating] = useState(false);
+  const [savedNotice, setSavedNotice] = useState(false);
 
   const [formData, setFormData] = useState({
     id: null,
@@ -95,14 +96,26 @@ export default function AdminPage() {
     });
   };
 
+  // Un post está "en vivo" si ya existe, está publicado y su fecha ya pasó.
+  const isLivePost = (post) =>
+    Boolean(post.id) && post.published && new Date(post.date) <= new Date();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     const result = await savePost(formData);
     if (result.success) {
-      setLastSavedPost(result.post);
-      setShowModal(true);
-      loadPosts();
+      if (isLivePost(formData)) {
+        // Corrección de un post ya en vivo: guardamos en el sitio sin pasar
+        // por el modal de publicación (que reescribiría la fecha original).
+        setSavedNotice(true);
+        setTimeout(() => setSavedNotice(false), 3000);
+        loadPosts();
+      } else {
+        setLastSavedPost(result.post);
+        setShowModal(true);
+        loadPosts();
+      }
     }
     setIsSubmitting(false);
   };
@@ -203,6 +216,8 @@ export default function AdminPage() {
       tags_en: "",
       content_en: "",
     });
+
+  const editingLivePost = isLivePost(formData);
 
   const currentPosts = posts.slice(0, visibleLimit);
   const hasMore = posts.length > visibleLimit;
@@ -506,6 +521,14 @@ export default function AdminPage() {
                 </div>
               </div>
 
+              {savedNotice && (
+                <div className="flex justify-center">
+                  <span className="inline-flex items-center gap-2 bg-green-100 text-green-800 font-black text-sm px-4 py-2 rounded-full border border-green-300">
+                    Guardado ✓
+                  </span>
+                </div>
+              )}
+
               <div className="flex flex-col md:flex-row gap-3">
                 {formData.id && (
                   <>
@@ -530,9 +553,17 @@ export default function AdminPage() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="flex-1 bg-black text-white font-black py-8 rounded-2xl hover:bg-blue-600 transition-all uppercase tracking-[0.2em] shadow-2xl disabled:bg-gray-400"
+                  className={`flex-1 text-white font-black py-8 rounded-2xl transition-all uppercase tracking-[0.2em] shadow-2xl disabled:bg-gray-400 ${
+                    editingLivePost
+                      ? "bg-green-700 hover:bg-green-800"
+                      : "bg-black hover:bg-blue-600"
+                  }`}
                 >
-                  {isSubmitting ? "Procesando..." : "Finalizar Publicación"}
+                  {isSubmitting
+                    ? "Procesando..."
+                    : editingLivePost
+                      ? "Guardar cambios"
+                      : "Finalizar Publicación"}
                 </button>
               </div>
             </form>
