@@ -128,21 +128,33 @@ export async function savePost(data) {
     ];
 
     if (id) {
-      const existing = await prisma.postTranslation.findMany({
-        where: { postId: Number(id) },
+      const existingPost = await prisma.post.findUnique({
+        where: { id: Number(id) },
         select: {
-          lang: true,
-          linkedinPost: true,
-          linkedinHashtags: true,
-          metaDescription: true,
+          published: true,
+          translations: {
+            select: {
+              lang: true,
+              slug: true,
+              linkedinPost: true,
+              linkedinHashtags: true,
+              metaDescription: true,
+            },
+          },
         },
       });
       for (const t of translationsData) {
-        const prev = existing.find((e) => e.lang === t.lang);
+        const prev = existingPost?.translations.find((e) => e.lang === t.lang);
         if (prev) {
           t.linkedinPost = prev.linkedinPost;
           t.linkedinHashtags = prev.linkedinHashtags ?? [];
           t.metaDescription = prev.metaDescription;
+          // Congelamos el slug de un post ya publicado: cambiar su URL
+          // rompería enlaces existentes (web, LinkedIn, Google). Los
+          // borradores sí regeneran el slug desde el título.
+          if (existingPost.published && prev.slug) {
+            t.slug = prev.slug;
+          }
         }
       }
     }

@@ -84,14 +84,26 @@ export async function POST(request) {
       fallbackQuery: fallbackQueryForCategory(post.category),
     });
 
-    const slugEs = await ensureUniqueSlug(
-      draft.slug_es || slugifyFallback(draft.title_es),
-      postId,
-    );
-    const slugEn = await ensureUniqueSlug(
-      draft.slug_en || slugifyFallback(draft.title_en),
-      postId,
-    );
+    // Si el post ya está publicado, conservamos su slug para no romper la URL
+    // (enlaces compartidos, indexación en Google, LinkedIn). Solo los
+    // borradores generan un slug nuevo a partir del título regenerado.
+    const existingEs = post.translations.find((t) => t.lang === "es");
+    const existingEn = post.translations.find((t) => t.lang === "en");
+
+    const slugEs =
+      post.published && existingEs?.slug
+        ? existingEs.slug
+        : await ensureUniqueSlug(
+            draft.slug_es || slugifyFallback(draft.title_es),
+            postId,
+          );
+    const slugEn =
+      post.published && existingEn?.slug
+        ? existingEn.slug
+        : await ensureUniqueSlug(
+            draft.slug_en || slugifyFallback(draft.title_en),
+            postId,
+          );
 
     const updated = await prisma.post.update({
       where: { id: postId },
