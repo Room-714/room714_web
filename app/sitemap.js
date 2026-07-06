@@ -30,15 +30,7 @@ export default async function sitemap() {
     priority: 0.85,
   }));
 
-  // 2. Ruta raíz (/) que suele redirigir al idioma por defecto
-  const root = {
-    url: baseUrl,
-    lastModified: new Date().toISOString(),
-    changeFrequency: "monthly",
-    priority: 1,
-  };
-
-  // 3. Blog posts
+  // 2. Blog posts
   let blogRoutes = [];
   try {
     const esPosts = await getAllPosts("es");
@@ -75,5 +67,5 @@ export default async function sitemap() {
     console.error("Sitemap: error fetching blog posts", error);
   }
 
-  return [root, ...routes, ...categoryRoutes, ...blogRoutes];
+  return [...routes, ...categoryRoutes, ...blogRoutes];
 }
