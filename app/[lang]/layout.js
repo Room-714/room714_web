@@ -265,21 +265,21 @@ export default async function RootLayout({ children, params }) {
             {/* LINKS PRIVACY, COOKIES AND TERMS */}
             <div className="flex justify-center items-center gap-x-3 md:gap-x-6 text-white text-sm sm:text-base md:text-xl lg:text-2xl font-light">
               <Link
-                href="/privacy"
+                href={`/${lang}/privacy`}
                 className="hover:text-red-500 transition-colors duration-300"
               >
                 {dict.footer.privacy}
               </Link>
               <span className="w-px h-5 bg-white" aria-hidden="true" />
               <Link
-                href="/terms"
+                href={`/${lang}/terms`}
                 className="hover:text-red-500 transition-colors duration-300"
               >
                 {dict.footer.terms}
               </Link>
               <span className="w-px h-5 bg-white" aria-hidden="true" />
               <Link
-                href="/cookies"
+                href={`/${lang}/cookies`}
                 className="hover:text-red-500 transition-colors duration-300"
               >
                 {dict.footer.cookies}
