@@ -33,6 +33,7 @@ async function fireWebhook({ variant, post, translationEs }) {
     linkedin_hashtags_string: hashtagsString,
     link_for_first_comment: postUrl,
     // Metadatos de la variante (útil para debugging del scenario)
+    variant_id: variant.id,
     variant_number: variant.variant,
     variant_angle: variant.angle,
   };
