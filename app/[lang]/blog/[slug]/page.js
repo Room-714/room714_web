@@ -56,9 +56,11 @@ export async function generateMetadata({ params }) {
       images: [imageUrl],
     },
     alternates: {
+      canonical: pageUrl,
       languages: {
-        "es-ES": `https://room714.com/es/blog/${post.alternateSlugs.es}`,
-        "en-US": `https://room714.com/en/blog/${post.alternateSlugs.en}`,
+        "es-ES": `https://www.room714.com/es/blog/${post.alternateSlugs.es}`,
+        "en-US": `https://www.room714.com/en/blog/${post.alternateSlugs.en}`,
+        "x-default": `https://www.room714.com/en/blog/${post.alternateSlugs.en}`,
       },
     },
   };
