@@ -7,56 +7,74 @@ function escapeHtml(s) {
     .replace(/>/g, "&gt;");
 }
 
-// Construye el email con el contenido de una variante de LinkedIn para
-// publicación MANUAL. Devuelve { subject, html }. Es una función pura para
-// poder previsualizarla sin enviar nada.
-export function buildLinkedInManualEmail({ variant, translationEs, postUrl }) {
-  const hashtags = (variant.hashtags || [])
-    .map((h) => (h.startsWith("#") ? h : `#${h}`))
-    .join(" ");
-
-  const fullText = `${variant.text || ""}${hashtags ? `\n\n${hashtags}` : ""}`;
-
-  let suggested = "";
+function fmtDate(d) {
   try {
-    suggested = new Date(variant.scheduledFor).toLocaleString("es-ES", {
+    return new Date(d).toLocaleString("es-ES", {
       timeZone: "Europe/Madrid",
       dateStyle: "full",
       timeStyle: "short",
     });
   } catch {
-    suggested = String(variant.scheduledFor);
+    return String(d);
   }
+}
 
-  const subject = `📢 LinkedIn manual: ${translationEs.title} (v${variant.variant} · ${variant.angle})`;
+// Bloque HTML de UNA variante de LinkedIn (sin envoltura de email): texto
+// listo para copiar + hashtags, enlace, imagen incrustada y descarga.
+export function renderVariantBlock({ variant, postUrl }) {
+  const hashtags = (variant.hashtags || [])
+    .map((h) => (h.startsWith("#") ? h : `#${h}`))
+    .join(" ");
+  const fullText = `${variant.text || ""}${hashtags ? `\n\n${hashtags}` : ""}`;
 
-  const html = `
-<div style="font-family: sans-serif; color:#222; max-width:640px;">
-  <h2 style="border-bottom:1px solid #eee; padding-bottom:10px;">Publicación de LinkedIn para hoy</h2>
+  return `
+  <div style="border:1px solid #eee; border-radius:10px; padding:16px; margin:16px 0;">
+    <p style="margin:0 0 8px; font-size:13px; color:#888;">Variante ${variant.variant} · ${variant.angle} · publicar aprox. <strong>${fmtDate(variant.scheduledFor)}</strong></p>
+    <pre style="white-space:pre-wrap; word-break:break-word; background:#f6f6f6; padding:14px; border-radius:8px; font-family:inherit; font-size:15px; margin:0 0 10px;">${escapeHtml(fullText)}</pre>
+    <p style="margin:0 0 10px;"><a href="${postUrl}">${postUrl}</a> <span style="color:#888;">(para el post o el primer comentario)</span></p>
+    <img src="${variant.imageBlobUrl}" alt="Imagen variante ${variant.variant}" style="max-width:100%; height:auto; border-radius:8px;" />
+    <p style="margin:8px 0 0;"><a href="${variant.imageBlobUrl}">Descargar imagen</a></p>
+  </div>`;
+}
+
+// Sección con las N variantes (para incrustar en el email de generación).
+// Devuelve "" si no hay variantes.
+export function buildLinkedInVariantsSection({ variants, postUrl }) {
+  if (!variants?.length) return "";
+  const blocks = variants
+    .slice()
+    .sort((a, b) => a.variant - b.variant)
+    .map((v) => renderVariantBlock({ variant: v, postUrl }))
+    .join("");
+  return `
+  <h2 style="border-bottom:1px solid #eee; padding-bottom:10px; margin-top:28px;">LinkedIn — publica estas ${variants.length} a mano esta semana</h2>
   <p style="color:#666; font-size:14px;">
     Publicación <strong>manual</strong> (la automática vía Make está pausada mientras
-    LinkedIn aprueba la app). Publícala en la <strong>página de empresa</strong> y en
-    tu <strong>perfil personal</strong>.<br>
-    Hora sugerida: <strong>${suggested}</strong>.
+    LinkedIn aprueba la app). Publica cada una en la <strong>página de empresa</strong> y
+    en tu <strong>perfil personal</strong>, en la fecha sugerida.
   </p>
-  <p><strong>Post:</strong> ${escapeHtml(translationEs.title)} · variante ${variant.variant} (${variant.angle})</p>
+  ${blocks}`;
+}
 
-  <h3 style="margin-top:24px;">Texto (cópialo tal cual)</h3>
-  <pre style="white-space:pre-wrap; word-break:break-word; background:#f6f6f6; padding:16px; border-radius:8px; font-family:inherit; font-size:15px; margin:0;">${escapeHtml(fullText)}</pre>
-
-  <p style="margin-top:12px;"><strong>Enlace</strong> (para el post o el primer comentario):<br>
-    <a href="${postUrl}">${postUrl}</a></p>
-
-  <h3 style="margin-top:24px;">Imagen</h3>
-  <p><img src="${variant.imageBlobUrl}" alt="Imagen del post" style="max-width:100%; height:auto; border-radius:8px;" /></p>
-  <p><a href="${variant.imageBlobUrl}">Descargar imagen</a></p>
+// Email individual de una variante (usado por el cron diario como red de
+// seguridad / recuperación de variantes sueltas).
+export function buildLinkedInManualEmail({ variant, translationEs, postUrl }) {
+  const subject = `📢 LinkedIn manual: ${translationEs.title} (v${variant.variant} · ${variant.angle})`;
+  const html = `
+<div style="font-family: sans-serif; color:#222; max-width:640px;">
+  <h2 style="border-bottom:1px solid #eee; padding-bottom:10px;">Publicación de LinkedIn</h2>
+  <p style="color:#666; font-size:14px;">
+    Publicación <strong>manual</strong>. Publícala en la <strong>página de empresa</strong> y
+    en tu <strong>perfil personal</strong>.
+  </p>
+  <p><strong>Post:</strong> ${escapeHtml(translationEs.title)}</p>
+  ${renderVariantBlock({ variant, postUrl })}
 </div>`;
-
   return { subject, html };
 }
 
-// Envía (o previsualiza) el email de publicación manual. Con preview=true
-// devuelve el contenido sin enviar ni depender de RESEND_API_KEY.
+// Envía (o previsualiza) el email de una variante. Con preview=true devuelve
+// el contenido sin enviar ni depender de RESEND_API_KEY.
 export async function sendLinkedInManualEmail({
   variant,
   translationEs,

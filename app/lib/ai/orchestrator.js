@@ -160,13 +160,28 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
     backlinks = { error: err.message };
   }
 
+  const postUrl = `https://www.room714.com/es/blog/${translationEs.slug}`;
+
   let emailResult = { skipped: true };
   if (sendEmail) {
     emailResult = await sendDraftReadyEmail({
       post,
       translationEs,
       category,
+      linkedinVariants: post.linkedinVariants,
+      postUrl,
     });
+
+    // MODO MANUAL (Make en pausa): las 3 variantes de LinkedIn se entregan en
+    // este mismo email para publicarlas a mano, así que las marcamos como
+    // enviadas para que /api/cron/publish-linkedin no las reenvíe.
+    // AL REACTIVAR MAKE: eliminar este marcado para que el cron las publique.
+    if (emailResult?.success) {
+      await prisma.linkedInVariant.updateMany({
+        where: { postId: post.id },
+        data: { sent: true, sentAt: new Date() },
+      });
+    }
   }
 
   return {

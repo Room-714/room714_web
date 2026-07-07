@@ -1,6 +1,13 @@
 import { Resend } from "resend";
+import { buildLinkedInVariantsSection } from "@/app/lib/notifications/linkedinManual";
 
-export async function sendDraftReadyEmail({ post, translationEs, category }) {
+export async function sendDraftReadyEmail({
+  post,
+  translationEs,
+  category,
+  linkedinVariants = [],
+  postUrl,
+}) {
   const apiKey = process.env.RESEND_API_KEY;
   const to = process.env.DRAFT_REVIEW_EMAIL || "joseantonio.cesfranjo@room714.com";
 
@@ -12,6 +19,13 @@ export async function sendDraftReadyEmail({ post, translationEs, category }) {
   const resend = new Resend(apiKey);
   const baseUrl = process.env.NEXTAUTH_URL || "https://www.room714.com";
   const adminUrl = `${baseUrl}/admin?postId=${post.id}`;
+  const resolvedPostUrl =
+    postUrl || `${baseUrl}/es/blog/${translationEs.slug}`;
+
+  const linkedinSection = buildLinkedInVariantsSection({
+    variants: linkedinVariants,
+    postUrl: resolvedPostUrl,
+  });
 
   try {
     const { error } = await resend.emails.send({
@@ -19,9 +33,9 @@ export async function sendDraftReadyEmail({ post, translationEs, category }) {
       to: [to],
       subject: `Post de hoy listo: ${translationEs.title}`,
       html: `
-<div style="font-family: sans-serif; color: #333; max-width: 600px;">
+<div style="font-family: sans-serif; color: #333; max-width: 640px;">
   <h2 style="border-bottom: 1px solid #eee; padding-bottom: 10px;">Post generado y programado</h2>
-  <p>Se ha generado el post de hoy. <strong>Se publicará automáticamente a las 10:00</strong> en la web y en LinkedIn, salvo que lo despubliques o lo borres antes.</p>
+  <p>Se ha generado el post de hoy. <strong>Se publicará automáticamente a las 10:00 en la web</strong>, salvo que lo despubliques o lo borres antes. <strong>En LinkedIn se publica a mano</strong> (ver más abajo) mientras la app está en revisión.</p>
   <p><strong>Categoría:</strong> ${category}</p>
   <p><strong>Título:</strong> ${translationEs.title}</p>
   <p><strong>Tags:</strong> ${translationEs.tags.join(", ")}</p>
@@ -35,6 +49,7 @@ export async function sendDraftReadyEmail({ post, translationEs, category }) {
     Si quieres editarlo: entra en el admin, modifica lo que necesites y guarda (sigue marcado como publicado).<br>
     Si quieres rechazarlo: despublícalo o bórralo desde el admin antes de las 10:00.
   </p>
+  ${linkedinSection}
 </div>
       `,
     });
