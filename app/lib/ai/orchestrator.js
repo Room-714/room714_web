@@ -172,16 +172,9 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
       postUrl,
     });
 
-    // MODO MANUAL (Make en pausa): las 3 variantes de LinkedIn se entregan en
-    // este mismo email para publicarlas a mano, así que las marcamos como
-    // enviadas para que /api/cron/publish-linkedin no las reenvíe.
-    // AL REACTIVAR MAKE: eliminar este marcado para que el cron las publique.
-    if (emailResult?.success) {
-      await prisma.linkedInVariant.updateMany({
-        where: { postId: post.id },
-        data: { sent: true, sentAt: new Date() },
-      });
-    }
+    // Make reactivado (jul 2026): las variantes se quedan en sent=false para
+    // que /api/cron/publish-linkedin las publique automáticamente a su hora.
+    // El email es solo informativo (muestra qué se publicará y cuándo).
   }
 
   return {

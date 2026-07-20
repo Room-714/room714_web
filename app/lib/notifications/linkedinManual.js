@@ -47,11 +47,11 @@ export function buildLinkedInVariantsSection({ variants, postUrl }) {
     .map((v) => renderVariantBlock({ variant: v, postUrl }))
     .join("");
   return `
-  <h2 style="border-bottom:1px solid #eee; padding-bottom:10px; margin-top:28px;">LinkedIn — publica estas ${variants.length} a mano esta semana</h2>
+  <h2 style="border-bottom:1px solid #eee; padding-bottom:10px; margin-top:28px;">LinkedIn — se publican automáticamente (${variants.length} esta semana)</h2>
   <p style="color:#666; font-size:14px;">
-    Publicación <strong>manual</strong> (la automática vía Make está pausada mientras
-    LinkedIn aprueba la app). Publica cada una en la <strong>página de empresa</strong> y
-    en tu <strong>perfil personal</strong>, en la fecha sugerida.
+    Publicación <strong>automática vía Make</strong> en la <strong>página de empresa</strong>,
+    en las fechas indicadas. <strong>No las publiques a mano</strong> para no duplicar.
+    Si alguna no te convence, edítala o rechaza el post en el admin antes de su fecha.
   </p>
   ${blocks}`;
 }

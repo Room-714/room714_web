@@ -35,7 +35,7 @@ export async function sendDraftReadyEmail({
       html: `
 <div style="font-family: sans-serif; color: #333; max-width: 640px;">
   <h2 style="border-bottom: 1px solid #eee; padding-bottom: 10px;">Post generado y programado</h2>
-  <p>Se ha generado el post de hoy. <strong>Se publicará automáticamente a las 10:00 en la web</strong>, salvo que lo despubliques o lo borres antes. <strong>En LinkedIn se publica a mano</strong> (ver más abajo) mientras la app está en revisión.</p>
+  <p>Se ha generado el post de hoy. <strong>Se publicará automáticamente a las 10:00 en la web</strong>, salvo que lo despubliques o lo borres antes. <strong>En LinkedIn se publica automáticamente vía Make</strong> (ver fechas más abajo); no hace falta que publiques a mano.</p>
   <p><strong>Categoría:</strong> ${category}</p>
   <p><strong>Título:</strong> ${translationEs.title}</p>
   <p><strong>Tags:</strong> ${translationEs.tags.join(", ")}</p>
