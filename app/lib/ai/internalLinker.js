@@ -99,7 +99,8 @@ export async function computeOutboundLinksForPost({
 
 ## Contenido de ESTE post (origen del enlace)
 - Categoría: ${category}
-- Contenido (ES): ${htmlSnippet(contentEs, 1200)}
+- Contenido (ES): ${htmlSnippet(contentEs, 1100)}
+- Contenido (EN): ${htmlSnippet(contentEn, 1100)}
 
 ## Posts destino candidatos (misma categoría)
 ${forPrompt
@@ -114,7 +115,7 @@ ${forPrompt
 
 ## Reglas
 1. Elige 2-3 destinos donde el enlace SE LEA NATURAL. Si ninguno encaja honestamente, elige menos (incluso 0). Mejor pocos buenos que muchos forzados.
-2. La anchor_phrase_es debe aparecer LITERALMENTE en el contenido de ESTE post (arriba), sin inventar ni cambiar acentos/mayúsculas. La anchor_phrase_en es su equivalente en la versión inglesa del mismo post.
+2. La anchor_phrase_es debe aparecer LITERALMENTE en el Contenido (ES) de arriba, y la anchor_phrase_en LITERALMENTE en el Contenido (EN) de arriba. Sin inventar ni cambiar acentos/mayúsculas/puntuación en ninguno.
 3. No enlaces dos veces a la misma frase ni al mismo destino. Frases cortas y autosuficientes.
 
 Llama a select_outbound_links con tus selecciones.`;
@@ -159,21 +160,26 @@ Llama a select_outbound_links con tus selecciones.`;
       href: `/en/blog/${cand.slug_en}`,
     });
 
-    if (!esRes.replaced || !enRes.replaced) {
+    // Insertamos ES y EN de forma independiente: si solo aparece el ancla en
+    // un idioma, enlazamos ese (cada idioma es contenido independiente).
+    if (!esRes.replaced && !enRes.replaced) {
       skipped.push({
         slug_es: cand.slug_es,
-        why: `anchor no encontrado (es=${esRes.replaced} en=${enRes.replaced})`,
+        why: "anchor no encontrado en ES ni EN",
       });
       continue;
     }
 
-    es = esRes.html;
-    en = enRes.html;
+    if (esRes.replaced) es = esRes.html;
+    if (enRes.replaced) en = enRes.html;
     usedTargets.add(cand.slug_es);
     added.push({
       slug_es: cand.slug_es,
       anchor_es: sel.anchor_phrase_es,
       anchor_en: sel.anchor_phrase_en,
+      langs: [esRes.replaced ? "es" : null, enRes.replaced ? "en" : null].filter(
+        Boolean,
+      ),
       reason: sel.reason,
     });
   }
