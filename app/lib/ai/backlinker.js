@@ -49,17 +49,17 @@ const SELECTION_TOOL = {
   },
 };
 
-function htmlSnippet(html, max = 400) {
+export function htmlSnippet(html, max = 400) {
   if (!html) return "";
   const stripped = html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
   return stripped.length > max ? stripped.slice(0, max) + "…" : stripped;
 }
 
-function escapeRegExp(s) {
+export function escapeRegExp(s) {
   return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-function insertLinkAroundPhrase({ html, phrase, href }) {
+export function insertLinkAroundPhrase({ html, phrase, href }) {
   if (!html || !phrase) return { html, replaced: false };
   // Sólo reemplaza la primera ocurrencia. Caso-sensitive para evitar tocar
   // texto ya marcado o lugares inesperados.

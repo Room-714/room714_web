@@ -10,6 +10,7 @@ import {
 } from "@/app/lib/sources/unsplash";
 import { generatePostDraft } from "./generator";
 import { backlinkOldPosts } from "./backlinker";
+import { computeOutboundLinksForPost } from "./internalLinker";
 import { sendDraftReadyEmail } from "@/app/lib/notifications/draftReady";
 import { nextMadridSlot } from "@/app/lib/time/madrid";
 import { variantScheduleFor } from "@/app/lib/time/linkedinSchedule";
@@ -160,6 +161,37 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
     backlinks = { error: err.message };
   }
 
+  // Enlaces salientes: el post nuevo enlaza a 2-3 posts relacionados de su
+  // categoría para no salir huérfano. Best-effort — un fallo no rompe nada.
+  let outboundLinks = { skipped: true };
+  try {
+    const out = await computeOutboundLinksForPost({
+      postId: post.id,
+      category,
+      contentEs: translationEs.content,
+      contentEn: translationEn?.content || "",
+    });
+    if (out.added.length > 0) {
+      await prisma.post.update({
+        where: { id: post.id },
+        data: {
+          translations: {
+            update: [
+              { where: { id: translationEs.id }, data: { content: out.contentEs } },
+              ...(translationEn
+                ? [{ where: { id: translationEn.id }, data: { content: out.contentEn } }]
+                : []),
+            ],
+          },
+        },
+      });
+    }
+    outboundLinks = { added: out.added.length, skippedCount: out.skipped.length };
+  } catch (err) {
+    console.error("Outbound links falló:", err.message);
+    outboundLinks = { error: err.message };
+  }
+
   const postUrl = `https://www.room714.com/es/blog/${translationEs.slug}`;
 
   let emailResult = { skipped: true };
@@ -192,6 +224,7 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
     usage: draft.usage,
     email: emailResult,
     backlinks,
+    outboundLinks,
     linkedinVariants: post.linkedinVariants.map((v) => ({
       variant: v.variant,
       angle: v.angle,
