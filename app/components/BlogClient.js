@@ -28,8 +28,6 @@ export default function BlogClient({ posts, dict, lang }) {
     return post.category === activeFilterId;
   });
 
-  const visiblePosts = filteredPosts.slice(0, visibleCount);
-
   return (
     <div className="w-full bg-gray-300 p-5 pb-20 rounded-t-[50px] -mt-10 relative z-10">
       <nav className="relative w-full mx-auto px-4 md:px-8 mt-10">
@@ -51,9 +49,17 @@ export default function BlogClient({ posts, dict, lang }) {
       </nav>
 
       <section className="w-full px-4 md:px-8 mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16 mt-10">
-        {visiblePosts.length > 0 ? (
-          visiblePosts.map((post) => (
-            <BlogCard key={post.id} post={post} lang={lang} />
+        {filteredPosts.length > 0 ? (
+          // Renderizamos TODAS las tarjetas para que sus enlaces estén en el
+          // HTML y Google los rastree; ocultamos con CSS las que superan
+          // visibleCount. "Cargar más" solo revela más, no crea enlaces nuevos.
+          filteredPosts.map((post, i) => (
+            <div
+              key={post.id}
+              className={i < visibleCount ? "contents" : "hidden"}
+            >
+              <BlogCard post={post} lang={lang} />
+            </div>
           ))
         ) : (
           <div className="col-span-full font-title text-center py-20 text-gray-600 text-2xl">
