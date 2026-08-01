@@ -29,29 +29,54 @@ export function variantScheduleFor(postPublishDate) {
 }
 
 // ─── Reparto perfil personal / página de empresa ───────────────────────────
-// Único sitio donde se decide qué cuenta publica cada variante. El Router de
-// Make solo filtra por el campo `canal` del payload, así que cambiar el
-// reparto es cambiar esta tabla (Make no se toca).
+// Único sitio donde se decide qué cuenta publica cada variante y qué le toca
+// hacer al otro canal. El Router de Make solo filtra por el campo `canal` del
+// payload y el briefing diario lee `cross`, así que cambiar el reparto es
+// cambiar esta tabla.
 //
 // Con dos posts por semana (Lunes y Miércoles), los 6 slots quedan 3 y 3:
-//   Post del LUNES      → v1 Lun 10:00 personal · v2 Mar 10:00 empresa · v3 Mié 16:00 empresa
-//   Post del MIÉRCOLES  → v1 Mié 10:00 personal · v2 Jue 10:00 empresa · v3 Vie 16:00 personal
+//   L 10:00  art.1 v1  personal  → Room714 lo recomparte
+//   M 10:00  art.1 v2  empresa   → José comenta desde su perfil
+//   X 10:00  art.2 v1  personal  → —
+//   X 16:00  art.1 v3  empresa   → —
+//   J 10:00  art.2 v2  empresa   → José comenta desde su perfil
+//   V 16:00  art.2 v3  personal  → Room714 lo recomparte
 //
-// Ojo a la asimetría de v3: es intencionada. Es lo que equilibra la semana
-// (personal = Lun, Mié mañana, Vie · empresa = Mar, Mié tarde, Jue) y evita
-// que el miércoles las dos publicaciones salgan por la misma cuenta.
-const CHANNEL_BY_PUBLISH_WEEKDAY = {
-  Mon: ["personal", "empresa", "empresa"],
-  Wed: ["personal", "empresa", "personal"],
+// Ojo a la asimetría de v3: es intencionada. Es lo que equilibra la semana y
+// evita que el miércoles las dos publicaciones salgan por la misma cuenta.
+const SLOTS_BY_PUBLISH_WEEKDAY = {
+  Mon: [
+    { canal: "personal", cross: "reshare_company" },
+    { canal: "empresa", cross: "comment_personal" },
+    { canal: "empresa", cross: null },
+  ],
+  Wed: [
+    { canal: "personal", cross: null },
+    { canal: "empresa", cross: "comment_personal" },
+    { canal: "personal", cross: "reshare_company" },
+  ],
 };
 
 // Si un post cae en un día no previsto (recuperación manual, cambio de
 // calendario), aplicamos el reparto del lunes en vez de fallar: perder el
 // equilibrio de la semana es preferible a no publicar.
-const FALLBACK_CHANNELS = CHANNEL_BY_PUBLISH_WEEKDAY.Mon;
+const FALLBACK_SLOTS = SLOTS_BY_PUBLISH_WEEKDAY.Mon;
+
+function slotsFor(postPublishDate) {
+  const weekday = getMadridWeekday(postPublishDate);
+  return SLOTS_BY_PUBLISH_WEEKDAY[weekday] || FALLBACK_SLOTS;
+}
+
+export function slotFor({ postPublishDate, variant }) {
+  return slotsFor(postPublishDate)[variant - 1] || FALLBACK_SLOTS[0];
+}
 
 export function channelForVariant({ postPublishDate, variant }) {
-  const weekday = getMadridWeekday(postPublishDate);
-  const channels = CHANNEL_BY_PUBLISH_WEEKDAY[weekday] || FALLBACK_CHANNELS;
-  return channels[variant - 1] || FALLBACK_CHANNELS[0];
+  return slotFor({ postPublishDate, variant }).canal;
+}
+
+// Las tres acciones cruzadas en el orden de las variantes. Lo consume el
+// orquestador para decirle al generador qué sugerencia escribir en cada una.
+export function crossActionsFor(postPublishDate) {
+  return slotsFor(postPublishDate).map((slot) => slot.cross);
 }

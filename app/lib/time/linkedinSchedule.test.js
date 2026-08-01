@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { channelForVariant, variantScheduleFor } from "./linkedinSchedule";
+import {
+  channelForVariant,
+  crossActionsFor,
+  slotFor,
+  variantScheduleFor,
+} from "./linkedinSchedule";
 
 // Lunes 27 de julio de 2026, 10:00 Madrid (CEST = UTC+2).
 const LUNES = new Date("2026-07-27T08:00:00Z");
@@ -59,5 +64,43 @@ describe("channelForVariant", () => {
     expect(
       channelForVariant({ postPublishDate: lunesInvierno, variant: 2 }),
     ).toBe("empresa");
+  });
+});
+
+describe("crossActionsFor", () => {
+  it("da recompartición, comentario y nada al post del lunes", () => {
+    expect(crossActionsFor(LUNES)).toEqual([
+      "reshare_company",
+      "comment_personal",
+      null,
+    ]);
+  });
+
+  it("da nada, comentario y recompartición al post del miércoles", () => {
+    expect(crossActionsFor(MIERCOLES)).toEqual([
+      null,
+      "comment_personal",
+      "reshare_company",
+    ]);
+  });
+});
+
+describe("slotFor", () => {
+  it("devuelve canal y acción cruzada juntos", () => {
+    expect(slotFor({ postPublishDate: LUNES, variant: 1 })).toEqual({
+      canal: "personal",
+      cross: "reshare_company",
+    });
+    expect(slotFor({ postPublishDate: MIERCOLES, variant: 3 })).toEqual({
+      canal: "personal",
+      cross: "reshare_company",
+    });
+  });
+
+  it("cae en el primer slot del lunes si la variante está fuera de rango", () => {
+    expect(slotFor({ postPublishDate: LUNES, variant: 9 })).toEqual({
+      canal: "personal",
+      cross: "reshare_company",
+    });
   });
 });
