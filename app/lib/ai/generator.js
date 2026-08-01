@@ -89,6 +89,11 @@ const POST_TOOL = {
               description:
                 "Frase corta en inglés (3-6 palabras) para buscar UNA imagen en Unsplash que ilustre ESTA variante en particular. Las 3 image_query del post deben ser distintas entre sí: cada variante tira de una metáfora visual diferente para que las 3 publicaciones de LinkedIn no parezcan copia. Pensadas para devolver fotografías abstractas/profesionales, NO ilustraciones obvias del tema.",
             },
+            cross_note: {
+              type: "string",
+              description:
+                "Texto sugerido para la ACCIÓN CRUZADA de esta variante, si la tiene (te la indico en el prompt). Máximo 2 frases. Si la variante no tiene acción cruzada, cadena vacía.",
+            },
           },
           required: ["angle", "text", "hashtags", "image_query"],
         },
@@ -143,7 +148,33 @@ function formatTrendingItem(it, i) {
   return `${i + 1}. "${it.title}"${source}${desc}`;
 }
 
-function buildUserPrompt({ category, trending, recentPosts }) {
+const CROSS_ACTION_BRIEF = {
+  comment_personal:
+    "COMENTARIO DE JOSÉ. Esta variante la publica la página de Room714, y José comenta debajo desde su perfil personal. Escribe en cross_note ese comentario: 1-2 frases en primera persona que APORTEN un dato, un matiz o un contraejemplo que no esté en el post. Prohibido el elogio genérico tipo 'gran reflexión'.",
+  reshare_company:
+    "RECOMPARTICIÓN DE ROOM714. Esta variante la publica José desde su perfil, y la página de Room714 la recomparte. Escribe en cross_note la línea con la que la página lo comparte: 1-2 frases en voz corporativa de Room714, que enmarquen por qué el tema importa. NO repitas el hook del post.",
+};
+
+function buildCrossNotesBlock(crossActions) {
+  if (!crossActions || crossActions.every((a) => !a)) return "";
+
+  const lines = crossActions.map((action, i) => {
+    const n = i + 1;
+    return action
+      ? `- Variante ${n}: ${CROSS_ACTION_BRIEF[action]}`
+      : `- Variante ${n}: sin acción cruzada. Deja cross_note como cadena vacía.`;
+  });
+
+  return `
+
+## ACCIONES CRUZADAS (campo cross_note de cada variante)
+
+Cada variante se publica en una sola cuenta, y algunas llevan una acción en la otra cuenta. Rellena cross_note según lo que le toque a cada una:
+
+${lines.join("\n")}`;
+}
+
+function buildUserPrompt({ category, trending, recentPosts, crossActions }) {
   const trendingText =
     trending.length > 0
       ? trending.slice(0, 18).map(formatTrendingItem).join("\n\n")
@@ -196,7 +227,7 @@ REGLAS CRÍTICAS:
 4. Genera ambas versiones (ES y EN) coherentes pero NO traducción literal: cada una en su idioma nativo.
 5. Embedde 2-3 internal links a posts recientes relacionados (sección INTERNAL LINKING).
 
-Llama al tool create_blog_post con los campos correspondientes.`;
+Llama al tool create_blog_post con los campos correspondientes.${buildCrossNotesBlock(crossActions)}`;
 }
 
 function sanitizeInvalidLinks(html, validSlugs, lang) {
@@ -418,8 +449,18 @@ async function generateViaCreateBlogPostTool({ userPrompt, recentPosts }) {
   );
 }
 
-export async function generatePostDraft({ category, trending, recentPosts }) {
-  const userPrompt = buildUserPrompt({ category, trending, recentPosts });
+export async function generatePostDraft({
+  category,
+  trending,
+  recentPosts,
+  crossActions,
+}) {
+  const userPrompt = buildUserPrompt({
+    category,
+    trending,
+    recentPosts,
+    crossActions,
+  });
   return generateViaCreateBlogPostTool({ userPrompt, recentPosts });
 }
 
