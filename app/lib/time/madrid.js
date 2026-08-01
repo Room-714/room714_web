@@ -31,6 +31,12 @@ export function isMadridWeekday() {
   return !["Sat", "Sun"].includes(weekday);
 }
 
+// Día de la semana en Madrid ("Mon".."Sun"). Usar esto y no getDay()/getUTCDay():
+// una fecha guardada en UTC puede caer en otro día natural según el huso.
+export function getMadridWeekday(date = new Date()) {
+  return getMadridParts(date).weekday;
+}
+
 export function nextMadridSlot(targetHour) {
   const now = new Date();
   const targetStr = String(targetHour).padStart(2, "0");
