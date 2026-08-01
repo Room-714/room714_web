@@ -158,3 +158,76 @@ describe("buildDailyTasks — variantes del día", () => {
     expect(incidents).toEqual([]);
   });
 });
+
+describe("buildDailyTasks — blog, incidencias y orden", () => {
+  it("añade la revisión del artículo que se publica hoy", () => {
+    const { tasks } = buildDailyTasks({
+      blogPost: {
+        id: 77,
+        date: LUNES,
+        translations: [
+          { lang: "es", slug: "articulo-nuevo", title: "Artículo nuevo" },
+        ],
+      },
+      siteUrl: SITE,
+    });
+    expect(kinds(tasks)).toEqual(["blog_review"]);
+    expect(tasks[0].articleUrl).toBe(`${SITE}/es/blog/articulo-nuevo`);
+    expect(tasks[0].adminUrl).toBe(`${SITE}/admin?postId=77`);
+  });
+
+  it("no añade nada de blog si hoy no se publica artículo", () => {
+    const { tasks } = buildDailyTasks({ blogPost: null, siteUrl: SITE });
+    expect(tasks).toEqual([]);
+  });
+
+  it("informa de las variantes de ayer que no llegaron a publicarse", () => {
+    const { tasks, incidents } = buildDailyTasks({
+      yesterdayUnsent: [
+        {
+          id: 5,
+          variant: 2,
+          scheduledFor: new Date("2026-07-28T08:00:00Z"),
+          post: {
+            id: 10,
+            date: LUNES,
+            translations: [{ lang: "es", slug: "mi-post", title: "Mi post" }],
+          },
+        },
+      ],
+      siteUrl: SITE,
+    });
+    expect(tasks).toEqual([]);
+    expect(kinds(incidents)).toEqual(["not_published"]);
+    expect(incidents[0].title).toContain("no llegó a publicarse");
+  });
+
+  it("ordena por hora, y a igual hora lo previo antes que lo posterior", () => {
+    const { tasks } = buildDailyTasks({
+      todayVariants: [
+        // 16:00, canal empresa, sin acción cruzada → no genera tareas.
+        variante({
+          id: 2,
+          variant: 3,
+          postDate: LUNES,
+          scheduledFor: new Date("2026-07-29T14:00:00Z"),
+        }),
+        // 10:00, canal personal → revisar (antes) + primer comentario (después).
+        variante({ id: 1, variant: 1, postDate: MIERCOLES }),
+      ],
+      blogPost: {
+        id: 77,
+        date: MIERCOLES,
+        translations: [
+          { lang: "es", slug: "articulo-nuevo", title: "Artículo nuevo" },
+        ],
+      },
+      siteUrl: SITE,
+    });
+    expect(tasks.map((t) => [t.time, t.when])).toEqual([
+      ["10:00", "before"],
+      ["10:00", "before"],
+      ["10:00", "after"],
+    ]);
+  });
+});
