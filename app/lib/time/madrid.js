@@ -31,6 +31,67 @@ export function isMadridWeekday() {
   return !["Sat", "Sun"].includes(weekday);
 }
 
+// Día de la semana en Madrid ("Mon".."Sun"). Usar esto y no getDay()/getUTCDay():
+// una fecha guardada en UTC puede caer en otro día natural según el huso.
+export function getMadridWeekday(date = new Date()) {
+  return getMadridParts(date).weekday;
+}
+
+// Hora de Madrid en formato "HH:MM".
+export function formatMadridTime(date) {
+  const { hour, minute } = getMadridParts(date);
+  return `${hour}:${minute}`;
+}
+
+// Etiqueta corta para asuntos de correo: "lunes 27".
+export function formatMadridDateLabel(date = new Date()) {
+  const parts = new Intl.DateTimeFormat("es-ES", {
+    timeZone: TIMEZONE,
+    weekday: "long",
+    day: "numeric",
+  }).formatToParts(date);
+
+  const weekday = parts.find((p) => p.type === "weekday").value;
+  const day = parts.find((p) => p.type === "day").value;
+  return `${weekday} ${day}`;
+}
+
+// Desplazamiento de Madrid respecto a UTC, en milisegundos, en ese instante.
+function madridOffsetMs(date) {
+  const name = new Intl.DateTimeFormat("en-US", {
+    timeZone: TIMEZONE,
+    timeZoneName: "longOffset",
+  })
+    .formatToParts(date)
+    .find((p) => p.type === "timeZoneName").value; // "GMT+02:00"
+
+  const match = name.match(/GMT([+-])(\d{2}):(\d{2})/);
+  if (!match) return 0;
+  const sign = match[1] === "-" ? -1 : 1;
+  return sign * (Number(match[2]) * 60 + Number(match[3])) * 60 * 1000;
+}
+
+// Primer y último instante (en UTC) del día natural de Madrid al que pertenece
+// `date`. Se usa para filtrar por fecha en Prisma, que compara instantes.
+//
+// El desplazamiento se toma en `date`, así que un día de cambio de hora podría
+// desviar el rango una hora. No afecta: los cambios ocurren de madrugada en
+// domingo y este cálculo solo lo usa el cron de lunes a viernes.
+export function madridDayRange(date = new Date()) {
+  const ymd = new Intl.DateTimeFormat("en-CA", {
+    timeZone: TIMEZONE,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(date); // "2026-07-27"
+
+  const [year, month, day] = ymd.split("-").map(Number);
+  const offset = madridOffsetMs(date);
+  const start = new Date(Date.UTC(year, month - 1, day, 0, 0, 0, 0) - offset);
+  const end = new Date(start.getTime() + 24 * 60 * 60 * 1000 - 1);
+  return { start, end };
+}
+
 export function nextMadridSlot(targetHour) {
   const now = new Date();
   const targetStr = String(targetHour).padStart(2, "0");

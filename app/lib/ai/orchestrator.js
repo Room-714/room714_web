@@ -13,7 +13,10 @@ import { backlinkOldPosts } from "./backlinker";
 import { computeOutboundLinksForPost } from "./internalLinker";
 import { sendDraftReadyEmail } from "@/app/lib/notifications/draftReady";
 import { nextMadridSlot } from "@/app/lib/time/madrid";
-import { variantScheduleFor } from "@/app/lib/time/linkedinSchedule";
+import {
+  crossActionsFor,
+  variantScheduleFor,
+} from "@/app/lib/time/linkedinSchedule";
 
 const PUBLISH_HOUR_MADRID = 10;
 
@@ -58,7 +61,12 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
     getRecentPosts(10),
   ]);
 
-  const draft = await generatePostDraft({ category, trending, recentPosts });
+  const draft = await generatePostDraft({
+    category,
+    trending,
+    recentPosts,
+    crossActions: crossActionsFor(publishDate),
+  });
 
   const datePrefix = today.toISOString().split("T")[0];
   const cover = await fetchAndStoreCoverImage(draft.image_query, datePrefix, {
@@ -134,6 +142,7 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
           hashtags: v.hashtags || [],
           imageBlobUrl: variantImages[idx],
           imageQuery: v.image_query,
+          crossNote: v.cross_note?.trim() || null,
           scheduledFor: variantSchedules[idx],
         })),
       },

@@ -20,15 +20,15 @@ enum PostSource {
 }
 
 model Post {
-  id             Int               @id @default(autoincrement())
+  id             Int        @id @default(autoincrement())
   image          String
   category       Category
   date           DateTime
-  published      Boolean           @default(false)
-  published_sent Boolean           @default(false)
-  source         PostSource        @default(MANUAL)
-  createdAt      DateTime          @default(now())
-  updatedAt      DateTime          @updatedAt
+  published      Boolean    @default(false)
+  published_sent Boolean    @default(false)
+  source         PostSource @default(MANUAL)
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
 
   translations     PostTranslation[]
   linkedinVariants LinkedInVariant[]
@@ -37,9 +37,9 @@ model Post {
 model PostRedirect {
   id        Int      @id @default(autoincrement())
   fromSlug  String
-  toSlug    String?  // null = sin destino (404/410)
-  lang      String   // "es" | "en"
-  reason    String?  // motivo opcional para debug (fused-into, pruned, etc.)
+  toSlug    String? // null = sin destino (404/410)
+  lang      String // "es" | "en"
+  reason    String? // motivo opcional para debug (fused-into, pruned, etc.)
   createdAt DateTime @default(now())
 
   @@unique([fromSlug, lang])
@@ -47,20 +47,22 @@ model PostRedirect {
 }
 
 model LinkedInVariant {
-  id           Int       @id @default(autoincrement())
-  postId       Int
-  variant      Int       // 1, 2, 3
-  angle        String    // "data" | "polemica" | "conclusion"
-  text         String    @db.Text
-  hashtags     String[]  @default([])
-  imageBlobUrl String
-  imageQuery   String?
-  scheduledFor DateTime
-  sent         Boolean   @default(false)
-  sentAt       DateTime?
-  createdAt    DateTime  @default(now())
+  id              Int       @id @default(autoincrement())
+  postId          Int
+  variant         Int // 1, 2, 3
+  angle           String // "data" | "polemica" | "conclusion"
+  text            String    @db.Text
+  hashtags        String[]  @default([])
+  imageBlobUrl    String
+  imageQuery      String?
+  crossNote       String?   @db.Text // sugerencia de comentario o recompartición
+  linkedinPostUrl String? // URL del post publicado, la devuelve Make
+  scheduledFor    DateTime
+  sent            Boolean   @default(false)
+  sentAt          DateTime?
+  createdAt       DateTime  @default(now())
 
-  post         Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   @@unique([postId, variant])
   @@index([scheduledFor, sent])
@@ -79,7 +81,7 @@ model PostTranslation {
   linkedinHashtags String[] @default([])
   metaDescription  String?
 
-  post    Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   @@unique([postId, lang])
 }
@@ -98,15 +100,15 @@ enum CandidateEducation {
 }
 
 model Candidate {
-  id          Int                 @id @default(autoincrement())
-  createdAt   DateTime            @default(now())
-  position    CandidatePosition
-  country     String
-  education   CandidateEducation
-  cvBlobUrl   String
-  aiSummary   String?             @db.Text
-  emailSent   Boolean             @default(false)
-  expiresAt   DateTime
+  id        Int                @id @default(autoincrement())
+  createdAt DateTime           @default(now())
+  position  CandidatePosition
+  country   String
+  education CandidateEducation
+  cvBlobUrl String
+  aiSummary String?            @db.Text
+  emailSent Boolean            @default(false)
+  expiresAt DateTime
 
   @@index([expiresAt])
 }

@@ -1,5 +1,6 @@
 import { prisma } from "@/app/lib/prisma";
 import { NextResponse } from "next/server";
+import { channelForVariant } from "@/app/lib/time/linkedinSchedule";
 
 export const maxDuration = 60;
 
@@ -45,6 +46,13 @@ function buildWebhookPayload({ variant, post, translationEs }) {
     variant_id: variant.id,
     variant_number: variant.variant,
     variant_angle: variant.angle,
+    // Decide qué ruta del Router de Make se ejecuta: "personal" → Create a
+    // User Image Post · "empresa" → Create a Company Image Post. El reparto
+    // vive en linkedinSchedule.js, no en Make.
+    canal: channelForVariant({
+      postPublishDate: post.date,
+      variant: variant.variant,
+    }),
   };
 }
 
