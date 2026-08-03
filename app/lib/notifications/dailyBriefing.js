@@ -23,9 +23,26 @@ function button(href, label) {
   return `<a href="${esc(href)}" style="background:#000;color:#fff;padding:9px 16px;text-decoration:none;border-radius:6px;font-size:13px;font-weight:bold;display:inline-block;margin:4px 8px 0 0;">${esc(label)}</a>`;
 }
 
-// Caja copiable: texto tal cual, respetando saltos de línea.
-function copyBox(text) {
-  return `<pre style="white-space:pre-wrap;word-wrap:break-word;background:#f6f6f6;border-radius:6px;padding:12px;margin:8px 0;font-family:inherit;font-size:14px;line-height:1.5;color:#222;">${esc(text)}</pre>`;
+// Caja de texto literal. La etiqueta es obligatoria: sin ella, dos cajas con el
+// mismo aspecto (una URL para pegar y un texto sugerido) se confunden.
+function copyBox(label, text) {
+  return `
+    <div style="margin:10px 0;">
+      <div style="font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:#999;margin-bottom:4px;">${esc(label)}</div>
+      <pre style="white-space:pre-wrap;word-wrap:break-word;background:#f6f6f6;border-radius:6px;padding:12px;margin:0;font-family:inherit;font-size:14px;line-height:1.5;color:#222;">${esc(text)}</pre>
+    </div>`;
+}
+
+// Pasos numerados. Cada elemento puede llevar <strong> ya escrito, así que no
+// se escapa aquí: las cadenas son literales del código, no datos externos.
+function steps(items) {
+  return `<ol style="margin:10px 0 0;padding-left:22px;font-size:14px;line-height:1.65;color:#333;">${items
+    .map((s) => `<li style="margin-bottom:4px;">${s}</li>`)
+    .join("")}</ol>`;
+}
+
+function note(text) {
+  return `<p style="margin:0;color:#666;font-size:13px;">${esc(text)}</p>`;
 }
 
 function timing(task) {
@@ -48,8 +65,8 @@ export function renderTaskHtml(task) {
       return block(`
         ${eyebrow(timing(task))}
         ${heading(task.title)}
-        <p style="margin:0;color:#666;font-size:13px;">Artículo: ${esc(task.articleTitle)}</p>
-        ${copyBox(task.text)}
+        ${note(`Se publica automáticamente a las ${task.time} en tu perfil, no tienes que hacer nada. Esto es para que lo leas antes; si algo no te convence, edítalo en LinkedIn una vez publicado.`)}
+        ${copyBox("Texto que se va a publicar", task.text)}
         <p style="margin:0 0 10px;font-size:13px;color:#444;">${esc((task.hashtags || []).join(" "))}</p>
         <p style="margin:0;font-size:13px;color:#8a5a00;background:#fff8e6;padding:10px;border-radius:6px;">${esc(task.voiceHint)}</p>
       `);
@@ -58,20 +75,48 @@ export function renderTaskHtml(task) {
       return block(`
         ${eyebrow(timing(task))}
         ${heading(task.title)}
-        <p style="margin:0;color:#666;font-size:13px;">El cuerpo del post va sin enlace; el enlace vive en el primer comentario.</p>
-        ${copyBox(task.articleUrl)}
+        ${note("El post sale sin enlace en el cuerpo a propósito: LinkedIn recorta el alcance de las publicaciones con enlaces externos. El enlace va en el primer comentario.")}
+        ${steps([
+          `Pulsa <strong>Ir al post</strong>: se abre tu publicación de hoy.`,
+          `Copia el enlace de abajo.`,
+          `Pégalo como <strong>primer comentario</strong> de tu propio post. Cuanto antes, mejor.`,
+        ])}
+        ${copyBox("Enlace del artículo", task.articleUrl)}
         ${button(task.linkUrl, "Ir al post")}
       `);
 
-    case "reshare_company":
     case "comment_personal":
       return block(`
         ${eyebrow(timing(task))}
         ${heading(task.title)}
-        <p style="margin:0;color:#666;font-size:13px;">Artículo: ${esc(task.articleTitle)}</p>
+        ${note(`Artículo: ${task.articleTitle}`)}
+        ${steps([
+          `Pulsa <strong>Ir al post</strong>: se abre la publicación de hoy de Room 714.`,
+          `<strong>Comprueba que comentas desde tu perfil personal</strong>, no como la página: al ser administrador, LinkedIn puede ponerte la identidad de Room 714 por defecto.`,
+          `Pega el texto de abajo, ajústalo a tu voz si quieres, y publícalo.`,
+        ])}
         ${
           task.suggestion
-            ? copyBox(task.suggestion)
+            ? copyBox("Comentario sugerido", task.suggestion)
+            : `<p style="margin:10px 0;font-size:13px;color:#999;font-style:italic;">Sin sugerencia generada para esta variante — escríbelo a mano.</p>`
+        }
+        ${button(task.linkUrl, "Ir al post")}
+      `);
+
+    case "reshare_company":
+      return block(`
+        ${eyebrow(timing(task))}
+        ${heading(task.title)}
+        ${note(`Artículo: ${task.articleTitle}`)}
+        ${steps([
+          `Pulsa <strong>Ir al post</strong>: se abre tu publicación de hoy.`,
+          `Dale a <strong>Compartir</strong> → <strong>Compartir con tus comentarios</strong> (no el compartir simple).`,
+          `<strong>Arriba del cuadro de redacción, cambia la identidad de tu nombre a Room 714.</strong> Es el paso que se olvida: sin él lo recompartes como tú y no sirve de nada.`,
+          `Pega el texto de abajo como comentario de la recompartición y publica.`,
+        ])}
+        ${
+          task.suggestion
+            ? copyBox("Texto sugerido para la recompartición", task.suggestion)
             : `<p style="margin:10px 0;font-size:13px;color:#999;font-style:italic;">Sin sugerencia generada para esta variante — escríbelo a mano.</p>`
         }
         ${button(task.linkUrl, "Ir al post")}
@@ -82,6 +127,7 @@ export function renderTaskHtml(task) {
         ${eyebrow(timing(task))}
         ${heading(task.title)}
         <p style="margin:0 0 4px;font-size:15px;color:#111;"><strong>${esc(task.articleTitle)}</strong></p>
+        ${note(`Se publica solo a las ${task.time}. Échale un ojo por si quieres corregir algo antes.`)}
         ${button(task.articleUrl, "Ver artículo")}${button(task.adminUrl, "Editar en el admin")}
       `);
 

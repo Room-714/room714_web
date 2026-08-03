@@ -61,6 +61,75 @@ describe("renderBriefingHtml", () => {
     expect(html).toContain("https://www.room714.com/api/go/variant/1");
   });
 
+  it("explica el cambio de identidad al recompartir, que es el paso que se olvida", () => {
+    const html = renderBriefingHtml({
+      tasks: [
+        {
+          id: "reshare-1",
+          kind: "reshare_company",
+          when: "after",
+          time: "10:00",
+          channel: "empresa",
+          title: "Recomparte el post desde la página de Room714",
+          articleTitle: "Mi post",
+          suggestion: "Línea corporativa sugerida",
+          articleUrl: "https://www.room714.com/es/blog/mi-post",
+          linkUrl: "https://www.room714.com/api/go/variant/1",
+        },
+      ],
+      incidents: [],
+      dateLabel: "lunes 27",
+    });
+    expect(html).toContain("cambia la identidad de tu nombre a Room 714");
+    expect(html).toContain("Compartir con tus comentarios");
+    expect(html).toContain("Texto sugerido para la recompartición");
+  });
+
+  it("avisa de que hay que comentar desde el perfil, no como la página", () => {
+    const html = renderBriefingHtml({
+      tasks: [
+        {
+          id: "comment-1",
+          kind: "comment_personal",
+          when: "after",
+          time: "10:00",
+          channel: "personal",
+          title: "Comenta desde tu perfil en el post de Room714",
+          articleTitle: "Mi post",
+          suggestion: "Un matiz con un dato",
+          articleUrl: "https://www.room714.com/es/blog/mi-post",
+          linkUrl: "https://www.room714.com/api/go/variant/1",
+        },
+      ],
+      incidents: [],
+      dateLabel: "martes 28",
+    });
+    expect(html).toContain("desde tu perfil personal");
+    expect(html).toContain("Comentario sugerido");
+  });
+
+  it("etiqueta el enlace del primer comentario para no confundirlo con un texto sugerido", () => {
+    const html = renderBriefingHtml({
+      tasks: [
+        {
+          id: "first-comment-1",
+          kind: "first_comment",
+          when: "after",
+          time: "10:00",
+          channel: "personal",
+          title: "Publica el enlace al artículo como primer comentario",
+          articleTitle: "Mi post",
+          articleUrl: "https://www.room714.com/es/blog/mi-post",
+          linkUrl: "https://www.room714.com/api/go/variant/1",
+        },
+      ],
+      incidents: [],
+      dateLabel: "lunes 27",
+    });
+    expect(html).toContain("Enlace del artículo");
+    expect(html).toContain("primer comentario");
+  });
+
   it("lista las incidencias de ayer", () => {
     const html = renderBriefingHtml({
       tasks: [],
