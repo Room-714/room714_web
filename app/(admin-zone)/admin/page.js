@@ -350,6 +350,12 @@ export default function AdminPage() {
             >
               CVs recibidos
             </Link>
+            <Link
+              href="/admin/prospects"
+              className="bg-white border-2 border-black text-black px-2 py-4 rounded-2xl hover:bg-black hover:text-white font-bold transition-colors uppercase text-center"
+            >
+              Prospectos LinkedIn
+            </Link>
             <h3 className="font-black pl-4 mt-4 text-xl">Publicaciones</h3>
           </div>
 
