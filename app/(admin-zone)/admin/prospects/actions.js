@@ -101,6 +101,62 @@ export async function setProspectStatus(id, status) {
   }
 }
 
+// Tras tres saltos seguidos dejamos de intentarlo: quien no publica nada tres
+// veces no sirve para una estrategia que consiste en comentarle.
+const MAX_CONSECUTIVE_SKIPS = 3;
+
+// El prospecto salió en el briefing pero no había nada que comentar. Cuenta
+// como atención —mueve `lastTouchedAt`— sin tocar `lastEngagedAt`, que sigue
+// midiendo comentarios reales. Es lo que desbloquea la cola.
+export async function skipProspect(id, reason) {
+  await requireSession();
+  const prospectId = Number(id);
+  if (!Number.isInteger(prospectId) || prospectId <= 0) {
+    return { success: false, error: "Identificador no válido" };
+  }
+
+  try {
+    const current = await prisma.prospect.findUnique({
+      where: { id: prospectId },
+      select: { skipCount: true, notes: true, name: true },
+    });
+    if (!current) return { success: false, error: "Ese prospecto ya no existe" };
+
+    const skipCount = (current.skipCount || 0) + 1;
+    const paused = skipCount >= MAX_CONSECUTIVE_SKIPS;
+
+    const trimmedReason = (reason || "").trim();
+    const notes = trimmedReason
+      ? [current.notes, `[salto ${skipCount}] ${trimmedReason}`]
+          .filter(Boolean)
+          .join("\n")
+      : current.notes;
+
+    await prisma.prospect.update({
+      where: { id: prospectId },
+      data: {
+        lastTouchedAt: new Date(),
+        skipCount,
+        notes,
+        ...(paused ? { status: "PAUSED" } : {}),
+      },
+    });
+
+    revalidatePath("/admin/prospects");
+    return {
+      success: true,
+      skipCount,
+      paused,
+      message: paused
+        ? `${current.name} pasa a pausado tras ${skipCount} saltos seguidos`
+        : `Saltado. Vuelve al final de la cola (${skipCount}/${MAX_CONSECUTIVE_SKIPS})`,
+    };
+  } catch (err) {
+    console.error("[prospects] saltar falló:", err);
+    return { success: false, error: err.message };
+  }
+}
+
 // Borrado real, no un cambio de estado. Hace falta poder eliminar de verdad:
 // son datos personales de terceros y alguien puede pedir que se le borre.
 // Los ProspectEngagement caen en cascada por el onDelete del esquema.
@@ -171,7 +227,9 @@ export async function registerEngagement({ prospectId, comment, postUrl, postExc
       }),
       prisma.prospect.update({
         where: { id: Number(prospectId) },
-        data: { lastEngagedAt: now },
+        // Los dos relojes: `lastEngagedAt` es la métrica de trabajo hecho y
+        // `lastTouchedAt` mueve la cola. Comentar reinicia los saltos.
+        data: { lastEngagedAt: now, lastTouchedAt: now, skipCount: 0 },
       }),
     ]);
 

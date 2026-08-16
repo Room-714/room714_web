@@ -111,13 +111,21 @@ model Prospect {
   status        ProspectStatus @default(ACTIVE)
   apolloId      String?        @unique // id de Apollo, para no volver a enriquecer al mismo
   source        String         @default("manual") // "manual" | "apollo"
+  // Dos relojes distintos a propósito. `lastEngagedAt` mide trabajo real
+  // hecho (comentarios publicados) y es la métrica que interesa mirar.
+  // `lastTouchedAt` mueve la cola del briefing: se actualiza también cuando se
+  // salta a alguien por no haber publicado nada. Sin esa separación, un
+  // prospecto poco activo se queda para siempre como el más antiguo y bloquea
+  // uno de los dos huecos diarios indefinidamente.
   lastEngagedAt DateTime? // último comentario registrado
+  lastTouchedAt DateTime? // última atención: comentario O salto
+  skipCount     Int            @default(0) // saltos consecutivos por falta de actividad
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 
   engagements ProspectEngagement[]
 
-  @@index([status, lastEngagedAt])
+  @@index([status, lastTouchedAt])
 }
 
 model ProspectEngagement {

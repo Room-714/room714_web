@@ -10,6 +10,7 @@ import {
   runDiscovery,
   saveProspect,
   setProspectStatus,
+  skipProspect,
 } from "./actions";
 
 const STATUS_LABEL = {
@@ -133,6 +134,22 @@ function ProspectsInner() {
       if (!res.success) return flash(`⚠️ ${res.error}`);
     }
     flash("Copiado y registrado. Pégalo en LinkedIn 👌");
+    setDrafting(null);
+    setPostText("");
+    setPostUrl("");
+    setOptions([]);
+    load();
+  };
+
+  // Sin nada que comentar. Lo saca de la cabeza de la cola sin registrar un
+  // comentario que no existe.
+  const handleSkip = async () => {
+    if (!drafting) return;
+    setBusy(true);
+    const res = await skipProspect(drafting.id, "sin actividad reciente");
+    setBusy(false);
+    if (!res.success) return flash(`⚠️ ${res.error}`);
+    flash(res.message);
     setDrafting(null);
     setPostText("");
     setPostUrl("");
@@ -288,13 +305,22 @@ function ProspectsInner() {
             value={postUrl}
             onChange={(e) => setPostUrl(e.target.value)}
           />
-          <button
-            onClick={handleDraft}
-            disabled={busy}
-            className="bg-black text-white font-bold px-6 py-2 rounded-xl disabled:opacity-50"
-          >
-            {busy ? "Redactando..." : "Proponme dos comentarios"}
-          </button>
+          <div className="flex gap-3 items-center flex-wrap">
+            <button
+              onClick={handleDraft}
+              disabled={busy}
+              className="bg-black text-white font-bold px-6 py-2 rounded-xl disabled:opacity-50"
+            >
+              {busy ? "Redactando..." : "Proponme dos comentarios"}
+            </button>
+            <button
+              onClick={handleSkip}
+              disabled={busy}
+              className="border border-gray-400 text-gray-700 font-bold px-6 py-2 rounded-xl disabled:opacity-50"
+            >
+              No ha publicado nada — saltar
+            </button>
+          </div>
 
           {options.length > 0 && (
             <div className="grid md:grid-cols-2 gap-4 mt-4">

@@ -17,6 +17,25 @@ import {
 //   (rotada por día del mes para no repetir búsqueda dos días seguidos).
 // - `latestPost` (el artículo más reciente del blog) da el ángulo: comentar
 //   con la mirada del contenido que estamos publicando esa semana.
+// Orden de la cola, en un solo sitio y probado. Primero quien nunca ha
+// recibido atención (`lastTouchedAt` nulo), luego quien lleva más tiempo sin
+// ella. Desempate por id para que el orden sea estable entre ejecuciones.
+//
+// Ojo con el campo: es `lastTouchedAt`, no `lastEngagedAt`. Saltar a alguien
+// porque no ha publicado nada cuenta como atención, y por eso lo saca de la
+// cabeza de la cola. Con `lastEngagedAt` volvería a salir mañana, y pasado, y
+// al otro.
+export function orderProspectQueue(prospects = []) {
+  return [...prospects].sort((a, b) => {
+    const ta = a.lastTouchedAt ? new Date(a.lastTouchedAt).getTime() : null;
+    const tb = b.lastTouchedAt ? new Date(b.lastTouchedAt).getTime() : null;
+    if (ta === null && tb === null) return a.id - b.id;
+    if (ta === null) return -1;
+    if (tb === null) return 1;
+    return ta - tb || a.id - b.id;
+  });
+}
+
 export function buildProspectingTasks({
   prospects = [],
   latestPost = null,
@@ -30,7 +49,7 @@ export function buildProspectingTasks({
     ? `Ángulo de la semana: "${latestPost.title}". Si su post toca el tema, enlaza tu comentario con esa idea (sin citar el blog: aporta el argumento, no el enlace).`
     : "Aporta un dato o una experiencia propia; nada de elogios genéricos.";
 
-  for (const prospect of prospects.slice(0, maxTasks)) {
+  for (const prospect of orderProspectQueue(prospects).slice(0, maxTasks)) {
     tasks.push({
       id: `prospect-${prospect.id}`,
       kind: "prospect_comment",
