@@ -6,6 +6,7 @@ import {
   madridDayRange,
 } from "@/app/lib/time/madrid";
 import { buildDailyTasks } from "@/app/lib/linkedin/dailyTasks";
+import { buildProspectingTasks } from "@/app/lib/linkedin/prospecting";
 import { sendDailyBriefingEmail } from "@/app/lib/notifications/dailyBriefing";
 
 export const maxDuration = 60;
@@ -46,7 +47,8 @@ export async function GET(request) {
   const yesterdayStart = new Date(start.getTime() - DAY_MS);
 
   try {
-    const [todayVariants, yesterdayUnsent, blogPost] = await Promise.all([
+    const [todayVariants, yesterdayUnsent, blogPost, prospects, latestPost] =
+      await Promise.all([
       prisma.linkedInVariant.findMany({
         where: { scheduledFor: { gte: start, lte: end } },
         include: { post: { include: { translations: true } } },
@@ -61,15 +63,42 @@ export async function GET(request) {
         where: { published: true, date: { gte: start, lte: end } },
         include: { translations: true },
       }),
+      // Prospección: los ACTIVE menos atendidos primero (nulls first =
+      // nunca comentados). La rotación es esta consulta.
+      prisma.prospect.findMany({
+        where: { status: "ACTIVE" },
+        orderBy: [{ lastEngagedAt: { sort: "asc", nulls: "first" } }],
+        take: 5,
+      }),
+      // Artículo más reciente ya publicado: da el ángulo del comentario.
+      prisma.post.findFirst({
+        where: { published: true, date: { lte: now } },
+        orderBy: { date: "desc" },
+        include: { translations: { where: { lang: "es" } } },
+      }),
     ]);
+
+    const siteUrl = process.env.NEXTAUTH_URL || SITE;
 
     const { tasks, incidents } = buildDailyTasks({
       todayVariants,
       yesterdayUnsent,
       blogPost,
-      siteUrl: process.env.NEXTAUTH_URL || SITE,
+      siteUrl,
       firstCommentAutomated: process.env.FIRST_COMMENT_AUTOMATED === "true",
     });
+
+    // Las tareas de prospección van al final: son "después de comer" y no
+    // compiten con la secuencia de publicación de la mañana.
+    const prospectingTasks = buildProspectingTasks({
+      prospects,
+      latestPost: latestPost?.translations?.[0]
+        ? { title: latestPost.translations[0].title }
+        : null,
+      siteUrl,
+      dayOfMonth: now.getDate(),
+    });
+    tasks.push(...prospectingTasks);
 
     const dateLabel = formatMadridDateLabel(now);
 

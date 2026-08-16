@@ -4,7 +4,9 @@ export default function robots() {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/api/", "/_next/", "/private/", "/admin/"],
+        // Sin /_next/: ahí viven los CSS y JS de la app, y bloquearlos impide
+        // que Google renderice las páginas como las ve un usuario.
+        disallow: ["/api/", "/private/", "/admin/"],
       },
       {
         // Regla opcional: Bloquear GPTBot si no quieres que usen tu web para entrenar a ChatGPT

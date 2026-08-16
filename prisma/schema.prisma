@@ -86,6 +86,51 @@ model PostTranslation {
   @@unique([postId, lang])
 }
 
+// ─── Prospección en LinkedIn ────────────────────────────────────────────────
+// Clientes potenciales cuya actividad se comenta manualmente desde el perfil
+// de José. El briefing diario rota sobre los ACTIVE menos atendidos y el admin
+// (/admin/prospects) redacta el comentario con IA. Nada se publica solo:
+// LinkedIn no permite automatizar comentarios en publicaciones de terceros.
+enum ProspectStatus {
+  ACTIVE // en rotación diaria
+  PAUSED // fuera de rotación temporalmente
+  CLIENT // convertido: fuera de rotación
+  DISCARDED // descartado: fuera de rotación
+}
+
+model Prospect {
+  id            Int              @id @default(autoincrement())
+  name          String // persona o empresa
+  company       String?
+  role          String? // cargo, si es persona
+  linkedinUrl   String           @unique // URL del perfil o de la página
+  sector        String?
+  interest      String? // servicio de Room714 que encaja (texto libre)
+  keywords      String[]         @default([]) // temas por los que comentarle
+  notes         String?          @db.Text
+  status        ProspectStatus   @default(ACTIVE)
+  lastEngagedAt DateTime? // último comentario registrado
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  engagements ProspectEngagement[]
+
+  @@index([status, lastEngagedAt])
+}
+
+model ProspectEngagement {
+  id          Int      @id @default(autoincrement())
+  prospectId  Int
+  postUrl     String? // URL del post del prospecto (si se conoce)
+  postExcerpt String?  @db.Text // fragmento del post comentado
+  comment     String   @db.Text // comentario publicado
+  createdAt   DateTime @default(now())
+
+  prospect Prospect @relation(fields: [prospectId], references: [id], onDelete: Cascade)
+
+  @@index([prospectId, createdAt])
+}
+
 enum CandidatePosition {
   DEVELOPER
   DESIGNER

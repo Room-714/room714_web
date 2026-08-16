@@ -174,7 +174,43 @@ Cada variante se publica en una sola cuenta, y algunas llevan una acción en la 
 ${lines.join("\n")}`;
 }
 
-function buildUserPrompt({ category, trending, recentPosts, crossActions }) {
+// Corpus completo agrupado por categoría. Con más de 75 artículos publicados,
+// pasarle al modelo solo los 10 recientes dejaba libre cualquier tema de hace
+// más de cinco semanas, y Google ya marcó varios pares como duplicados.
+function buildPublishedCorpusBlock(publishedCorpus) {
+  if (!publishedCorpus?.length) return "";
+
+  const byCategory = new Map();
+  for (const post of publishedCorpus) {
+    const list = byCategory.get(post.category) || [];
+    const title = post.title_es || post.title_en || "(sin título)";
+    const tags = post.tags?.length ? ` [${post.tags.join(", ")}]` : "";
+    list.push(`- "${title}" (${post.date})${tags}`);
+    byCategory.set(post.category, list);
+  }
+
+  const sections = [...byCategory.entries()]
+    .map(([cat, lines]) => `### ${cat}\n${lines.join("\n")}`)
+    .join("\n\n");
+
+  return `
+
+## Corpus ya publicado — NO repitas ninguno de estos ángulos
+
+Estos son TODOS los artículos que Room714 ya ha publicado. Antes de elegir tu tema, compruébalo contra esta lista. Si tu idea comparte la tesis central con cualquiera de ellos, descártala y elige otra, aunque el enfoque o el título sean distintos. Reescribir un ángulo ya publicado hace que Google trate ambos como duplicados y no indexe ninguno.
+
+${sections}`;
+}
+
+// Exportada solo para poder probarla; el flujo normal entra por
+// generatePostDraft.
+export function buildUserPrompt({
+  category,
+  trending,
+  recentPosts,
+  publishedCorpus,
+  crossActions,
+}) {
   const trendingText =
     trending.length > 0
       ? trending.slice(0, 18).map(formatTrendingItem).join("\n\n")
@@ -227,7 +263,7 @@ REGLAS CRÍTICAS:
 4. Genera ambas versiones (ES y EN) coherentes pero NO traducción literal: cada una en su idioma nativo.
 5. Embedde 2-3 internal links a posts recientes relacionados (sección INTERNAL LINKING).
 
-Llama al tool create_blog_post con los campos correspondientes.${buildCrossNotesBlock(crossActions)}`;
+Llama al tool create_blog_post con los campos correspondientes.${buildPublishedCorpusBlock(publishedCorpus)}${buildCrossNotesBlock(crossActions)}`;
 }
 
 function sanitizeInvalidLinks(html, validSlugs, lang) {
@@ -453,12 +489,14 @@ export async function generatePostDraft({
   category,
   trending,
   recentPosts,
+  publishedCorpus,
   crossActions,
 }) {
   const userPrompt = buildUserPrompt({
     category,
     trending,
     recentPosts,
+    publishedCorpus,
     crossActions,
   });
   return generateViaCreateBlogPostTool({ userPrompt, recentPosts });

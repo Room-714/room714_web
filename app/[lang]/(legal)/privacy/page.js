@@ -2,6 +2,8 @@ import { getDictionary } from "@/app/dictionaries";
 import Navbar from "@/app/components/Navbar";
 import Image from "next/image";
 
+const baseUrl = "https://www.room714.com";
+
 export async function generateMetadata({ params }) {
   const { lang = "en" } = await params;
   return {
@@ -9,6 +11,16 @@ export async function generateMetadata({ params }) {
     description: lang === "es"
       ? "Política de privacidad de Room 714."
       : "Room 714 privacy policy.",
+    // Canónica propia por coherencia: sin ella heredaría la de la portada.
+    // No cambia su exclusión del índice, que sigue en `robots`.
+    alternates: {
+      canonical: `${baseUrl}/${lang}/privacy`,
+      languages: {
+        "en-US": `${baseUrl}/en/privacy`,
+        "es-ES": `${baseUrl}/es/privacy`,
+        "x-default": `${baseUrl}/en/privacy`,
+      },
+    },
     robots: { index: false, follow: true },
   };
 }

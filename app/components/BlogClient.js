@@ -1,6 +1,8 @@
 "use client";
 import { useState } from "react";
+import Link from "next/link";
 import { CATEGORY_IDS, CATEGORY_LABELS } from "@/app/data/BlogCategories";
+import { getSlugFromCategory } from "@/app/lib/categoryRoutes";
 import BlogCard from "@/app/components/BlogCard";
 
 export default function BlogClient({ posts, dict, lang }) {
@@ -16,11 +18,19 @@ export default function BlogClient({ posts, dict, lang }) {
   };
 
   // Construimos las categorías mezclando "ALL" con los IDs del ENUM
-  const allCategories = ["ALL", ...CATEGORY_IDS].map((id) => ({
-    id: id,
-    // Prioridad: 1. Diccionario JSON, 2. Labels estáticos, 3. El ID puro
-    name: dict.categories?.[id] || CATEGORY_LABELS[id]?.[lang] || id,
-  }));
+  const allCategories = ["ALL", ...CATEGORY_IDS].map((id) => {
+    const slug = id === "ALL" ? null : getSlugFromCategory(lang, id);
+    return {
+      id: id,
+      // Prioridad: 1. Diccionario JSON, 2. Labels estáticos, 3. El ID puro
+      name: dict.categories?.[id] || CATEGORY_LABELS[id]?.[lang] || id,
+      // Enlace real a la ruta de categoría. Existe para que Google la rastree:
+      // hasta ahora esas ocho rutas solo vivían en el sitemap y ningún enlace
+      // del sitio apuntaba a ellas. El clic se intercepta más abajo, así que el
+      // usuario sigue viendo el filtrado instantáneo de siempre.
+      href: slug ? `/${lang}/blog/category/${slug}` : `/${lang}/blog`,
+    };
+  });
 
   const filteredPosts = posts.filter((post) => {
     if (activeFilterId === "ALL") return true;
@@ -33,9 +43,16 @@ export default function BlogClient({ posts, dict, lang }) {
       <nav className="relative w-full mx-auto px-4 md:px-8 mt-10">
         <div className="flex items-center justify-start overflow-x-auto no-scrollbar pb-4">
           {allCategories.map((cat) => (
-            <button
+            <Link
               key={cat.id}
-              onClick={() => handleFilterChange(cat.id)}
+              href={cat.href}
+              onClick={(e) => {
+                // Con modificadores (ctrl/cmd/shift, o botón central) dejamos
+                // que el navegador abra la ruta de categoría de verdad.
+                if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+                e.preventDefault();
+                handleFilterChange(cat.id);
+              }}
               className={`px-6 py-2 rounded-full text-sm sm:text-base md:text-lg lg:text-xl font-hand transition-all whitespace-nowrap shrink-0 ${
                 activeFilterId === cat.id
                   ? "text-red-500 font-bold scale-110"
@@ -43,7 +60,7 @@ export default function BlogClient({ posts, dict, lang }) {
               }`}
             >
               {cat.name}
-            </button>
+            </Link>
           ))}
         </div>
       </nav>
