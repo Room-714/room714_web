@@ -64,7 +64,10 @@ export async function searchPeople(params) {
   const data = await apolloPost("/mixed_people/api_search", params);
   return {
     people: data.people || [],
-    totalEntries: data.pagination?.total_entries ?? 0,
+    // api_search no rellena pagination.total_entries (comprobado en
+    // producción: devuelve 25 personas y el total a 0). Se propaga null en vez
+    // de un cero que parecería "no hay nadie más".
+    totalEntries: data.pagination?.total_entries || null,
   };
 }
 
