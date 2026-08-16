@@ -63,3 +63,68 @@ export function activityFeedUrl(linkedinUrl) {
 
 // Cuántas tareas de prospección entran en el briefing de cada día laborable.
 export const PROSPECT_TASKS_PER_DAY = 2;
+
+// ─── Traducción del ICP a una consulta de Apollo ────────────────────────────
+// El perfil de arriba está escrito para humanos y para el prompt del redactor.
+// Esto lo convierte en filtros de la People Search API. Se mantienen separados
+// a propósito: el ICP es la estrategia, esto es su implementación.
+
+// Lo primero que se va a querer cambiar. Apollo acepta país, región o ciudad.
+export const APOLLO_PERSON_LOCATIONS = ["Spain"];
+
+// Ni startup sin presupuesto ni multinacional inalcanzable. Apollo espera
+// cadenas "mínimo,máximo".
+export const APOLLO_EMPLOYEE_RANGES = ["51,1000"];
+
+// Valores del enum de Apollo: owner, founder, c_suite, partner, vp, head,
+// director, manager, senior, entry, intern.
+export const APOLLO_SENIORITIES = ["c_suite", "founder", "head", "director"];
+
+// Apollo NO tiene filtro de industria en la People Search API (verificado en
+// docs.apollo.io/reference/people-api-search y /organization-search: no existe
+// `organization_industries` ni se documenta `organization_industry_tag_ids`,
+// que además exigiría IDs numéricos internos sin forma documentada de
+// obtenerlos). Lo más cercano que SÍ está documentado es el filtro por
+// etiquetas de palabra clave, así que traducimos cada sector del ICP a los
+// términos en inglés con los que Apollo etiqueta a esas empresas.
+export const SECTOR_TO_APOLLO_TAGS = {
+  "SaaS y scaleups": ["saas", "software"],
+  "Banca y fintech": ["banking", "fintech"],
+  "Retail y ecommerce": ["retail", "e-commerce"],
+  "Salud digital": ["digital health", "health care"],
+  "Industria con canal digital (B2B)": ["manufacturing", "industrial"],
+  "Medios y educación online": ["media", "e-learning"],
+};
+
+// "CEO / Founder" es legible para una persona pero no es un cargo que Apollo
+// entienda: hay que partirlo en cargos sueltos.
+function titlesFromRoles(roles = []) {
+  const titles = roles
+    .flatMap((role) => String(role).split("/"))
+    .map((t) => t.trim())
+    .filter(Boolean);
+  return [...new Set(titles)];
+}
+
+function tagsFromSectors(sectors = []) {
+  const tags = sectors.flatMap((s) => SECTOR_TO_APOLLO_TAGS[s] || []);
+  return [...new Set(tags)];
+}
+
+// Pura: mismo perfil, misma consulta. Es la pieza que decide a quién se dirige
+// la empresa, así que está cubierta por tests.
+export function buildApolloQuery(profile = IDEAL_CUSTOMER_PROFILE, overrides = {}) {
+  return {
+    person_titles: titlesFromRoles(profile.roles),
+    // Los cargos reales rara vez coinciden literalmente ("Head of Product
+    // Design", "Directora de Producto"…).
+    include_similar_titles: true,
+    person_seniorities: APOLLO_SENIORITIES,
+    person_locations: APOLLO_PERSON_LOCATIONS,
+    organization_num_employees_ranges: APOLLO_EMPLOYEE_RANGES,
+    q_organization_keyword_tags: tagsFromSectors(profile.sectors),
+    page: 1,
+    per_page: 25,
+    ...overrides,
+  };
+}

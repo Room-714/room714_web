@@ -99,23 +99,33 @@ enum ProspectStatus {
 }
 
 model Prospect {
-  id            Int              @id @default(autoincrement())
+  id            Int            @id @default(autoincrement())
   name          String // persona o empresa
   company       String?
   role          String? // cargo, si es persona
-  linkedinUrl   String           @unique // URL del perfil o de la página
+  linkedinUrl   String         @unique // URL del perfil o de la página
   sector        String?
   interest      String? // servicio de Room714 que encaja (texto libre)
-  keywords      String[]         @default([]) // temas por los que comentarle
-  notes         String?          @db.Text
-  status        ProspectStatus   @default(ACTIVE)
+  keywords      String[]       @default([]) // temas por los que comentarle
+  notes         String?        @db.Text
+  status        ProspectStatus @default(ACTIVE)
+  apolloId      String?        @unique // id de Apollo, para no volver a enriquecer al mismo
+  source        String         @default("manual") // "manual" | "apollo"
+  // Dos relojes distintos a propósito. `lastEngagedAt` mide trabajo real
+  // hecho (comentarios publicados) y es la métrica que interesa mirar.
+  // `lastTouchedAt` mueve la cola del briefing: se actualiza también cuando se
+  // salta a alguien por no haber publicado nada. Sin esa separación, un
+  // prospecto poco activo se queda para siempre como el más antiguo y bloquea
+  // uno de los dos huecos diarios indefinidamente.
   lastEngagedAt DateTime? // último comentario registrado
-  createdAt     DateTime         @default(now())
-  updatedAt     DateTime         @updatedAt
+  lastTouchedAt DateTime? // última atención: comentario O salto
+  skipCount     Int            @default(0) // saltos consecutivos por falta de actividad
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 
   engagements ProspectEngagement[]
 
-  @@index([status, lastEngagedAt])
+  @@index([status, lastTouchedAt])
 }
 
 model ProspectEngagement {
@@ -129,6 +139,23 @@ model ProspectEngagement {
   prospect Prospect @relation(fields: [prospectId], references: [id], onDelete: Cascade)
 
   @@index([prospectId, createdAt])
+}
+
+// Rastro de TODA persona que hemos enriquecido en Apollo, se acabe importando
+// como prospecto o no. Sin esta tabla, cada ejecución semanal volvería a pagar
+// un crédito por los mismos perfiles que ya descartamos. También es el
+// contador del presupuesto: filas de los últimos 30 días = créditos gastados.
+model ProspectDiscovery {
+  id          Int      @id @default(autoincrement())
+  apolloId    String   @unique
+  name        String?
+  title       String?
+  company     String?
+  linkedinUrl String? // null = enriquecido pero sin perfil utilizable
+  imported    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  @@index([createdAt])
 }
 
 enum CandidatePosition {

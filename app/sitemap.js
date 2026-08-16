@@ -5,6 +5,12 @@ import { listAllCategoryRoutes } from "@/app/lib/categoryRoutes";
 // generados por cron (lunes/miércoles) aparezcan sin esperar a un despliegue.
 export const revalidate = 3600;
 
+// El inglés va a media prioridad que su equivalente español. De las 119
+// páginas que Google conoce y nunca ha rastreado, 60 son inglesas: compiten
+// por el mismo presupuesto de rastreo y hoy no aportan tráfico. Esto no las
+// excluye, solo las pone detrás en la cola.
+const priorityFor = (base, lang) => (lang === "en" ? base / 2 : base);
+
 export default async function sitemap() {
   const baseUrl = "https://www.room714.com";
   const languages = ["en", "es"];
@@ -53,7 +59,10 @@ export default async function sitemap() {
           },
         },
         changeFrequency: page === "" || page === "/blog" ? "daily" : "monthly",
-        priority: page === "" ? 1 : page === "/blog" ? 0.9 : 0.8,
+        priority: priorityFor(
+          page === "" ? 1 : page === "/blog" ? 0.9 : 0.8,
+          lang,
+        ),
       };
       if (dynamicPages.has(page) && latestModIso) {
         entry.lastModified = latestModIso;
@@ -68,7 +77,7 @@ export default async function sitemap() {
     const entry = {
       url: `${baseUrl}${r.url}`,
       changeFrequency: "daily",
-      priority: 0.85,
+      priority: priorityFor(0.85, r.lang),
     };
     if (latestModIso) entry.lastModified = latestModIso;
     return entry;
@@ -81,7 +90,7 @@ export default async function sitemap() {
       url: `${baseUrl}/${lang}/blog/${post.slug}`,
       ...(mod ? { lastModified: mod.toISOString() } : {}),
       changeFrequency: "weekly",
-      priority: 0.6,
+      priority: priorityFor(0.6, lang),
     };
   };
   const blogRoutes = [

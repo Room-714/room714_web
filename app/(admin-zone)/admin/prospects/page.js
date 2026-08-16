@@ -4,10 +4,13 @@ import { Suspense, useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import {
+  deleteProspect,
   listProspects,
   registerEngagement,
+  runDiscovery,
   saveProspect,
   setProspectStatus,
+  skipProspect,
 } from "./actions";
 
 const STATUS_LABEL = {
@@ -51,6 +54,10 @@ function ProspectsInner() {
   const [postUrl, setPostUrl] = useState("");
   const [options, setOptions] = useState([]);
   const [busy, setBusy] = useState(false);
+
+  // Origen: lo primero que se hace tras una tanda de Apollo es revisarla en
+  // bloque, así que el filtro va arriba y no escondido.
+  const [sourceFilter, setSourceFilter] = useState("all");
 
   const load = useCallback(async () => {
     const res = await listProspects();
@@ -134,11 +141,72 @@ function ProspectsInner() {
     load();
   };
 
+  // Sin nada que comentar. Lo saca de la cabeza de la cola sin registrar un
+  // comentario que no existe.
+  const handleSkip = async () => {
+    if (!drafting) return;
+    setBusy(true);
+    const res = await skipProspect(drafting.id, "sin actividad reciente");
+    setBusy(false);
+    if (!res.success) return flash(`⚠️ ${res.error}`);
+    flash(res.message);
+    setDrafting(null);
+    setPostText("");
+    setPostUrl("");
+    setOptions([]);
+    load();
+  };
+
+  const handleDelete = async (p) => {
+    // Borrado real e irreversible: se lleva por delante su historial de
+    // comentarios. Por eso confirma con el nombre delante.
+    if (
+      !window.confirm(
+        `¿Borrar a ${p.name} definitivamente?\n\nSe eliminan también sus ${p.engagements?.length || 0} comentario(s) registrados. Esto no se puede deshacer.`,
+      )
+    ) {
+      return;
+    }
+    setBusy(true);
+    const res = await deleteProspect(p.id);
+    setBusy(false);
+    if (!res.success) return flash(`⚠️ ${res.error}`);
+    flash(`${p.name} borrado`);
+    load();
+  };
+
+  const handleDiscover = async () => {
+    setBusy(true);
+    flash("Buscando en Apollo...");
+    const res = await runDiscovery();
+    setBusy(false);
+    if (!res.success) return flash(`⚠️ ${res.error}`);
+    const r = res.result || {};
+    flash(
+      r.skipped
+        ? `Sin cambios: ${r.reason}`
+        : `${r.imported ?? 0} importados de ${r.enriched ?? 0} enriquecidos (${r.creditsSpent ?? 0} créditos). Quedan ${r.budgetLeft ?? "?"} este mes.`,
+    );
+    load();
+  };
+
+  const visibleProspects =
+    sourceFilter === "all"
+      ? prospects
+      : prospects.filter((p) => (p.source || "manual") === sourceFilter);
+
   return (
     <main className="min-h-screen bg-gray-100 text-black p-4 md:p-8 max-w-5xl mx-auto">
       <div className="flex items-center justify-between flex-wrap gap-4 mb-6">
         <h1 className="text-3xl font-black">Prospectos LinkedIn</h1>
         <div className="flex gap-4 items-center">
+          <button
+            onClick={handleDiscover}
+            disabled={busy}
+            className="border-2 border-black text-sm font-bold px-4 py-2 rounded-xl disabled:opacity-50"
+          >
+            {busy ? "Buscando..." : "Buscar prospectos ahora"}
+          </button>
           <button
             onClick={() => {
               setForm(EMPTY_FORM);
@@ -237,13 +305,22 @@ function ProspectsInner() {
             value={postUrl}
             onChange={(e) => setPostUrl(e.target.value)}
           />
-          <button
-            onClick={handleDraft}
-            disabled={busy}
-            className="bg-black text-white font-bold px-6 py-2 rounded-xl disabled:opacity-50"
-          >
-            {busy ? "Redactando..." : "Proponme dos comentarios"}
-          </button>
+          <div className="flex gap-3 items-center flex-wrap">
+            <button
+              onClick={handleDraft}
+              disabled={busy}
+              className="bg-black text-white font-bold px-6 py-2 rounded-xl disabled:opacity-50"
+            >
+              {busy ? "Redactando..." : "Proponme dos comentarios"}
+            </button>
+            <button
+              onClick={handleSkip}
+              disabled={busy}
+              className="border border-gray-400 text-gray-700 font-bold px-6 py-2 rounded-xl disabled:opacity-50"
+            >
+              No ha publicado nada — saltar
+            </button>
+          </div>
 
           {options.length > 0 && (
             <div className="grid md:grid-cols-2 gap-4 mt-4">
@@ -277,7 +354,34 @@ function ProspectsInner() {
         </div>
       ) : (
         <div className="bg-white rounded-3xl border border-gray-200 overflow-hidden divide-y divide-gray-100">
-          {prospects.map((p) => (
+          <div className="flex items-center gap-2 p-4 text-sm">
+            <span className="text-gray-500 font-bold mr-1">Origen:</span>
+            {[
+              ["all", "Todos"],
+              ["apollo", "Apollo"],
+              ["manual", "Manual"],
+            ].map(([value, label]) => {
+              const count =
+                value === "all"
+                  ? prospects.length
+                  : prospects.filter((p) => (p.source || "manual") === value)
+                      .length;
+              return (
+                <button
+                  key={value}
+                  onClick={() => setSourceFilter(value)}
+                  className={`px-3 py-1 rounded-full font-bold ${
+                    sourceFilter === value
+                      ? "bg-black text-white"
+                      : "bg-gray-100 text-gray-600"
+                  }`}
+                >
+                  {label} ({count})
+                </button>
+              );
+            })}
+          </div>
+          {visibleProspects.map((p) => (
             <div
               key={p.id}
               className="flex items-center justify-between gap-4 p-5 flex-wrap"
@@ -285,6 +389,15 @@ function ProspectsInner() {
               <div className="min-w-0">
                 <p className="font-black">
                   {p.name}
+                  <span
+                    className={`ml-2 align-middle text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full ${
+                      p.source === "apollo"
+                        ? "bg-indigo-100 text-indigo-700"
+                        : "bg-gray-100 text-gray-500"
+                    }`}
+                  >
+                    {p.source === "apollo" ? "Apollo" : "Manual"}
+                  </span>
                   {p.company ? (
                     <span className="font-normal text-gray-500">
                       {" "}
@@ -338,6 +451,14 @@ function ProspectsInner() {
                     </option>
                   ))}
                 </select>
+                <button
+                  onClick={() => handleDelete(p)}
+                  disabled={busy}
+                  title="Borrar definitivamente"
+                  className="text-sm font-bold text-red-600 px-2 py-2 rounded-xl hover:bg-red-50 disabled:opacity-50"
+                >
+                  Borrar
+                </button>
               </div>
             </div>
           ))}

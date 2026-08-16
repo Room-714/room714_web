@@ -63,11 +63,14 @@ export async function GET(request) {
         where: { published: true, date: { gte: start, lte: end } },
         include: { translations: true },
       }),
-      // Prospección: los ACTIVE menos atendidos primero (nulls first =
-      // nunca comentados). La rotación es esta consulta.
+      // Prospección: los ACTIVE menos atendidos primero (nulls first = nunca
+      // atendidos). Se ordena por `lastTouchedAt`, no por `lastEngagedAt`:
+      // saltar a alguien que no ha publicado nada también es atenderle, y con
+      // el segundo campo se quedaría clavado en cabeza de cola para siempre.
+      // El orden definitivo lo pone orderProspectQueue, que está probado.
       prisma.prospect.findMany({
         where: { status: "ACTIVE" },
-        orderBy: [{ lastEngagedAt: { sort: "asc", nulls: "first" } }],
+        orderBy: [{ lastTouchedAt: { sort: "asc", nulls: "first" } }],
         take: 5,
       }),
       // Artículo más reciente ya publicado: da el ángulo del comentario.
