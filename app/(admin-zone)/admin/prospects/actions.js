@@ -101,6 +101,53 @@ export async function setProspectStatus(id, status) {
   }
 }
 
+// Borrado real, no un cambio de estado. Hace falta poder eliminar de verdad:
+// son datos personales de terceros y alguien puede pedir que se le borre.
+// Los ProspectEngagement caen en cascada por el onDelete del esquema.
+export async function deleteProspect(id) {
+  await requireSession();
+  const prospectId = Number(id);
+  if (!Number.isInteger(prospectId) || prospectId <= 0) {
+    return { success: false, error: "Identificador no válido" };
+  }
+  try {
+    await prisma.prospect.delete({ where: { id: prospectId } });
+    revalidatePath("/admin/prospects");
+    return { success: true };
+  } catch (err) {
+    if (err.code === "P2025") {
+      return { success: false, error: "Ese prospecto ya no existe" };
+    }
+    console.error("[prospects] borrar falló:", err);
+    return { success: false, error: err.message };
+  }
+}
+
+// Lanza el cron de descubrimiento a demanda, para no esperar al lunes.
+// `preview` no gasta créditos: solo enseña a quién encontraría.
+export async function runDiscovery({ preview = false } = {}) {
+  await requireSession();
+
+  const baseUrl = process.env.NEXTAUTH_URL || "https://www.room714.com";
+  const url = `${baseUrl}/api/cron/discover-prospects${preview ? "?preview=1" : ""}`;
+
+  try {
+    const response = await fetch(url, {
+      headers: { Authorization: `Bearer ${process.env.CRON_SECRET}` },
+      cache: "no-store",
+    });
+    const result = await response.json();
+    if (!response.ok) {
+      return { success: false, error: result?.error || `HTTP ${response.status}` };
+    }
+    revalidatePath("/admin/prospects");
+    return { success: true, result };
+  } catch (err) {
+    console.error("[prospects] descubrimiento falló:", err);
+    return { success: false, error: err.message };
+  }
+}
+
 // Registra que José publicó un comentario: guarda el engagement y actualiza
 // lastEngagedAt, que es lo que mueve la rotación del briefing.
 export async function registerEngagement({ prospectId, comment, postUrl, postExcerpt }) {
