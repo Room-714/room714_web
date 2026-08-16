@@ -99,19 +99,21 @@ enum ProspectStatus {
 }
 
 model Prospect {
-  id            Int              @id @default(autoincrement())
+  id            Int            @id @default(autoincrement())
   name          String // persona o empresa
   company       String?
   role          String? // cargo, si es persona
-  linkedinUrl   String           @unique // URL del perfil o de la página
+  linkedinUrl   String         @unique // URL del perfil o de la página
   sector        String?
   interest      String? // servicio de Room714 que encaja (texto libre)
-  keywords      String[]         @default([]) // temas por los que comentarle
-  notes         String?          @db.Text
-  status        ProspectStatus   @default(ACTIVE)
+  keywords      String[]       @default([]) // temas por los que comentarle
+  notes         String?        @db.Text
+  status        ProspectStatus @default(ACTIVE)
+  apolloId      String?        @unique // id de Apollo, para no volver a enriquecer al mismo
+  source        String         @default("manual") // "manual" | "apollo"
   lastEngagedAt DateTime? // último comentario registrado
-  createdAt     DateTime         @default(now())
-  updatedAt     DateTime         @updatedAt
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 
   engagements ProspectEngagement[]
 
@@ -129,6 +131,23 @@ model ProspectEngagement {
   prospect Prospect @relation(fields: [prospectId], references: [id], onDelete: Cascade)
 
   @@index([prospectId, createdAt])
+}
+
+// Rastro de TODA persona que hemos enriquecido en Apollo, se acabe importando
+// como prospecto o no. Sin esta tabla, cada ejecución semanal volvería a pagar
+// un crédito por los mismos perfiles que ya descartamos. También es el
+// contador del presupuesto: filas de los últimos 30 días = créditos gastados.
+model ProspectDiscovery {
+  id          Int      @id @default(autoincrement())
+  apolloId    String   @unique
+  name        String?
+  title       String?
+  company     String?
+  linkedinUrl String? // null = enriquecido pero sin perfil utilizable
+  imported    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  @@index([createdAt])
 }
 
 enum CandidatePosition {
