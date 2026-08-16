@@ -1,5 +1,9 @@
 import { prisma } from "@/app/lib/prisma";
-import { categoryForDate, getRecentPosts } from "./topicRotation";
+import {
+  categoryForDate,
+  getPublishedTitles,
+  getRecentPosts,
+} from "./topicRotation";
 import {
   getCrossSourceTrending,
   summarizeSources,
@@ -56,15 +60,17 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
     };
   }
 
-  const [trending, recentPosts] = await Promise.all([
+  const [trending, recentPosts, publishedCorpus] = await Promise.all([
     getCrossSourceTrending(category),
     getRecentPosts(10),
+    getPublishedTitles(),
   ]);
 
   const draft = await generatePostDraft({
     category,
     trending,
     recentPosts,
+    publishedCorpus,
     crossActions: crossActionsFor(publishDate),
   });
 
