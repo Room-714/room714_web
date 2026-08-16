@@ -2,6 +2,8 @@ import { getDictionary } from "@/app/dictionaries";
 import Navbar from "@/app/components/Navbar";
 import Image from "next/image";
 
+const baseUrl = "https://www.room714.com";
+
 export async function generateMetadata({ params }) {
   const { lang = "en" } = await params;
   return {
@@ -9,6 +11,16 @@ export async function generateMetadata({ params }) {
     description: lang === "es"
       ? "Política de cookies de Room 714."
       : "Room 714 cookie policy.",
+    // Canónica propia por coherencia: sin ella heredaría la de la portada.
+    // No cambia su exclusión del índice, que sigue en `robots`.
+    alternates: {
+      canonical: `${baseUrl}/${lang}/cookies`,
+      languages: {
+        "en-US": `${baseUrl}/en/cookies`,
+        "es-ES": `${baseUrl}/es/cookies`,
+        "x-default": `${baseUrl}/en/cookies`,
+      },
+    },
     robots: { index: false, follow: true },
   };
 }

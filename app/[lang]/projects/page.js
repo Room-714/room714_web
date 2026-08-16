@@ -6,6 +6,8 @@ import PrimaryButton from "@/app/components/PrimaryButton";
 import ProjectsList from "@/app/components/ProjectList";
 import { getProjectsData } from "@/app/data/Projects";
 
+const baseUrl = "https://www.room714.com";
+
 export async function generateMetadata({ params }) {
   const { lang } = await params;
   const titles = {
@@ -20,6 +22,17 @@ export async function generateMetadata({ params }) {
   return {
     title: titles[lang],
     description: descriptions[lang],
+    // Sin esto, Next fusiona los metadatos con los del layout y la página
+    // hereda `canonical: ${baseUrl}/${lang}`: le declara a Google que es una
+    // copia de la portada, y Google deja de indexarla.
+    alternates: {
+      canonical: `${baseUrl}/${lang}/projects`,
+      languages: {
+        "en-US": `${baseUrl}/en/projects`,
+        "es-ES": `${baseUrl}/es/projects`,
+        "x-default": `${baseUrl}/en/projects`,
+      },
+    },
   };
 }
 
