@@ -176,6 +176,15 @@ function ProspectsInner() {
   };
 
   const handleDiscover = async () => {
+    // Esto cuesta dinero: 1 crédito por persona enriquecida, de 75 al mes.
+    // Sin confirmación, dos clics distraídos son un tercio del presupuesto.
+    if (
+      !window.confirm(
+        "Buscar prospectos gasta créditos de Apollo: hasta 10 en esta ejecución (1 por persona).\n\n¿Continuar?",
+      )
+    ) {
+      return;
+    }
     setBusy(true);
     flash("Buscando en Apollo...");
     const res = await runDiscovery();

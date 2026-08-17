@@ -24,17 +24,23 @@ const MONTHLY_ENRICH_CAP =
 
 const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
 
-function isUsableLinkedInUrl(url) {
-  if (!url) return false;
+// Apollo devuelve los perfiles en HTTP, no en HTTPS:
+//   "linkedin_url": "http://www.linkedin.com/in/marcus-ellery-4c2b81de"
+// Una validación que exigiera https los rechazaría todos (y lo hizo: 26
+// créditos gastados y ninguna URL guardada). Aceptamos ambos esquemas y
+// normalizamos a https, que es lo que sirve LinkedIn de todas formas.
+export function normalizeLinkedInProfileUrl(url) {
+  if (!url) return null;
+  let parsed;
   try {
-    const parsed = new URL(String(url));
-    return (
-      parsed.protocol === "https:" &&
-      /(^|\.)linkedin\.com$/.test(parsed.hostname)
-    );
+    parsed = new URL(String(url).trim());
   } catch {
-    return false;
+    return null;
   }
+  if (parsed.protocol !== "https:" && parsed.protocol !== "http:") return null;
+  if (!/(^|\.)linkedin\.com$/.test(parsed.hostname)) return null;
+  parsed.protocol = "https:";
+  return parsed.toString();
 }
 
 // El cargo y el sector que hicieron match alimentan al redactor de comentarios.
@@ -65,7 +71,16 @@ export async function GET(request) {
   // Preview: enseña a quién encontraría y qué haría, sin enriquecer (o sea,
   // sin gastar un solo crédito) y sin escribir en base de datos. Es la única
   // forma de probar esto sin coste.
-  const preview = new URL(request.url).searchParams.get("preview") === "1";
+  const params = new URL(request.url).searchParams;
+  const preview = params.get("preview") === "1";
+
+  // `?limit=N` baja el tope de esta ejecución (nunca lo sube). Sirve para
+  // validar un cambio gastando 2 créditos en vez de 10.
+  const requestedLimit = Number(params.get("limit"));
+  const runLimit =
+    Number.isInteger(requestedLimit) && requestedLimit > 0
+      ? Math.min(requestedLimit, MAX_ENRICH_PER_RUN)
+      : MAX_ENRICH_PER_RUN;
 
   try {
     const activeCount = await prisma.prospect.count({
@@ -108,7 +123,7 @@ export async function GET(request) {
     });
     const budgetLeft = Math.max(0, MONTHLY_ENRICH_CAP - spentLast30Days);
 
-    const candidates = fresh.slice(0, Math.min(MAX_ENRICH_PER_RUN, budgetLeft));
+    const candidates = fresh.slice(0, Math.min(runLimit, budgetLeft));
 
     const summary = {
       activeCount,
@@ -162,8 +177,9 @@ export async function GET(request) {
       const apolloId = match.id;
       if (!apolloId) continue;
 
-      const linkedinUrl = match.linkedin_url || null;
-      const usable = isUsableLinkedInUrl(linkedinUrl);
+      const rawUrl = match.linkedin_url || null;
+      const linkedinUrl = normalizeLinkedInProfileUrl(rawUrl);
+      const usable = Boolean(linkedinUrl);
       const company = match.organization?.name ?? null;
 
       // ¿Existe ya con esa URL? El @unique de linkedinUrl lo impediría.
@@ -191,23 +207,30 @@ export async function GET(request) {
         discarded.push({
           apolloId,
           name: match.name || null,
-          reason: !linkedinUrl
-            ? "sin URL de LinkedIn"
+          // Se incluye la URL cruda: si un día vuelve a fallar, el motivo se
+          // ve en la respuesta y no hay que gastar créditos para averiguarlo.
+          rawUrl,
+          reason: !rawUrl
+            ? "Apollo no devolvió URL de LinkedIn"
             : !usable
-              ? "URL de LinkedIn no válida"
+              ? `URL no reconocida: ${rawUrl}`
               : "ya existe un prospecto con esa URL",
         });
       }
 
       await prisma.prospectDiscovery.upsert({
         where: { apolloId },
-        update: { imported: usable && !duplicate },
+        update: {
+          imported: usable && !duplicate,
+          // Guardamos la cruda si la normalizada no sirve, para diagnóstico.
+          linkedinUrl: linkedinUrl || rawUrl || null,
+        },
         create: {
           apolloId,
           name: match.name || null,
           title: match.title || null,
           company,
-          linkedinUrl: usable ? linkedinUrl : null,
+          linkedinUrl: linkedinUrl || rawUrl || null,
           imported: usable && !duplicate,
         },
       });
