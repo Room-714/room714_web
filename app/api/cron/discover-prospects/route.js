@@ -7,6 +7,11 @@ import {
   roleGroupFor,
   weekIndexFor,
 } from "@/app/data/ProspectingProfile";
+import {
+  interestFor,
+  keywordsFor,
+  normalizeLinkedInProfileUrl,
+} from "@/app/lib/prospecting/prospectFields";
 
 export const maxDuration = 60;
 
@@ -30,44 +35,6 @@ const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
 // Con 25 por página son hasta 125 personas revisadas por ejecución, y buscar
 // no cuesta créditos.
 const MAX_SEARCH_PAGES = 5;
-
-// Apollo devuelve los perfiles en HTTP, no en HTTPS:
-//   "linkedin_url": "http://www.linkedin.com/in/marcus-ellery-4c2b81de"
-// Una validación que exigiera https los rechazaría todos (y lo hizo: 26
-// créditos gastados y ninguna URL guardada). Aceptamos ambos esquemas y
-// normalizamos a https, que es lo que sirve LinkedIn de todas formas.
-export function normalizeLinkedInProfileUrl(url) {
-  if (!url) return null;
-  let parsed;
-  try {
-    parsed = new URL(String(url).trim());
-  } catch {
-    return null;
-  }
-  if (parsed.protocol !== "https:" && parsed.protocol !== "http:") return null;
-  if (!/(^|\.)linkedin\.com$/.test(parsed.hostname)) return null;
-  parsed.protocol = "https:";
-  return parsed.toString();
-}
-
-// El cargo y el sector que hicieron match alimentan al redactor de comentarios.
-function interestFor(title) {
-  const t = String(title || "").toLowerCase();
-  if (/(ux|design|diseñ)/.test(t)) return "UX/UI y research";
-  if (/(product|producto)/.test(t)) return "Product management";
-  if (/(cto|engineer|tech|desarrollo)/.test(t)) return "Software development";
-  if (/(digital|transformaci|innovaci)/.test(t)) return "Transformación digital";
-  return "Producto digital y CX";
-}
-
-function keywordsFor(title, company) {
-  const base = BUYER_PROFILE.keywords.slice(0, 3);
-  const extra = [];
-  if (/(ux|design|diseñ)/i.test(title || "")) extra.push("UX");
-  if (/(product|producto)/i.test(title || "")) extra.push("product management");
-  if (company) extra.push(String(company));
-  return [...new Set([...extra, ...base])].slice(0, 5);
-}
 
 export async function GET(request) {
   const authHeader = request.headers.get("authorization");
