@@ -6,16 +6,27 @@ import {
   BUYER_PROFILE,
   IDEAL_CUSTOMER_PROFILE,
   buildApolloQuery,
-  roleGroupFor,
+  sectorForWeek,
   weekIndexFor,
 } from "./ProspectingProfile";
 
 describe("buildApolloQuery", () => {
-  it("apunta a dirección general y de negocio", () => {
-    const q = buildApolloQuery(); // sin semana: todos los cargos
+  it("apunta a responsables de empresa, no a cargos funcionales de venta", () => {
+    const q = buildApolloQuery();
     expect(q.person_titles).toContain("CEO");
     expect(q.person_titles).toContain("Director General");
+    expect(q.person_titles).toContain("Director de Transformación Digital");
     expect(q.person_titles).toContain("Director de Operaciones");
+    expect(q.person_titles).toContain("CIO");
+  });
+
+  // El segundo error de premisa, convertido en test: un director comercial
+  // solo compra lo que mueve su metrica, y la suya es volumen de ventas.
+  it("NO busca cargos comerciales ni de marketing", () => {
+    const titles = buildApolloQuery().person_titles.join(" ").toLowerCase();
+    for (const prohibido of ["comercial", "commercial", "marketing", "ventas", "sales"]) {
+      expect(titles).not.toContain(prohibido);
+    }
   });
 
   // ─── El error de la primera versión, convertido en test ───────────────────
@@ -107,40 +118,45 @@ describe("buildApolloQuery", () => {
   });
 });
 
-// ─── Rotación semanal de cargos ─────────────────────────────────────────────
-// Con los siete cargos a la vez, Apollo llenaba la primera página de un solo
-// perfil: diez COOs de diez en la primera prueba real. Rotando, la lista acaba
-// con las cuatro miradas del problema.
-describe("rotación de cargos por semana", () => {
-  it("cada semana busca un grupo distinto y vuelve a empezar al completar el ciclo", () => {
-    const grupos = BUYER_PROFILE.roleGroups.length;
-    const nombres = Array.from({ length: grupos }, (_, i) =>
-      roleGroupFor(BUYER_PROFILE, i).name,
+// ─── Rotación semanal por sector ────────────────────────────────────────────
+// Se rota el SECTOR y no el cargo: los cargos buenos son los que son. Lo que
+// interesa variar son las empresas, para que la primera página de Apollo no
+// salga siempre igual.
+describe("rotación semanal por sector", () => {
+  it("cada semana busca un sector distinto y cierra el ciclo", () => {
+    const total = BUYER_PROFILE.sectors.length;
+    const vistos = Array.from({ length: total }, (_, i) =>
+      sectorForWeek(BUYER_PROFILE, i),
     );
-    expect(new Set(nombres).size).toBe(grupos);
-    // El ciclo se repite: la semana `grupos` vuelve al primer grupo.
-    expect(roleGroupFor(BUYER_PROFILE, grupos).name).toBe(nombres[0]);
+    expect(new Set(vistos).size).toBe(total);
+    expect(sectorForWeek(BUYER_PROFILE, total)).toBe(vistos[0]);
   });
 
-  it("la consulta de una semana lleva solo los cargos de su grupo", () => {
-    const q = buildApolloQuery(BUYER_PROFILE, { weekIndex: 1 });
-    expect(q.person_titles).toEqual(["COO", "Director de Operaciones"]);
-    expect(q.person_titles).not.toContain("CEO");
+  it("la consulta de una semana lleva solo las etiquetas de su sector", () => {
+    const q = buildApolloQuery(BUYER_PROFILE, { weekIndex: 0 });
+    const todas = buildApolloQuery(BUYER_PROFILE).q_organization_keyword_tags;
+    expect(q.q_organization_keyword_tags.length).toBeGreaterThan(0);
+    expect(q.q_organization_keyword_tags.length).toBeLessThan(todas.length);
   });
 
-  it("aguanta índices negativos sin salirse del array", () => {
-    expect(roleGroupFor(BUYER_PROFILE, -1)).toBeDefined();
-    expect(roleGroupFor(BUYER_PROFILE, -1).name).toBe(
-      BUYER_PROFILE.roleGroups[BUYER_PROFILE.roleGroups.length - 1].name,
+  it("los cargos NO cambian con la semana: solo el sector", () => {
+    const a = buildApolloQuery(BUYER_PROFILE, { weekIndex: 0 });
+    const b = buildApolloQuery(BUYER_PROFILE, { weekIndex: 3 });
+    expect(a.person_titles).toEqual(b.person_titles);
+    expect(a.q_organization_keyword_tags).not.toEqual(
+      b.q_organization_keyword_tags,
     );
   });
 
-  it("un perfil sin grupos usa todos sus cargos", () => {
-    const q = buildApolloQuery(
-      { roles: ["CEO", "CFO"], sectors: [] },
-      { weekIndex: 3 },
+  it("sin semana busca todos los sectores a la vez", () => {
+    const q = buildApolloQuery(BUYER_PROFILE);
+    expect(q.q_organization_keyword_tags.length).toBeGreaterThan(6);
+  });
+
+  it("aguanta índices negativos", () => {
+    expect(sectorForWeek(BUYER_PROFILE, -1)).toBe(
+      BUYER_PROFILE.sectors[BUYER_PROFILE.sectors.length - 1],
     );
-    expect(q.person_titles).toEqual(["CEO", "CFO"]);
   });
 
   it("weekIndexFor avanza de siete en siete días", () => {
@@ -151,11 +167,10 @@ describe("rotación de cargos por semana", () => {
     expect(weekIndexFor(siguiente)).toBe(weekIndexFor(lunes) + 1);
   });
 
-  it("no rompe el resto de filtros", () => {
+  it("no rompe el resto de filtros ni filtra weekIndex a la consulta", () => {
     const q = buildApolloQuery(BUYER_PROFILE, { weekIndex: 2, page: 3 });
     expect(q.page).toBe(3);
     expect(q.organization_num_employees_ranges).toEqual(APOLLO_EMPLOYEE_RANGES);
-    expect(q.q_organization_keyword_tags.length).toBeGreaterThan(0);
     expect(q).not.toHaveProperty("weekIndex");
   });
 });

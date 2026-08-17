@@ -4,7 +4,7 @@ import { searchPeople, enrichPeople } from "@/app/lib/prospecting/apollo";
 import {
   BUYER_PROFILE,
   buildApolloQuery,
-  roleGroupFor,
+  sectorForWeek,
   weekIndexFor,
 } from "@/app/data/ProspectingProfile";
 import {
@@ -86,9 +86,9 @@ export async function GET(request) {
     // registradas, no vuelve a aparecer nadie nuevo y el cron semanal deja de
     // encontrar prospectos para siempre. Buscar es gratis, así que recorrer
     // varias páginas no cuesta nada.
-    // La rotacion de cargos evita que la lista se llene de un solo perfil.
+    // La rotacion es por sector: los cargos buenos no se alternan, las empresas si.
     const weekIndex = weekIndexFor(new Date());
-    const roleGroup = roleGroupFor(BUYER_PROFILE, weekIndex);
+    const sector = sectorForWeek(BUYER_PROFILE, weekIndex);
 
     const fresh = [];
     let searched = 0;
@@ -126,7 +126,7 @@ export async function GET(request) {
 
     const summary = {
       activeCount,
-      roleGroup: roleGroup?.name ?? "todos los cargos",
+      sector: sector ?? "todos los sectores",
       searched,
       pagesUsed,
       totalEntries,

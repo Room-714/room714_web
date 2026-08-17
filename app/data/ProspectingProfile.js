@@ -24,30 +24,33 @@ export const BUYER_PROFILE = {
   kind: "buyer",
   // Donde no hay CPO ni Head of Design, la decisión de buscar ayuda fuera la
   // toma negocio, no tecnología.
+  // Cuatro familias de cargo, todas con una cosa en común: sienten una
+  // limitación técnica, de producto o de diseño como un problema del negocio.
+  //
+  // Ojo con lo que NO está y por qué: nada de Director Comercial ni de
+  // Marketing. Se probaron y no funcionan — un cargo funcional solo compra lo
+  // que mueve su propia métrica, y la del comercial es volumen de ventas, que
+  // esto no toca de forma directa. El "responsable de empresa" sí: su métrica
+  // es el negocio entero.
   roles: [
+    // Dirección general y propiedad: decide sin pedir permiso.
     "CEO",
     "Director General",
+    "Consejero Delegado",
+    "Gerente",
+    "Propietario",
+    "Fundador",
+    // Transformación digital: si el cargo existe, hay mandato y presupuesto.
+    "Director de Transformación Digital",
+    "Director de Innovación",
+    "Director de Negocio Digital",
+    // Operaciones: sufren la limitación a diario y piensan en procesos.
     "COO",
     "Director de Operaciones",
-    "Director Comercial",
-    "Director de Marketing",
-    "Director de Transformación Digital",
-  ],
-  // La búsqueda NO usa los siete cargos a la vez. Apollo ordena por relevancia
-  // y con la lista entera la primera página se llenaba solo de COOs: diez de
-  // diez en la primera prueba real. Rotando un grupo por semana, la lista
-  // acaba teniendo las cuatro miradas del problema en vez de una.
-  roleGroups: [
-    { name: "dirección general", titles: ["CEO", "Director General"] },
-    { name: "operaciones", titles: ["COO", "Director de Operaciones"] },
-    {
-      name: "negocio",
-      titles: ["Director Comercial", "Director de Marketing"],
-    },
-    {
-      name: "transformación digital",
-      titles: ["Director de Transformación Digital"],
-    },
+    // IT y sistemas: detectan la limitación técnica antes que nadie.
+    "CIO",
+    "Director de IT",
+    "Director de Sistemas",
   ],
   // Empresas con canal digital relevante y sin músculo propio para sostenerlo.
   sectors: [
@@ -187,12 +190,18 @@ export function weekIndexFor(date = new Date()) {
   return Math.floor(date.getTime() / (7 * 24 * 60 * 60 * 1000));
 }
 
-// Qué grupo de cargos toca esta semana. Devuelve null si el perfil no define
-// grupos (los perfiles de los tests, por ejemplo), y entonces se usan todos.
-export function roleGroupFor(profile = BUYER_PROFILE, weekIndex) {
-  const groups = profile.roleGroups;
-  if (!groups?.length || !Number.isFinite(weekIndex)) return null;
-  return groups[((weekIndex % groups.length) + groups.length) % groups.length];
+// Qué sector toca esta semana. La rotación es por SECTOR y no por cargo: los
+// cargos buenos son los que son y no conviene alternarlos con peores solo por
+// tener variedad. Lo que sí interesa variar son las empresas, y con una lista
+// larga de cargos y un solo sector cada semana, la primera página de Apollo
+// deja de ser monocolor.
+//
+// Devuelve null si no hay semana o el perfil no tiene sectores (los perfiles de
+// los tests), y entonces se buscan todos a la vez.
+export function sectorForWeek(profile = BUYER_PROFILE, weekIndex) {
+  const sectors = profile.sectors;
+  if (!sectors?.length || !Number.isFinite(weekIndex)) return null;
+  return sectors[((weekIndex % sectors.length) + sectors.length) % sectors.length];
 }
 
 // Pura: mismo perfil y misma semana, misma consulta. Es la pieza que decide a
@@ -201,17 +210,18 @@ export function buildApolloQuery(
   profile = BUYER_PROFILE,
   { weekIndex, ...overrides } = {},
 ) {
-  const group = roleGroupFor(profile, weekIndex);
+  const sector = sectorForWeek(profile, weekIndex);
+  const sectors = sector ? [sector] : profile.sectors;
 
   return {
-    person_titles: titlesFromRoles(group ? group.titles : profile.roles),
+    person_titles: titlesFromRoles(profile.roles),
     // Los cargos reales rara vez coinciden literalmente ("Directora General",
     // "Chief Operating Officer"…).
     include_similar_titles: true,
     person_seniorities: APOLLO_SENIORITIES,
     person_locations: APOLLO_PERSON_LOCATIONS,
     organization_num_employees_ranges: APOLLO_EMPLOYEE_RANGES,
-    q_organization_keyword_tags: tagsFromSectors(profile.sectors),
+    q_organization_keyword_tags: tagsFromSectors(sectors),
     page: 1,
     per_page: 25,
     ...overrides,
