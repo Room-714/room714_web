@@ -8,13 +8,36 @@ import {
 } from "./ProspectingProfile";
 
 describe("buildApolloQuery", () => {
-  it("parte los cargos compuestos del ICP en títulos sueltos", () => {
+  it("apunta a dirección general y de negocio", () => {
     const q = buildApolloQuery();
     expect(q.person_titles).toContain("CEO");
-    expect(q.person_titles).toContain("Founder");
-    expect(q.person_titles).toContain("Head of Product");
-    // "CEO / Founder" no debe viajar entero: Apollo no lo entendería.
-    expect(q.person_titles).not.toContain("CEO / Founder");
+    expect(q.person_titles).toContain("Director General");
+    expect(q.person_titles).toContain("Director de Operaciones");
+  });
+
+  // ─── El error de la primera versión, convertido en test ───────────────────
+  // Buscar cargos de producto o sectores de software trae empresas que ya
+  // tienen la capacidad dentro: exactamente las que NO nos contratan. La
+  // primera consulta hizo eso y devolvió agencias digitales y startups de
+  // software, competencia incluida.
+  it("NO busca cargos de producto: implicarían empresas con equipo propio", () => {
+    const titles = buildApolloQuery().person_titles.join(" ").toLowerCase();
+    for (const prohibido of ["cpo", "head of product", "head of ux", "product owner"]) {
+      expect(titles).not.toContain(prohibido);
+    }
+  });
+
+  it("NO busca sectores que se autoabastecen", () => {
+    const tags = buildApolloQuery().q_organization_keyword_tags.join(" ").toLowerCase();
+    for (const prohibido of ["saas", "software", "agency", "consulting", "information technology"]) {
+      expect(tags).not.toContain(prohibido);
+    }
+  });
+
+  it("parte los cargos compuestos en títulos sueltos", () => {
+    // Apollo no entiende "CEO / Founder": hay que trocearlo.
+    const q = buildApolloQuery({ roles: ["CEO / Founder"], sectors: [] });
+    expect(q.person_titles).toEqual(["CEO", "Founder"]);
   });
 
   it("no repite títulos que aparecen en varios roles", () => {
@@ -25,16 +48,22 @@ describe("buildApolloQuery", () => {
     expect(q.person_titles).toEqual(["CEO", "Founder", "CTO"]);
   });
 
-  it("traduce los sectores del ICP a etiquetas de Apollo, sin duplicados", () => {
+  it("traduce los sectores del perfil a etiquetas de Apollo, sin duplicados", () => {
     const q = buildApolloQuery({
       roles: [],
-      sectors: ["SaaS y scaleups", "Banca y fintech"],
+      sectors: ["Industria y fabricación", "Salud y clínicas"],
     });
     expect(q.q_organization_keyword_tags).toEqual([
-      "saas",
-      "software",
-      "banking",
-      "fintech",
+      "manufacturing",
+      "industrial automation",
+      "health care",
+      "hospital & health care",
+    ]);
+  });
+
+  it("busca empresas medianas: ni sin presupuesto ni con equipo propio", () => {
+    expect(buildApolloQuery().organization_num_employees_ranges).toEqual([
+      "51,250",
     ]);
   });
 

@@ -13,6 +13,7 @@ async function requireSession() {
 }
 
 const VALID_STATUS = ["ACTIVE", "PAUSED", "CLIENT", "DISCARDED"];
+const VALID_KIND = ["buyer", "reference"];
 
 export async function listProspects() {
   try {
@@ -62,6 +63,7 @@ export async function saveProspect(data) {
           .map((k) => k.trim())
           .filter(Boolean),
     status: VALID_STATUS.includes(data.status) ? data.status : "ACTIVE",
+    kind: VALID_KIND.includes(data.kind) ? data.kind : "buyer",
   };
 
   try {

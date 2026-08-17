@@ -1,53 +1,103 @@
-// ─── Perfil de cliente ideal (ICP) para la prospección en LinkedIn ─────────
-// Derivado de los servicios de Room714 (UX/UI, Product Management, CX
-// Research, Transformación Digital, Software Development). Se usa en dos
-// sitios: el prompt del redactor de comentarios (contexto de a quién le
-// hablamos) y las búsquedas sugeridas del briefing cuando la lista de
-// prospectos aún es corta.
+// ─── Perfiles de prospección en LinkedIn ────────────────────────────────────
+// Hay DOS públicos con objetivos distintos, y confundirlos fue el primer error
+// de este sistema:
+//
+//   COMPRADOR   → empresas medianas tradicionales con canal digital pero sin
+//                 equipo propio de producto, diseño o tecnología. Son las que
+//                 pueden contratar a Room714. Se encuentran con Apollo.
+//   REFERENCIA  → gente que publica con asiduidad sobre producto, diseño o
+//                 tecnología. No son clientes: comentar sus publicaciones da
+//                 alcance y presencia. NO se encuentran con Apollo (no sabe
+//                 filtrar por actividad de publicación), sino con las búsquedas
+//                 de contenido de LinkedIn y criterio humano.
 //
 // Editar este fichero ES editar la estrategia de prospección: no hay más
 // configuración escondida.
 
-export const IDEAL_CUSTOMER_PROFILE = {
-  // A quién buscamos: decisores con presupuesto de producto/digital.
+// ─── Público 1: el comprador ────────────────────────────────────────────────
+// Ojo con la tentación de meter aquí cargos de producto (CPO, Head of Product)
+// o sectores de software: buscar esos cargos garantiza dar con empresas que ya
+// tienen la capacidad dentro, que son exactamente las que NO nos necesitan. La
+// primera versión de este fichero cometía ese error y trajo agencias digitales
+// y startups de software, competencia incluida.
+export const BUYER_PROFILE = {
+  kind: "buyer",
+  // Donde no hay CPO ni Head of Design, la decisión de buscar ayuda fuera la
+  // toma negocio, no tecnología.
   roles: [
-    "CEO / Founder",
-    "CPO / Head of Product",
-    "CTO / VP Engineering",
-    "Head of Digital / Transformación Digital",
-    "Head of UX / Design Lead",
-    "Director de Innovación",
+    "CEO",
+    "Director General",
+    "COO",
+    "Director de Operaciones",
+    "Director Comercial",
+    "Director de Marketing",
+    "Director de Transformación Digital",
   ],
-  // Dónde: empresas con producto digital propio o canal digital relevante.
+  // Empresas con canal digital relevante y sin músculo propio para sostenerlo.
   sectors: [
-    "SaaS y scaleups",
-    "Banca y fintech",
-    "Retail y ecommerce",
-    "Salud digital",
-    "Industria con canal digital (B2B)",
-    "Medios y educación online",
+    "Industria y fabricación",
+    "Retail no nativo digital",
+    "Salud y clínicas",
+    "Seguros y banca tradicional",
+    "Educación",
+    "Servicios profesionales",
+    "Turismo y hostelería",
   ],
   // Señales de que un post suyo es comentable con nuestra voz.
   signals: [
-    "Habla de rediseños, lanzamientos o roadmap de producto",
-    "Se queja de fricción, churn o conversión",
-    "Menciona modernizar sistemas legados",
-    "Pregunta o opina sobre IA aplicada a producto",
-    "Comparte métricas o aprendizajes de UX/CX",
+    "Habla de digitalizar procesos o canales de venta",
+    "Se queja de una web o app que no convierte",
+    "Menciona sistemas antiguos que frenan al negocio",
+    "Anuncia un proyecto digital o una transformación",
+    "Pregunta u opina sobre IA sin tener equipo técnico propio",
   ],
-  // Palabras clave para búsquedas de contenido en LinkedIn.
+  keywords: [
+    "transformación digital",
+    "canal digital",
+    "digitalización",
+    "experiencia de cliente",
+    "comercio electrónico",
+  ],
+};
+
+// ─── Público 2: las referencias ─────────────────────────────────────────────
+// No hay consulta de Apollo aquí a propósito: lo que las define es que
+// publiquen a menudo, y eso solo se ve leyendo LinkedIn. El briefing abre
+// búsquedas de contenido reciente por estos temas y el alta es manual.
+export const REFERENCE_PROFILE = {
+  kind: "reference",
+  roles: [
+    "Head of Design",
+    "Design Lead",
+    "Head of Product",
+    "Product Lead",
+    "CTO",
+    "Principal Engineer",
+    "Consultor de producto",
+  ],
+  signals: [
+    "Publica varias veces por semana, no una vez al trimestre",
+    "Escribe opinión propia, no solo comparte enlaces",
+    "Tiene conversación en comentarios (no monólogo)",
+    "Toca producto, diseño, research o ingeniería con criterio",
+  ],
+  // Temas por los que buscar publicaciones recientes.
   keywords: [
     "UX",
     "product management",
-    "experiencia de cliente",
-    "transformación digital",
-    "producto digital",
+    "diseño de producto",
+    "investigación de usuarios",
+    "arquitectura de software",
     "IA en producto",
   ],
 };
 
-// Búsquedas de contenido en LinkedIn para encontrar posts comentables cuando
-// un prospecto no ha publicado nada reciente. Rotan por día para no repetir.
+// Compatibilidad: el redactor de comentarios y el briefing importaban este
+// nombre. Apunta al comprador, que es el perfil comercial.
+export const IDEAL_CUSTOMER_PROFILE = BUYER_PROFILE;
+
+// Búsquedas de contenido en LinkedIn para encontrar posts comentables. Rotan
+// por día para no repetir.
 export function contentSearchUrl(keyword) {
   return `https://www.linkedin.com/search/results/content/?keywords=${encodeURIComponent(
     keyword,
@@ -61,43 +111,46 @@ export function activityFeedUrl(linkedinUrl) {
   return `${clean}/recent-activity/all/`;
 }
 
-// Cuántas tareas de prospección entran en el briefing de cada día laborable.
+// Cuántas tareas de prospección entran en el briefing de cada día laborable, y
+// cómo se reparten: una de cada público, para avanzar las dos estrategias en
+// paralelo.
 export const PROSPECT_TASKS_PER_DAY = 2;
+export const TASKS_PER_KIND = { buyer: 1, reference: 1 };
 
-// ─── Traducción del ICP a una consulta de Apollo ────────────────────────────
-// El perfil de arriba está escrito para humanos y para el prompt del redactor.
-// Esto lo convierte en filtros de la People Search API. Se mantienen separados
-// a propósito: el ICP es la estrategia, esto es su implementación.
+// ─── Traducción del perfil de comprador a una consulta de Apollo ────────────
 
 // Lo primero que se va a querer cambiar. Apollo acepta país, región o ciudad.
 export const APOLLO_PERSON_LOCATIONS = ["Spain"];
 
-// Ni startup sin presupuesto ni multinacional inalcanzable. Apollo espera
+// "Mediana empresa" según la definición europea: 50 a 250 empleados. Por debajo
+// no hay presupuesto; por encima suele haber equipo propio. Apollo espera
 // cadenas "mínimo,máximo".
-export const APOLLO_EMPLOYEE_RANGES = ["51,1000"];
+export const APOLLO_EMPLOYEE_RANGES = ["51,250"];
 
 // Valores del enum de Apollo: owner, founder, c_suite, partner, vp, head,
 // director, manager, senior, entry, intern.
-export const APOLLO_SENIORITIES = ["c_suite", "founder", "head", "director"];
+export const APOLLO_SENIORITIES = ["c_suite", "founder", "director", "vp"];
 
 // Apollo NO tiene filtro de industria en la People Search API (verificado en
 // docs.apollo.io/reference/people-api-search y /organization-search: no existe
 // `organization_industries` ni se documenta `organization_industry_tag_ids`,
 // que además exigiría IDs numéricos internos sin forma documentada de
-// obtenerlos). Lo más cercano que SÍ está documentado es el filtro por
-// etiquetas de palabra clave, así que traducimos cada sector del ICP a los
-// términos en inglés con los que Apollo etiqueta a esas empresas.
+// obtenerlos). Lo más cercano documentado es el filtro por etiquetas de
+// palabra clave, así que traducimos cada sector a los términos en inglés con
+// los que Apollo etiqueta a esas empresas.
+//
+// Aquí NO debe aparecer software, saas, agencias ni consultoría tecnológica:
+// esas empresas resuelven dentro lo que nosotros vendemos.
 export const SECTOR_TO_APOLLO_TAGS = {
-  "SaaS y scaleups": ["saas", "software"],
-  "Banca y fintech": ["banking", "fintech"],
-  "Retail y ecommerce": ["retail", "e-commerce"],
-  "Salud digital": ["digital health", "health care"],
-  "Industria con canal digital (B2B)": ["manufacturing", "industrial"],
-  "Medios y educación online": ["media", "e-learning"],
+  "Industria y fabricación": ["manufacturing", "industrial automation"],
+  "Retail no nativo digital": ["retail", "consumer goods"],
+  "Salud y clínicas": ["health care", "hospital & health care"],
+  "Seguros y banca tradicional": ["insurance", "banking"],
+  Educación: ["education management", "higher education"],
+  "Servicios profesionales": ["professional services", "accounting"],
+  "Turismo y hostelería": ["hospitality", "leisure, travel & tourism"],
 };
 
-// "CEO / Founder" es legible para una persona pero no es un cargo que Apollo
-// entienda: hay que partirlo en cargos sueltos.
 function titlesFromRoles(roles = []) {
   const titles = roles
     .flatMap((role) => String(role).split("/"))
@@ -113,11 +166,11 @@ function tagsFromSectors(sectors = []) {
 
 // Pura: mismo perfil, misma consulta. Es la pieza que decide a quién se dirige
 // la empresa, así que está cubierta por tests.
-export function buildApolloQuery(profile = IDEAL_CUSTOMER_PROFILE, overrides = {}) {
+export function buildApolloQuery(profile = BUYER_PROFILE, overrides = {}) {
   return {
     person_titles: titlesFromRoles(profile.roles),
-    // Los cargos reales rara vez coinciden literalmente ("Head of Product
-    // Design", "Directora de Producto"…).
+    // Los cargos reales rara vez coinciden literalmente ("Directora General",
+    // "Chief Operating Officer"…).
     include_similar_titles: true,
     person_seniorities: APOLLO_SENIORITIES,
     person_locations: APOLLO_PERSON_LOCATIONS,

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/app/lib/prisma";
 import { isAuthorizedAdmin } from "@/app/lib/auth";
 import { getAnthropicClient, MODEL } from "@/app/lib/ai/anthropic";
-import { IDEAL_CUSTOMER_PROFILE } from "@/app/data/ProspectingProfile";
+import { BUYER_PROFILE, REFERENCE_PROFILE } from "@/app/data/ProspectingProfile";
 
 export const maxDuration = 60;
 
@@ -82,9 +82,17 @@ export async function POST(request) {
 
   const prospectContext = prospect
     ? `Autor del post: ${prospect.name}${prospect.role ? `, ${prospect.role}` : ""}${prospect.company ? ` en ${prospect.company}` : ""}.${prospect.interest ? ` Servicio de Room714 que podría encajarle: ${prospect.interest}.` : ""}${prospect.notes ? ` Notas: ${prospect.notes}` : ""}`
-    : "Autor del post: un cliente potencial (decisor de producto/digital).";
+    : "Autor del post: un cliente potencial (decisor de negocio).";
 
-  const prompt = `Eres José, fundador de Room714 (estudio de producto digital: UX/UI, product management, CX research, transformación digital y desarrollo). Vas a comentar un post de LinkedIn de un cliente potencial DESDE TU PERFIL PERSONAL.
+  // El objetivo del comentario cambia por completo según el público, y con él
+  // el tono. A un comprador se le demuestra criterio; a una referencia se le
+  // aporta ante su audiencia, que es de donde sale el alcance.
+  const esReferencia = (prospect?.kind || "buyer") === "reference";
+  const objetivo = esReferencia
+    ? `Es una REFERENCIA del sector, no un cliente: alguien con audiencia que publica a menudo (perfiles como ${REFERENCE_PROFILE.roles.slice(0, 3).join(", ")}). El objetivo del comentario es aportar algo a SUS lectores, porque de ahí sale tu alcance. No la trates como prospecto comercial: no le vendas nada ni le ofrezcas ayuda.`
+    : `Es un CLIENTE POTENCIAL. Nuestro comprador: ${BUYER_PROFILE.roles.slice(0, 4).join(", ")} en ${BUYER_PROFILE.sectors.join(", ")} — empresas medianas con canal digital pero sin equipo propio de producto, diseño o tecnología. El objetivo es que vea criterio y se pregunte quién eres, no que reciba una oferta.`;
+
+  const prompt = `Eres José, fundador de Room714 (estudio de producto digital: UX/UI, product management, CX research, transformación digital y desarrollo). Vas a comentar un post de LinkedIn DESDE TU PERFIL PERSONAL.
 
 ${prospectContext}
 
@@ -96,7 +104,7 @@ ${postText.slice(0, 4000)}
 Lo que Room714 está publicando estas semanas (tu conversación pública, por si el post conecta con algún tema):
 ${blogContext || "(sin artículos recientes)"}
 
-Nuestro cliente ideal: ${IDEAL_CUSTOMER_PROFILE.roles.join(", ")} en ${IDEAL_CUSTOMER_PROFILE.sectors.join(", ")}.
+${objetivo}
 
 Escribe DOS opciones de comentario con enfoques distintos. Reglas duras:
 - Voz José: primera persona, opinión con riesgo, referencia a lo que ves en tus propios proyectos. Nada de "nosotros" corporativo.

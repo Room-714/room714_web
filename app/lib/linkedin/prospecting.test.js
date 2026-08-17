@@ -3,30 +3,79 @@ import { buildProspectingTasks, orderProspectQueue } from "./prospecting";
 
 const SITE = "https://www.room714.com";
 
+// Sin `kind` a propósito en el fixture: así se comprueba que lo ausente cuenta
+// como comprador, que es el valor por defecto de la columna.
 const prospect = (id, overrides = {}) => ({
   id,
   name: `Prospecto ${id}`,
   company: "Empresa SA",
-  role: "CPO",
+  role: "Director General",
   linkedinUrl: `https://www.linkedin.com/in/prospecto-${id}`,
   interest: "Rediseño UX/UI",
   lastEngagedAt: null,
   ...overrides,
 });
 
+const soloCompradores = { buyer: 2, reference: 0 };
+
 describe("buildProspectingTasks", () => {
-  it("genera una tarea de comentario por prospecto, hasta el máximo diario", () => {
+  it("da un hueco a cada público: un comprador y una referencia", () => {
     const tasks = buildProspectingTasks({
-      prospects: [prospect(1), prospect(2), prospect(3)],
+      prospects: [
+        prospect(1),
+        prospect(2),
+        prospect(3, { kind: "reference", name: "Referente" }),
+      ],
       siteUrl: SITE,
-      maxTasks: 2,
+    });
+    const comentarios = tasks.filter((t) => t.kind === "prospect_comment");
+    expect(comentarios).toHaveLength(2);
+    expect(comentarios.map((t) => t.prospectKind)).toEqual([
+      "buyer",
+      "reference",
+    ]);
+    // Solo UN comprador, aunque hubiera tres en cola: el otro hueco es de la
+    // referencia y no se lo puede quedar.
+    expect(comentarios[0].prospectName).toBe("Prospecto 1");
+    expect(comentarios[1].prospectName).toBe("Referente");
+  });
+
+  it("el hueco de un público vacío se rellena buscando de ESE público", () => {
+    const tasks = buildProspectingTasks({
+      prospects: [prospect(1)], // solo comprador
+      siteUrl: SITE,
+      dayOfMonth: 14,
     });
     expect(tasks).toHaveLength(2);
-    expect(tasks.every((t) => t.kind === "prospect_comment")).toBe(true);
-    expect(tasks[0].activityUrl).toBe(
-      "https://www.linkedin.com/in/prospecto-1/recent-activity/all/",
-    );
-    expect(tasks[0].draftUrl).toBe(`${SITE}/admin/prospects?prospectId=1`);
+    expect(tasks[0].kind).toBe("prospect_comment");
+    expect(tasks[0].prospectKind).toBe("buyer");
+    // El hueco libre es de referencia, así que busca referencias, no un
+    // segundo comprador.
+    expect(tasks[1].kind).toBe("prospect_discover");
+    expect(tasks[1].prospectKind).toBe("reference");
+    expect(tasks[1].searchUrl).toContain("linkedin.com/search/results/content");
+    expect(tasks[1].adminUrl).toBe(`${SITE}/admin/prospects?kind=reference`);
+  });
+
+  it("con lista vacía busca de los dos públicos, con temas distintos", () => {
+    const tasks = buildProspectingTasks({
+      prospects: [],
+      siteUrl: SITE,
+      dayOfMonth: 3,
+    });
+    expect(tasks).toHaveLength(2);
+    expect(tasks.every((t) => t.kind === "prospect_discover")).toBe(true);
+    expect(tasks.map((t) => t.prospectKind)).toEqual(["buyer", "reference"]);
+    // Dos búsquedas el mismo día no deben repetir tema.
+    expect(tasks[0].keyword).not.toBe(tasks[1].keyword);
+  });
+
+  it("cada público lleva su propia instrucción de tono", () => {
+    const tasks = buildProspectingTasks({ prospects: [], siteUrl: SITE });
+    const comprador = tasks.find((t) => t.prospectKind === "buyer");
+    const referencia = tasks.find((t) => t.prospectKind === "reference");
+    expect(comprador.commentHint).toContain("cliente potencial");
+    expect(referencia.commentHint).toContain("audiencia");
   });
 
   it("usa el feed de posts si el prospecto es una página de empresa", () => {
@@ -35,34 +84,12 @@ describe("buildProspectingTasks", () => {
         prospect(1, { linkedinUrl: "https://www.linkedin.com/company/acme/" }),
       ],
       siteUrl: SITE,
-      maxTasks: 1,
+      tasksPerKind: { buyer: 1, reference: 0 },
     });
     expect(tasks[0].activityUrl).toBe(
       "https://www.linkedin.com/company/acme/posts/",
     );
-  });
-
-  it("rellena con una tarea de descubrimiento si no hay prospectos suficientes", () => {
-    const tasks = buildProspectingTasks({
-      prospects: [prospect(1)],
-      siteUrl: SITE,
-      dayOfMonth: 14,
-      maxTasks: 2,
-    });
-    expect(tasks).toHaveLength(2);
-    expect(tasks[1].kind).toBe("prospect_discover");
-    expect(tasks[1].searchUrl).toContain("linkedin.com/search/results/content");
-  });
-
-  it("con lista vacía devuelve solo descubrimiento", () => {
-    const tasks = buildProspectingTasks({
-      prospects: [],
-      siteUrl: SITE,
-      dayOfMonth: 3,
-      maxTasks: 2,
-    });
-    expect(tasks).toHaveLength(1);
-    expect(tasks[0].kind).toBe("prospect_discover");
+    expect(tasks[0].draftUrl).toBe(`${SITE}/admin/prospects?prospectId=1`);
   });
 
   it("el ángulo menciona el artículo más reciente si existe", () => {
@@ -70,7 +97,7 @@ describe("buildProspectingTasks", () => {
       prospects: [prospect(1)],
       latestPost: { title: "Diseñar con IA sin perder el criterio" },
       siteUrl: SITE,
-      maxTasks: 1,
+      tasksPerKind: { buyer: 1, reference: 0 },
     });
     expect(tasks[0].angle).toContain("Diseñar con IA sin perder el criterio");
   });
@@ -80,15 +107,25 @@ describe("buildProspectingTasks", () => {
       prospects: [],
       siteUrl: SITE,
       dayOfMonth: 3,
-      maxTasks: 1,
+      tasksPerKind: { buyer: 1, reference: 0 },
     });
     const [b] = buildProspectingTasks({
       prospects: [],
       siteUrl: SITE,
       dayOfMonth: 4,
-      maxTasks: 1,
+      tasksPerKind: { buyer: 1, reference: 0 },
     });
     expect(a.keyword).not.toBe(b.keyword);
+  });
+
+  it("un cupo a cero no genera nada de ese público", () => {
+    const tasks = buildProspectingTasks({
+      prospects: [],
+      siteUrl: SITE,
+      tasksPerKind: { buyer: 1, reference: 0 },
+    });
+    expect(tasks).toHaveLength(1);
+    expect(tasks[0].prospectKind).toBe("buyer");
   });
 });
 
@@ -124,6 +161,7 @@ describe("orderProspectQueue", () => {
     const tasks = buildProspectingTasks({
       prospects: [saltadoHoy, nuncaAtendido, atendidoHaceUnaSemana],
       siteUrl: SITE,
+      tasksPerKind: soloCompradores,
     });
 
     const asignados = tasks
@@ -138,7 +176,10 @@ describe("orderProspectQueue", () => {
     // Documenta el bug antiguo: los dos siguen con lastEngagedAt nulo, así que
     // ese campo no distingue entre "nunca comentado" y "atendido hoy".
     const saltadoHoy = prospect(1, { lastEngagedAt: null, lastTouchedAt: HOY });
-    const nuncaAtendido = prospect(2, { lastEngagedAt: null, lastTouchedAt: null });
+    const nuncaAtendido = prospect(2, {
+      lastEngagedAt: null,
+      lastTouchedAt: null,
+    });
     expect(saltadoHoy.lastEngagedAt).toBe(nuncaAtendido.lastEngagedAt);
     expect(orderProspectQueue([saltadoHoy, nuncaAtendido])[0].id).toBe(2);
   });
@@ -165,5 +206,22 @@ describe("orderProspectQueue", () => {
       prospect(2, { lastTouchedAt: "2026-08-09T09:00:00.000Z" }),
     ]);
     expect(orden.map((p) => p.id)).toEqual([2, 1]);
+  });
+
+  it("las colas de los dos públicos son independientes", () => {
+    // Un comprador atendido hoy no debe empujar a la referencia fuera de su
+    // hueco, ni al contrario.
+    const tasks = buildProspectingTasks({
+      prospects: [
+        prospect(1, { lastTouchedAt: HOY }),
+        prospect(2, { kind: "reference", lastTouchedAt: null }),
+      ],
+      siteUrl: SITE,
+    });
+    const comentarios = tasks.filter((t) => t.kind === "prospect_comment");
+    expect(comentarios.map((t) => t.prospectKind)).toEqual([
+      "buyer",
+      "reference",
+    ]);
   });
 });

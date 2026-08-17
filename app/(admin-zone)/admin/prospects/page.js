@@ -13,6 +13,11 @@ import {
   skipProspect,
 } from "./actions";
 
+const KIND_LABEL = {
+  buyer: "Comprador",
+  reference: "Referencia",
+};
+
 const STATUS_LABEL = {
   ACTIVE: "En rotación",
   PAUSED: "Pausado",
@@ -31,6 +36,7 @@ const EMPTY_FORM = {
   keywords: "",
   notes: "",
   status: "ACTIVE",
+  kind: "buyer",
 };
 
 function daysAgo(date) {
@@ -42,6 +48,10 @@ function daysAgo(date) {
 function ProspectsInner() {
   const searchParams = useSearchParams();
   const preselectedId = searchParams.get("prospectId");
+  // El briefing enlaza aquí con ?kind=reference cuando la tarea es buscar
+  // referencias: llegas con el filtro puesto y el alta preparada para ese
+  // público, sin tener que acordarte de cambiarlo.
+  const preselectedKind = searchParams.get("kind");
 
   const [prospects, setProspects] = useState([]);
   const [form, setForm] = useState(EMPTY_FORM);
@@ -58,6 +68,11 @@ function ProspectsInner() {
   // Origen: lo primero que se hace tras una tanda de Apollo es revisarla en
   // bloque, así que el filtro va arriba y no escondido.
   const [sourceFilter, setSourceFilter] = useState("all");
+  const [kindFilter, setKindFilter] = useState(
+    preselectedKind === "buyer" || preselectedKind === "reference"
+      ? preselectedKind
+      : "all",
+  );
 
   const load = useCallback(async () => {
     const res = await listProspects();
@@ -199,10 +214,9 @@ function ProspectsInner() {
     load();
   };
 
-  const visibleProspects =
-    sourceFilter === "all"
-      ? prospects
-      : prospects.filter((p) => (p.source || "manual") === sourceFilter);
+  const visibleProspects = prospects
+    .filter((p) => sourceFilter === "all" || (p.source || "manual") === sourceFilter)
+    .filter((p) => kindFilter === "all" || (p.kind || "buyer") === kindFilter);
 
   return (
     <main className="min-h-screen bg-gray-100 text-black p-4 md:p-8 max-w-5xl mx-auto">
@@ -218,7 +232,10 @@ function ProspectsInner() {
           </button>
           <button
             onClick={() => {
-              setForm(EMPTY_FORM);
+              setForm({
+                ...EMPTY_FORM,
+                kind: kindFilter === "all" ? "buyer" : kindFilter,
+              });
               setShowForm((v) => !v);
             }}
             className="bg-black text-white text-sm font-bold px-4 py-2 rounded-xl"
@@ -245,10 +262,10 @@ function ProspectsInner() {
           {[
             ["name", "Nombre *", "Ana García"],
             ["company", "Empresa", "Acme SL"],
-            ["role", "Cargo", "CPO"],
+            ["role", "Cargo", "Director General"],
             ["linkedinUrl", "URL LinkedIn *", "https://www.linkedin.com/in/..."],
-            ["sector", "Sector", "SaaS / fintech / retail..."],
-            ["interest", "Servicio que encaja", "Rediseño UX/UI"],
+            ["sector", "Sector", "Industria / retail / salud..."],
+            ["interest", "Servicio que encaja", "Rediseno UX/UI"],
             ["keywords", "Temas (coma)", "UX, churn, IA en producto"],
           ].map(([key, label, placeholder]) => (
             <label key={key} className="text-sm font-bold">
@@ -261,6 +278,21 @@ function ProspectsInner() {
               />
             </label>
           ))}
+          <label className="text-sm font-bold">
+            Público
+            <select
+              className="mt-1 w-full border border-gray-300 rounded-xl px-3 py-2 font-normal bg-white"
+              value={form.kind}
+              onChange={(e) => setForm({ ...form, kind: e.target.value })}
+            >
+              <option value="buyer">
+                Comprador — puede contratarnos
+              </option>
+              <option value="reference">
+                Referencia — publica mucho, da alcance
+              </option>
+            </select>
+          </label>
           <label className="text-sm font-bold md:col-span-2">
             Notas
             <textarea
@@ -363,6 +395,32 @@ function ProspectsInner() {
         </div>
       ) : (
         <div className="bg-white rounded-3xl border border-gray-200 overflow-hidden divide-y divide-gray-100">
+          <div className="flex items-center gap-2 p-4 pb-0 text-sm">
+            <span className="text-gray-500 font-bold mr-1">Público:</span>
+            {[
+              ["all", "Todos"],
+              ["buyer", "Compradores"],
+              ["reference", "Referencias"],
+            ].map(([value, label]) => {
+              const count =
+                value === "all"
+                  ? prospects.length
+                  : prospects.filter((p) => (p.kind || "buyer") === value).length;
+              return (
+                <button
+                  key={value}
+                  onClick={() => setKindFilter(value)}
+                  className={`px-3 py-1 rounded-full font-bold ${
+                    kindFilter === value
+                      ? "bg-black text-white"
+                      : "bg-gray-100 text-gray-600"
+                  }`}
+                >
+                  {label} ({count})
+                </button>
+              );
+            })}
+          </div>
           <div className="flex items-center gap-2 p-4 text-sm">
             <span className="text-gray-500 font-bold mr-1">Origen:</span>
             {[
@@ -400,6 +458,15 @@ function ProspectsInner() {
                   {p.name}
                   <span
                     className={`ml-2 align-middle text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full ${
+                      (p.kind || "buyer") === "reference"
+                        ? "bg-amber-100 text-amber-700"
+                        : "bg-emerald-100 text-emerald-700"
+                    }`}
+                  >
+                    {KIND_LABEL[p.kind || "buyer"]}
+                  </span>
+                  <span
+                    className={`ml-1 align-middle text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full ${
                       p.source === "apollo"
                         ? "bg-indigo-100 text-indigo-700"
                         : "bg-gray-100 text-gray-500"

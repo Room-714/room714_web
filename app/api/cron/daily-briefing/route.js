@@ -68,10 +68,12 @@ export async function GET(request) {
       // saltar a alguien que no ha publicado nada también es atenderle, y con
       // el segundo campo se quedaría clavado en cabeza de cola para siempre.
       // El orden definitivo lo pone orderProspectQueue, que está probado.
+      // Se traen de sobra y de los dos tipos (comprador y referencia): el
+      // reparto de un hueco por tipo lo hace buildProspectingTasks.
       prisma.prospect.findMany({
         where: { status: "ACTIVE" },
         orderBy: [{ lastTouchedAt: { sort: "asc", nulls: "first" } }],
-        take: 5,
+        take: 20,
       }),
       // Artículo más reciente ya publicado: da el ángulo del comentario.
       prisma.post.findFirst({

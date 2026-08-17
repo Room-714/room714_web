@@ -1,10 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/app/lib/prisma";
 import { searchPeople, enrichPeople } from "@/app/lib/prospecting/apollo";
-import {
-  IDEAL_CUSTOMER_PROFILE,
-  buildApolloQuery,
-} from "@/app/data/ProspectingProfile";
+import { BUYER_PROFILE, buildApolloQuery } from "@/app/data/ProspectingProfile";
 
 export const maxDuration = 60;
 
@@ -59,7 +56,7 @@ function interestFor(title) {
 }
 
 function keywordsFor(title, company) {
-  const base = IDEAL_CUSTOMER_PROFILE.keywords.slice(0, 3);
+  const base = BUYER_PROFILE.keywords.slice(0, 3);
   const extra = [];
   if (/(ux|design|diseñ)/i.test(title || "")) extra.push("UX");
   if (/(product|producto)/i.test(title || "")) extra.push("product management");
@@ -88,8 +85,10 @@ export async function GET(request) {
       : MAX_ENRICH_PER_RUN;
 
   try {
+    // Solo compradores: Apollo no descubre referencias (no sabe filtrar por
+    // actividad de publicación), asi que las referencias no consumen este cupo.
     const activeCount = await prisma.prospect.count({
-      where: { status: "ACTIVE" },
+      where: { status: "ACTIVE", kind: "buyer" },
     });
 
     if (activeCount >= MAX_ACTIVE_PROSPECTS) {
@@ -122,7 +121,7 @@ export async function GET(request) {
     let lastQuery = null;
 
     for (let page = 1; page <= MAX_SEARCH_PAGES && fresh.length < wanted; page++) {
-      lastQuery = buildApolloQuery(IDEAL_CUSTOMER_PROFILE, { page });
+      lastQuery = buildApolloQuery(BUYER_PROFILE, { page });
       const result = await searchPeople(lastQuery);
       pagesUsed = page;
       searched += result.people.length;
@@ -224,6 +223,7 @@ export async function GET(request) {
             keywords: keywordsFor(match.title, company),
             status: "ACTIVE",
             source: "apollo",
+            kind: "buyer",
             apolloId,
           },
         });

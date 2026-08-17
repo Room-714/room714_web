@@ -111,6 +111,9 @@ model Prospect {
   status        ProspectStatus @default(ACTIVE)
   apolloId      String?        @unique // id de Apollo, para no volver a enriquecer al mismo
   source        String         @default("manual") // "manual" | "apollo"
+  // "buyer" = cliente potencial · "reference" = quien publica mucho y a quien
+  // comentamos por alcance. El tono del comentario cambia según cuál sea.
+  kind          String         @default("buyer")
   // Dos relojes distintos a propósito. `lastEngagedAt` mide trabajo real
   // hecho (comentarios publicados) y es la métrica que interesa mirar.
   // `lastTouchedAt` mueve la cola del briefing: se actualiza también cuando se
@@ -125,7 +128,7 @@ model Prospect {
 
   engagements ProspectEngagement[]
 
-  @@index([status, lastTouchedAt])
+  @@index([status, kind, lastTouchedAt])
 }
 
 model ProspectEngagement {
