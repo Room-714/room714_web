@@ -24,6 +24,11 @@ const MONTHLY_ENRICH_CAP =
 
 const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
 
+// Cuántas páginas de resultados recorrer como máximo buscando caras nuevas.
+// Con 25 por página son hasta 125 personas revisadas por ejecución, y buscar
+// no cuesta créditos.
+const MAX_SEARCH_PAGES = 5;
+
 // Apollo devuelve los perfiles en HTTP, no en HTTPS:
 //   "linkedin_url": "http://www.linkedin.com/in/marcus-ellery-4c2b81de"
 // Una validación que exigiera https los rechazaría todos (y lo hizo: 26
@@ -95,41 +100,61 @@ export async function GET(request) {
       });
     }
 
-    // 1. Búsqueda. Gratis: no consume créditos.
-    const query = buildApolloQuery();
-    const { people, totalEntries } = await searchPeople(query);
-
-    // 2. Descartar a quien ya conocemos, por cualquiera de las dos vías.
-    const ids = people.map((p) => p.id).filter(Boolean);
-    const [seenDiscoveries, seenProspects] = await Promise.all([
-      prisma.prospectDiscovery.findMany({
-        where: { apolloId: { in: ids } },
-        select: { apolloId: true },
-      }),
-      prisma.prospect.findMany({
-        where: { apolloId: { in: ids } },
-        select: { apolloId: true },
-      }),
-    ]);
-    const known = new Set([
-      ...seenDiscoveries.map((d) => d.apolloId),
-      ...seenProspects.map((p) => p.apolloId),
-    ]);
-    const fresh = people.filter((p) => p.id && !known.has(p.id));
-
-    // 3. Guarda de presupuesto: créditos gastados en los últimos 30 días.
+    // Guarda de presupuesto: créditos gastados en los últimos 30 días.
     const spentLast30Days = await prisma.prospectDiscovery.count({
       where: { createdAt: { gte: new Date(Date.now() - THIRTY_DAYS_MS) } },
     });
     const budgetLeft = Math.max(0, MONTHLY_ENRICH_CAP - spentLast30Days);
+    const wanted = Math.min(runLimit, budgetLeft);
 
-    const candidates = fresh.slice(0, Math.min(runLimit, budgetLeft));
+    // 1 y 2. Buscar y descartar conocidos, avanzando páginas hasta reunir
+    // suficientes caras nuevas.
+    //
+    // Paginar es imprescindible: la búsqueda es determinista, así que pedir
+    // siempre la página 1 devuelve las mismas 25 personas. En cuanto quedan
+    // registradas, no vuelve a aparecer nadie nuevo y el cron semanal deja de
+    // encontrar prospectos para siempre. Buscar es gratis, así que recorrer
+    // varias páginas no cuesta nada.
+    const fresh = [];
+    let searched = 0;
+    let pagesUsed = 0;
+    let totalEntries = null;
+    let lastQuery = null;
+
+    for (let page = 1; page <= MAX_SEARCH_PAGES && fresh.length < wanted; page++) {
+      lastQuery = buildApolloQuery(IDEAL_CUSTOMER_PROFILE, { page });
+      const result = await searchPeople(lastQuery);
+      pagesUsed = page;
+      searched += result.people.length;
+      totalEntries = result.totalEntries ?? totalEntries;
+      if (result.people.length === 0) break;
+
+      const ids = result.people.map((p) => p.id).filter(Boolean);
+      const [seenDiscoveries, seenProspects] = await Promise.all([
+        prisma.prospectDiscovery.findMany({
+          where: { apolloId: { in: ids } },
+          select: { apolloId: true },
+        }),
+        prisma.prospect.findMany({
+          where: { apolloId: { in: ids } },
+          select: { apolloId: true },
+        }),
+      ]);
+      const known = new Set([
+        ...seenDiscoveries.map((d) => d.apolloId),
+        ...seenProspects.map((p) => p.apolloId),
+      ]);
+      fresh.push(...result.people.filter((p) => p.id && !known.has(p.id)));
+    }
+
+    const candidates = fresh.slice(0, wanted);
 
     const summary = {
       activeCount,
-      searched: people.length,
+      searched,
+      pagesUsed,
       totalEntries,
-      alreadyKnown: people.length - fresh.length,
+      alreadyKnown: searched - fresh.length,
       spentLast30Days,
       budgetLeft,
       wouldEnrich: candidates.length,
@@ -148,7 +173,7 @@ export async function GET(request) {
         ...summary,
         mode: "preview",
         message: "Preview: nada enriquecido, ningún crédito gastado",
-        query,
+        query: lastQuery,
         sample: candidates.slice(0, 10).map((p) => ({
           apolloId: p.id,
           name: [p.first_name, p.last_name_obfuscated].filter(Boolean).join(" "),
