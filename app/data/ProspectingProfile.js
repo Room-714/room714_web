@@ -33,6 +33,22 @@ export const BUYER_PROFILE = {
     "Director de Marketing",
     "Director de Transformación Digital",
   ],
+  // La búsqueda NO usa los siete cargos a la vez. Apollo ordena por relevancia
+  // y con la lista entera la primera página se llenaba solo de COOs: diez de
+  // diez en la primera prueba real. Rotando un grupo por semana, la lista
+  // acaba teniendo las cuatro miradas del problema en vez de una.
+  roleGroups: [
+    { name: "dirección general", titles: ["CEO", "Director General"] },
+    { name: "operaciones", titles: ["COO", "Director de Operaciones"] },
+    {
+      name: "negocio",
+      titles: ["Director Comercial", "Director de Marketing"],
+    },
+    {
+      name: "transformación digital",
+      titles: ["Director de Transformación Digital"],
+    },
+  ],
   // Empresas con canal digital relevante y sin músculo propio para sostenerlo.
   sectors: [
     "Industria y fabricación",
@@ -164,11 +180,31 @@ function tagsFromSectors(sectors = []) {
   return [...new Set(tags)];
 }
 
-// Pura: mismo perfil, misma consulta. Es la pieza que decide a quién se dirige
-// la empresa, así que está cubierta por tests.
-export function buildApolloQuery(profile = BUYER_PROFILE, overrides = {}) {
+// Semanas transcurridas desde la época Unix. No pretende ser el número de
+// semana ISO: solo un entero que avanza de siete en siete días, que es lo que
+// necesita la rotación.
+export function weekIndexFor(date = new Date()) {
+  return Math.floor(date.getTime() / (7 * 24 * 60 * 60 * 1000));
+}
+
+// Qué grupo de cargos toca esta semana. Devuelve null si el perfil no define
+// grupos (los perfiles de los tests, por ejemplo), y entonces se usan todos.
+export function roleGroupFor(profile = BUYER_PROFILE, weekIndex) {
+  const groups = profile.roleGroups;
+  if (!groups?.length || !Number.isFinite(weekIndex)) return null;
+  return groups[((weekIndex % groups.length) + groups.length) % groups.length];
+}
+
+// Pura: mismo perfil y misma semana, misma consulta. Es la pieza que decide a
+// quién se dirige la empresa, así que está cubierta por tests.
+export function buildApolloQuery(
+  profile = BUYER_PROFILE,
+  { weekIndex, ...overrides } = {},
+) {
+  const group = roleGroupFor(profile, weekIndex);
+
   return {
-    person_titles: titlesFromRoles(profile.roles),
+    person_titles: titlesFromRoles(group ? group.titles : profile.roles),
     // Los cargos reales rara vez coinciden literalmente ("Directora General",
     // "Chief Operating Officer"…).
     include_similar_titles: true,

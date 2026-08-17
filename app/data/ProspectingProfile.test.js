@@ -3,13 +3,16 @@ import {
   APOLLO_EMPLOYEE_RANGES,
   APOLLO_PERSON_LOCATIONS,
   APOLLO_SENIORITIES,
+  BUYER_PROFILE,
   IDEAL_CUSTOMER_PROFILE,
   buildApolloQuery,
+  roleGroupFor,
+  weekIndexFor,
 } from "./ProspectingProfile";
 
 describe("buildApolloQuery", () => {
   it("apunta a dirección general y de negocio", () => {
-    const q = buildApolloQuery();
+    const q = buildApolloQuery(); // sin semana: todos los cargos
     expect(q.person_titles).toContain("CEO");
     expect(q.person_titles).toContain("Director General");
     expect(q.person_titles).toContain("Director de Operaciones");
@@ -101,5 +104,58 @@ describe("buildApolloQuery", () => {
     expect(q.q_organization_keyword_tags.length).toBeGreaterThanOrEqual(
       IDEAL_CUSTOMER_PROFILE.sectors.length,
     );
+  });
+});
+
+// ─── Rotación semanal de cargos ─────────────────────────────────────────────
+// Con los siete cargos a la vez, Apollo llenaba la primera página de un solo
+// perfil: diez COOs de diez en la primera prueba real. Rotando, la lista acaba
+// con las cuatro miradas del problema.
+describe("rotación de cargos por semana", () => {
+  it("cada semana busca un grupo distinto y vuelve a empezar al completar el ciclo", () => {
+    const grupos = BUYER_PROFILE.roleGroups.length;
+    const nombres = Array.from({ length: grupos }, (_, i) =>
+      roleGroupFor(BUYER_PROFILE, i).name,
+    );
+    expect(new Set(nombres).size).toBe(grupos);
+    // El ciclo se repite: la semana `grupos` vuelve al primer grupo.
+    expect(roleGroupFor(BUYER_PROFILE, grupos).name).toBe(nombres[0]);
+  });
+
+  it("la consulta de una semana lleva solo los cargos de su grupo", () => {
+    const q = buildApolloQuery(BUYER_PROFILE, { weekIndex: 1 });
+    expect(q.person_titles).toEqual(["COO", "Director de Operaciones"]);
+    expect(q.person_titles).not.toContain("CEO");
+  });
+
+  it("aguanta índices negativos sin salirse del array", () => {
+    expect(roleGroupFor(BUYER_PROFILE, -1)).toBeDefined();
+    expect(roleGroupFor(BUYER_PROFILE, -1).name).toBe(
+      BUYER_PROFILE.roleGroups[BUYER_PROFILE.roleGroups.length - 1].name,
+    );
+  });
+
+  it("un perfil sin grupos usa todos sus cargos", () => {
+    const q = buildApolloQuery(
+      { roles: ["CEO", "CFO"], sectors: [] },
+      { weekIndex: 3 },
+    );
+    expect(q.person_titles).toEqual(["CEO", "CFO"]);
+  });
+
+  it("weekIndexFor avanza de siete en siete días", () => {
+    const lunes = new Date("2026-08-17T09:00:00Z");
+    const mismaSemana = new Date("2026-08-19T09:00:00Z");
+    const siguiente = new Date("2026-08-26T09:00:00Z");
+    expect(weekIndexFor(mismaSemana)).toBe(weekIndexFor(lunes));
+    expect(weekIndexFor(siguiente)).toBe(weekIndexFor(lunes) + 1);
+  });
+
+  it("no rompe el resto de filtros", () => {
+    const q = buildApolloQuery(BUYER_PROFILE, { weekIndex: 2, page: 3 });
+    expect(q.page).toBe(3);
+    expect(q.organization_num_employees_ranges).toEqual(APOLLO_EMPLOYEE_RANGES);
+    expect(q.q_organization_keyword_tags.length).toBeGreaterThan(0);
+    expect(q).not.toHaveProperty("weekIndex");
   });
 });

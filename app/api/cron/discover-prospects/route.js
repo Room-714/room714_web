@@ -1,7 +1,12 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/app/lib/prisma";
 import { searchPeople, enrichPeople } from "@/app/lib/prospecting/apollo";
-import { BUYER_PROFILE, buildApolloQuery } from "@/app/data/ProspectingProfile";
+import {
+  BUYER_PROFILE,
+  buildApolloQuery,
+  roleGroupFor,
+  weekIndexFor,
+} from "@/app/data/ProspectingProfile";
 
 export const maxDuration = 60;
 
@@ -114,6 +119,10 @@ export async function GET(request) {
     // registradas, no vuelve a aparecer nadie nuevo y el cron semanal deja de
     // encontrar prospectos para siempre. Buscar es gratis, así que recorrer
     // varias páginas no cuesta nada.
+    // La rotacion de cargos evita que la lista se llene de un solo perfil.
+    const weekIndex = weekIndexFor(new Date());
+    const roleGroup = roleGroupFor(BUYER_PROFILE, weekIndex);
+
     const fresh = [];
     let searched = 0;
     let pagesUsed = 0;
@@ -121,7 +130,7 @@ export async function GET(request) {
     let lastQuery = null;
 
     for (let page = 1; page <= MAX_SEARCH_PAGES && fresh.length < wanted; page++) {
-      lastQuery = buildApolloQuery(BUYER_PROFILE, { page });
+      lastQuery = buildApolloQuery(BUYER_PROFILE, { page, weekIndex });
       const result = await searchPeople(lastQuery);
       pagesUsed = page;
       searched += result.people.length;
@@ -150,6 +159,7 @@ export async function GET(request) {
 
     const summary = {
       activeCount,
+      roleGroup: roleGroup?.name ?? "todos los cargos",
       searched,
       pagesUsed,
       totalEntries,
