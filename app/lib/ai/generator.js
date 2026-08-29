@@ -516,3 +516,204 @@ export async function generatePostFromIdea({
   });
   return generateViaCreateBlogPostTool({ userPrompt, recentPosts });
 }
+
+/* ─── Tomas de LinkedIn ──────────────────────────────────────────────────────
+ * Se generan APARTE del artículo y DESPUÉS de él, a las 08:30, leyendo el
+ * texto tal y como haya quedado tras la revisión manual. Antes salían en la
+ * misma llamada que el artículo, del borrador sin revisar.
+ * ────────────────────────────────────────────────────────────────────────── */
+
+const TAKES_TOOL = {
+  name: "create_linkedin_takes",
+  description:
+    "Escribe las tomas de LinkedIn de un artículo ya publicado de Room 714.",
+  input_schema: {
+    type: "object",
+    properties: {
+      takes: {
+        type: "array",
+        description:
+          "Tomas de post nativo de LinkedIn en español sobre el mismo artículo, cada una desde un ángulo distinto. NO son traducciones ni resúmenes: son tomas distintas sobre el mismo tema.",
+        items: {
+          type: "object",
+          properties: {
+            angle: {
+              type: "string",
+              enum: ["data", "polemica", "conclusion"],
+              description:
+                "Ángulo del que tira la toma. 'data': empieza con un número o hecho concreto. 'polemica': afirmación contraintuitiva o crítica con el sector. 'conclusion': lección práctica que se llevan a la oficina.",
+            },
+            text: {
+              type: "string",
+              description:
+                "Post nativo de LinkedIn en español (1000-1800 chars). Empieza con un HOOK punzante en la primera línea (lo que se ve antes del 'ver más'). Tono coloquial-profesional. 3-5 párrafos cortos separados por doble salto de línea. SIN enlaces. SIN hashtags al final (van en otro campo). Termina con una pregunta o invitación a comentar. El hook debe ser ÚNICO en cada toma.",
+            },
+            hashtags: {
+              type: "array",
+              items: { type: "string" },
+              description:
+                "3-5 hashtags (formato #SinEspacios). Mezcla específicos (#JTBD, #ProductoDigital) con generales (#IA, #UX). Sin acentos.",
+            },
+            image_query: {
+              type: "string",
+              description:
+                "Frase corta en inglés (3-6 palabras) para buscar UNA imagen en Unsplash que ilustre ESTA toma. Las image_query de un mismo artículo deben ser distintas entre sí para que las publicaciones no parezcan copia. Fotografía abstracta o profesional, NO ilustración obvia del tema.",
+            },
+            cross_note: {
+              type: "string",
+              description:
+                "Texto sugerido para la ACCIÓN CRUZADA de esta toma (te la indico en el prompt). Máximo 2 frases. Si no tiene acción cruzada, cadena vacía.",
+            },
+          },
+          required: ["angle", "text", "hashtags", "image_query"],
+        },
+      },
+    },
+    required: ["takes"],
+  },
+};
+
+// Exportada para poder probarla; el flujo normal entra por generateLinkedInTakes.
+export function buildTakesPrompt({
+  articleTitle,
+  articleContentEs,
+  articleUrl,
+  count,
+  crossActions = [],
+}) {
+  const crossBlock = crossActions.some(Boolean)
+    ? `
+
+## ACCIONES CRUZADAS (campo cross_note de cada toma)
+
+Cada toma se publica en una sola cuenta y lleva una acción en la otra. Rellena cross_note según lo que le toque a cada una:
+
+${crossActions
+  .slice(0, count)
+  .map((action, i) =>
+    action
+      ? `- Toma ${i + 1}: ${CROSS_ACTION_BRIEF[action]}`
+      : `- Toma ${i + 1}: sin acción cruzada. Deja cross_note como cadena vacía.`,
+  )
+  .join("\n")}`
+    : "";
+
+  return `Este artículo acaba de publicarse en el blog de Room 714. Escribe **exactamente ${count} tomas** de LinkedIn que apunten a él desde ángulos distintos.
+
+## Artículo
+
+**Título:** ${articleTitle}
+
+**URL:** ${articleUrl}
+
+**Contenido:**
+
+${articleContentEs}
+
+## Tu tarea
+
+1. Lee el artículo y quédate con sus ${count} ideas más fuertes: una por toma.
+2. Escribe cada toma como post nativo de LinkedIn con la voz de Room 714 — la misma del artículo: crítica, pragmática, con analogías concretas y sin tono de nota de prensa.
+3. Cada toma tiene que sostenerse sola: quien lea solo esa debe llevarse una idea completa, no un anzuelo vacío.
+4. Los hooks de las ${count} tomas tienen que ser claramente distintos entre sí. Se publican en días diferentes de la misma semana y las lee la misma gente.
+5. NO metas la URL en el texto: el enlace va aparte.
+
+Llama al tool create_linkedin_takes con las ${count} tomas.${crossBlock}`;
+}
+
+// Exportada para poder probarla.
+export function validateTakes(data, count) {
+  if (!Array.isArray(data?.takes) || data.takes.length !== count) {
+    throw new Error(
+      `takes debe ser un array con exactamente ${count} tomas (llegaron ${data?.takes?.length ?? 0})`,
+    );
+  }
+  for (const [i, t] of data.takes.entries()) {
+    if (!t.text || !t.angle || !t.image_query || !Array.isArray(t.hashtags)) {
+      throw new Error(`takes[${i}] incompleto`);
+    }
+  }
+  return data;
+}
+
+// Presupuesto holgado: tres posts de 1800 caracteres son ~1.500 tokens. 8k deja
+// margen de sobra sin acercarse al timeout HTTP del SDK en modo no-streaming.
+const MAX_TAKES_OUTPUT_TOKENS = 8000;
+
+export async function generateLinkedInTakes({
+  articleTitle,
+  articleContentEs,
+  articleUrl,
+  count,
+  crossActions,
+}) {
+  const client = getAnthropicClient();
+  const userPrompt = buildTakesPrompt({
+    articleTitle,
+    articleContentEs,
+    articleUrl,
+    count,
+    crossActions,
+  });
+
+  let lastError;
+
+  for (let attempt = 1; attempt <= MAX_GENERATION_ATTEMPTS; attempt += 1) {
+    let response;
+    try {
+      response = await client.messages.create({
+        model: MODEL,
+        max_tokens: MAX_TAKES_OUTPUT_TOKENS,
+        system: buildCachedSystemBlocks(),
+        tools: [TAKES_TOOL],
+        tool_choice: { type: "tool", name: "create_linkedin_takes" },
+        messages: [{ role: "user", content: userPrompt }],
+      });
+    } catch (err) {
+      lastError = err;
+      console.error(
+        `generateLinkedInTakes intento ${attempt}/${MAX_GENERATION_ATTEMPTS} — error de API: ${err.message}`,
+      );
+      continue;
+    }
+
+    if (response.stop_reason === "max_tokens") {
+      lastError = new Error(
+        `Respuesta truncada por max_tokens (output_tokens=${response.usage?.output_tokens})`,
+      );
+      console.error(
+        `generateLinkedInTakes intento ${attempt}/${MAX_GENERATION_ATTEMPTS}: ${lastError.message}`,
+      );
+      continue;
+    }
+
+    const toolUse = response.content.find((b) => b.type === "tool_use");
+    if (!toolUse) {
+      lastError = new Error("Claude no llamó al tool create_linkedin_takes");
+      console.error(
+        `generateLinkedInTakes intento ${attempt}/${MAX_GENERATION_ATTEMPTS}: ${lastError.message}`,
+      );
+      continue;
+    }
+
+    try {
+      const validated = validateTakes(toolUse.input, count);
+      return {
+        takes: validated.takes,
+        usage: {
+          input_tokens: response.usage.input_tokens,
+          output_tokens: response.usage.output_tokens,
+        },
+      };
+    } catch (err) {
+      lastError = err;
+      console.error(
+        `generateLinkedInTakes intento ${attempt}/${MAX_GENERATION_ATTEMPTS} — validación falló: ${err.message}`,
+      );
+    }
+  }
+
+  throw new Error(
+    `No se pudieron generar las tomas tras ${MAX_GENERATION_ATTEMPTS} intentos: ${lastError?.message}`,
+  );
+}
