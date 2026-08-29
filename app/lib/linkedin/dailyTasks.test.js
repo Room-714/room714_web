@@ -3,9 +3,9 @@ import { buildDailyTasks } from "./dailyTasks";
 
 const SITE = "https://www.room714.com";
 
-// Lunes 27 y miércoles 29 de julio de 2026, 10:00 Madrid.
-const LUNES = new Date("2026-07-27T08:00:00Z");
-const MIERCOLES = new Date("2026-07-29T08:00:00Z");
+// Lunes 27 y miércoles 29 de julio de 2026, 07:30 Madrid.
+const LUNES = new Date("2026-07-27T05:30:00Z");
+const MIERCOLES = new Date("2026-07-29T05:30:00Z");
 
 function variante({
   id = 1,
@@ -35,16 +35,12 @@ function kinds(tasks) {
 }
 
 describe("buildDailyTasks — variantes del día", () => {
-  it("lunes: revisar, primer comentario y recompartir desde la página", () => {
+  it("lunes: primer comentario y recompartir desde la página", () => {
     const { tasks } = buildDailyTasks({
       todayVariants: [variante({ variant: 1, postDate: LUNES })],
       siteUrl: SITE,
     });
-    expect(kinds(tasks)).toEqual([
-      "review_own",
-      "first_comment",
-      "reshare_company",
-    ]);
+    expect(kinds(tasks)).toEqual(["first_comment", "reshare_company"]);
   });
 
   it("martes: solo comentar desde el perfil", () => {
@@ -53,7 +49,7 @@ describe("buildDailyTasks — variantes del día", () => {
         variante({
           variant: 2,
           postDate: LUNES,
-          scheduledFor: new Date("2026-07-28T08:00:00Z"),
+          scheduledFor: new Date("2026-07-28T05:30:00Z"),
         }),
       ],
       siteUrl: SITE,
@@ -61,54 +57,34 @@ describe("buildDailyTasks — variantes del día", () => {
     expect(kinds(tasks)).toEqual(["comment_personal"]);
   });
 
-  it("miércoles: dos publicaciones y ninguna acción cruzada", () => {
+  it("miércoles: primer comentario y recompartir del segundo artículo", () => {
+    const { tasks } = buildDailyTasks({
+      todayVariants: [variante({ variant: 1, postDate: MIERCOLES })],
+      siteUrl: SITE,
+    });
+    expect(kinds(tasks)).toEqual(["first_comment", "reshare_company"]);
+  });
+
+  it("viernes: la toma 3 del lunes es tuya y la recomparte la página", () => {
     const { tasks } = buildDailyTasks({
       todayVariants: [
-        // Deriv. 1 del artículo nuevo, 10:00, canal personal.
-        variante({ id: 1, variant: 1, postDate: MIERCOLES }),
-        // Deriv. 3 del artículo del lunes, 16:00, canal empresa.
         variante({
-          id: 2,
           variant: 3,
           postDate: LUNES,
-          scheduledFor: new Date("2026-07-29T14:00:00Z"),
+          scheduledFor: new Date("2026-07-31T05:30:00Z"),
         }),
       ],
       siteUrl: SITE,
     });
-    expect(kinds(tasks)).toEqual(["review_own", "first_comment"]);
+    expect(kinds(tasks)).toEqual(["first_comment", "reshare_company"]);
   });
 
-  it("viernes: la v3 del miércoles es tuya y la recomparte la página", () => {
-    const { tasks } = buildDailyTasks({
-      todayVariants: [
-        variante({
-          variant: 3,
-          postDate: MIERCOLES,
-          scheduledFor: new Date("2026-07-31T14:00:00Z"),
-        }),
-      ],
-      siteUrl: SITE,
-    });
-    expect(kinds(tasks)).toEqual([
-      "review_own",
-      "first_comment",
-      "reshare_company",
-    ]);
-  });
-
-  it("la tarea de revisión trae todo lo necesario para ejecutarla", () => {
+  it("no pide revisar el texto: el briefing llega cuando ya se ha publicado", () => {
     const { tasks } = buildDailyTasks({
       todayVariants: [variante({ variant: 1, postDate: LUNES })],
       siteUrl: SITE,
     });
-    const review = tasks.find((t) => t.kind === "review_own");
-    expect(review.when).toBe("before");
-    expect(review.time).toBe("10:00");
-    expect(review.text).toBe("Texto de la variante");
-    expect(review.hashtags).toEqual(["#IA", "#UX"]);
-    expect(review.articleUrl).toBe(`${SITE}/es/blog/mi-post`);
-    expect(review.voiceHint).toContain("primera persona");
+    expect(kinds(tasks)).not.toContain("review_own");
   });
 
   it("las acciones cruzadas enlazan al redirector y llevan la sugerencia", () => {
@@ -140,7 +116,7 @@ describe("buildDailyTasks — variantes del día", () => {
       siteUrl: SITE,
       firstCommentAutomated: true,
     });
-    expect(kinds(tasks)).toEqual(["review_own", "reshare_company"]);
+    expect(kinds(tasks)).toEqual(["reshare_company"]);
   });
 
   it("ignora variantes sin traducción española", () => {
@@ -202,17 +178,49 @@ describe("buildDailyTasks — blog, incidencias y orden", () => {
     expect(incidents[0].title).toContain("no llegó a publicarse");
   });
 
+  it("avisa si el artículo de hoy se quedó sin tomas", () => {
+    const { incidents } = buildDailyTasks({
+      blogPost: {
+        id: 10,
+        date: LUNES,
+        translations: [{ lang: "es", slug: "mi-post", title: "Mi post" }],
+        linkedinVariants: [],
+      },
+      siteUrl: SITE,
+    });
+    expect(incidents.map((i) => i.kind)).toContain("no_takes");
+  });
+
+  it("no avisa si el artículo de hoy ya tiene sus tomas", () => {
+    const { incidents } = buildDailyTasks({
+      blogPost: {
+        id: 10,
+        date: LUNES,
+        translations: [{ lang: "es", slug: "mi-post", title: "Mi post" }],
+        linkedinVariants: [{ id: 1 }],
+      },
+      siteUrl: SITE,
+    });
+    expect(incidents.map((i) => i.kind)).not.toContain("no_takes");
+  });
+
+  // El caso viejo comparaba tres tareas que caían todas a la misma hora
+  // (10:00), así que en realidad solo probaba el desempate before/antes de
+  // after/después y nunca el orden ascendente entre horas distintas. Al quitar
+  // review_own, blog_review sigue siendo la única tarea "before" del día, así
+  // que se conserva ese desempate y además se añade una toma a otra hora
+  // (08:35) para que el orden ascendente quede probado de verdad.
   it("ordena por hora, y a igual hora lo previo antes que lo posterior", () => {
     const { tasks } = buildDailyTasks({
       todayVariants: [
-        // 16:00, canal empresa, sin acción cruzada → no genera tareas.
+        // 08:35, canal personal → primer comentario + recompartir (después).
         variante({
           id: 2,
-          variant: 3,
+          variant: 1,
           postDate: LUNES,
-          scheduledFor: new Date("2026-07-29T14:00:00Z"),
+          scheduledFor: new Date("2026-07-27T06:35:00Z"),
         }),
-        // 10:00, canal personal → revisar (antes) + primer comentario (después).
+        // 07:30, canal personal → primer comentario + recompartir (después).
         variante({ id: 1, variant: 1, postDate: MIERCOLES }),
       ],
       blogPost: {
@@ -225,9 +233,11 @@ describe("buildDailyTasks — blog, incidencias y orden", () => {
       siteUrl: SITE,
     });
     expect(tasks.map((t) => [t.time, t.when])).toEqual([
-      ["10:00", "before"],
-      ["10:00", "before"],
-      ["10:00", "after"],
+      ["07:30", "before"],
+      ["07:30", "after"],
+      ["07:30", "after"],
+      ["08:35", "after"],
+      ["08:35", "after"],
     ]);
   });
 });

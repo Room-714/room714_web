@@ -61,7 +61,7 @@ export async function GET(request) {
       }),
       prisma.post.findFirst({
         where: { published: true, date: { gte: start, lte: end } },
-        include: { translations: true },
+        include: { translations: true, linkedinVariants: true },
       }),
       // Prospección: los ACTIVE menos atendidos primero (nulls first = nunca
       // atendidos). Se ordena por `lastTouchedAt`, no por `lastEngagedAt`:

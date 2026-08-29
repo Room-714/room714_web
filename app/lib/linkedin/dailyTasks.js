@@ -1,11 +1,8 @@
 import { slotFor } from "@/app/lib/time/linkedinSchedule";
 import { formatMadridTime } from "@/app/lib/time/madrid";
 
-const VOICE_JOSE =
-  'Voz José: primera persona, opinión con riesgo, referencia a lo que ves en tus propios proyectos. Sin el "nosotros" corporativo ni tono de nota de prensa.';
-
 // Construye las tareas manuales del día a partir de datos ya consultados.
-// Función pura a propósito: es lo que permite probar los seis slots de la
+// Función pura a propósito: es lo que permite probar las cinco tomas de la
 // semana sin base de datos.
 //
 // Devuelve dos listas separadas porque son cosas distintas: `tasks` es lo que
@@ -34,20 +31,6 @@ export function buildDailyTasks({
     });
 
     if (slot.canal === "personal") {
-      tasks.push({
-        id: `review-${variant.id}`,
-        kind: "review_own",
-        when: "before",
-        time,
-        channel: "personal",
-        title: `Revisa el texto que sale a tu nombre a las ${time}`,
-        articleTitle: translationEs.title,
-        text: variant.text,
-        hashtags: variant.hashtags || [],
-        voiceHint: VOICE_JOSE,
-        articleUrl,
-      });
-
       if (!firstCommentAutomated) {
         tasks.push({
           id: `first-comment-${variant.id}`,
@@ -127,6 +110,23 @@ export function buildDailyTasks({
       articleTitle: translationEs?.title || `Post ${variant.post?.id ?? "?"}`,
     };
   });
+
+  // El artículo salió pero el cron de las 08:30 no llegó a escribir sus tomas.
+  // Sin esto, un fallo de generación es indistinguible de un día sin nada que
+  // hacer, y el hueco de la semana se descubre el viernes.
+  if (blogPost && (blogPost.linkedinVariants?.length ?? 0) === 0) {
+    incidents.push({
+      id: `no-takes-${blogPost.id}`,
+      kind: "no_takes",
+      when: "before",
+      time: formatMadridTime(blogPost.date),
+      channel: null,
+      title: "El artículo de hoy se publicó sin tomas de LinkedIn",
+      articleTitle:
+        blogPost.translations?.find((t) => t.lang === "es")?.title ??
+        `Post ${blogPost.id}`,
+    });
+  }
 
   const WHEN_ORDER = { before: 0, after: 1 };
   tasks.sort(

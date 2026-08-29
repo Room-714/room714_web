@@ -61,16 +61,6 @@ function timing(task) {
 
 export function renderTaskHtml(task) {
   switch (task.kind) {
-    case "review_own":
-      return block(`
-        ${eyebrow(timing(task))}
-        ${heading(task.title)}
-        ${note(`Se publica automáticamente a las ${task.time} en tu perfil, no tienes que hacer nada. Esto es para que lo leas antes; si algo no te convence, edítalo en LinkedIn una vez publicado.`)}
-        ${copyBox("Texto que se va a publicar", task.text)}
-        <p style="margin:0 0 10px;font-size:13px;color:#444;">${esc((task.hashtags || []).join(" "))}</p>
-        <p style="margin:0;font-size:13px;color:#8a5a00;background:#fff8e6;padding:10px;border-radius:6px;">${esc(task.voiceHint)}</p>
-      `);
-
     case "first_comment":
       return block(`
         ${eyebrow(timing(task))}
@@ -174,6 +164,15 @@ export function renderTaskHtml(task) {
         ${eyebrow(`Ayer a las ${task.time}`)}
         ${heading(task.title)}
         <p style="margin:0;color:#666;font-size:13px;">${esc(task.articleTitle)}. Revisa el escenario de Make o resetea la variante para que el cron la reintente.</p>
+      `);
+
+    // El cron de las 08:30 no llegó a generar las tomas (fallo o timeout) y,
+    // al no reintentar Vercel, nadie más lo detecta antes del viernes.
+    case "no_takes":
+      return block(`
+        ${eyebrow(`Hoy a las ${task.time}`)}
+        ${heading(task.title)}
+        <p style="margin:0;color:#666;font-size:13px;">${esc(task.articleTitle)}. Genera las variantes a mano desde el admin o revisa los logs del cron de las 08:30.</p>
       `);
 
     default:
