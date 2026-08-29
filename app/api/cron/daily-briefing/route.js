@@ -17,10 +17,10 @@ const DAY_MS = 24 * 60 * 60 * 1000;
 
 // Briefing diario de tareas manuales de LinkedIn.
 //
-// A las 08:00 y no a las 07:00: el cron `generate` corre a las 07:00 Madrid los
-// lunes y miércoles y crea el post de ESE MISMO día con sus tres variantes
-// (nextMadridSlot(10) devuelve las 10:00 de la jornada en curso). A las 07:00
-// todavía no existirían justo los días con más tareas.
+// A las 08:50 y no antes: el cron `generate-linkedin` corre a las 08:30 de
+// lunes y miércoles y crea las tomas de LinkedIn de ese día, y la primera sale
+// hacia las 08:35-08:43. Antes de las 08:50 el briefing hablaría de una
+// publicación que todavía no existe.
 //
 // Vercel programa en UTC, así que hay dos entradas en vercel.json (una por cada
 // horario estacional) y aquí se descarta la que no toca. Eso resuelve de paso
