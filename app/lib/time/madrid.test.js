@@ -95,4 +95,13 @@ describe("nextMadridSlot", () => {
 
     expect(nextMadridSlot(10).toISOString()).toBe("2026-07-27T08:00:00.000Z");
   });
+
+  it("no devuelve las 07:30 de hoy si ya son las 07:45", () => {
+    // Lunes 27 de julio de 2026, 07:45 Madrid (CEST = UTC+2) → 05:45 UTC.
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-07-27T05:45:00Z"));
+
+    // Se salta al martes: el slot de hoy ya pasó.
+    expect(nextMadridSlot(7, 30).toISOString()).toBe("2026-07-28T05:30:00.000Z");
+  });
 });

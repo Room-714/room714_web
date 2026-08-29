@@ -115,6 +115,6 @@ export function nextMadridSlot(targetHour, targetMinute = 0) {
     }
   }
   throw new Error(
-    `nextMadridSlot: no se encontró slot para ${targetHour}:${String(targetMinute).padStart(2, "0")}`,
+    `nextMadridSlot: no se encontró slot para ${targetStr}:${String(targetMinute).padStart(2, "0")}`,
   );
 }
