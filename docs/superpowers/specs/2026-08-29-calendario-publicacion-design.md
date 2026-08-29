@@ -181,8 +181,9 @@ Cada pieza tiene una responsabilidad y se puede probar sola:
 - **No se añade una tarea de "revisa el artículo"**: el briefing sale a las 08:50
   y la revisión es de 08:00 a 08:30, así que llegaría tarde. El aviso de que hay
   artículo que revisar es el correo de borrador listo de las 06:00.
-- El resto (primer comentario, recompartir, comentar desde el perfil, incidencias
-  de ayer) se mantiene, más una línea con el enlace a la cola de prospectos.
+- El resto (primer comentario, recompartir, comentar desde el perfil, aviso del
+  artículo nuevo, incidencias de ayer) se mantiene tal cual. La línea con la cola
+  de prospectos la añade la spec de prospección, no esta.
 
 ### `app/api/cron/daily-briefing/route.js`
 
