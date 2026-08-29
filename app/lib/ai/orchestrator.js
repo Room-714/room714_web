@@ -12,13 +12,15 @@ import {
   fetchAndStoreCoverImage,
   fallbackQueryForCategory,
 } from "@/app/lib/sources/unsplash";
-import { generatePostDraft } from "./generator";
+import { generateLinkedInTakes, generatePostDraft } from "./generator";
 import { backlinkOldPosts } from "./backlinker";
 import { computeOutboundLinksForPost } from "./internalLinker";
 import { sendDraftReadyEmail } from "@/app/lib/notifications/draftReady";
-import { nextMadridSlot } from "@/app/lib/time/madrid";
+import { madridDayRange, nextMadridSlot } from "@/app/lib/time/madrid";
 import {
+  channelForVariant,
   crossActionsFor,
+  takeCountFor,
   variantScheduleFor,
 } from "@/app/lib/time/linkedinSchedule";
 
@@ -245,5 +247,133 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
       angle: v.angle,
       scheduledFor: v.scheduledFor.toISOString(),
     })),
+  };
+}
+
+/* ─── Tomas de LinkedIn del artículo de hoy ──────────────────────────────────
+ * Corre a las 08:30 de lunes y miércoles, después de la ventana de revisión
+ * manual (08:00-08:30). Lee el artículo tal y como haya quedado en base de
+ * datos: si se editó, las tomas salen del texto editado; si no se tocó, del
+ * generado. Nada bloquea.
+ * ────────────────────────────────────────────────────────────────────────── */
+export async function generateTakesForToday({ preview = false } = {}) {
+  const { start, end } = madridDayRange(new Date());
+
+  const post = await prisma.post.findFirst({
+    where: {
+      source: "AUTO",
+      published: true,
+      date: { gte: start, lte: end },
+    },
+    include: { translations: true, linkedinVariants: true },
+    orderBy: { date: "desc" },
+  });
+
+  if (!post) {
+    return { skipped: true, reason: "No hay artículo AUTO publicado hoy" };
+  }
+
+  // Idempotencia: de las dos entradas de cron por horario solo pasa una, pero
+  // un reintento de Vercel sí puede repetir la ejecución.
+  if (post.linkedinVariants.length > 0) {
+    return {
+      skipped: true,
+      postId: post.id,
+      reason: `El post ${post.id} ya tiene ${post.linkedinVariants.length} tomas`,
+    };
+  }
+
+  const translationEs = post.translations.find((t) => t.lang === "es");
+  if (!translationEs) {
+    return {
+      skipped: true,
+      postId: post.id,
+      reason: `El post ${post.id} no tiene traducción española`,
+    };
+  }
+
+  const count = takeCountFor(post.date);
+  const crossActions = crossActionsFor(post.date);
+  const schedules = variantScheduleFor(post.date);
+  const siteUrl = process.env.NEXTAUTH_URL || "https://www.room714.com";
+  const articleUrl = `${siteUrl}/es/blog/${translationEs.slug}`;
+
+  const { takes, usage } = await generateLinkedInTakes({
+    articleTitle: translationEs.title,
+    articleContentEs: translationEs.content,
+    articleUrl,
+    count,
+    crossActions,
+  });
+
+  const describe = (take, idx) => ({
+    take: idx + 1,
+    angle: take.angle,
+    canal: channelForVariant({ postPublishDate: post.date, variant: idx + 1 }),
+    cross: crossActions[idx],
+    scheduledFor: schedules[idx].toISOString(),
+  });
+
+  // Preview: enseña qué se publicaría y cuándo, sin descargar imágenes ni
+  // escribir en base de datos. Es la forma de validar un cambio sin ensuciar.
+  if (preview) {
+    return {
+      preview: true,
+      postId: post.id,
+      articleTitle: translationEs.title,
+      count,
+      usage,
+      takes: takes.map((take, idx) => ({
+        ...describe(take, idx),
+        text: take.text,
+        hashtags: take.hashtags,
+        crossNote: take.cross_note?.trim() || null,
+      })),
+    };
+  }
+
+  // Una imagen por toma, con su propia consulta. Best-effort: si Unsplash
+  // falla, se usa la portada del artículo, como hacía el flujo anterior.
+  const datePrefix = new Date().toISOString().split("T")[0];
+  const images = await Promise.all(
+    takes.map(async (take, idx) => {
+      try {
+        const img = await fetchAndStoreCoverImage(
+          take.image_query,
+          `${datePrefix}-li${idx + 1}`,
+          { fallbackQuery: fallbackQueryForCategory(post.category) },
+        );
+        return img.url;
+      } catch (err) {
+        console.error(
+          `Imagen de la toma ${idx + 1} falló (query "${take.image_query}"):`,
+          err.message,
+        );
+        return post.image;
+      }
+    }),
+  );
+
+  await prisma.linkedInVariant.createMany({
+    data: takes.map((take, idx) => ({
+      postId: post.id,
+      variant: idx + 1,
+      angle: take.angle,
+      text: take.text,
+      hashtags: take.hashtags || [],
+      imageBlobUrl: images[idx],
+      imageQuery: take.image_query,
+      crossNote: take.cross_note?.trim() || null,
+      scheduledFor: schedules[idx],
+    })),
+  });
+
+  return {
+    skipped: false,
+    postId: post.id,
+    articleTitle: translationEs.title,
+    count,
+    usage,
+    takes: takes.map(describe),
   };
 }
