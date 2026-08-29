@@ -29,15 +29,27 @@ export async function GET(request) {
     return new Response("No autorizado", { status: 401 });
   }
 
+  const params = new URL(request.url).searchParams;
+
   // Preview: enseña a quién pondría en la cola sin escribir nada. Como buscar es
   // gratis, este modo no cuesta absolutamente nada y es la forma de validar un
   // cambio de criterio antes de vivir con él una mañana entera.
-  const preview = new URL(request.url).searchParams.get("preview") === "1";
+  const preview = params.get("preview") === "1";
 
-  if (!preview && !isMadridHour(TARGET_HOUR)) {
+  // Force: llena la cola de verdad fuera de la hora del cron. Salta el guard de
+  // hora, nunca la autenticación. Hace falta para dos cosas reales: verificar el
+  // sistema sin esperar a las 06:00, y recuperarse de una mañana en que el cron
+  // fallara — los crones de Vercel no reintentan, así que sin esto un fallo deja
+  // el día sin cola y no hay forma de arreglarlo hasta el día siguiente.
+  //
+  // No salta el corte por cola llena: eso sigue protegiendo de acumular.
+  const force = params.get("force") === "1";
+
+  if (!preview && !force && !isMadridHour(TARGET_HOUR)) {
     return NextResponse.json({
       message: "Saltado: no es la hora correcta en Madrid",
       targetHour: `${TARGET_HOUR}:00 Madrid`,
+      pista: "Para llenarla ahora a mano: ?force=1",
     });
   }
 
