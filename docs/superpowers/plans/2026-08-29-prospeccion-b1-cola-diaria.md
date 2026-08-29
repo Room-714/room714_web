@@ -22,7 +22,9 @@
 
 **`APOLLO_API_KEY` no está en `.env.local`.** Está en Vercel, donde corre el cron. Sin ella no se puede probar nada de prospección en local: hará falta para la verificación de la Task 11.
 
-**Comandos.** Tests: `npx vitest run <ruta>`. Todo: `npx vitest run`. Migraciones: `npx prisma migrate dev --name <nombre>`. Todo desde `my-app/`.
+**Comandos.** Tests: `npx vitest run <ruta>`. Todo: `npx vitest run`. Todo desde `my-app/`.
+
+**Esquema: `db push`, nunca `migrate`.** Este proyecto no usa migraciones de Prisma — no hay carpeta `prisma/migrations` ni tabla `_prisma_migrations` en la base, comprobado contra producción. El esquema siempre se ha aplicado con `prisma db push`. Ejecutar `prisma migrate dev` aquí detectaría deriva contra un historial vacío y **pediría resetear la base entera**. Ver la Task 1, Step 5, para el procedimiento correcto.
 
 **Orden de las tareas.** Las funciones puras primero (2-6), porque son el corazón y se prueban sin base de datos ni red. Después la escritura (7-9) y por último el borrado (10). El árbol queda verde en cada commit.
 
@@ -137,27 +139,90 @@ node --env-file=.env.local -e "const {PrismaClient}=require('@prisma/client');co
 
 Expected: solo `ACTIVE` (en producción hay 10, todas ACTIVE). Si aparece `PAUSED`, pásalas a `ACTIVE` con un `UPDATE` antes de seguir y dilo en el informe.
 
-- [ ] **Step 5: Generar la migración con el relleno de datos**
+- [ ] **Step 5: NO uses `prisma migrate`. Este proyecto no tiene migraciones.**
 
-Run: `npx prisma migrate dev --name prospeccion-cola-diaria`
+Comprobado contra la base de producción: hay 8 tablas y **no existe la tabla `_prisma_migrations`**. El esquema siempre se ha aplicado con `prisma db push`, que no deja historial.
 
-Prisma generará el SQL de esquema. **Edita el fichero de migración generado** y añade al final el relleno de las filas existentes:
+`npx prisma migrate dev` contra una base con tablas y sin historial detecta deriva y **pide resetear la base**: dropear las 8 tablas, incluidos todos los artículos del blog, sus traducciones, las variantes de LinkedIn, las candidaturas y los prospectos. No lo ejecutes.
 
-```sql
--- Las filas existentes se crearon todas al enriquecer, así que su crédito ya
--- está gastado y el contador debe verlo.
-UPDATE "ProspectDiscovery" SET "enrichedAt" = "createdAt" WHERE "enrichedAt" IS NULL;
+El procedimiento correcto para este proyecto son tres pasos, en este orden.
 
--- Y ya están decididas de hecho. Se marcan con reasonCode 'legacy' a propósito:
--- las no importadas se descartaron por un fallo técnico (un bug de validación de
--- URL ya corregido), no porque nadie las rechazara, y 'legacy' las mantiene
--- fuera de las reglas derivadas, que solo cuentan los cuatro motivos reales.
-UPDATE "ProspectDiscovery"
-   SET decision = CASE WHEN imported THEN 'yes' ELSE 'no' END,
-       "reasonCode" = 'legacy',
-       "decidedAt" = "createdAt"
- WHERE decision = 'pending';
+**5a. Copia de seguridad de lo que se va a perder.** Es lo único que hace reversible el borrado, y cuesta un minuto. Crea `scripts/backup-prospeccion.mjs`:
+
+```javascript
+// Vuelca a un fichero las tablas que la migración va a tocar. No es una copia
+// de la base entera: es el seguro concreto de este cambio, que borra columnas y
+// una tabla y no se puede deshacer con git.
+import { writeFileSync } from "node:fs";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
+
+const datos = {
+  exportadoEn: new Date().toISOString(),
+  prospect: await prisma.prospect.findMany(),
+  prospectDiscovery: await prisma.prospectDiscovery.findMany(),
+  prospectEngagement: await prisma.prospectEngagement.findMany(),
+};
+
+const destino = `backup-prospeccion-${datos.exportadoEn.slice(0, 10)}.json`;
+writeFileSync(destino, JSON.stringify(datos, null, 2));
+console.log(
+  `${destino}: ${datos.prospect.length} prospectos, ` +
+    `${datos.prospectDiscovery.length} descubrimientos, ` +
+    `${datos.prospectEngagement.length} engagements`,
+);
+
+await prisma.$disconnect();
 ```
+
+Run: `node --env-file=.env.local scripts/backup-prospeccion.mjs`
+
+Expected: `10 prospectos, 48 descubrimientos, 0 engagements`. **Guarda ese fichero fuera del repositorio** (lleva datos personales: nombres, cargos y URLs de LinkedIn de personas reales). Añade `backup-prospeccion-*.json` a `.gitignore` antes de generarlo.
+
+**5b. Aplicar el esquema.**
+
+Run: `npx prisma db push`
+
+Prisma listará lo que va a borrar y pedirá confirmación por la pérdida de datos. **Léelo antes de aceptar.** Debe mencionar exactamente: la tabla `ProspectEngagement`, las columnas `kind`, `keywords`, `interest`, `lastEngagedAt`, `lastTouchedAt` y `skipCount` de `Prospect`, y el valor `PAUSED` del enum. Si menciona **cualquier otra cosa** —y muy en particular cualquier tabla que no sea `ProspectEngagement`— **cancela y para**: significa que el `schema.prisma` local no coincide con lo que hay en producción y hay que averiguar por qué antes de tocar nada.
+
+**5c. Rellenar las filas existentes.** Va después del push, porque rellena columnas que hasta ese momento no existen. Crea `scripts/backfill-prospeccion.mjs`:
+
+```javascript
+// Relleno de las 48 filas que ya existían. Se ejecuta UNA vez, después del
+// db push, y es idempotente: solo toca lo que sigue sin rellenar.
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
+
+// Las filas existentes se crearon todas al enriquecer, así que su crédito ya
+// está gastado y el contador del ciclo debe verlo.
+const conCredito = await prisma.$executeRawUnsafe(
+  `UPDATE "ProspectDiscovery" SET "enrichedAt" = "createdAt" WHERE "enrichedAt" IS NULL`,
+);
+
+// Y ya están decididas de hecho. El reasonCode 'legacy' es deliberado: las no
+// importadas se descartaron por un fallo técnico (un bug de validación de URL ya
+// corregido), no porque nadie las rechazara. 'legacy' las mantiene fuera de las
+// reglas derivadas, que solo cuentan los cuatro motivos reales — y eso vale
+// tanto para los 'no' como para los 'yes', que si no salvarían tramos y
+// contarían como aciertos de sector sin que nadie los hubiera aceptado.
+const decididas = await prisma.$executeRawUnsafe(
+  `UPDATE "ProspectDiscovery"
+      SET decision = CASE WHEN imported THEN 'yes' ELSE 'no' END,
+          "reasonCode" = 'legacy',
+          "decidedAt" = "createdAt"
+    WHERE decision = 'pending'`,
+);
+
+console.log(`enrichedAt rellenado: ${conCredito} · decisiones marcadas: ${decididas}`);
+
+await prisma.$disconnect();
+```
+
+Run: `node --env-file=.env.local scripts/backfill-prospeccion.mjs`
+
+Expected: `enrichedAt rellenado: 48 · decisiones marcadas: 48`.
 
 - [ ] **Step 6: Verificar la migración**
 
