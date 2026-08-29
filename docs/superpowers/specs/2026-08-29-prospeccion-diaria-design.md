@@ -83,9 +83,8 @@ visto**. Es la pieza central: la cola, el historial y el contador salen de aquí
 |---|---|---|
 | `apolloId` | `String @unique` | ya existe |
 | `name`, `title`, `company` | `String?` | ya existen |
-| `industry` | `String?` | nuevo, si la búsqueda lo da |
-| `employees` | `Int?` | nuevo, si la búsqueda lo da |
 | `sectorQuery` | `String?` | nuevo: el sector de la consulta que lo trajo |
+| `sizeQuery` | `String?` | nuevo: el tramo de plantilla de esa consulta (`"51,100"` / `"101,250"`) |
 | `linkedinUrl` | `String?` | ya existe; solo se rellena al enriquecer |
 | `shownOn` | `DateTime?` | nuevo: día en que entró en la cola |
 | `decision` | `String @default("pending")` | nuevo: `pending` / `yes` / `no` |
@@ -187,8 +186,14 @@ función pura y cubierta por tests: entra el perfil y las reglas, sale la consul
 
 **Qué se guarda.** Cada decisión, como texto legible más metadatos:
 
-> «Director de Operaciones · fabricante de envases metálicos · industria ·
-> 120 empleados · DESCARTADO por sector»
+> «Director de Operaciones · Envases Ruiz SL · buscado como industria y
+> fabricación, 51-100 empleados · DESCARTADO por sector»
+
+El texto que se embebe es el mismo que se ve en la ficha, con la decisión al
+final. No lleva sector ni plantilla reales porque no los tenemos (ver
+*Verificaciones hechas*), pero sí el nombre de la empresa, que es lo que más
+señal semántica aporta: «Envases Ruiz SL» dice más de a qué se dedican que la
+etiqueta de sector con la que los buscamos.
 
 Además, un documento corto de contexto comercial de Room714 (qué vende y a quién)
 y las conclusiones de las conversaciones del chat.
@@ -270,10 +275,13 @@ en vez de fallar contra la API. El día de renovación es configurable
 Tres zonas:
 
 1. **Cabecera** — el contador del ciclo y cuántas decisiones llevas hoy.
-2. **La cola** — 20 fichas ordenadas por afinidad. Cada una muestra cargo,
-   empresa, sector y plantilla (lo que la búsqueda dé), por qué salió y a qué se
-   parece. Botones **Sí** (con el coste en crédito escrito) y **No** (que despliega
-   los cinco motivos y el campo de nota). Y el chat, plegado, en la propia ficha.
+2. **La cola** — 20 fichas ordenadas por afinidad. Cada una muestra el cargo, el
+   nombre de la empresa y **con qué criterio se buscó** (sector y tramo de
+   plantilla de la consulta que la trajo), más a qué se parece. Sector y plantilla
+   reales no se pueden mostrar: la búsqueda de Apollo no los devuelve y
+   conseguirlos costaría un crédito por ficha. Botones **Sí** (con el coste en
+   crédito escrito) y **No** (que despliega los cinco motivos y el campo de nota).
+   Y el chat, plegado, en la propia ficha.
 3. **Panel "Lo que ha aprendido el filtro"**, plegado — cargos excluidos con su
    cuenta, sectores ordenados por acierto, tramos de plantilla descartados, reglas
    explícitas con su origen, y las notas libres en orden cronológico.
@@ -294,21 +302,46 @@ LinkedIn y notas. Es el resultado del sistema.
   por una línea con el enlace a la cola
 - El cron semanal `discover-prospects`, sustituido por `prospect-queue` diario
 
-## Verificaciones previas (primer paso del plan)
+## Verificaciones hechas (2026-08-29)
 
-Tres cosas que condicionan el diseño y que hay que comprobar contra la API real
-antes de escribir la pantalla:
+Las tres cuestiones que quedaban abiertas, ya resueltas contra la documentación
+de Apollo y contra la base de datos de producción. Dos de las respuestas
+cambiaron el diseño.
 
-1. **Qué devuelve `mixed_people/api_search` por persona.** El código actual solo
-   usa `organization.name`. Si vienen también sector y plantilla, la ficha es
-   mucho más rica y el filtro local mucho más fino. Se comprueba con una llamada
-   de búsqueda, que no gasta créditos.
-2. **Si el enriquecimiento de *empresa* de Apollo consume créditos.** Si no los
-   consume, cada ficha puede llevar sector, plantilla y web de la empresa antes
-   de decidir. Sería el mayor salto de calidad del filtrado y sale gratis.
-3. **Cuánto pozo hay.** 20 al día son 440 caras al mes. Con España, 51-250
-   empleados y un sector, ese pozo se agota. La búsqueda debe recordar por qué
-   página va cada sector y saltar al siguiente cuando deje de dar caras nuevas.
+**1. Qué devuelve `mixed_people/api_search` por persona.** Menos de lo que
+esperábamos. Por persona: `id`, `first_name`, `last_name_obfuscated`, `title`,
+`last_refreshed_at` y banderas `has_email` / `has_city` / `has_direct_phone`.
+Y dentro de `organization`, **solo `name` y banderas booleanas**
+(`has_industry`, `has_employee_count`, `has_revenue`…): **nunca el sector ni la
+plantilla**. La respuesta sí trae `pagination.total_entries`.
+
+**2. Si el enriquecimiento de empresa es gratis.** No lo es. Enriquecer una
+organización cuesta **1 crédito**, lo mismo que enriquecer a la persona, y la
+búsqueda de organizaciones **1 crédito por página**. La búsqueda de personas sí
+es gratis, que es lo que sostiene todo el diseño.
+
+**Consecuencia**: la ficha se construye con **lo que preguntamos**, no con lo que
+responde. Cada candidato se guarda etiquetado con los parámetros de la consulta
+que lo trajo, y eso obliga a consultar **un tramo de plantilla cada vez** (51-100
+o 101-250) igual que ya se hace con el sector. Sin eso no sabríamos en qué tramo
+cae nadie y el motivo "el tamaño no encaja" no tendría a qué apuntar.
+
+**3. Cuánto pozo hay.** 20 al día son 440 caras al mes. Con España, un sector y
+un tramo de plantilla, ese pozo se agota. La búsqueda debe recordar por qué
+página va cada combinación de sector y tramo, y saltar a la siguiente cuando deje
+de dar caras nuevas. Partir el rango en dos tramos duplica las combinaciones
+(7 sectores × 2 tramos = 14), lo que además reparte mejor el agotamiento.
+
+**Estado de la base al empezar** (producción, 2026-08-29): 10 `Prospect`, todos
+`buyer` y de Apollo; 48 `ProspectDiscovery`, de los que **26 se descartaron
+porque Apollo no devolvió URL de LinkedIn** — más de la mitad de los créditos
+gastados en nada, que es exactamente lo que este rediseño corrige; y **0
+`ProspectEngagement`**: la parte de comentar publicaciones no se ha usado ni una
+vez, así que eliminarla no pierde ningún historial.
+
+**Pendiente de ti**: `APOLLO_API_KEY` no está en `.env.local` (sí en Vercel, que
+es donde corre el cron). Hace falta en local para verificar la cola antes de
+desplegar.
 
 ## Riesgos
 
