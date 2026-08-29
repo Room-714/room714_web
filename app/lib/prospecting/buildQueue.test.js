@@ -138,6 +138,20 @@ describe("collectFreshCandidates", () => {
     expect(paginas[paginas.length - 1]).toBe(3 + MAX_SEARCH_PAGES - 1);
   });
 
+  it("distingue la última página recorrida de cuántas se recorrieron", async () => {
+    const search = vi.fn(async () => ({ people: [persona("repe")], totalEntries: 10 }));
+    const r = await collectFreshCandidates({
+      search,
+      query: {},
+      wanted: QUEUE_SIZE,
+      rules: {},
+      knownIds: new Set(["repe"]),
+      startPage: 3,
+    });
+    expect(r.pagesFetched).toBe(MAX_SEARCH_PAGES);
+    expect(r.lastPageFetched).toBe(3 + MAX_SEARCH_PAGES - 1);
+  });
+
   it("no repite a la misma persona entre páginas", async () => {
     const search = vi.fn(async () => ({
       people: [persona("mismo", "Empresa A"), persona("otro", "Empresa B")],

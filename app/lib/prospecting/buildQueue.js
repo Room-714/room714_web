@@ -46,13 +46,15 @@ export async function collectFreshCandidates({
   const dropped = [];
   const yaElegidos = new Set();
   let searched = 0;
-  let pagesUsed = 0;
+  let lastPageFetched = 0;
+  let pagesFetched = 0;
   let totalEntries = null;
 
   const lastPage = startPage + MAX_SEARCH_PAGES - 1;
   for (let page = startPage; page <= lastPage && candidates.length < wanted; page++) {
     const result = await search({ ...query, page });
-    pagesUsed = page;
+    lastPageFetched = page;
+    pagesFetched += 1;
     searched += result.people.length;
     totalEntries = result.totalEntries ?? totalEntries;
 
@@ -79,7 +81,13 @@ export async function collectFreshCandidates({
     candidates,
     dropped,
     searched,
-    pagesUsed,
+    // Dos números distintos a propósito. `lastPageFetched` es la página
+    // absoluta en la que se paró, y sirve para saber por dónde va esta
+    // combinación; `pagesFetched` es cuántas llamadas se hicieron. Con
+    // startPage 3 y cinco páginas, la primera vale 7 y la segunda 5, y leer una
+    // por la otra hace pensar que se buscó más de lo que se buscó.
+    lastPageFetched,
+    pagesFetched,
     totalEntries,
     // Se agotó el pozo de esta combinación: o no quedan páginas o no quedan
     // caras nuevas. Lo consume el cron para avisar.
