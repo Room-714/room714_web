@@ -1,20 +1,15 @@
-// ─── Perfiles de prospección en LinkedIn ────────────────────────────────────
-// Hay DOS públicos con objetivos distintos, y confundirlos fue el primer error
-// de este sistema:
-//
-//   COMPRADOR   → empresas medianas tradicionales con canal digital pero sin
-//                 equipo propio de producto, diseño o tecnología. Son las que
-//                 pueden contratar a Room714. Se encuentran con Apollo.
-//   REFERENCIA  → gente que publica con asiduidad sobre producto, diseño o
-//                 tecnología. No son clientes: comentar sus publicaciones da
-//                 alcance y presencia. NO se encuentran con Apollo (no sabe
-//                 filtrar por actividad de publicación), sino con las búsquedas
-//                 de contenido de LinkedIn y criterio humano.
+// ─── Perfil de prospección en LinkedIn ──────────────────────────────────────
+// Hubo un segundo público, "referencia" (gente que publica mucho, a quien se
+// comentaba para ganar alcance), y un flujo entero de comentar publicaciones
+// alrededor de él. Se retiraron los dos: en meses no produjeron ni un solo
+// engagement registrado. Lo que queda es un único público, el comprador, y las
+// acciones diarias se reducen a revisar la cola de candidatos que trae Apollo
+// y darle feedback a la búsqueda.
 //
 // Editar este fichero ES editar la estrategia de prospección: no hay más
 // configuración escondida.
 
-// ─── Público 1: el comprador ────────────────────────────────────────────────
+// ─── El comprador ───────────────────────────────────────────────────────────
 // Ojo con la tentación de meter aquí cargos de producto (CPO, Head of Product)
 // o sectores de software: buscar esos cargos garantiza dar con empresas que ya
 // tienen la capacidad dentro, que son exactamente las que NO nos necesitan. La
@@ -79,72 +74,21 @@ export const BUYER_PROFILE = {
   ],
 };
 
-// ─── Público 2: las referencias ─────────────────────────────────────────────
-// No hay consulta de Apollo aquí a propósito: lo que las define es que
-// publiquen a menudo, y eso solo se ve leyendo LinkedIn. El briefing abre
-// búsquedas de contenido reciente por estos temas y el alta es manual.
-export const REFERENCE_PROFILE = {
-  kind: "reference",
-  roles: [
-    "Head of Design",
-    "Design Lead",
-    "Head of Product",
-    "Product Lead",
-    "CTO",
-    "Principal Engineer",
-    "Consultor de producto",
-  ],
-  signals: [
-    "Publica varias veces por semana, no una vez al trimestre",
-    "Escribe opinión propia, no solo comparte enlaces",
-    "Tiene conversación en comentarios (no monólogo)",
-    "Toca producto, diseño, research o ingeniería con criterio",
-  ],
-  // Temas por los que buscar publicaciones recientes.
-  keywords: [
-    "UX",
-    "product management",
-    "diseño de producto",
-    "investigación de usuarios",
-    "arquitectura de software",
-    "IA en producto",
-  ],
-};
-
-// Compatibilidad: el redactor de comentarios y el briefing importaban este
-// nombre. Apunta al comprador, que es el perfil comercial.
-export const IDEAL_CUSTOMER_PROFILE = BUYER_PROFILE;
-
-// Búsquedas de contenido en LinkedIn para encontrar posts comentables. Rotan
-// por día para no repetir.
-export function contentSearchUrl(keyword) {
-  return `https://www.linkedin.com/search/results/content/?keywords=${encodeURIComponent(
-    keyword,
-  )}&sortBy=%22date_posted%22`;
-}
-
-// Feed de actividad reciente de un perfil o página a partir de su URL.
-export function activityFeedUrl(linkedinUrl) {
-  const clean = String(linkedinUrl || "").replace(/\/+$/, "");
-  if (clean.includes("/company/")) return `${clean}/posts/`;
-  return `${clean}/recent-activity/all/`;
-}
-
-// Cuántas tareas de prospección entran en el briefing de cada día laborable, y
-// cómo se reparten: una de cada público, para avanzar las dos estrategias en
-// paralelo.
-export const PROSPECT_TASKS_PER_DAY = 2;
-export const TASKS_PER_KIND = { buyer: 1, reference: 1 };
-
 // ─── Traducción del perfil de comprador a una consulta de Apollo ────────────
 
 // Lo primero que se va a querer cambiar. Apollo acepta país, región o ciudad.
 export const APOLLO_PERSON_LOCATIONS = ["Spain"];
 
 // "Mediana empresa" según la definición europea: 50 a 250 empleados. Por debajo
-// no hay presupuesto; por encima suele haber equipo propio. Apollo espera
-// cadenas "mínimo,máximo".
-export const APOLLO_EMPLOYEE_RANGES = ["51,250"];
+// no hay presupuesto; por encima suele haber equipo propio.
+//
+// Va partido en dos tramos, y no como un rango único, por una razón que no es
+// obvia: la búsqueda de Apollo NO devuelve la plantilla de la empresa (solo una
+// bandera de si la tiene), así que la única forma de saber en qué tramo cae un
+// candidato es haberlo preguntado. Sin esta partición, el motivo de descarte
+// "el tamaño no encaja" no tendría a qué apuntar y la regla derivada que quita
+// un tramo de la consulta no podría existir.
+export const APOLLO_EMPLOYEE_RANGES = ["51,100", "101,250"];
 
 // Valores del enum de Apollo: owner, founder, c_suite, partner, vp, head,
 // director, manager, senior, entry, intern.
@@ -183,44 +127,78 @@ function tagsFromSectors(sectors = []) {
   return [...new Set(tags)];
 }
 
-// Semanas transcurridas desde la época Unix. No pretende ser el número de
-// semana ISO: solo un entero que avanza de siete en siete días, que es lo que
-// necesita la rotación.
-export function weekIndexFor(date = new Date()) {
-  return Math.floor(date.getTime() / (7 * 24 * 60 * 60 * 1000));
+// Días transcurridos desde la época Unix. No pretende ser un número de día del
+// año: solo un entero que avanza de uno en uno, que es lo que necesita la
+// rotación.
+export function dayIndexFor(date = new Date()) {
+  return Math.floor(date.getTime() / (24 * 60 * 60 * 1000));
 }
 
-// Qué sector toca esta semana. La rotación es por SECTOR y no por cargo: los
-// cargos buenos son los que son y no conviene alternarlos con peores solo por
-// tener variedad. Lo que sí interesa variar son las empresas, y con una lista
-// larga de cargos y un solo sector cada semana, la primera página de Apollo
-// deja de ser monocolor.
+// Todas las combinaciones de sector y tramo, en orden estable. Son 14, así que
+// con una al día una combinación se repite cada dos semanas y media: tiempo de
+// sobra para que Apollo tenga caras nuevas que enseñar.
+export function searchCombos(profile = BUYER_PROFILE) {
+  const sectors = profile.sectors?.length ? profile.sectors : [null];
+  return sectors.flatMap((sector) =>
+    APOLLO_EMPLOYEE_RANGES.map((size) => ({ sector, size })),
+  );
+}
+
+// Qué combinación toca hoy. El ciclo es FIJO, y eso es deliberado: garantiza que
+// todas las combinaciones se sigan muestreando. Ponderarlo por tasa de acierto
+// sería un trinquete — una combinación con una mala racha temprana dejaría de
+// salir y no podría demostrar nunca que era buena. La tasa se calcula y se
+// enseña en el panel de aprendizaje, para que la decisión de estrechar el perfil
+// la tome una persona.
+export function comboForDay(profile = BUYER_PROFILE, dayIndex) {
+  const combos = searchCombos(profile);
+  if (!combos.length || !Number.isFinite(dayIndex)) return combos[0] ?? null;
+  return combos[((dayIndex % combos.length) + combos.length) % combos.length];
+}
+
+// Pura: mismo perfil, misma combinación y mismas reglas, misma consulta. Es la
+// pieza que decide a quién se dirige la empresa, así que está cubierta por tests.
 //
-// Devuelve null si no hay semana o el perfil no tiene sectores (los perfiles de
-// los tests), y entonces se buscan todos a la vez.
-export function sectorForWeek(profile = BUYER_PROFILE, weekIndex) {
-  const sectors = profile.sectors;
-  if (!sectors?.length || !Number.isFinite(weekIndex)) return null;
-  return sectors[((weekIndex % sectors.length) + sectors.length) % sectors.length];
-}
-
-// Pura: mismo perfil y misma semana, misma consulta. Es la pieza que decide a
-// quién se dirige la empresa, así que está cubierta por tests.
+// `rules` viene de app/lib/prospecting/rules.js y sale de contar las decisiones
+// pasadas. Aquí solo se aplica; la política de cuándo excluir algo vive allí.
 export function buildApolloQuery(
   profile = BUYER_PROFILE,
-  { weekIndex, ...overrides } = {},
+  { combo, rules = {}, ...overrides } = {},
 ) {
-  const sector = sectorForWeek(profile, weekIndex);
-  const sectors = sector ? [sector] : profile.sectors;
+  const excludedTitles = rules.excludedTitles ?? [];
+  const excludedSizes = rules.excludedSizes ?? [];
+
+  const titles = titlesFromRoles(profile.roles).filter(
+    (t) => !excludedTitles.includes(t),
+  );
+  const sectors = combo?.sector ? [combo.sector] : profile.sectors;
+
+  // El tramo de la combinación del día NO se usa a ciegas: si las reglas ya lo
+  // excluyeron (SIZE_STRIKES descartes y ningún sí que lo salve, ver
+  // app/lib/prospecting/rules.js), buscar en él de todas formas sería ignorar
+  // precisamente la señal que esas reglas existen para aplicar — "hoy tocaba
+  // ese tramo" no es un motivo para gastar búsquedas en uno que ya se sabe que
+  // no sirve. En su lugar, esta función pura cae al mismo comportamiento que
+  // cuando no hay combinación: buscar en todos los tramos no excluidos. No
+  // busca en OTRO tramo dentro del par sector+tramo (eso rompería la lectura
+  // de "qué combinación tocaba hoy" en el panel de aprendizaje) ni deja de
+  // buscar (un día sin búsqueda no aporta nada). Decidir qué combinación toca
+  // DE VERDAD ese día — saltar a otra o no buscar — es una decisión de nivel
+  // de orquestación diaria, no de esta función pura: no vive aquí.
+  const comboSizeExcluded = combo?.size && excludedSizes.includes(combo.size);
+  const sizes =
+    combo?.size && !comboSizeExcluded
+      ? [combo.size]
+      : APOLLO_EMPLOYEE_RANGES.filter((r) => !excludedSizes.includes(r));
 
   return {
-    person_titles: titlesFromRoles(profile.roles),
+    person_titles: titles,
     // Los cargos reales rara vez coinciden literalmente ("Directora General",
     // "Chief Operating Officer"…).
     include_similar_titles: true,
     person_seniorities: APOLLO_SENIORITIES,
     person_locations: APOLLO_PERSON_LOCATIONS,
-    organization_num_employees_ranges: APOLLO_EMPLOYEE_RANGES,
+    organization_num_employees_ranges: sizes,
     q_organization_keyword_tags: tagsFromSectors(sectors),
     page: 1,
     per_page: 25,
