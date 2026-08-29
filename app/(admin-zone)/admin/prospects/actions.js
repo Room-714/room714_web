@@ -15,13 +15,18 @@ import {
 import { ruleStats } from "@/app/lib/prospecting/rules";
 import { QUEUE_SIZE } from "@/app/lib/prospecting/buildQueue";
 
-// Defensa en profundidad: el proxy ya exige sesión bajo /admin, pero las
-// Server Actions de Next se invocan por un identificador de acción en el
-// body de un POST, no por su propia ruta, así que ese matcher por ruta no es
-// garantía de que las intercepte. Se llama desde las cinco acciones de este
-// fichero: las que escriben en base de datos (una de ellas gasta dinero de
-// verdad) y también las dos de solo lectura (`loadQueue`, `listProspects`),
-// porque devuelven datos reales de personas y comprobarlo no cuesta nada.
+// Defensa en profundidad: HOY el proxy ya exige sesión bajo /admin, y como
+// una Server Action se invoca con un POST a la ruta de la página que la
+// importó (no a una ruta propia), ese matcher sí la intercepta mientras el
+// único sitio que importe estas acciones sea una página bajo /admin. Pero esa
+// protección depende de DÓNDE se importe la acción, no de la acción misma:
+// nada impide que mañana alguien reutilice `listProspects` o `loadQueue`
+// desde una página fuera de /admin (o desde un componente compartido) y se
+// lleve la protección por delante sin querer. Se llama desde las cinco
+// acciones de este fichero: las que escriben en base de datos (una de ellas
+// gasta dinero de verdad) y también las dos de solo lectura (`loadQueue`,
+// `listProspects`), porque devuelven datos reales de personas y comprobarlo
+// no cuesta nada.
 async function requireSession() {
   const session = await getServerSession(authOptions);
   if (!session) throw new Error("No autorizado");
@@ -50,10 +55,9 @@ async function creditStatus(now = new Date()) {
 // Lo que pinta la pantalla de un tirón: la cola, el contador y el panel de
 // aprendizaje. Una sola acción para no encadenar tres viajes desde el cliente.
 //
-// SÍ lleva `requireSession`, aunque sea una lectura que no gasta nada: las
-// Server Actions de Next se invocan por un identificador de acción en el body
-// de un POST, no por su propia ruta, así que el matcher del proxy que exige
-// sesión para /admin no es garantía de que las intercepte. `listProspects`,
+// SÍ lleva `requireSession`, aunque sea una lectura que no gasta nada: ver el
+// comentario de `requireSession` más arriba sobre por qué el matcher del
+// proxy no es una garantía permanente para una Server Action. `listProspects`,
 // aquí al lado, devuelve nombre, empresa, cargo, URL de LinkedIn y notas de
 // personas reales; esta función devuelve lo mismo de la cola sin decidir. Es
 // defensa en profundidad y no cuesta nada.
@@ -364,9 +368,9 @@ export async function acceptCandidate({ id, note }) {
 
 // La lista de validados: el resultado del sistema. Devuelve nombre, empresa,
 // cargo, URL de LinkedIn y notas de personas reales, así que lleva
-// `requireSession` por el mismo motivo que `loadQueue` aquí arriba: una
-// Server Action no depende del matcher de ruta del proxy para estar
-// protegida.
+// `requireSession` por el mismo motivo que `loadQueue` aquí arriba: la
+// protección del proxy depende de que solo una página bajo /admin importe
+// esta acción, no de la acción misma.
 export async function listProspects() {
   await requireSession();
   try {
