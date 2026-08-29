@@ -1843,11 +1843,23 @@ Desplegar es hacer push a `main`. **El primer despliegue debe hacerse un día qu
 
 Lo limpio es desplegar un jueves o un viernes por la tarde, y que el lunes siguiente arranque entero con el flujo nuevo.
 
-Si quedan variantes del calendario antiguo pendientes de publicar (`sent = false`) cuando se despliegue, saldrán a su hora vieja porque `publish-linkedin` solo mira `scheduledFor`. Con la ventana nueva (`*/5 5-7` UTC) las que estuvieran programadas a las 16:00 **no llegarán a publicarse nunca**. Comprobar antes con:
+**Corrección importante de una versión anterior de esta nota.** Decía que las variantes del calendario antiguo pendientes (`sent = false`) programadas a las 16:00 "no llegarán a publicarse nunca". **Es al revés, y es el riesgo más serio del despliegue.** `publish-linkedin` filtra `{ sent: false, scheduledFor: { lte: now } }` — **sin cota inferior**. La primera ejecución de la ventana nueva las encuentra vencidas y las dispara **todas en lote**, fuera de calendario.
+
+Y hay un daño añadido: `channelForVariant` ya usa el `TAKE_PLAN` nuevo. Una variante 3 de un artículo de **lunes** valía `empresa` en el calendario viejo y ahora devuelve `personal`. Make enruta por ese campo, así que saldría desde el perfil personal un texto escrito para la página de empresa, sin acción cruzada y sin aparecer en el briefing (que solo lista lo programado para hoy).
+
+Dos medidas, y conviene tomar las dos:
+
+**1. Estructural, ya en el código**: `publish-linkedin` lleva una cota inferior de 12 horas. Nada con más de medio día de retraso se publica; se registra y se deja pasar. Así una cola vieja no puede vaciarse de golpe aunque nadie limpie la base.
+
+**2. En el despliegue**: comprobar y vaciar la cola antigua en la misma ventana del push.
 
 ```sql
 SELECT id, "postId", variant, "scheduledFor" FROM "LinkedInVariant"
 WHERE sent = false ORDER BY "scheduledFor";
 ```
 
-y decidir si se dejan morir o se reprograman a mano.
+Si hay filas, marcarlas como enviadas para que no compitan con el calendario nuevo:
+
+```sql
+UPDATE "LinkedInVariant" SET sent = true, "sentAt" = now() WHERE sent = false;
+```
