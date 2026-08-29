@@ -87,78 +87,64 @@ model PostTranslation {
 }
 
 // ─── Prospección en LinkedIn ────────────────────────────────────────────────
-// Clientes potenciales cuya actividad se comenta manualmente desde el perfil
-// de José. El briefing diario rota sobre los ACTIVE menos atendidos y el admin
-// (/admin/prospects) redacta el comentario con IA. Nada se publica solo:
-// LinkedIn no permite automatizar comentarios en publicaciones de terceros.
+// Clientes potenciales que se revisan uno a uno cada mañana. Buscar en Apollo
+// es gratis; enriquecer cuesta 1 crédito de 60 al mes, así que el orden de las
+// operaciones es lo que da forma a todo esto: primero se decide, después se
+// paga. La cola diaria vive en ProspectDiscovery; los que sobreviven al triaje
+// pasan a Prospect.
 enum ProspectStatus {
-  ACTIVE // en rotación diaria
-  PAUSED // fuera de rotación temporalmente
-  CLIENT // convertido: fuera de rotación
-  DISCARDED // descartado: fuera de rotación
+  ACTIVE // en la lista de validados
+  CLIENT // convertido
+  DISCARDED // descartado a posteriori
 }
 
 model Prospect {
-  id            Int            @id @default(autoincrement())
-  name          String // persona o empresa
-  company       String?
-  role          String? // cargo, si es persona
-  linkedinUrl   String         @unique // URL del perfil o de la página
-  sector        String?
-  interest      String? // servicio de Room714 que encaja (texto libre)
-  keywords      String[]       @default([]) // temas por los que comentarle
-  notes         String?        @db.Text
-  status        ProspectStatus @default(ACTIVE)
-  apolloId      String?        @unique // id de Apollo, para no volver a enriquecer al mismo
-  source        String         @default("manual") // "manual" | "apollo"
-  // "buyer" = cliente potencial · "reference" = quien publica mucho y a quien
-  // comentamos por alcance. El tono del comentario cambia según cuál sea.
-  kind          String         @default("buyer")
-  // Dos relojes distintos a propósito. `lastEngagedAt` mide trabajo real
-  // hecho (comentarios publicados) y es la métrica que interesa mirar.
-  // `lastTouchedAt` mueve la cola del briefing: se actualiza también cuando se
-  // salta a alguien por no haber publicado nada. Sin esa separación, un
-  // prospecto poco activo se queda para siempre como el más antiguo y bloquea
-  // uno de los dos huecos diarios indefinidamente.
-  lastEngagedAt DateTime? // último comentario registrado
-  lastTouchedAt DateTime? // última atención: comentario O salto
-  skipCount     Int            @default(0) // saltos consecutivos por falta de actividad
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
+  id          Int            @id @default(autoincrement())
+  name        String
+  company     String?
+  role        String? // cargo
+  linkedinUrl String         @unique
+  sector      String? // el sector con el que se buscó, heredado del descubrimiento
+  notes       String?        @db.Text
+  status      ProspectStatus @default(ACTIVE)
+  apolloId    String?        @unique // id de Apollo, para no volver a enriquecer al mismo
+  source      String         @default("manual") // "manual" | "apollo"
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
 
-  engagements ProspectEngagement[]
-
-  @@index([status, kind, lastTouchedAt])
+  @@index([status, createdAt])
 }
 
-model ProspectEngagement {
-  id          Int      @id @default(autoincrement())
-  prospectId  Int
-  postUrl     String? // URL del post del prospecto (si se conoce)
-  postExcerpt String?  @db.Text // fragmento del post comentado
-  comment     String   @db.Text // comentario publicado
-  createdAt   DateTime @default(now())
-
-  prospect Prospect @relation(fields: [prospectId], references: [id], onDelete: Cascade)
-
-  @@index([prospectId, createdAt])
-}
-
-// Rastro de TODA persona que hemos enriquecido en Apollo, se acabe importando
-// como prospecto o no. Sin esta tabla, cada ejecución semanal volvería a pagar
-// un crédito por los mismos perfiles que ya descartamos. También es el
-// contador del presupuesto: filas de los últimos 30 días = créditos gastados.
+// Rastro de TODA persona que la búsqueda nos ha puesto delante, se acabe
+// enriqueciendo o no. Es la cola, el historial y el contador de créditos a la
+// vez: las filas con `enrichedAt` dentro del ciclo son lo que llevamos gastado.
+//
+// Ojo con la diferencia entre `sectorQuery`/`sizeQuery` y la realidad: son los
+// parámetros de la CONSULTA que trajo a esta persona, no atributos suyos
+// verificados. La búsqueda de Apollo no devuelve ni el sector ni la plantilla de
+// la empresa (solo banderas booleanas de si los tiene), y conseguirlos costaría
+// un crédito por ficha. Así que lo único que sabemos es qué le pedimos a Apollo.
 model ProspectDiscovery {
   id          Int      @id @default(autoincrement())
   apolloId    String   @unique
   name        String?
   title       String?
   company     String?
-  linkedinUrl String? // null = enriquecido pero sin perfil utilizable
-  imported    Boolean  @default(false)
-  createdAt   DateTime @default(now())
+  sectorQuery String? // sector de la consulta que lo trajo
+  sizeQuery   String? // tramo de plantilla de esa consulta: "51,100" | "101,250"
+  linkedinUrl String? // solo se rellena al enriquecer
 
-  @@index([createdAt])
+  shownOn    DateTime? // día en que entró en la cola
+  decision   String    @default("pending") // pending | yes | no
+  decidedAt  DateTime?
+  reasonCode String? // role | sector | size | in_house_team | other | legacy
+  note       String?   @db.Text
+  enrichedAt DateTime? // null = nunca gastó crédito
+  imported   Boolean   @default(false)
+  createdAt  DateTime  @default(now())
+
+  @@index([decision, shownOn])
+  @@index([enrichedAt])
 }
 
 enum CandidatePosition {
