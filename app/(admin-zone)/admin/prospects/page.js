@@ -9,6 +9,7 @@ import {
   rejectCandidate,
   setProspectStatus,
 } from "./actions";
+import { lookupLinksFor } from "@/app/lib/prospecting/lookupLinks";
 
 // Los cinco motivos, con el texto que se le enseña a quien decide. El orden
 // importa: los tres primeros son los que más se van a usar.
@@ -76,6 +77,11 @@ function CandidateCard({ candidato, exhausted, onAccept, onReject }) {
     .filter(Boolean)
     .join(" · ");
 
+  const enlaces = lookupLinksFor({
+    title: candidato.title,
+    company: candidato.company,
+  });
+
   return (
     <div className="rounded-xl border p-4 bg-white">
       <p className="text-lg font-bold">{candidato.title || "(sin cargo)"}</p>
@@ -88,6 +94,26 @@ function CandidateCard({ candidato, exhausted, onAccept, onReject }) {
             Es el criterio con el que se buscó, no datos comprobados de la empresa:
             la búsqueda de Apollo no devuelve ni sector ni plantilla.
           </span>
+        </p>
+      )}
+
+      {/* Investigar antes de pagar. La URL de LinkedIn de la persona no puede
+          estar aquí —es justo lo que se compra con el crédito— pero buscarla uno
+          mismo es gratis, y sin ninguna forma de mirar, la decisión se toma con
+          el cargo y el nombre de la empresa a secas. */}
+      {enlaces.length > 0 && (
+        <p className="mt-2 flex flex-wrap gap-3 text-xs">
+          {enlaces.map((l) => (
+            <a
+              key={l.label}
+              href={l.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline text-blue-700"
+            >
+              {l.label} ↗
+            </a>
+          ))}
         </p>
       )}
 
