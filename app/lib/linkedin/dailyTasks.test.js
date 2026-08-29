@@ -7,6 +7,12 @@ const SITE = "https://www.room714.com";
 const LUNES = new Date("2026-07-27T05:30:00Z");
 const MIERCOLES = new Date("2026-07-29T05:30:00Z");
 
+// La toma 1 sale a las 08:35 (offsetMin 65 en TAKE_PLAN), no a la hora de
+// publicación del artículo. Si el valor por defecto fuera postDate a secas,
+// cualquier test que mañana compare `time` para variant:1 heredaría una hora
+// que el calendario real nunca produce.
+const TAKE1_OFFSET_MS = 65 * 60 * 1000;
+
 function variante({
   id = 1,
   variant = 1,
@@ -14,13 +20,15 @@ function variante({
   scheduledFor,
   ...rest
 }) {
+  const defaultScheduledFor =
+    variant === 1 ? new Date(postDate.getTime() + TAKE1_OFFSET_MS) : postDate;
   return {
     id,
     variant,
     text: "Texto de la variante",
     hashtags: ["#IA", "#UX"],
     crossNote: "Sugerencia generada",
-    scheduledFor: scheduledFor ?? postDate,
+    scheduledFor: scheduledFor ?? defaultScheduledFor,
     post: {
       id: 10,
       date: postDate,
@@ -77,6 +85,20 @@ describe("buildDailyTasks — variantes del día", () => {
       siteUrl: SITE,
     });
     expect(kinds(tasks)).toEqual(["first_comment", "reshare_company"]);
+  });
+
+  it("jueves: comentar desde el perfil en el post de la empresa", () => {
+    const { tasks } = buildDailyTasks({
+      todayVariants: [
+        variante({
+          variant: 2,
+          postDate: MIERCOLES,
+          scheduledFor: new Date("2026-07-30T05:30:00Z"),
+        }),
+      ],
+      siteUrl: SITE,
+    });
+    expect(kinds(tasks)).toEqual(["comment_personal"]);
   });
 
   it("no pide revisar el texto: el briefing llega cuando ya se ha publicado", () => {
@@ -182,6 +204,7 @@ describe("buildDailyTasks — blog, incidencias y orden", () => {
     const { incidents } = buildDailyTasks({
       blogPost: {
         id: 10,
+        source: "AUTO",
         date: LUNES,
         translations: [{ lang: "es", slug: "mi-post", title: "Mi post" }],
         linkedinVariants: [],
@@ -195,9 +218,24 @@ describe("buildDailyTasks — blog, incidencias y orden", () => {
     const { incidents } = buildDailyTasks({
       blogPost: {
         id: 10,
+        source: "AUTO",
         date: LUNES,
         translations: [{ lang: "es", slug: "mi-post", title: "Mi post" }],
         linkedinVariants: [{ id: 1 }],
+      },
+      siteUrl: SITE,
+    });
+    expect(incidents.map((i) => i.kind)).not.toContain("no_takes");
+  });
+
+  it("no avisa si el artículo de hoy es manual: los manuales no llevan tomas", () => {
+    const { incidents } = buildDailyTasks({
+      blogPost: {
+        id: 10,
+        source: "MANUAL",
+        date: LUNES,
+        translations: [{ lang: "es", slug: "mi-post", title: "Mi post" }],
+        linkedinVariants: [],
       },
       siteUrl: SITE,
     });
@@ -208,8 +246,10 @@ describe("buildDailyTasks — blog, incidencias y orden", () => {
   // (10:00), así que en realidad solo probaba el desempate before/antes de
   // after/después y nunca el orden ascendente entre horas distintas. Al quitar
   // review_own, blog_review sigue siendo la única tarea "before" del día, así
-  // que se conserva ese desempate y además se añade una toma a otra hora
-  // (08:35) para que el orden ascendente quede probado de verdad.
+  // que se conserva ese desempate y además se añaden horas distintas (07:30 y
+  // 08:35) para que el orden ascendente quede probado de verdad. Todas las
+  // horas van explícitas: este test comprueba el sort(), no el calendario de
+  // linkedinSchedule, así que no depende del valor por defecto de variante().
   it("ordena por hora, y a igual hora lo previo antes que lo posterior", () => {
     const { tasks } = buildDailyTasks({
       todayVariants: [
@@ -220,8 +260,13 @@ describe("buildDailyTasks — blog, incidencias y orden", () => {
           postDate: LUNES,
           scheduledFor: new Date("2026-07-27T06:35:00Z"),
         }),
-        // 07:30, canal personal → primer comentario + recompartir (después).
-        variante({ id: 1, variant: 1, postDate: MIERCOLES }),
+        // 07:30, canal empresa → comentar desde el perfil (después).
+        variante({
+          id: 1,
+          variant: 2,
+          postDate: MIERCOLES,
+          scheduledFor: new Date("2026-07-30T05:30:00Z"),
+        }),
       ],
       blogPost: {
         id: 77,
@@ -234,7 +279,6 @@ describe("buildDailyTasks — blog, incidencias y orden", () => {
     });
     expect(tasks.map((t) => [t.time, t.when])).toEqual([
       ["07:30", "before"],
-      ["07:30", "after"],
       ["07:30", "after"],
       ["08:35", "after"],
       ["08:35", "after"],

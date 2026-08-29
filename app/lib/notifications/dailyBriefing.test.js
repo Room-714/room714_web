@@ -13,6 +13,7 @@ describe("renderBriefingHtml", () => {
       dateLabel: "lunes 27",
     });
     expect(html).toContain("lunes 27");
+    expect(html).toContain("0 tareas");
   });
 
   it("escapa el HTML que venga en la sugerencia de una acción cruzada", () => {
@@ -22,7 +23,7 @@ describe("renderBriefingHtml", () => {
           id: "reshare-1",
           kind: "reshare_company",
           when: "after",
-          time: "10:00",
+          time: "08:35",
           channel: "empresa",
           title: "Recomparte el post desde la página de Room714",
           articleTitle: "Mi post",
@@ -45,7 +46,7 @@ describe("renderBriefingHtml", () => {
           id: "reshare-1",
           kind: "reshare_company",
           when: "after",
-          time: "10:00",
+          time: "08:35",
           channel: "empresa",
           title: "Recomparte el post desde la página de Room714",
           articleTitle: "Mi post",
@@ -68,7 +69,7 @@ describe("renderBriefingHtml", () => {
           id: "reshare-1",
           kind: "reshare_company",
           when: "after",
-          time: "10:00",
+          time: "08:35",
           channel: "empresa",
           title: "Recomparte el post desde la página de Room714",
           articleTitle: "Mi post",
@@ -92,7 +93,7 @@ describe("renderBriefingHtml", () => {
           id: "comment-1",
           kind: "comment_personal",
           when: "after",
-          time: "10:00",
+          time: "07:30",
           channel: "personal",
           title: "Comenta desde tu perfil en el post de Room714",
           articleTitle: "Mi post",
@@ -115,7 +116,7 @@ describe("renderBriefingHtml", () => {
           id: "first-comment-1",
           kind: "first_comment",
           when: "after",
-          time: "10:00",
+          time: "08:35",
           channel: "personal",
           title: "Publica el enlace al artículo como primer comentario",
           articleTitle: "Mi post",
@@ -138,7 +139,7 @@ describe("renderBriefingHtml", () => {
           id: "not-published-5",
           kind: "not_published",
           when: "before",
-          time: "10:00",
+          time: "07:30",
           channel: null,
           title: "La derivación 2 de ayer no llegó a publicarse",
           articleTitle: "Mi post",

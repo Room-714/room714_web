@@ -167,12 +167,15 @@ export function renderTaskHtml(task) {
       `);
 
     // El cron de las 08:30 no llegó a generar las tomas (fallo o timeout) y,
-    // al no reintentar Vercel, nadie más lo detecta antes del viernes.
+    // al no reintentar Vercel, nadie más lo detecta antes del viernes. El
+    // eyebrow no usa task.time: esa es la hora de publicación del artículo
+    // (07:30), y el fallo ocurre en el cron de las 08:30 — mezclarlas despista.
     case "no_takes":
       return block(`
-        ${eyebrow(`Hoy a las ${task.time}`)}
+        ${eyebrow("Hoy · cron de las 08:30")}
         ${heading(task.title)}
         <p style="margin:0;color:#666;font-size:13px;">${esc(task.articleTitle)}. Genera las variantes a mano desde el admin o revisa los logs del cron de las 08:30.</p>
+        ${button(task.adminUrl, "Generar en el admin")}
       `);
 
     default:
@@ -182,7 +185,7 @@ export function renderTaskHtml(task) {
 
 export function renderBriefingHtml({ tasks = [], incidents = [], dateLabel }) {
   const incidentsHtml = incidents.length
-    ? `<h2 style="font-size:14px;text-transform:uppercase;letter-spacing:.06em;color:#b00020;margin:26px 0 12px;">No salió ayer</h2>${incidents.map(renderTaskHtml).join("")}`
+    ? `<h2 style="font-size:14px;text-transform:uppercase;letter-spacing:.06em;color:#b00020;margin:26px 0 12px;">Incidencias</h2>${incidents.map(renderTaskHtml).join("")}`
     : "";
 
   return `

@@ -6,7 +6,8 @@ import { formatMadridTime } from "@/app/lib/time/madrid";
 // semana sin base de datos.
 //
 // Devuelve dos listas separadas porque son cosas distintas: `tasks` es lo que
-// hay que hacer hoy, `incidents` es lo que no salió ayer y solo se informa.
+// hay que hacer hoy, `incidents` es lo que ha fallado —ayer o hoy— y solo se
+// informa, no pide ninguna acción con hora.
 export function buildDailyTasks({
   todayVariants = [],
   yesterdayUnsent = [],
@@ -114,7 +115,15 @@ export function buildDailyTasks({
   // El artículo salió pero el cron de las 08:30 no llegó a escribir sus tomas.
   // Sin esto, un fallo de generación es indistinguible de un día sin nada que
   // hacer, y el hueco de la semana se descubre el viernes.
-  if (blogPost && (blogPost.linkedinVariants?.length ?? 0) === 0) {
+  //
+  // Solo los AUTO llevan tomas: son los que recoge el cron de las 08:30. Un
+  // artículo manual no las tiene ni debe tenerlas, y sin esta condición
+  // dispararía la incidencia cada vez que se publica algo a mano.
+  if (
+    blogPost &&
+    blogPost.source === "AUTO" &&
+    (blogPost.linkedinVariants?.length ?? 0) === 0
+  ) {
     incidents.push({
       id: `no-takes-${blogPost.id}`,
       kind: "no_takes",
@@ -125,6 +134,7 @@ export function buildDailyTasks({
       articleTitle:
         blogPost.translations?.find((t) => t.lang === "es")?.title ??
         `Post ${blogPost.id}`,
+      adminUrl: `${siteUrl}/admin?postId=${blogPost.id}`,
     });
   }
 
