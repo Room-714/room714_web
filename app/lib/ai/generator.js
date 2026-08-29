@@ -1,5 +1,5 @@
 import { getAnthropicClient, MODEL } from "./anthropic";
-import { EDITORIAL_GUIDE, FEW_SHOT_EXAMPLES } from "./editorialGuide";
+import { EDITORIAL_GUIDE, FEW_SHOT_EXAMPLES, LINKEDIN_GUIDE } from "./editorialGuide";
 
 const POST_TOOL = {
   name: "create_blog_post",
@@ -581,7 +581,7 @@ export function buildTakesPrompt({
   count,
   crossActions = [],
 }) {
-  const crossBlock = crossActions.some(Boolean)
+  const crossBlock = crossActions.slice(0, count).some(Boolean)
     ? `
 
 ## ACCIONES CRUZADAS (campo cross_note de cada toma)
@@ -623,11 +623,30 @@ Llama al tool create_linkedin_takes con las ${count} tomas.${crossBlock}`;
 
 // Exportada para poder probarla.
 export function validateTakes(data, count) {
-  if (!Array.isArray(data?.takes) || data.takes.length !== count) {
+  if (!Array.isArray(data?.takes)) {
     throw new Error(
-      `takes debe ser un array con exactamente ${count} tomas (llegaron ${data?.takes?.length ?? 0})`,
+      `takes debe ser un array con exactamente ${count} tomas (llegó ${typeof data?.takes})`,
     );
   }
+
+  // De menos no hay nada que hacer: una toma no se inventa, hay que reintentar.
+  if (data.takes.length < count) {
+    throw new Error(
+      `takes debe ser un array con exactamente ${count} tomas (llegaron ${data.takes.length})`,
+    );
+  }
+
+  // De más sí: las primeras `count` son las que llevan briefing de acción
+  // cruzada (el prompt las numera "Toma 1", "Toma 2"…), así que quedarse con
+  // ellas conserva el alineamiento. Recortar cuesta una línea; reintentar
+  // cuesta una generación entera y arriesga quedarse sin publicaciones.
+  if (data.takes.length > count) {
+    console.warn(
+      `validateTakes: llegaron ${data.takes.length} tomas y se pidieron ${count}; se recortan las sobrantes`,
+    );
+    data.takes = data.takes.slice(0, count);
+  }
+
   for (const [i, t] of data.takes.entries()) {
     if (!t.text || !t.angle || !t.image_query || !Array.isArray(t.hashtags)) {
       throw new Error(`takes[${i}] incompleto`);
@@ -639,6 +658,18 @@ export function validateTakes(data, count) {
 // Presupuesto holgado: tres posts de 1800 caracteres son ~1.500 tokens. 8k deja
 // margen de sobra sin acercarse al timeout HTTP del SDK en modo no-streaming.
 const MAX_TAKES_OUTPUT_TOKENS = 8000;
+
+// Bloque de sistema propio. NO se reutiliza buildCachedSystemBlocks(): aquel
+// lleva la guía del artículo, que pide 1500-2500 palabras, HTML de TipTap y
+// enlaces internos obligatorios, y además fijaba el número de variantes en tres
+// — lo que contradecía al prompt de usuario los miércoles, que piden dos.
+//
+// Sin cache_control a propósito: son unos 900 tokens, por debajo del mínimo
+// cacheable, y la llamada corre dos veces por semana con más de una hora entre
+// una y otra, así que no habría lectura que amortizara la escritura.
+function buildTakesSystemBlocks() {
+  return [{ type: "text", text: LINKEDIN_GUIDE }];
+}
 
 export async function generateLinkedInTakes({
   articleTitle,
@@ -664,7 +695,7 @@ export async function generateLinkedInTakes({
       response = await client.messages.create({
         model: MODEL,
         max_tokens: MAX_TAKES_OUTPUT_TOKENS,
-        system: buildCachedSystemBlocks(),
+        system: buildTakesSystemBlocks(),
         tools: [TAKES_TOOL],
         tool_choice: { type: "tool", name: "create_linkedin_takes" },
         messages: [{ role: "user", content: userPrompt }],
@@ -703,6 +734,8 @@ export async function generateLinkedInTakes({
         usage: {
           input_tokens: response.usage.input_tokens,
           output_tokens: response.usage.output_tokens,
+          cache_creation_input_tokens: response.usage.cache_creation_input_tokens,
+          cache_read_input_tokens: response.usage.cache_read_input_tokens,
         },
       };
     } catch (err) {

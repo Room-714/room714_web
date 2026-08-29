@@ -1,5 +1,20 @@
-import { describe, expect, it } from "vitest";
-import { buildUserPrompt, buildTakesPrompt, validateTakes } from "./generator";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import {
+  buildUserPrompt,
+  buildTakesPrompt,
+  validateTakes,
+  generateLinkedInTakes,
+} from "./generator";
+import { getAnthropicClient } from "./anthropic";
+
+// Mock del cliente Anthropic: generateLinkedInTakes es la única pieza de esta
+// tarea que hace una llamada real, y es la que gasta dinero y tiene el modo de
+// fallo caro (reintento agota la generación y puede dejar la semana sin
+// publicaciones). Se prueba aquí el bucle de reintentos, no el modelo en sí.
+vi.mock("./anthropic", () => ({
+  getAnthropicClient: vi.fn(),
+  MODEL: "claude-test-model",
+}));
 
 const TRENDING = [
   { title: "Un titular en tendencia", source: "Medium", description: "..." },
@@ -117,7 +132,9 @@ describe("buildTakesPrompt", () => {
   it("describe la acción cruzada de cada toma", () => {
     const prompt = buildTakesPrompt(base);
     expect(prompt).toContain("Toma 1:");
+    expect(prompt).toContain("RECOMPARTICIÓN DE ROOM714");
     expect(prompt).toContain("Toma 3:");
+    expect(prompt).toContain("COMENTARIO DE JOSÉ");
   });
 
   it("no habla de acciones cruzadas si no hay ninguna", () => {
@@ -126,6 +143,12 @@ describe("buildTakesPrompt", () => {
       crossActions: [null, null, null],
     });
     expect(prompt).not.toContain("ACCIONES CRUZADAS");
+  });
+
+  it("no menciona tomas que no se han pedido", () => {
+    const prompt = buildTakesPrompt({ ...base, count: 2 });
+    expect(prompt).toContain("Toma 2:");
+    expect(prompt).not.toContain("Toma 3:");
   });
 });
 
@@ -149,10 +172,9 @@ describe("validateTakes", () => {
     );
   });
 
-  it("rechaza si vienen de más", () => {
-    expect(() => validateTakes({ takes: [take, take, take] }, 2)).toThrow(
-      /exactamente 2 tomas/,
-    );
+  it("recorta si vienen de más en vez de tirar la generación", () => {
+    const data = { takes: [take, take, take] };
+    expect(validateTakes(data, 2).takes).toHaveLength(2);
   });
 
   it("rechaza una toma sin texto", () => {
@@ -167,5 +189,75 @@ describe("validateTakes", () => {
     expect(() => validateTakes({ takes: [rota] }, 1)).toThrow(
       /takes\[0\] incompleto/,
     );
+  });
+});
+
+describe("generateLinkedInTakes", () => {
+  const take = {
+    angle: "data",
+    text: "Un post de LinkedIn suficientemente largo para pasar por bueno.",
+    hashtags: ["#IA", "#UX"],
+    image_query: "abstract industrial texture",
+    cross_note: "",
+  };
+
+  // Construye una respuesta de la API con la forma mínima que
+  // generateLinkedInTakes necesita leer (stop_reason, content, usage).
+  function mockResponse(takes) {
+    return {
+      stop_reason: "tool_use",
+      content: [
+        { type: "tool_use", name: "create_linkedin_takes", input: { takes } },
+      ],
+      usage: {
+        input_tokens: 100,
+        output_tokens: 50,
+        cache_creation_input_tokens: 0,
+        cache_read_input_tokens: 0,
+      },
+    };
+  }
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("si el primer intento no valida, reintenta y devuelve las tomas del segundo", async () => {
+    const create = vi
+      .fn()
+      // Primer intento: la toma 0 llega sin texto, validateTakes la rechaza.
+      .mockResolvedValueOnce(mockResponse([{ ...take, text: "" }, take]))
+      // Segundo intento: las dos tomas llegan completas.
+      .mockResolvedValueOnce(mockResponse([take, take]));
+    getAnthropicClient.mockReturnValue({ messages: { create } });
+
+    const result = await generateLinkedInTakes({
+      articleTitle: "Título",
+      articleContentEs: "<p>Contenido</p>",
+      articleUrl: "https://www.room714.com/es/blog/x",
+      count: 2,
+      crossActions: [null, null],
+    });
+
+    expect(result.takes).toHaveLength(2);
+    expect(create).toHaveBeenCalledTimes(2);
+  });
+
+  it("si los dos intentos fallan, lanza tras agotarlos", async () => {
+    const create = vi
+      .fn()
+      .mockResolvedValue(mockResponse([{ ...take, text: "" }]));
+    getAnthropicClient.mockReturnValue({ messages: { create } });
+
+    await expect(
+      generateLinkedInTakes({
+        articleTitle: "Título",
+        articleContentEs: "<p>Contenido</p>",
+        articleUrl: "https://www.room714.com/es/blog/x",
+        count: 1,
+        crossActions: [null],
+      }),
+    ).rejects.toThrow(/tras 2 intentos/);
+    expect(create).toHaveBeenCalledTimes(2);
   });
 });
