@@ -121,42 +121,16 @@ export function renderTaskHtml(task) {
         ${button(task.articleUrl, "Ver artículo")}${button(task.adminUrl, "Editar en el admin")}
       `);
 
-    case "prospect_comment": {
-      const who = [task.prospectRole, task.prospectCompany]
-        .filter(Boolean)
-        .join(" · ");
+    // La prospección del día es una sola decisión: revisar la cola que trae
+    // Apollo y decir sí o no a cada candidato. Sustituye a las dos tareas
+    // antiguas (comentar un post, buscar referencias), que en meses no
+    // produjeron ni un solo engagement registrado.
+    case "prospect_queue":
       return block(`
-        ${eyebrow("Cuando tengas 10 minutos · tu perfil")}
+        ${eyebrow(timing(task))}
         ${heading(task.title)}
-        ${who ? note(who) : ""}
-        ${
-          task.neverEngaged
-            ? note("Primer contacto: todavía no le has comentado nunca. Que el comentario se sostenga solo, sin mencionar Room714.")
-            : ""
-        }
-        ${steps([
-          `Pulsa <strong>Ver su actividad</strong> y elige un post reciente (ideal, de las últimas 48 h) que toque nuestros temas.`,
-          `Copia el texto del post y pégalo en <strong>Redactar comentario</strong>: la IA te propone dos opciones con tu voz.`,
-          `Publica el que más te convenza (ajústalo si hace falta) y márcalo como comentado para que la rotación siga.`,
-        ])}
-        <p style="margin:10px 0 0;font-size:13px;color:#8a5a00;background:#fff8e6;padding:10px;border-radius:6px;">${esc(task.angle)}</p>
-        ${button(task.activityUrl, "Ver su actividad")}${button(task.draftUrl, "Redactar comentario")}
-      `);
-    }
-
-    case "prospect_discover":
-      return block(`
-        ${eyebrow("Cuando tengas 10 minutos · tu perfil")}
-        ${heading(task.title)}
-        ${note("La lista de prospectos aún no llena el cupo del día. Esta búsqueda abre posts recientes de LinkedIn sobre el tema; si el autor encaja con nuestro cliente ideal, coméntale y dalo de alta.")}
-        ${task.profileHint ? note(task.profileHint) : ""}
-        ${steps([
-          `Pulsa <strong>Abrir búsqueda</strong> y ojea los posts de las últimas 24-48 h.`,
-          `Si el autor encaja (decisor de producto/digital), comenta con un dato o experiencia propia.`,
-          `Dalo de alta en <strong>Prospectos</strong> para que entre en la rotación diaria.`,
-        ])}
-        <p style="margin:10px 0 0;font-size:13px;color:#8a5a00;background:#fff8e6;padding:10px;border-radius:6px;">${esc(task.angle)}</p>
-        ${button(task.searchUrl, "Abrir búsqueda")}${button(task.adminUrl, "Prospectos")}
+        ${note("Candidatos que ha traído Apollo desde la última revisión. Para cada uno: sí, no, o pendiente.")}
+        ${button(task.adminUrl, "Revisar cola")}
       `);
 
     case "not_published":

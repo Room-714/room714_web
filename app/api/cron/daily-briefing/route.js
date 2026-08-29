@@ -8,7 +8,6 @@ import {
 } from "@/app/lib/time/madrid";
 import { PLANNED_WEEKDAYS } from "@/app/lib/time/linkedinSchedule";
 import { buildDailyTasks } from "@/app/lib/linkedin/dailyTasks";
-import { buildProspectingTasks } from "@/app/lib/linkedin/prospecting";
 import { sendDailyBriefingEmail } from "@/app/lib/notifications/dailyBriefing";
 
 export const maxDuration = 60;
@@ -49,7 +48,7 @@ export async function GET(request) {
   const yesterdayStart = new Date(start.getTime() - DAY_MS);
 
   try {
-    const [todayVariants, yesterdayUnsent, todaysPosts, prospects, latestPost] =
+    const [todayVariants, yesterdayUnsent, todaysPosts, pendientes] =
       await Promise.all([
       prisma.linkedInVariant.findMany({
         where: { scheduledFor: { gte: start, lte: end } },
@@ -72,24 +71,7 @@ export async function GET(request) {
         include: { translations: true, linkedinVariants: true },
         orderBy: { date: "desc" },
       }),
-      // Prospección: los ACTIVE menos atendidos primero (nulls first = nunca
-      // atendidos). Se ordena por `lastTouchedAt`, no por `lastEngagedAt`:
-      // saltar a alguien que no ha publicado nada también es atenderle, y con
-      // el segundo campo se quedaría clavado en cabeza de cola para siempre.
-      // El orden definitivo lo pone orderProspectQueue, que está probado.
-      // Se traen de sobra y de los dos tipos (comprador y referencia): el
-      // reparto de un hueco por tipo lo hace buildProspectingTasks.
-      prisma.prospect.findMany({
-        where: { status: "ACTIVE" },
-        orderBy: [{ lastTouchedAt: { sort: "asc", nulls: "first" } }],
-        take: 20,
-      }),
-      // Artículo más reciente ya publicado: da el ángulo del comentario.
-      prisma.post.findFirst({
-        where: { published: true, date: { lte: now } },
-        orderBy: { date: "desc" },
-        include: { translations: { where: { lang: "es" } } },
-      }),
+      prisma.prospectDiscovery.count({ where: { decision: "pending" } }),
     ]);
 
     // De los posts de hoy, prioriza el AUTO: es el que lleva tomas de
@@ -112,17 +94,20 @@ export async function GET(request) {
       expectsArticle: PLANNED_WEEKDAYS.includes(getMadridWeekday(now)),
     });
 
-    // Las tareas de prospección van al final: son "después de comer" y no
-    // compiten con la secuencia de publicación de la mañana.
-    const prospectingTasks = buildProspectingTasks({
-      prospects,
-      latestPost: latestPost?.translations?.[0]
-        ? { title: latestPost.translations[0].title }
-        : null,
-      siteUrl,
-      dayOfMonth: now.getDate(),
-    });
-    tasks.push(...prospectingTasks);
+    // Toda la prospección del día cabe en una tarea: revisar la cola. Antes
+    // había dos —comentar el post de alguien y buscar referencias— que en meses
+    // no produjeron ni un solo engagement registrado.
+    if (pendientes > 0) {
+      tasks.push({
+        id: "prospect-queue",
+        kind: "prospect_queue",
+        when: "after",
+        time: "09:00",
+        channel: null,
+        title: `Revisa la cola de prospectos (${pendientes} pendientes)`,
+        adminUrl: `${siteUrl}/admin/prospects`,
+      });
+    }
 
     const dateLabel = formatMadridDateLabel(now);
 

@@ -52,7 +52,12 @@ async function apolloPost(path, body) {
   if (!response.ok) {
     const detail =
       data?.error || data?.message || text?.slice(0, 300) || "sin cuerpo";
-    throw new Error(`Apollo ${path} respondió ${response.status}: ${detail}`);
+    const err = new Error(`Apollo ${path} respondió ${response.status}: ${detail}`);
+    // Hubo respuesta HTTP: Apollo rechazó la petición, así que no llegó a
+    // devolver datos que calificaran y casi con seguridad no cobró. Un fallo
+    // del fetch, en cambio, no lleva esta marca: ahí no sabemos si procesó.
+    err.gotResponse = true;
+    throw err;
   }
 
   return data ?? {};
@@ -88,4 +93,21 @@ export async function enrichPeople(apolloIds = []) {
   }
 
   return { matches };
+}
+
+// La decisión que no puede romperse en silencio: dado un error de
+// `enrichPeople`, ¿se revierte la reserva del crédito (no cobró) o se deja
+// como está (no lo sabemos, se asume lo peor)? Pura y exportada aparte para
+// poder probarla sin montar Prisma ni un servidor.
+//
+//   - `err.gotResponse` cierto: hubo respuesta HTTP (4xx/5xx). Apollo
+//     rechazó la petición sin llegar a devolver datos que calificaran, así
+//     que casi con seguridad no cobró: se revierte.
+//   - sin la marca: el fallo fue del propio fetch (red caída, timeout sin
+//     respuesta...). No sabemos si Apollo procesó la petición antes de que
+//     la respuesta se perdiera, así que se asume que sí y NO se revierte: es
+//     el lado seguro, porque sobrecontar no rompe el presupuesto e
+//     infracontar sí.
+export function shouldRevertReservation(err) {
+  return Boolean(err?.gotResponse);
 }

@@ -12,6 +12,7 @@
     { "path": "/api/cron/daily-briefing", "schedule": "50 6 * * 1-5" },
     { "path": "/api/cron/daily-briefing", "schedule": "50 7 * * 1-5" },
     { "path": "/api/cron/cleanup-candidates", "schedule": "0 3 * * *" },
-    { "path": "/api/cron/discover-prospects", "schedule": "0 5 * * 1" }
+    { "path": "/api/cron/prospect-queue", "schedule": "10 4 * * 1-5" },
+    { "path": "/api/cron/prospect-queue", "schedule": "10 5 * * 1-5" }
   ]
 }

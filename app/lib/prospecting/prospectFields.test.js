@@ -1,9 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  interestFor,
-  keywordsFor,
-  normalizeLinkedInProfileUrl,
-} from "./prospectFields";
+import { normalizeLinkedInProfileUrl } from "./prospectFields";
 
 // Este fichero existe por dos fallos reales, no por completismo.
 describe("normalizeLinkedInProfileUrl", () => {
@@ -48,69 +44,5 @@ describe("normalizeLinkedInProfileUrl", () => {
     for (const v of [null, undefined, "", "   "]) {
       expect(normalizeLinkedInProfileUrl(v)).toBeNull();
     }
-  });
-});
-
-describe("interestFor", () => {
-  // Fallo 2: el patrón buscaba "cto" como subcadena y "direCTOr" la contiene,
-  // así que los diez primeros compradores importados —todos directores—
-  // quedaron etiquetados como "Software development".
-  it("un director comercial NO es software development", () => {
-    expect(interestFor("Director Comercial")).toBe("Canal digital y conversión");
-    expect(interestFor("Commercial Director")).toBe("Canal digital y conversión");
-    expect(interestFor("Director de Marketing Digital")).toBe(
-      "Canal digital y conversión",
-    );
-  });
-
-  it("ningún cargo con la palabra director cae en software por accidente", () => {
-    for (const cargo of [
-      "Director General",
-      "Directora de Operaciones",
-      "Director Comercial Internacional",
-    ]) {
-      expect(interestFor(cargo)).not.toBe("Software development");
-    }
-  });
-
-  it("un CTO de verdad sí es software development", () => {
-    expect(interestFor("CTO")).toBe("Software development");
-    expect(interestFor("CTO & Co-Founder")).toBe("Software development");
-  });
-
-  it("reconoce operaciones, transformación y diseño", () => {
-    expect(interestFor("COO")).toBe("Digitalización de procesos");
-    expect(interestFor("Director de Operaciones")).toBe(
-      "Digitalización de procesos",
-    );
-    expect(interestFor("Director de Transformación Digital")).toBe(
-      "Transformación digital",
-    );
-    expect(interestFor("Head of UX")).toBe("UX/UI y research");
-  });
-
-  it("un CEO cae en el genérico: su cargo no declara una necesidad", () => {
-    expect(interestFor("CEO")).toBe("Producto digital y CX");
-    expect(interestFor(null)).toBe("Producto digital y CX");
-  });
-});
-
-describe("keywordsFor", () => {
-  it("añade temas propios del cargo y la empresa", () => {
-    const kw = keywordsFor("Director Comercial", "Araven");
-    expect(kw).toContain("conversión");
-    expect(kw).toContain("Araven");
-    expect(kw.length).toBeLessThanOrEqual(5);
-  });
-
-  it("sin cargo ni empresa devuelve los temas del perfil de comprador", () => {
-    const kw = keywordsFor(null, null);
-    expect(kw.length).toBeGreaterThan(0);
-    expect(kw.length).toBeLessThanOrEqual(5);
-  });
-
-  it("no repite temas", () => {
-    const kw = keywordsFor("Director de Operaciones", "Acme");
-    expect(new Set(kw).size).toBe(kw.length);
   });
 });
