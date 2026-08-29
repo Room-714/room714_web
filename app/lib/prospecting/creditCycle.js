@@ -80,7 +80,11 @@ export function buildCreditStatus({
   const workdaysToReset = workdaysBetween(now, nextReset);
 
   return {
-    spent,
+    // Se devuelve `gastados` (el saneado), no `spent` tal cual llegó: con una
+    // entrada rota (undefined, null, NaN) el mensaje de error de
+    // `acceptCandidate` mostraría "Sin créditos: undefined de 60 gastados" en
+    // vez del cupo entero que es lo que de verdad se ha asumido gastado.
+    spent: gastados,
     cap,
     remaining,
     exhausted: remaining === 0,

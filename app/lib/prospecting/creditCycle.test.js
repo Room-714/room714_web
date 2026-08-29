@@ -103,6 +103,18 @@ describe("buildCreditStatus", () => {
       expect(s.exhausted).toBe(true);
     }
   });
+
+  it("expone en `spent` el valor saneado, no el crudo recibido", () => {
+    // Antes se devolvía `spent` tal cual llegaba: con una entrada rota, el
+    // mensaje de `acceptCandidate` salía como "Sin créditos: undefined de 60
+    // gastados". Lo que debe verse es el número con el que de verdad se ha
+    // calculado `remaining` y `exhausted` (el cupo entero, en el peor caso).
+    for (const spent of [undefined, null, NaN]) {
+      const s = buildCreditStatus({ spent, cap: 60, now, resetDay: 16 });
+      expect(s.spent).toBe(60);
+    }
+    expect(buildCreditStatus({ spent: 17, cap: 60, now, resetDay: 16 }).spent).toBe(17);
+  });
 });
 
 describe("límites conocidos", () => {

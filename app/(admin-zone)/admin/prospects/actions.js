@@ -4,7 +4,7 @@ import { prisma } from "@/app/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/lib/authOptions";
-import { enrichPeople } from "@/app/lib/prospecting/apollo";
+import { enrichPeople, shouldRevertReservation } from "@/app/lib/prospecting/apollo";
 import { normalizeLinkedInProfileUrl } from "@/app/lib/prospecting/prospectFields";
 import {
   DEFAULT_CAP,
@@ -124,46 +124,50 @@ export async function rejectCandidate({ id, reasonCode, note }) {
 // Un "sí" SÍ gasta: un crédito de Apollo, ahora mismo. Todo lo de esta función
 // está ordenado alrededor de eso.
 //
-// EL AGUJERO DE CONTABILIDAD (y por qué esta función tiene la forma que tiene):
+// EL AGUJERO DE CONTABILIDAD QUE ESTO EVITA:
+//
+// El crédito se banca (se reserva la fila) ANTES de llamar a Apollo, no
+// después de que responda. Es lo único que impide tres formas de infracontar
+// —y solo infracontar es inaceptable; sobrecontar es el lado seguro—:
+//
+//   - Dos pestañas aceptando el mismo candidato a la vez: sin reserva atómica,
+//     las dos pasarían la guarda, las dos llamarían a Apollo (2 créditos
+//     reales) y las dos escribirían sobre la misma fila (el contador cuenta
+//     filas con `enrichedAt`, así que registraría 1 de 2). Con la reserva
+//     (`updateMany` con `decision: "pending", enrichedAt: null` en el WHERE),
+//     solo una de las dos consigue reservar; la otra recibe `count === 0` y
+//     se rechaza sin tocar Apollo.
+//   - El proceso muere entre que Apollo cobra y que se escribe: si se
+//     reservara después de la respuesta, ese gasto real desaparecería de la
+//     contabilidad. Reservando antes, la fila ya cuenta como gastada desde
+//     el instante en que se decide llamar, así que una caída a mitad no
+//     pierde el gasto.
+//   - Un timeout de red sin respuesta: no se sabe si Apollo procesó la
+//     petición. Se asume que sí (se mantiene la reserva) en vez de asumir que
+//     no: es el único sentido del error que no puede llevar a infracontar.
 //
 // Apollo factura, según su propia documentación, "solo cuando devuelve datos
-// que califican". Eso separa con nitidez tres desenlaces de `enrichPeople`:
+// que califican". Eso separa tres desenlaces de `enrichPeople` una vez
+// reservada la fila:
 //
-//   1. Lanza una excepción (red caída, 500 de Apollo, clave inválida): la
-//      llamada nunca completó con una respuesta útil, así que lo más probable
-//      es que Apollo no haya cobrado nada. No se toca `enrichedAt`: la fila
-//      sigue "pending" y se puede reintentar sin miedo a pagar dos veces.
-//
-//   2. Devuelve `matches: []`: la llamada SÍ completó, pero Apollo no
-//      encontró ningún registro que calificara para ese apolloId. Sin datos
-//      que devolver, según su propia política, no hay cobro. Tratar esto igual
-//      que el caso 3 (como hacía un borrador anterior de esta función) cobraba
-//      de más a candidatos que Apollo nunca llegó a facturar.
-//
-//   3. Devuelve un match, pero sin `linkedin_url` utilizable: aquí Apollo SÍ
+//   1. Lanza una excepción con `err.gotResponse` (hubo respuesta HTTP, 4xx o
+//      5xx): Apollo rechazó la petición sin devolver datos que calificaran,
+//      así que casi seguro no cobró. Se revierte la reserva.
+//   2. Lanza una excepción SIN esa marca (falló el propio fetch: red caída,
+//      timeout): no se sabe si Apollo procesó. Se asume que sí y NO se
+//      revierte la reserva — el único caso ambiguo se resuelve del lado
+//      seguro, y esta fila no se reintenta sola (ver más abajo).
+//   3. Completa con `matches: []`: la llamada SÍ terminó, y Apollo no
+//      encontró ningún registro que calificara. Sin datos que devolver, no
+//      hay cobro: es el ÚNICO desenlace en el que se sabe con certeza que no
+//      se ha gastado nada, así que es el único en el que se revierte la
+//      reserva y la fila vuelve a "pending" para poder reintentarla.
+//   4. Completa con un match, pero sin `linkedin_url` utilizable: Apollo SÍ
 //      entregó un registro —hay datos que calificaron— así que según su
-//      política SÍ cobra, siga o no siendo útil para nosotros. La prueba de
-//      que esto cuesta dinero de verdad está en prospectFields.js: una
-//      validación demasiado estricta ahí rechazó URLs perfectamente válidas y
-//      costó 26 créditos reales sin guardar ni una. El crédito se gasta al
-//      recibir el dato, no al validarlo.
-//
-// El segundo problema, más sutil, es CUÁNDO se escribe `enrichedAt` en base de
-// datos. El crédito se gasta en el instante en que Apollo responde con un
-// match (caso 3), no en el instante en que terminamos de crear el `Prospect`.
-// Si esa segunda parte falla (un `P2002` por carrera, un corte con la BD) y
-// `enrichedAt` solo se escribiera al final junto con el resto, el gasto real
-// en Apollo desaparecería de nuestra contabilidad: la fila quedaría "pending"
-// sin `enrichedAt`, el contador de gastados la ignoraría, y "remaining"
-// mentiría por encima de lo que queda de verdad. Por eso el match con URL
-// utilizable se banca (se escribe `enrichedAt` + `linkedinUrl`) ANTES de tocar
-// la tabla `Prospect`, en su propio update: pase lo que pase después, el
-// contador ya sabe que esto costó un crédito. Y si el proceso muere justo ahí,
-// la próxima llamada para el mismo id detecta `enrichedAt` ya puesto y
-// reanuda sin volver a llamar a Apollo (que sí sería un cobro duplicado real).
-//
-// El principio detrás de las tres decisiones es siempre el mismo: el contador
-// nunca debe decir que queda más crédito del que queda de verdad.
+//      política SÍ cobra, sea o no útil para nosotros. La prueba de que esto
+//      cuesta dinero de verdad está en prospectFields.js: una validación
+//      demasiado estricta ahí rechazó URLs perfectamente válidas y costó 26
+//      créditos reales sin guardar ni una. La reserva se queda.
 export async function acceptCandidate({ id, note }) {
   await requireSession();
 
@@ -177,7 +181,6 @@ export async function acceptCandidate({ id, note }) {
     }
 
     let linkedinUrl = candidato.linkedinUrl;
-    let enrichedAt = candidato.enrichedAt;
     // Por defecto, lo que ya sabíamos por la búsqueda (caso de reanudación,
     // donde Apollo ya no está disponible). El intento en fresco los mejora
     // con lo que devuelva el enriquecimiento, que es más fiable.
@@ -185,12 +188,26 @@ export async function acceptCandidate({ id, note }) {
     let prospectCompany = candidato.company;
     let prospectRole = candidato.title;
 
-    // `enrichedAt` ya puesto con la decisión todavía "pending" solo puede
-    // significar una cosa: un intento anterior ya pagó el crédito a Apollo y
-    // se cayó antes de terminar de crear el `Prospect`. Se reanuda con la URL
-    // ya guardada; NO se vuelve a llamar a Apollo, o el segundo cobro sería
-    // real y esta vez sí nuestro.
-    if (!enrichedAt) {
+    if (candidato.enrichedAt) {
+      // La fila ya está reservada con la decisión todavía "pending". Solo
+      // puede pasar por dos motivos, y en ninguno de los dos se vuelve a
+      // llamar a Apollo (un segundo cobro sí sería real y esta vez nuestro):
+      //
+      //   - Ya hay `linkedinUrl`: un intento anterior recibió el match y lo
+      //     guardó, pero se cayó antes de crear el `Prospect`. Se reanuda con
+      //     esos datos.
+      //   - No hay `linkedinUrl`: la reserva se hizo pero el desenlace de
+      //     Apollo quedó sin resolver (el caso 2 de arriba: fetch ambiguo). No
+      //     se sabe si cobró; tampoco se reintenta solo. Queda a la espera de
+      //     revisión manual.
+      if (!linkedinUrl) {
+        return {
+          success: false,
+          error:
+            "Este candidato quedó reservado en un intento anterior sin respuesta clara de Apollo (puede haber cobrado). No se reintenta automáticamente para no arriesgar un cobro duplicado.",
+        };
+      }
+    } else {
       // Se comprueba el presupuesto ANTES de llamar a Apollo, no después:
       // llamar y luego descubrir que no había crédito lo gasta igual.
       const credits = await creditStatus();
@@ -201,23 +218,65 @@ export async function acceptCandidate({ id, note }) {
         };
       }
 
+      // Se reclama la fila ANTES de llamar a Apollo, no después. Es lo único
+      // que impide que dos pestañas acepten al mismo candidato, cobren dos
+      // créditos y registren uno: el contador cuenta filas con `enrichedAt`,
+      // así que dos escrituras sobre la misma fila valen por una sola.
+      //
+      // Reservar antes también significa que una caída entre el cobro y la
+      // escritura ya no pierde el gasto. El sesgo del sistema pasa a ser
+      // sobrecontar, que es el lado seguro: gastar de menos se corrige solo,
+      // y creerse con crédito que no se tiene, no.
+      const reservado = await prisma.prospectDiscovery.updateMany({
+        where: { id: Number(id), decision: "pending", enrichedAt: null },
+        data: { enrichedAt: new Date() },
+      });
+
+      if (reservado.count === 0) {
+        return {
+          success: false,
+          error: "Ese candidato ya estaba decidido o lo está procesando otra pestaña",
+        };
+      }
+
       let matches;
       try {
         ({ matches } = await enrichPeople([candidato.apolloId]));
       } catch (err) {
-        // Caso 1: sin respuesta útil, probablemente sin cobro. No se escribe
-        // nada; la fila sigue "pending" y reintentable.
-        console.error("[prospects] Apollo no respondió al enriquecer:", err);
+        if (shouldRevertReservation(err)) {
+          // Hubo respuesta HTTP: Apollo rechazó la petición, no cobró.
+          await prisma.prospectDiscovery.updateMany({
+            where: { id: candidato.id, decision: "pending" },
+            data: { enrichedAt: null },
+          });
+          console.error("[prospects] Apollo rechazó el enriquecimiento:", err);
+          return {
+            success: false,
+            error: `Apollo rechazó la petición (${err.message}). No se ha gastado crédito: puedes reintentarlo.`,
+          };
+        }
+        // Fallo del propio fetch: no se sabe si Apollo procesó. Se asume que
+        // sí y se mantiene la reserva; esta fila no se reintenta sola (ver la
+        // rama de reanudación de arriba).
+        console.error(
+          "[prospects] Apollo no respondió al enriquecer (no se sabe si cobró):",
+          err,
+        );
         return {
           success: false,
-          error: `Apollo no respondió (${err.message}). No se ha registrado gasto de crédito: puedes reintentarlo.`,
+          error: `Apollo no respondió (${err.message}). No se sabe si ha gastado crédito, así que se mantiene reservado: no se reintentará automáticamente.`,
         };
       }
 
       const match = matches[0];
       if (!match) {
-        // Caso 2: respuesta correcta, pero sin datos que calificaran. Según
-        // la política de Apollo, sin datos no hay cobro: no se escribe nada.
+        // Único desenlace en el que se sabe con certeza que no hubo cobro:
+        // la llamada completó y Apollo no encontró datos que calificaran. Se
+        // revierte la reserva y la fila vuelve a "pending", reintentable.
+        await prisma.prospectDiscovery.updateMany({
+          where: { id: candidato.id, decision: "pending" },
+          data: { enrichedAt: null },
+        });
         return {
           success: false,
           error:
@@ -225,27 +284,22 @@ export async function acceptCandidate({ id, note }) {
         };
       }
 
-      // Caso 3: hay match. Apollo entregó un registro que calificó, así que
-      // el crédito ya está gastado exista o no una URL de LinkedIn usable
-      // dentro. Se marca `enrichedAt` pase lo que pase a partir de aquí.
-      enrichedAt = new Date();
+      // Hay match: Apollo entregó un registro que calificó, así que el
+      // crédito ya está gastado exista o no una URL de LinkedIn usable
+      // dentro. La reserva se queda tal cual (ya tiene `enrichedAt`).
       linkedinUrl = normalizeLinkedInProfileUrl(match.linkedin_url);
       prospectName = match.name || candidato.name || "(sin nombre)";
       prospectCompany = match.organization?.name ?? candidato.company;
       prospectRole = match.title || candidato.title;
 
       if (!linkedinUrl) {
-        // Todo en un único update: decisión y gasto quedan grabados juntos y
-        // atómicos, sin ventana en la que el crédito conste gastado pero la
-        // fila siga "pending" esperando un segundo intento que no hace falta.
         await prisma.prospectDiscovery.update({
           where: { id: candidato.id },
           data: {
             decision: "no",
             reasonCode: "other",
             note: "Apollo no devolvió una URL de LinkedIn utilizable",
-            decidedAt: enrichedAt,
-            enrichedAt,
+            decidedAt: new Date(),
           },
         });
         revalidatePath("/admin/prospects");
@@ -255,11 +309,9 @@ export async function acceptCandidate({ id, note }) {
         };
       }
 
-      // Se banca el crédito ya, antes de tocar `Prospect`: si lo de abajo
-      // falla, el contador no debe olvidar que esto ya ha costado.
       await prisma.prospectDiscovery.update({
         where: { id: candidato.id },
-        data: { enrichedAt, linkedinUrl },
+        data: { linkedinUrl },
       });
     }
 
@@ -286,7 +338,10 @@ export async function acceptCandidate({ id, note }) {
       data: {
         decision: "yes",
         note: (note || "").trim() || null,
-        decidedAt: enrichedAt,
+        // `new Date()`, no `enrichedAt`: con la reserva previa, `enrichedAt`
+        // es ahora el momento en que se reservó el crédito, no el momento en
+        // que se decide. Son instantes distintos desde este arreglo.
+        decidedAt: new Date(),
         imported: !duplicado,
       },
     });
