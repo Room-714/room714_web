@@ -58,46 +58,6 @@ const POST_TOOL = {
         type: "string",
         description: "Meta description en inglés (140-160 chars).",
       },
-      linkedin_variants: {
-        type: "array",
-        description:
-          "Exactamente 3 variantes de post nativo de LinkedIn en español que apuntan al mismo artículo del blog desde ángulos distintos. NO traducciones: tres tomas distintas sobre el mismo tema.",
-        minItems: 3,
-        maxItems: 3,
-        items: {
-          type: "object",
-          properties: {
-            angle: {
-              type: "string",
-              enum: ["data", "polemica", "conclusion"],
-              description:
-                "Ángulo del que tira la variante. 'data': empieza con un número/hecho/cifra concreta. 'polemica': afirmación contraintuitiva o crítica con el sector. 'conclusion': lección práctica/accionable que se llevan a la oficina.",
-            },
-            text: {
-              type: "string",
-              description:
-                "Post nativo de LinkedIn en español (1000-1800 chars). Empieza con un HOOK punzante en la primera línea (lo que se ve antes del 'ver más'). Tono coloquial-profesional. 3-5 párrafos cortos separados por doble salto de línea. SIN enlaces. SIN hashtags al final (van en otro campo). Termina con una pregunta o invitación a comentar. El hook debe ser ÚNICO en cada variante — distinto framing del mismo artículo.",
-            },
-            hashtags: {
-              type: "array",
-              items: { type: "string" },
-              description:
-                "3-5 hashtags (formato #SinEspacios). Pueden coincidir entre variantes en algunos generales; mezcla específicos (#JTBD, #ProductoDigital) con generales (#IA, #UX). Sin acentos.",
-            },
-            image_query: {
-              type: "string",
-              description:
-                "Frase corta en inglés (3-6 palabras) para buscar UNA imagen en Unsplash que ilustre ESTA variante en particular. Las 3 image_query del post deben ser distintas entre sí: cada variante tira de una metáfora visual diferente para que las 3 publicaciones de LinkedIn no parezcan copia. Pensadas para devolver fotografías abstractas/profesionales, NO ilustraciones obvias del tema.",
-            },
-            cross_note: {
-              type: "string",
-              description:
-                "Texto sugerido para la ACCIÓN CRUZADA de esta variante, si la tiene (te la indico en el prompt). Máximo 2 frases. Si la variante no tiene acción cruzada, cadena vacía.",
-            },
-          },
-          required: ["angle", "text", "hashtags", "image_query"],
-        },
-      },
     },
     required: [
       "title_es",
@@ -111,7 +71,6 @@ const POST_TOOL = {
       "image_query",
       "meta_description_es",
       "meta_description_en",
-      "linkedin_variants",
     ],
   },
 };
@@ -155,25 +114,6 @@ const CROSS_ACTION_BRIEF = {
     "RECOMPARTICIÓN DE ROOM714. Esta variante la publica José desde su perfil, y la página de Room714 la recomparte. Escribe en cross_note la línea con la que la página lo comparte: 1-2 frases en voz corporativa de Room714, que enmarquen por qué el tema importa. NO repitas el hook del post.",
 };
 
-function buildCrossNotesBlock(crossActions) {
-  if (!crossActions || crossActions.every((a) => !a)) return "";
-
-  const lines = crossActions.map((action, i) => {
-    const n = i + 1;
-    return action
-      ? `- Variante ${n}: ${CROSS_ACTION_BRIEF[action]}`
-      : `- Variante ${n}: sin acción cruzada. Deja cross_note como cadena vacía.`;
-  });
-
-  return `
-
-## ACCIONES CRUZADAS (campo cross_note de cada variante)
-
-Cada variante se publica en una sola cuenta, y algunas llevan una acción en la otra cuenta. Rellena cross_note según lo que le toque a cada una:
-
-${lines.join("\n")}`;
-}
-
 // Corpus completo agrupado por categoría. Con más de 75 artículos publicados,
 // pasarle al modelo solo los 10 recientes dejaba libre cualquier tema de hace
 // más de cinco semanas, y Google ya marcó varios pares como duplicados.
@@ -209,7 +149,6 @@ export function buildUserPrompt({
   trending,
   recentPosts,
   publishedCorpus,
-  crossActions,
 }) {
   const trendingText =
     trending.length > 0
@@ -263,7 +202,7 @@ REGLAS CRÍTICAS:
 4. Genera ambas versiones (ES y EN) coherentes pero NO traducción literal: cada una en su idioma nativo.
 5. Embedde 2-3 internal links a posts recientes relacionados (sección INTERNAL LINKING).
 
-Llama al tool create_blog_post con los campos correspondientes.${buildPublishedCorpusBlock(publishedCorpus)}${buildCrossNotesBlock(crossActions)}`;
+Llama al tool create_blog_post con los campos correspondientes.${buildPublishedCorpusBlock(publishedCorpus)}`;
 }
 
 function sanitizeInvalidLinks(html, validSlugs, lang) {
@@ -300,7 +239,6 @@ function validateGenerated(data, { recentPosts = [] } = {}) {
     "image_query",
     "meta_description_es",
     "meta_description_en",
-    "linkedin_variants",
   ];
   for (const key of required) {
     if (data[key] === undefined || data[key] === null || data[key] === "") {
@@ -309,17 +247,6 @@ function validateGenerated(data, { recentPosts = [] } = {}) {
   }
   if (!Array.isArray(data.tags_es) || !Array.isArray(data.tags_en)) {
     throw new Error("tags_es y tags_en deben ser arrays");
-  }
-  if (
-    !Array.isArray(data.linkedin_variants) ||
-    data.linkedin_variants.length !== 3
-  ) {
-    throw new Error("linkedin_variants debe ser un array con exactamente 3 variantes");
-  }
-  for (const [i, v] of data.linkedin_variants.entries()) {
-    if (!v.text || !v.angle || !v.image_query || !Array.isArray(v.hashtags)) {
-      throw new Error(`linkedin_variants[${i}] incompleto`);
-    }
   }
   if (!data.content_es.includes("<p>") || !data.content_es.includes("<h2>")) {
     throw new Error("content_es no parece HTML válido (faltan <p> o <h2>)");
@@ -398,17 +325,16 @@ USA SOLO los slugs literales de la lista (slug_es / slug_en). NO inventes. 1-2 e
 Llama al tool create_blog_post con los campos correspondientes.`;
 }
 
-// Presupuesto de tokens de salida. Dos artículos HTML de 1500-2500 palabras
-// (ES + EN) + 3 variantes de LinkedIn caben de sobra en 32k; el valor anterior
-// (16k) se truncaba en generaciones largas, cortando linkedin_variants (último
-// campo del schema) y haciendo fallar la validación.
+// Presupuesto de tokens de salida para el artículo (ES + EN, 1500-2500 palabras
+// cada uno). Las tomas de LinkedIn ya no van en esta llamada: se generan aparte
+// en generateLinkedInTakes.
 const MAX_OUTPUT_TOKENS = 32000;
 
 // 2 intentos = 1 reintento. Cada intento es una generación completa (streaming,
 // ~1-2 min), así que dos caben holgados en el maxDuration=300 de las rutas
 // cron/admin. Cubre truncados puntuales y no-conformidades del modelo (el
-// schema minItems/maxItems NO se aplica en tool use, así que la validación es
-// la única garantía de las 3 variantes).
+// schema del tool no se valida solo en tool use, así que validateGenerated es
+// la única garantía de que el post llega completo).
 const MAX_GENERATION_ATTEMPTS = 2;
 
 // Llama al tool create_blog_post con streaming (obligatorio por encima de ~16k
@@ -439,12 +365,12 @@ async function generateViaCreateBlogPostTool({ userPrompt, recentPosts }) {
     }
 
     // El truncado por presupuesto de tokens deja el JSON del tool a medias
-    // (típicamente sin las 3 variantes). Detectarlo aquí evita el fallo
-    // confuso "linkedin_variants debe ser un array con exactamente 3 variantes".
+    // (típicamente cortando content_es/content_en a mitad de frase). Detectarlo
+    // aquí evita el fallo confuso de "content_es no parece HTML válido".
     if (response.stop_reason === "max_tokens") {
       lastError = new Error(
         `Respuesta truncada por max_tokens (output_tokens=${response.usage?.output_tokens}). ` +
-          `El post + variantes no cupo en ${MAX_OUTPUT_TOKENS} tokens.`,
+          `El post no cupo en ${MAX_OUTPUT_TOKENS} tokens.`,
       );
       console.error(
         `generatePost intento ${attempt}/${MAX_GENERATION_ATTEMPTS}: ${lastError.message}`,
@@ -490,14 +416,12 @@ export async function generatePostDraft({
   trending,
   recentPosts,
   publishedCorpus,
-  crossActions,
 }) {
   const userPrompt = buildUserPrompt({
     category,
     trending,
     recentPosts,
     publishedCorpus,
-    crossActions,
   });
   return generateViaCreateBlogPostTool({ userPrompt, recentPosts });
 }

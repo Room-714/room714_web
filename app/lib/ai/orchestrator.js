@@ -24,7 +24,11 @@ import {
   variantScheduleFor,
 } from "@/app/lib/time/linkedinSchedule";
 
-const PUBLISH_HOUR_MADRID = 10;
+// El artículo se hace visible a las 07:30 de Madrid: el blog filtra date <= now,
+// así que esta fecha ES la hora de publicación. La revisión manual va de 08:00
+// a 08:30 y las tomas de LinkedIn se generan a las 08:30, en un cron aparte.
+const PUBLISH_HOUR_MADRID = 7;
+const PUBLISH_MINUTE_MADRID = 30;
 
 function slugifyFallback(text) {
   return text
@@ -52,7 +56,7 @@ async function ensureUniqueSlug(slug, lang) {
 
 export async function generateDraftForToday({ categoryOverride, sendEmail = true } = {}) {
   const today = new Date();
-  const publishDate = nextMadridSlot(PUBLISH_HOUR_MADRID);
+  const publishDate = nextMadridSlot(PUBLISH_HOUR_MADRID, PUBLISH_MINUTE_MADRID);
   const category = categoryOverride ?? categoryForDate(today);
 
   if (!category) {
@@ -73,7 +77,6 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
     trending,
     recentPosts,
     publishedCorpus,
-    crossActions: crossActionsFor(publishDate),
   });
 
   const datePrefix = today.toISOString().split("T")[0];
@@ -88,30 +91,6 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
   const slugEn = await ensureUniqueSlug(
     draft.slug_en || slugifyFallback(draft.title_en),
     "en",
-  );
-
-  // Fetch 3 imágenes adicionales para las variantes de LinkedIn (una por
-  // variante, con su image_query propia). Best-effort: si alguna falla,
-  // usamos la imagen del post como fallback.
-  const variants = draft.linkedin_variants || [];
-  const variantSchedules = variantScheduleFor(publishDate);
-  const variantImages = await Promise.all(
-    variants.map(async (v, idx) => {
-      try {
-        const img = await fetchAndStoreCoverImage(
-          v.image_query,
-          `${datePrefix}-li${idx + 1}`,
-          { fallbackQuery: fallbackQueryForCategory(category) },
-        );
-        return img.url;
-      } catch (err) {
-        console.error(
-          `Imagen variante ${idx + 1} falló (query "${v.image_query}"):`,
-          err.message,
-        );
-        return cover.url;
-      }
-    }),
   );
 
   const post = await prisma.post.create({
@@ -142,20 +121,8 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
           },
         ],
       },
-      linkedinVariants: {
-        create: variants.map((v, idx) => ({
-          variant: idx + 1,
-          angle: v.angle,
-          text: v.text,
-          hashtags: v.hashtags || [],
-          imageBlobUrl: variantImages[idx],
-          imageQuery: v.image_query,
-          crossNote: v.cross_note?.trim() || null,
-          scheduledFor: variantSchedules[idx],
-        })),
-      },
     },
-    include: { translations: true, linkedinVariants: true },
+    include: { translations: true },
   });
 
   const translationEs = post.translations.find((t) => t.lang === "es");
@@ -217,13 +184,13 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
       post,
       translationEs,
       category,
-      linkedinVariants: post.linkedinVariants,
       postUrl,
     });
 
-    // Make reactivado (jul 2026): las variantes se quedan en sent=false para
-    // que /api/cron/publish-linkedin las publique automáticamente a su hora.
-    // El email es solo informativo (muestra qué se publicará y cuándo).
+    // linkedinVariants no se pasa: a las 06:00 (cuando corre esta función)
+    // todavía no existen — se generan a las 08:30, en generateTakesForToday,
+    // después de la ventana de revisión manual. El parámetro por defecto ([])
+    // hace que sendDraftReadyEmail omita sola la sección de LinkedIn del correo.
   }
 
   return {
@@ -242,11 +209,6 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
     email: emailResult,
     backlinks,
     outboundLinks,
-    linkedinVariants: post.linkedinVariants.map((v) => ({
-      variant: v.variant,
-      angle: v.angle,
-      scheduledFor: v.scheduledFor.toISOString(),
-    })),
   };
 }
 
@@ -308,9 +270,8 @@ export async function generateTakesForToday({ preview = false } = {}) {
   }
 
   // El preview no escribe, así que no le aplica la idempotencia: tiene que
-  // poder enseñar qué saldría también en un día ya procesado. Sin esta
-  // excepción el preview es inservible mientras el flujo viejo siga creando
-  // variantes al generar el artículo.
+  // poder enseñar qué saldría también en un día ya procesado, aunque ese post
+  // ya tenga tomas guardadas.
   if (!preview && post.linkedinVariants.length > 0) {
     return {
       skipped: true,
