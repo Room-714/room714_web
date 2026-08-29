@@ -4,108 +4,138 @@ import {
   crossActionsFor,
   jitterMinutesFor,
   slotFor,
+  takeCountFor,
   variantScheduleFor,
 } from "./linkedinSchedule";
 
-// Lunes 27 de julio de 2026, 10:00 Madrid (CEST = UTC+2).
-const LUNES = new Date("2026-07-27T08:00:00Z");
-// Miércoles 29 de julio de 2026, 10:00 Madrid.
-const MIERCOLES = new Date("2026-07-29T08:00:00Z");
+// Los artículos se publican a las 07:30 de Madrid.
+// Lunes 27 de julio de 2026 (CEST = UTC+2) → 05:30 UTC.
+const LUNES = new Date("2026-07-27T05:30:00Z");
+// Miércoles 29 de julio de 2026, 07:30 Madrid.
+const MIERCOLES = new Date("2026-07-29T05:30:00Z");
 
 const MIN_MS = 60 * 1000;
 const DAY_MS = 24 * 60 * 60 * 1000;
-const HOUR_MS = 60 * 60 * 1000;
 
-describe("variantScheduleFor", () => {
-  it("programa el mismo día, el siguiente y dos días después por la tarde, con jitter dentro de ventana", () => {
-    const [v1, v2, v3] = variantScheduleFor(LUNES);
-    const base = LUNES.getTime();
-
-    // v1: nunca antes de la publicación del artículo (+4..+52 min).
-    const off1 = (v1.getTime() - base) / MIN_MS;
-    expect(off1).toBeGreaterThanOrEqual(4);
-    expect(off1).toBeLessThanOrEqual(52);
-
-    // v2: día siguiente, -25..+65 min sobre las 10:00.
-    const off2 = (v2.getTime() - (base + DAY_MS)) / MIN_MS;
-    expect(off2).toBeGreaterThanOrEqual(-25);
-    expect(off2).toBeLessThanOrEqual(65);
-
-    // v3: dos días después, -35..+55 min sobre las 16:00.
-    const off3 = (v3.getTime() - (base + 2 * DAY_MS + 6 * HOUR_MS)) / MIN_MS;
-    expect(off3).toBeGreaterThanOrEqual(-35);
-    expect(off3).toBeLessThanOrEqual(55);
+describe("takeCountFor", () => {
+  it("da tres tomas al artículo del lunes y dos al del miércoles", () => {
+    expect(takeCountFor(LUNES)).toBe(3);
+    expect(takeCountFor(MIERCOLES)).toBe(2);
   });
 
-  it("es determinista: el mismo post produce siempre el mismo horario", () => {
+  it("cae en el plan del lunes si el artículo sale un día no previsto", () => {
+    const viernes = new Date("2026-07-31T05:30:00Z");
+    expect(takeCountFor(viernes)).toBe(3);
+  });
+});
+
+describe("variantScheduleFor", () => {
+  it("reparte el artículo del lunes en lunes, martes y viernes", () => {
+    const [t1, t2, t3] = variantScheduleFor(LUNES);
+    const base = LUNES.getTime();
+
+    // Toma 1: mismo día a las 08:35 (65 min después del artículo), +0..+8.
+    const off1 = (t1.getTime() - (base + 65 * MIN_MS)) / MIN_MS;
+    expect(off1).toBeGreaterThanOrEqual(0);
+    expect(off1).toBeLessThanOrEqual(8);
+
+    // Toma 2: martes a las 07:30, +0..+28.
+    const off2 = (t2.getTime() - (base + DAY_MS)) / MIN_MS;
+    expect(off2).toBeGreaterThanOrEqual(0);
+    expect(off2).toBeLessThanOrEqual(28);
+
+    // Toma 3: viernes a las 07:30, +0..+28.
+    const off3 = (t3.getTime() - (base + 4 * DAY_MS)) / MIN_MS;
+    expect(off3).toBeGreaterThanOrEqual(0);
+    expect(off3).toBeLessThanOrEqual(28);
+  });
+
+  it("reparte el artículo del miércoles en miércoles y jueves", () => {
+    const fechas = variantScheduleFor(MIERCOLES);
+    expect(fechas).toHaveLength(2);
+
+    const base = MIERCOLES.getTime();
+    const off1 = (fechas[0].getTime() - (base + 65 * MIN_MS)) / MIN_MS;
+    const off2 = (fechas[1].getTime() - (base + DAY_MS)) / MIN_MS;
+    expect(off1).toBeGreaterThanOrEqual(0);
+    expect(off1).toBeLessThanOrEqual(8);
+    expect(off2).toBeGreaterThanOrEqual(0);
+    expect(off2).toBeLessThanOrEqual(28);
+  });
+
+  it("ninguna toma se sale de su franja de publicación", () => {
+    const todas = [
+      ...variantScheduleFor(LUNES),
+      ...variantScheduleFor(MIERCOLES),
+    ];
+    for (const fecha of todas) {
+      const minutos = fecha.getUTCHours() * 60 + fecha.getUTCMinutes();
+      // En CEST: la franja de mañana es 05:30-05:58 UTC y la de después de
+      // la revisión 06:35-06:43 UTC.
+      const enFranjaManana = minutos >= 5 * 60 + 30 && minutos <= 5 * 60 + 58;
+      const enFranjaRevision = minutos >= 6 * 60 + 35 && minutos <= 6 * 60 + 43;
+      expect(enFranjaManana || enFranjaRevision).toBe(true);
+    }
+  });
+
+  it("es determinista: el mismo artículo produce siempre el mismo horario", () => {
     const a = variantScheduleFor(LUNES).map((d) => d.toISOString());
     const b = variantScheduleFor(new Date(LUNES)).map((d) => d.toISOString());
     expect(a).toEqual(b);
   });
 
-  it("posts distintos no comparten minuto exacto (el jitter varía)", () => {
-    const offsets = [LUNES, MIERCOLES].flatMap((date) =>
-      [0, 1, 2].map((idx) => jitterMinutesFor(date, idx)),
-    );
-    // Si todos los offsets fueran iguales, seguiríamos siendo mecánicos.
-    expect(new Set(offsets).size).toBeGreaterThan(1);
+  it("mantiene el orden entre tomas", () => {
+    const [t1, t2, t3] = variantScheduleFor(LUNES);
+    expect(t1.getTime()).toBeLessThan(t2.getTime());
+    expect(t2.getTime()).toBeLessThan(t3.getTime());
   });
 
-  it("mantiene el orden v1 < v2 < v3 y no colisiona el miércoles", () => {
-    const [, , v3Lunes] = variantScheduleFor(LUNES);
-    const [v1Miercoles] = variantScheduleFor(MIERCOLES);
-    const [v1, v2, v3] = variantScheduleFor(LUNES);
-    expect(v1.getTime()).toBeLessThan(v2.getTime());
-    expect(v2.getTime()).toBeLessThan(v3.getTime());
-    // El recall del lunes (X ~16:00) va horas después del anuncio del
-    // miércoles (X ~10:00): las ventanas de jitter no pueden solaparse.
-    expect(v3Lunes.getTime() - v1Miercoles.getTime()).toBeGreaterThan(
-      3 * HOUR_MS,
+  it("la toma del lunes no pisa la del martes ni la del miércoles", () => {
+    const [, martes, viernes] = variantScheduleFor(LUNES);
+    const [miercoles, jueves] = variantScheduleFor(MIERCOLES);
+    const orden = [martes, miercoles, jueves, viernes].map((d) => d.getTime());
+    expect(orden).toEqual([...orden].sort((a, b) => a - b));
+  });
+
+  it("el jitter varía entre artículos y entre tomas", () => {
+    const offsets = [LUNES, MIERCOLES].flatMap((fecha) =>
+      [0, 1, 2].map((idx) => jitterMinutesFor(fecha, idx)),
     );
+    expect(new Set(offsets).size).toBeGreaterThan(1);
   });
 });
 
 describe("channelForVariant", () => {
-  it("reparte el post del lunes en personal, empresa, empresa", () => {
+  it("saca el artículo del lunes por personal, empresa y personal", () => {
     const canales = [1, 2, 3].map((variant) =>
       channelForVariant({ postPublishDate: LUNES, variant }),
-    );
-    expect(canales).toEqual(["personal", "empresa", "empresa"]);
-  });
-
-  it("reparte el post del miércoles en personal, empresa, personal", () => {
-    const canales = [1, 2, 3].map((variant) =>
-      channelForVariant({ postPublishDate: MIERCOLES, variant }),
     );
     expect(canales).toEqual(["personal", "empresa", "personal"]);
   });
 
-  it("mantiene 3 y 3 en la semana completa", () => {
+  it("saca el artículo del miércoles por personal y empresa", () => {
+    const canales = [1, 2].map((variant) =>
+      channelForVariant({ postPublishDate: MIERCOLES, variant }),
+    );
+    expect(canales).toEqual(["personal", "empresa"]);
+  });
+
+  it("deja la semana en 3 personal y 2 empresa", () => {
     const semana = [
       ...[1, 2, 3].map((v) =>
         channelForVariant({ postPublishDate: LUNES, variant: v }),
       ),
-      ...[1, 2, 3].map((v) =>
+      ...[1, 2].map((v) =>
         channelForVariant({ postPublishDate: MIERCOLES, variant: v }),
       ),
     ];
     expect(semana.filter((c) => c === "personal")).toHaveLength(3);
-    expect(semana.filter((c) => c === "empresa")).toHaveLength(3);
+    expect(semana.filter((c) => c === "empresa")).toHaveLength(2);
   });
 
-  it("aplica el reparto del lunes si el post cae en un día no previsto", () => {
-    const viernes = new Date("2026-07-31T08:00:00Z");
-    expect(channelForVariant({ postPublishDate: viernes, variant: 1 })).toBe(
-      "personal",
-    );
-    expect(channelForVariant({ postPublishDate: viernes, variant: 3 })).toBe(
-      "empresa",
-    );
-  });
-
-  it("resuelve el mismo día de la semana en horario de invierno", () => {
-    // Lunes 5 de enero de 2026, 10:00 Madrid (CET = UTC+1).
-    const lunesInvierno = new Date("2026-01-05T09:00:00Z");
+  it("resuelve el día de la semana en horario de invierno", () => {
+    // Lunes 5 de enero de 2026, 07:30 Madrid (CET = UTC+1).
+    const lunesInvierno = new Date("2026-01-05T06:30:00Z");
     expect(
       channelForVariant({ postPublishDate: lunesInvierno, variant: 2 }),
     ).toBe("empresa");
@@ -113,37 +143,42 @@ describe("channelForVariant", () => {
 });
 
 describe("crossActionsFor", () => {
-  it("da recompartición, comentario y nada al post del lunes", () => {
+  it("da tres acciones al artículo del lunes", () => {
     expect(crossActionsFor(LUNES)).toEqual([
       "reshare_company",
       "comment_personal",
-      null,
+      "reshare_company",
     ]);
   });
 
-  it("da nada, comentario y recompartición al post del miércoles", () => {
+  it("da dos al del miércoles", () => {
     expect(crossActionsFor(MIERCOLES)).toEqual([
-      null,
-      "comment_personal",
       "reshare_company",
+      "comment_personal",
     ]);
+  });
+
+  it("deja exactamente una acción cruzada por día de la semana", () => {
+    const semana = [...crossActionsFor(LUNES), ...crossActionsFor(MIERCOLES)];
+    expect(semana).toHaveLength(5);
+    expect(semana.every(Boolean)).toBe(true);
   });
 });
 
 describe("slotFor", () => {
   it("devuelve canal y acción cruzada juntos", () => {
-    expect(slotFor({ postPublishDate: LUNES, variant: 1 })).toEqual({
+    expect(slotFor({ postPublishDate: LUNES, variant: 1 })).toMatchObject({
       canal: "personal",
       cross: "reshare_company",
     });
-    expect(slotFor({ postPublishDate: MIERCOLES, variant: 3 })).toEqual({
-      canal: "personal",
-      cross: "reshare_company",
+    expect(slotFor({ postPublishDate: MIERCOLES, variant: 2 })).toMatchObject({
+      canal: "empresa",
+      cross: "comment_personal",
     });
   });
 
-  it("cae en el primer slot del lunes si la variante está fuera de rango", () => {
-    expect(slotFor({ postPublishDate: LUNES, variant: 9 })).toEqual({
+  it("cae en la primera toma si la variante está fuera de rango", () => {
+    expect(slotFor({ postPublishDate: MIERCOLES, variant: 9 })).toMatchObject({
       canal: "personal",
       cross: "reshare_company",
     });
