@@ -1336,16 +1336,69 @@ const SOURCE_BY_HOUR = {
 };
 ```
 
-- [ ] **Step 3: Ejecutar la suite**
+- [ ] **Step 3: Impedir que un artículo AUTO caiga al webhook legacy**
+
+Esto no estaba en el diseño y es el fallo más serio que destapó la revisión de la Tarea 7. La ruta decide así:
+
+```javascript
+const hasVariants = post.linkedinVariants.length > 0;
+if (hasVariants) { /* marcar y dejar que publish-linkedin haga su trabajo */ }
+else { /* flujo legacy: disparar el webhook de Make aquí mismo */ }
+```
+
+Antes, un post AUTO **siempre** nacía con sus variantes en el mismo `create`, así que la rama legacy era inalcanzable para AUTO. Ahora las tomas se escriben a las 08:30 y este cron corre a las 07:30: `hasVariants` será **false todos los lunes y miércoles**, y la rama legacy dispara Make con `cleanSummary` — el HTML del artículo desnudado a 250 caracteres más "...". Las traducciones AUTO nunca rellenan `linkedinPost`, así que no hay nada mejor que enviar. No falla: publica un resumen truncado en LinkedIn.
+
+El invariante correcto es que **un artículo AUTO nunca usa el camino legacy**: su presencia en LinkedIn son sus tomas, y llegan por su cron. Sustituir la condición por:
+
+```javascript
+      // Los AUTO nunca van por el webhook legacy: su LinkedIn son las tomas,
+      // que escribe /api/cron/generate-linkedin a las 08:30 y publica
+      // /api/cron/publish-linkedin a la hora de cada una. Este cron corre a las
+      // 07:30, antes de que existan, así que sin esta condición cada artículo
+      // se publicaría en LinkedIn como un resumen truncado del HTML.
+      if (hasVariants || post.source === "AUTO") {
+```
+
+Y en el mensaje del `results.push` de esa rama, distinguir los dos casos para que el log siga siendo legible:
+
+```javascript
+        results.push(
+          `Post ID ${post.id} ("${esData.title}"): publicado (${
+            hasVariants
+              ? "variantes LinkedIn a su cron"
+              : "AUTO sin tomas todavía; las generará el cron de las 8:30"
+          }).`,
+        );
+```
+
+- [ ] **Step 4: Avisar si la fecha de publicación se va a otro día**
+
+`nextMadridSlot(7, 30)` devuelve el **siguiente día laborable** si las 07:30 ya pasaron, y lo hace en silencio. Con la generación a las 06:00 hay hora y media de margen, así que no debería ocurrir; pero si Vercel entrega el cron tarde, el artículo del lunes se fecharía el martes, y entonces `generate-linkedin` —que solo corre lunes y miércoles— no lo encontraría y **esa semana se quedaría sin tomas**. Cuesta tres líneas dejar rastro. En `app/lib/ai/orchestrator.js`, justo después de calcular `publishDate`:
+
+```javascript
+  // Si el cron llegó tarde, nextMadridSlot salta al siguiente día laborable sin
+  // decir nada, y entonces el artículo se fecha un día en que generate-linkedin
+  // no corre: la semana se queda sin tomas. No lo impedimos —publicar mañana es
+  // mejor que no publicar— pero que quede en el log.
+  if (getMadridWeekday(publishDate) !== getMadridWeekday(new Date())) {
+    console.warn(
+      `generateDraftForToday: las 07:30 de hoy ya pasaron; el artículo se fecha el ${publishDate.toISOString()}`,
+    );
+  }
+```
+
+Añade `getMadridWeekday` al import de `@/app/lib/time/madrid` que ya existe en el fichero.
+
+- [ ] **Step 5: Ejecutar la suite**
 
 Run: `npx vitest run`
-Expected: PASS.
+Expected: siguen fallando solo los 2 de `app/lib/linkedin/dailyTasks.test.js`, que arregla la Tarea 9.
 
-- [ ] **Step 4: Commit**
+- [ ] **Step 6: Commit**
 
 ```bash
-git add app/api/cron/generate/route.js app/api/cron/publish/route.js
-git commit -m "feat(cron): generacion a las 6:00 y publicacion del articulo a las 7:30"
+git add app/api/cron/generate/route.js app/api/cron/publish/route.js app/lib/ai/orchestrator.js
+git commit -m "feat(cron): generacion a las 6:00, publicacion a las 7:30 y AUTO fuera del legacy"
 ```
 
 ---
@@ -1459,21 +1512,89 @@ En `app/lib/linkedin/dailyTasks.js`, borrar la constante `VOICE_JOSE` (líneas 4
 
 La tarea `blog_review` ("Artículo nuevo hoy en la web") **se queda**: no pide revisar nada a tiempo, solo apunta al artículo del día y a su ficha en el admin.
 
-- [ ] **Step 4: Comprobar que nadie más usaba `review_own`**
+- [ ] **Step 4: Avisar cuando el artículo del día se quedó sin tomas**
+
+Hueco detectado revisando el cron de las 08:30: si esa generación falla o agota su tiempo, no hay reintento —los crones de Vercel no reintentan y la otra entrada UTC ya la descartó el guard de hora— y **nada lo denuncia**. Los `incidents` de hoy salen solo de `yesterdayUnsent`, así que un lunes sin tomas produce un briefing con la tarea del artículo y ninguna de LinkedIn: idéntico a un día tranquilo.
+
+`buildDailyTasks` ya recibe `blogPost` (el artículo que se publica hoy). Añade un incidente cuando ese artículo existe y no tiene ninguna variante:
+
+```javascript
+  // El artículo salió pero el cron de las 08:30 no llegó a escribir sus tomas.
+  // Sin esto, un fallo de generación es indistinguible de un día sin nada que
+  // hacer, y el hueco de la semana se descubre el viernes.
+  if (blogPost && (blogPost.linkedinVariants?.length ?? 0) === 0) {
+    incidents.push({
+      id: `no-takes-${blogPost.id}`,
+      kind: "no_takes",
+      when: "before",
+      time: formatMadridTime(blogPost.date),
+      channel: null,
+      title: "El artículo de hoy se publicó sin tomas de LinkedIn",
+      articleTitle: blogPost.translations?.find((t) => t.lang === "es")?.title
+        ?? `Post ${blogPost.id}`,
+    });
+  }
+```
+
+Para que `blogPost.linkedinVariants` llegue relleno, en `app/api/cron/daily-briefing/route.js` la consulta de `blogPost` tiene que incluirlas:
+
+```javascript
+      prisma.post.findFirst({
+        where: { published: true, date: { gte: start, lte: end } },
+        include: { translations: true, linkedinVariants: true },
+      }),
+```
+
+Y un test en `dailyTasks.test.js`:
+
+```javascript
+  it("avisa si el artículo de hoy se quedó sin tomas", () => {
+    const { incidents } = buildDailyTasks({
+      blogPost: {
+        id: 10,
+        date: LUNES,
+        translations: [{ lang: "es", slug: "mi-post", title: "Mi post" }],
+        linkedinVariants: [],
+      },
+      siteUrl: SITE,
+    });
+    expect(incidents.map((i) => i.kind)).toContain("no_takes");
+  });
+
+  it("no avisa si el artículo de hoy ya tiene sus tomas", () => {
+    const { incidents } = buildDailyTasks({
+      blogPost: {
+        id: 10,
+        date: LUNES,
+        translations: [{ lang: "es", slug: "mi-post", title: "Mi post" }],
+        linkedinVariants: [{ id: 1 }],
+      },
+      siteUrl: SITE,
+    });
+    expect(incidents.map((i) => i.kind)).not.toContain("no_takes");
+  });
+```
+
+Comprueba que la plantilla del correo (`app/lib/notifications/dailyBriefing.js`) renderiza los incidentes por su forma común y no por un `switch` sobre `kind`; si es lo segundo, añade la rama de `no_takes`.
+
+- [ ] **Step 5: Comprobar que nadie más usaba `review_own`**
 
 Run: `grep -rn "review_own\|VOICE_JOSE" app/`
 Expected: solo apariciones en la plantilla del correo, si las hay. Si `app/lib/notifications/dailyBriefing.js` tiene una rama por `kind === "review_own"`, bórrala también e incluye el fichero en el commit.
 
-- [ ] **Step 5: Ejecutar y ver que pasa**
+- [ ] **Step 6: Ejecutar y ver que pasa**
 
 Run: `npx vitest run app/lib/linkedin/dailyTasks.test.js`
 Expected: PASS.
 
-- [ ] **Step 6: Commit**
+Run: `npx vitest run`
+Expected: PASS entero. Esta es la tarea que devuelve la suite al verde: si algo sigue en rojo aquí, no es un fallo previsto.
+
+- [ ] **Step 7: Commit**
 
 ```bash
-git add app/lib/linkedin/dailyTasks.js app/lib/linkedin/dailyTasks.test.js
-git commit -m "feat(briefing): fuera la revision previa, el correo llega ya publicado"
+git add app/lib/linkedin/dailyTasks.js app/lib/linkedin/dailyTasks.test.js app/api/cron/daily-briefing/route.js
+git commit -m "feat(briefing): fuera la revision previa, y aviso si el articulo se queda sin tomas"
 ```
 
 ---
@@ -1485,13 +1606,21 @@ El correo dice "se publicará automáticamente a las 10:00" y anuncia las fechas
 **Files:**
 - Modify: `app/lib/notifications/draftReady.js:38`
 
-- [ ] **Step 1: Cambiar el párrafo**
+- [ ] **Step 1: Corregir las cuatro afirmaciones falsas del correo**
 
-Sustituir la línea 38 por:
+El correo se degrada bien —sin variantes, su sección de LinkedIn se omite sola— pero su texto miente en cuatro sitios, y es el único mensaje sobre el que el dueño actúa. Los cuatro empujan en la dirección que le hace perder la ventana de revisión.
+
+Línea 38, el párrafo de cabecera:
 
 ```javascript
   <p>Se ha generado el artículo de hoy. <strong>Se publicará automáticamente a las 07:30 en la web</strong>, salvo que lo despubliques o lo borres antes. Tienes de <strong>08:00 a 08:30</strong> para revisarlo: a las 08:30 se generan a partir de él los posts de LinkedIn de esta semana, y salen del texto que hayas dejado. Si no lo tocas, se publica igual.</p>
 ```
+
+Ojo con lo que hay que quitar de ahí: la frase actual dice "En LinkedIn se publica automáticamente vía Make (**ver fechas más abajo**)", y ya no hay nada más abajo — la sección de variantes es siempre vacía en este flujo, porque a las 06:00 las tomas todavía no existen.
+
+Línea 48, el aviso de plazo: dice "Si no haces nada en las próximas **3h**: el post se publica tal cual". El correo sale hacia las 06:05 y el artículo se hace visible a las 07:30: hora y media, no tres horas. Y lo que de verdad importa no es ese plazo sino el de la revisión, que es hasta las 08:30. Reescríbelo en esos términos.
+
+Línea 50, "despublícalo o bórralo desde el admin **antes de las 10:00**" → antes de las 07:30.
 
 - [ ] **Step 2: Actualizar el comentario obsoleto del briefing**
 
@@ -1506,16 +1635,24 @@ Sustituir la línea 38 por:
 
 Dejar intacto el párrafo siguiente, el de las dos entradas en `vercel.json`: sigue siendo verdad.
 
-- [ ] **Step 3: Comprobar que no quedan más referencias a las 10:00**
+- [ ] **Step 3: Corregir los dos textos del admin**
 
-Run: `grep -rn "10:00\|las 10" app/lib/notifications/ app/lib/ai/ app/api/cron/`
-Expected: sin resultados relacionados con la hora de publicación del artículo.
+Los encontró la revisión de la Tarea 7 y el `grep` del paso siguiente **no los cubriría**, porque están fuera de los directorios que barre. No leen variantes ni rompen nada: solo mienten.
 
-- [ ] **Step 4: Commit**
+En `app/(admin-zone)/admin/page.js`:
+- El diálogo de confirmación dice "Se creará como publicado en la próxima franja de **10:00** (Madrid)" → 07:30.
+- `const publishTime = post.source === "AUTO" ? "10:00 AM" : "5:00 PM";` → `"07:30"` para AUTO. Deja el de MANUAL como está: los posts manuales siguen saliendo a las 17:00.
+
+- [ ] **Step 4: Comprobar que no quedan más referencias a las 10:00**
+
+Run: `grep -rn "10:00\|las 10\|10 AM" app/ --include=*.js`
+Expected: sin resultados relacionados con la hora de publicación del artículo. El barrido va sobre `app/` entero a propósito: acotarlo a `lib/` y `api/` dejaba fuera los textos del admin.
+
+- [ ] **Step 5: Commit**
 
 ```bash
-git add app/lib/notifications/draftReady.js app/api/cron/daily-briefing/route.js
-git commit -m "docs(email): el correo de borrador y el briefing cuentan el horario nuevo"
+git add app/lib/notifications/draftReady.js app/api/cron/daily-briefing/route.js "app/(admin-zone)/admin/page.js"
+git commit -m "docs(ui): el correo, el briefing y el admin cuentan el horario nuevo"
 ```
 
 ---
