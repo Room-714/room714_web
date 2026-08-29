@@ -1356,25 +1356,52 @@ export async function GET(request) {
     });
 
     const wanted = QUEUE_SIZE - pendientes;
-    const resultado = await collectFreshCandidates({
+    const startPage = startPageFor(vistosEnCombo);
+
+    const primerIntento = await collectFreshCandidates({
       search: searchPeople,
       query,
       wanted,
       rules,
       knownIds,
-      startPage: startPageFor(vistosEnCombo),
+      startPage,
     });
+
+    // Segundo intento sin reglas cuando la cola sale vacía. Es el suelo del
+    // sistema, y hace falta: las reglas solo restan cargos y tramos, nunca los
+    // devuelven, así que una cola vacía puede significar tanto "este sector se
+    // agotó" como "el filtro se ha cerrado demasiado". Sin este intento las dos
+    // cosas se ven igual, y la segunda no se corrige sola: sin candidatos no hay
+    // decisiones nuevas, y sin decisiones nuevas ninguna regla afloja jamás.
+    let resultado = primerIntento;
+    let sinReglas = false;
+    if (primerIntento.candidates.length === 0) {
+      resultado = await collectFreshCandidates({
+        search: searchPeople,
+        query: buildApolloQuery(BUYER_PROFILE, { combo }),
+        wanted,
+        rules: {},
+        knownIds,
+        startPage,
+      });
+      sinReglas = resultado.candidates.length > 0;
+    }
 
     const resumen = {
       combo,
       pendientesPrevios: pendientes,
       wanted,
       searched: resultado.searched,
-      pagesUsed: resultado.pagesUsed,
+      lastPageFetched: resultado.lastPageFetched,
+      pagesFetched: resultado.pagesFetched,
       totalEntries: resultado.totalEntries,
       encontrados: resultado.candidates.length,
       descartados: resultado.dropped.length,
       exhausted: resultado.exhausted,
+      // Si esto sale a true, el filtro estaba cerrado de más y la cola de hoy
+      // se llenó saltándoselo. Es la señal de que hay que mirar el panel de
+      // aprendizaje: alguna regla está de más.
+      sinReglas,
       reglasActivas: {
         cargosExcluidos: rules.excludedTitles,
         tramosExcluidos: rules.excludedSizes,
@@ -1400,7 +1427,8 @@ export async function GET(request) {
       return NextResponse.json({
         ...resumen,
         skipped: true,
-        reason: "La búsqueda no devolvió a nadie nuevo para esta combinación",
+        reason:
+          "La búsqueda no devolvió a nadie nuevo para esta combinación, ni siquiera ignorando las reglas",
       });
     }
 

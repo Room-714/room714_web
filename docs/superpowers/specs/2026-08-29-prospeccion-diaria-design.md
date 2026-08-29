@@ -172,10 +172,16 @@ cambia de opinión sobre un descarte, la regla desaparece sola.
 
 | Señal | Efecto |
 |---|---|
-| mismo cargo descartado 3 veces con motivo `role` | ese cargo sale de `person_titles` y se filtra en local |
-| sectores | dejan de rotar por semana; se ordenan por tasa de aceptación y sale más el que mejor funciona |
-| tramo de plantilla con ≥5 descartes por `size` y 0 aceptaciones | ese tramo sale de `organization_num_employees_ranges` |
-| ≥3 descartes por `in_house_team` en un sector | ese sector baja en la ordenación |
+| mismo cargo con ≥3 descartes por `role` **y ninguna aceptación** | ese cargo sale de `person_titles` y se filtra en local |
+| tramo de plantilla con ≥5 descartes por `size` **y ninguna aceptación** | ese tramo sale de `organization_num_employees_ranges` |
+| sectores | se ordenan por tasa de aceptación suavizada, y ese orden **se enseña en el panel**; la rotación en sí es fija |
+| ≥3 descartes por `in_house_team` en un sector | cuentan como fallos de ese sector y lo bajan en esa ordenación |
+
+**Dos correcciones sobre una versión anterior de esta tabla**, las dos por el mismo motivo de fondo: un umbral que solo cuenta fallos, sin denominador y sin ventana, es un trinquete.
+
+La primera es la guarda de "ninguna aceptación" en los cargos. La versión anterior excluía un cargo con tres descartes a secas, y como los contadores solo crecen, eso condena a cualquier cargo con tasa de rechazo mayor que cero: un cargo bueno rechazado 1 de cada 10 veces tiene un 59% de quedar excluido en tres semanas y un 95% en seis. Lo que evita el trinquete no es el número 3, es exigir que el cargo no haya funcionado **nunca**.
+
+La segunda es que **la rotación de sectores no se pondera por tasa de acierto**, al revés de lo que decía. La rotación recorre las 14 combinaciones de sector y tramo en ciclo fijo, y eso es deliberado: garantiza que todos se sigan muestreando. Ponderar por tasa reintroduce el mismo trinquete a otra escala — un sector con una mala racha temprana dejaría de muestrearse y no podría demostrar nunca que era bueno. La tasa se calcula, se suaviza (Laplace, para que una muestra de uno no adelante a una de cincuenta) y **se enseña**, para que la decisión de estrechar el perfil la tome una persona mirando los números. Ponderar la rotación con un suelo garantizado por combinación es candidato para más adelante, no para esta fase.
 
 **Reglas explícitas** — las de `ProspectRule`, aceptadas una a una.
 
