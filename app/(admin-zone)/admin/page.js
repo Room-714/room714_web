@@ -233,7 +233,7 @@ export default function AdminPage() {
 
   const renderPostButton = (post, extraClasses = "") => {
     const isFuture = new Date(post.date) > new Date();
-    const publishTime = post.source === "AUTO" ? "07:30" : "5:00 PM";
+    const publishTime = post.source === "AUTO" ? "07:30" : "17:00";
     return (
       <button
         key={post.id}
