@@ -333,11 +333,19 @@ de dar caras nuevas. Partir el rango en dos tramos duplica las combinaciones
 (7 sectores × 2 tramos = 14), lo que además reparte mejor el agotamiento.
 
 **Estado de la base al empezar** (producción, 2026-08-29): 10 `Prospect`, todos
-`buyer` y de Apollo; 48 `ProspectDiscovery`, de los que **26 se descartaron
-porque Apollo no devolvió URL de LinkedIn** — más de la mitad de los créditos
-gastados en nada, que es exactamente lo que este rediseño corrige; y **0
-`ProspectEngagement`**: la parte de comentar publicaciones no se ha usado ni una
-vez, así que eliminarla no pierde ningún historial.
+`buyer` y de Apollo; 48 `ProspectDiscovery`, de los que 26 se descartaron sin
+URL de LinkedIn utilizable.
+
+Ojo con ese 26: **no es evidencia de un problema vigente**. Lo causó un bug de
+validación ya corregido (Apollo devuelve los perfiles en `http` y la validación
+exigía `https`, así que los rechazaba todos), documentado en el comentario de
+`normalizeLinkedInProfileUrl`. Sirve como recordatorio de qué cuesta pagar antes
+de mirar —26 créditos irrecuperables por un error de una línea— pero no como
+medida de la tasa de descarte actual, que se desconoce.
+
+Y **0 `ProspectEngagement`**: la parte de comentar publicaciones no se ha usado ni
+una sola vez desde que existe. Eliminarla no pierde ningún historial, y es el
+dato más claro de que el flujo diario no estaba funcionando.
 
 **Pendiente de ti**: `APOLLO_API_KEY` no está en `.env.local` (sí en Vercel, que
 es donde corre el cron). Hace falta en local para verificar la cola antes de
