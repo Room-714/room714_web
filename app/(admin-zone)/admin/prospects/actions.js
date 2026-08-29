@@ -13,9 +13,15 @@ import {
   cycleStartFor,
 } from "@/app/lib/prospecting/creditCycle";
 import { ruleStats } from "@/app/lib/prospecting/rules";
+import { QUEUE_SIZE } from "@/app/lib/prospecting/buildQueue";
 
-// Defensa en profundidad: el proxy ya exige sesión bajo /admin, pero estas
-// acciones escriben en base de datos y una de ellas gasta dinero.
+// Defensa en profundidad: el proxy ya exige sesión bajo /admin, pero las
+// Server Actions de Next se invocan por un identificador de acción en el
+// body de un POST, no por su propia ruta, así que ese matcher por ruta no es
+// garantía de que las intercepte. Se llama desde las cinco acciones de este
+// fichero: las que escriben en base de datos (una de ellas gasta dinero de
+// verdad) y también las dos de solo lectura (`loadQueue`, `listProspects`),
+// porque devuelven datos reales de personas y comprobarlo no cuesta nada.
 async function requireSession() {
   const session = await getServerSession(authOptions);
   if (!session) throw new Error("No autorizado");
@@ -44,19 +50,21 @@ async function creditStatus(now = new Date()) {
 // Lo que pinta la pantalla de un tirón: la cola, el contador y el panel de
 // aprendizaje. Una sola acción para no encadenar tres viajes desde el cliente.
 //
-// Sin `requireSession`, a propósito y a diferencia de las de abajo: es una
-// lectura, no escribe nada ni gasta un céntimo. El mismo criterio que ya
-// tenía `listProspects` en la versión anterior de este fichero. La defensa en
-// profundidad de las demás acciones existe porque un fallo del proxy delante
-// de /admin costaría dinero o corrompería datos; aquí, en el peor de los
-// casos, se filtra la cola de candidatos, que ya vive detrás del proxy.
+// SÍ lleva `requireSession`, aunque sea una lectura que no gasta nada: las
+// Server Actions de Next se invocan por un identificador de acción en el body
+// de un POST, no por su propia ruta, así que el matcher del proxy que exige
+// sesión para /admin no es garantía de que las intercepte. `listProspects`,
+// aquí al lado, devuelve nombre, empresa, cargo, URL de LinkedIn y notas de
+// personas reales; esta función devuelve lo mismo de la cola sin decidir. Es
+// defensa en profundidad y no cuesta nada.
 export async function loadQueue() {
+  await requireSession();
   try {
     const [queue, decisiones, credits, validados] = await Promise.all([
       prisma.prospectDiscovery.findMany({
         where: { decision: "pending" },
         orderBy: [{ shownOn: "asc" }, { id: "asc" }],
-        take: 20,
+        take: QUEUE_SIZE,
       }),
       prisma.prospectDiscovery.findMany({
         where: { decision: { in: ["yes", "no"] } },
@@ -354,8 +362,13 @@ export async function acceptCandidate({ id, note }) {
   }
 }
 
-// La lista de validados: el resultado del sistema.
+// La lista de validados: el resultado del sistema. Devuelve nombre, empresa,
+// cargo, URL de LinkedIn y notas de personas reales, así que lleva
+// `requireSession` por el mismo motivo que `loadQueue` aquí arriba: una
+// Server Action no depende del matcher de ruta del proxy para estar
+// protegida.
 export async function listProspects() {
+  await requireSession();
   try {
     const prospects = await prisma.prospect.findMany({
       orderBy: [{ status: "asc" }, { createdAt: "desc" }],

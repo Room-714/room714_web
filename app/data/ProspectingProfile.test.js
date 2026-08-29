@@ -7,6 +7,8 @@ import {
   buildApolloQuery,
   comboForDay,
   dayIndexFor,
+  effectiveSizes,
+  emptiedDimensions,
   searchCombos,
 } from "./ProspectingProfile";
 
@@ -137,6 +139,34 @@ describe("buildApolloQuery", () => {
     expect(q.person_titles).toContain("COO");
   });
 
+  // ─── El bug del Paso 1: comparar sin normalizar ───────────────────────────
+  // `excludedTitles` sale de `deriveRules`, que guarda `t.original`: el
+  // `title` CRUDO que devolvió Apollo la primera vez que se vio ese cargo.
+  // Con `include_similar_titles: true` casi nunca coincide en forma con el
+  // rol tal y como está escrito en BUYER_PROFILE ("CEO" vs "ceo", espacios de
+  // sobra…). El test de arriba pasaba "por casualidad": "CEO" excluido y
+  // "CEO" en el perfil coinciden letra por letra. Este no.
+  it("quita el cargo aunque Apollo lo escriba de otra forma", () => {
+    const q = buildApolloQuery(BUYER_PROFILE, {
+      combo: { sector: "Educación", size: "51,100" },
+      rules: { excludedTitles: ["  chief executive officer ", "CEO"] },
+    });
+    expect(q.person_titles).not.toContain("CEO");
+  });
+
+  // ─── El bug del Paso 3: una exclusión que vacía la lista entera ───────────
+  // Si las reglas llegaran a excluir TODOS los cargos del perfil, un
+  // `person_titles: []` no le dice a Apollo "ningún cargo": le dice
+  // "cualquier cargo", sin que nada lo avise. Mejor ignorar la exclusión
+  // entera (buscar de más, que es gratis) que mandar un filtro fantasma.
+  it("si excluir vacía todos los cargos, ignora la exclusión y pide la lista completa", () => {
+    const todosLosCargos = buildApolloQuery(BUYER_PROFILE).person_titles;
+    const q = buildApolloQuery(BUYER_PROFILE, {
+      rules: { excludedTitles: todosLosCargos },
+    });
+    expect(q.person_titles).toEqual(todosLosCargos);
+  });
+
   it("no revienta sin reglas ni combinación", () => {
     const q = buildApolloQuery();
     expect(q.person_titles.length).toBeGreaterThan(0);
@@ -174,6 +204,71 @@ describe("buildApolloQuery", () => {
     expect(q.page).toBe(3);
     expect(q).not.toHaveProperty("combo");
     expect(q).not.toHaveProperty("rules");
+  });
+});
+
+// ─── El bug del Paso 2: etiquetar con lo que se PROPUSO, no con lo que se
+// buscó de verdad ────────────────────────────────────────────────────────
+// `buildApolloQuery` usa esto por dentro, pero el cron también lo necesita
+// directamente: es la función que decide qué `sizeQuery` guardar en cada
+// candidato, y guardar `combo.size` a pelo en vez de esto es precisamente el
+// bug (etiquetar un tramo que no se buscó, lo que realimenta mal las
+// reglas).
+describe("effectiveSizes", () => {
+  it("caso normal: el tramo de la combinación no está excluido", () => {
+    expect(effectiveSizes({ sector: "Educación", size: "51,100" }, {})).toEqual([
+      "51,100",
+    ]);
+  });
+
+  it("el tramo del día está excluido: ensancha a los tramos no excluidos", () => {
+    expect(
+      effectiveSizes(
+        { sector: "Educación", size: "51,100" },
+        { excludedSizes: ["51,100"] },
+      ),
+    ).toEqual(["101,250"]);
+  });
+
+  it("los dos tramos están excluidos: ignora la exclusión y busca en todos (una lista vacía sería «cualquier tamaño» para Apollo, no «ninguno»)", () => {
+    expect(
+      effectiveSizes(
+        { sector: "Educación", size: "51,100" },
+        { excludedSizes: ["51,100", "101,250"] },
+      ),
+    ).toEqual(APOLLO_EMPLOYEE_RANGES);
+  });
+});
+
+describe("emptiedDimensions", () => {
+  it("sin reglas, ninguna dimensión se ha vaciado", () => {
+    expect(emptiedDimensions(BUYER_PROFILE, {})).toEqual([]);
+  });
+
+  it("con un solo tramo excluido, no se ha vaciado nada: todavía queda el otro", () => {
+    expect(emptiedDimensions(BUYER_PROFILE, { excludedSizes: ["51,100"] })).toEqual([]);
+  });
+
+  it("con los dos tramos excluidos, marca «tramos» como vaciada", () => {
+    expect(
+      emptiedDimensions(BUYER_PROFILE, { excludedSizes: ["51,100", "101,250"] }),
+    ).toEqual(["tramos"]);
+  });
+
+  it("con todos los cargos excluidos, marca «cargos» como vaciada", () => {
+    const todosLosCargos = buildApolloQuery(BUYER_PROFILE).person_titles;
+    expect(
+      emptiedDimensions(BUYER_PROFILE, { excludedTitles: todosLosCargos }),
+    ).toEqual(["cargos"]);
+  });
+
+  it("puede vaciarse más de una dimensión a la vez", () => {
+    const todosLosCargos = buildApolloQuery(BUYER_PROFILE).person_titles;
+    const vaciadas = emptiedDimensions(BUYER_PROFILE, {
+      excludedTitles: todosLosCargos,
+      excludedSizes: ["51,100", "101,250"],
+    });
+    expect(vaciadas).toEqual(["cargos", "tramos"]);
   });
 });
 

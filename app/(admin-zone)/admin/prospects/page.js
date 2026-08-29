@@ -20,8 +20,10 @@ const REASONS = [
   ["other", "Otro motivo"],
 ];
 
+// Igual que documenta el enum ProspectStatus en schema.prisma: "ACTIVE // en
+// la lista de validados". "En rotación" describía una fase que ya no existe.
 const STATUS_LABEL = {
-  ACTIVE: "En rotación",
+  ACTIVE: "En la lista de validados",
   CLIENT: "Cliente",
   DISCARDED: "Descartado",
 };
@@ -404,12 +406,25 @@ export default function ProspectsPage() {
   // key y no el índice de la lista.
   const handleAccept = async (id, note) => {
     const res = await acceptCandidate({ id, note });
-    if (!res.success) return flash(`⚠️ ${res.error}`);
-    // Se guarda el enlace para poder abrirlo sin buscarlo: es lo primero que se
-    // quiere hacer después de decir que sí.
-    setAceptados((prev) => [...prev, { id, linkedinUrl: res.linkedinUrl }]);
-    setDecididosSesion((n) => n + 1);
-    flash(res.duplicado ? "Ya estaba en la lista" : "Añadido a validados");
+    if (res.success) {
+      // Se guarda el enlace para poder abrirlo sin buscarlo: es lo primero que
+      // se quiere hacer después de decir que sí.
+      setAceptados((prev) => [...prev, { id, linkedinUrl: res.linkedinUrl }]);
+      setDecididosSesion((n) => n + 1);
+      flash(res.duplicado ? "Ya estaba en la lista" : "Añadido a validados");
+    } else {
+      flash(`⚠️ ${res.error}`);
+    }
+    // `load()` va SIEMPRE, también cuando falla: no todos los errores de
+    // acceptCandidate dejan la fila decidida (el de "sin créditos" no toca
+    // nada), pero otros sí — "Apollo no devolvió URL de LinkedIn" marca la
+    // fila como "no" con el crédito ya gastado, y sin este `load()` la
+    // pantalla se quedaba enseñándola como pendiente con el contador de
+    // créditos viejo (el bug que se disparó 26 veces). Distinguir aquí caso
+    // por caso qué mensaje de error sí decide y cuál no es frágil: un error
+    // nuevo que decida la fila y se nos olvide añadir a esa lista repetiría
+    // el mismo bug. Recargar de más solo cuesta una consulta; recargar de
+    // menos deja la pantalla mintiendo con dinero ya gastado.
     load();
   };
 

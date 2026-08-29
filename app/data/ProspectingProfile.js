@@ -9,6 +9,14 @@
 // Editar este fichero ES editar la estrategia de prospección: no hay más
 // configuración escondida.
 
+// Se normaliza aquí con la misma función que usa candidateFilter.js por la
+// misma razón que allí: los cargos excluidos por las reglas vienen del
+// `title` crudo que devuelve Apollo, y los de este perfil los escribimos
+// nosotros a mano ("CEO", con mayúsculas y sin espacios de sobra). Comparar
+// sin normalizar los dos lados deja pasar exactamente los cargos que se
+// querían excluir.
+import { normalizeTitle } from "@/app/lib/prospecting/candidateFilter";
+
 // ─── El comprador ───────────────────────────────────────────────────────────
 // Ojo con la tentación de meter aquí cargos de producto (CPO, Head of Product)
 // o sectores de software: buscar esos cargos garantiza dar con empresas que ya
@@ -16,7 +24,6 @@
 // primera versión de este fichero cometía ese error y trajo agencias digitales
 // y startups de software, competencia incluida.
 export const BUYER_PROFILE = {
-  kind: "buyer",
   // Donde no hay CPO ni Head of Design, la decisión de buscar ayuda fuera la
   // toma negocio, no tecnología.
   // Cuatro familias de cargo, todas con una cosa en común: sienten una
@@ -56,21 +63,6 @@ export const BUYER_PROFILE = {
     "Educación",
     "Servicios profesionales",
     "Turismo y hostelería",
-  ],
-  // Señales de que un post suyo es comentable con nuestra voz.
-  signals: [
-    "Habla de digitalizar procesos o canales de venta",
-    "Se queja de una web o app que no convierte",
-    "Menciona sistemas antiguos que frenan al negocio",
-    "Anuncia un proyecto digital o una transformación",
-    "Pregunta u opina sobre IA sin tener equipo técnico propio",
-  ],
-  keywords: [
-    "transformación digital",
-    "canal digital",
-    "digitalización",
-    "experiencia de cliente",
-    "comercio electrónico",
   ],
 };
 
@@ -127,6 +119,76 @@ function tagsFromSectors(sectors = []) {
   return [...new Set(tags)];
 }
 
+// Cargos que de verdad se le piden a Apollo hoy: los del perfil menos los que
+// las reglas han excluido, comparando normalizado (ver el comentario del
+// import de normalizeTitle).
+//
+// Un array vacío en `person_titles` no es "ningún cargo" para Apollo: es
+// "cualquier cargo", sin que nada lo avise (verificado contra la API: con
+// person_titles: [] Apollo devuelve gente de cualquier cargo dentro de las
+// seniorities pedidas). Si excluir deja la lista ENTERA vacía —las reglas han
+// excluido los catorce cargos del perfil, algo que hoy no puede pasar a la
+// vez con TITLE_STRIKES pero que no cuesta nada defender—, ignorar la
+// exclusión entera y pedir la lista completa es mejor que mandar un filtro
+// que en apariencia funciona y en realidad no filtra nada.
+export function effectiveTitles(profile = BUYER_PROFILE, rules = {}) {
+  const candidatos = titlesFromRoles(profile.roles);
+  const excluidos = (rules.excludedTitles ?? []).map(normalizeTitle);
+  const filtrados = candidatos.filter((t) => !excluidos.includes(normalizeTitle(t)));
+  return filtrados.length ? filtrados : candidatos;
+}
+
+// Qué tramo de plantilla se busca de verdad. La combinación del día propone
+// uno, pero si las reglas ya lo excluyeron (SIZE_STRIKES descartes y ningún
+// sí que lo salve, ver app/lib/prospecting/rules.js) buscar en él de todas
+// formas ignoraría precisamente la señal que esa regla existe para aplicar.
+// En ese caso se ensancha a todos los tramos no excluidos: no se salta a OTRO
+// tramo dentro del par sector+tramo (eso rompería la lectura de "qué
+// combinación tocaba hoy" en el panel de aprendizaje) ni se deja de buscar
+// (un día sin búsqueda no aporta nada). El sector de la combinación nunca se
+// toca aquí: solo el tramo es lo que las reglas pueden haber desaconsejado.
+//
+// Por lo mismo que effectiveTitles: si excluir vacía los dos tramos a la vez,
+// un array vacío en `organization_num_employees_ranges` sería "cualquier
+// tamaño" para Apollo, no "ninguno", así que se ignora la exclusión entera.
+//
+// Esta es también la función que hay que usar para saber qué tramo etiquetar
+// en cada candidato (ver el cron): la combinación del día es una PROPUESTA,
+// no necesariamente lo que se ha buscado, y etiquetar con la propuesta en
+// vez de con esto sería mentir en un dato que realimenta las reglas.
+export function effectiveSizes(combo, rules = {}) {
+  const excluidos = rules.excludedSizes ?? [];
+  if (combo?.size && !excluidos.includes(combo.size)) return [combo.size];
+  const restantes = APOLLO_EMPLOYEE_RANGES.filter((r) => !excluidos.includes(r));
+  return restantes.length ? restantes : APOLLO_EMPLOYEE_RANGES;
+}
+
+// Qué dimensiones de la consulta se han tenido que ignorar por completo hoy
+// porque las reglas las habían vaciado (ver effectiveTitles/effectiveSizes
+// arriba). Lo consume el cron para dejarlo a la vista en el resumen: si esto
+// no sale vacío, alguna regla se ha vuelto tan agresiva que ha dejado de
+// filtrar nada sin que nadie lo note — que es justamente el peligro de una
+// lista vacía en Apollo.
+export function emptiedDimensions(profile = BUYER_PROFILE, rules = {}) {
+  const vaciadas = [];
+
+  const candidatosTitulos = titlesFromRoles(profile.roles);
+  const excluidosTitulos = (rules.excludedTitles ?? []).map(normalizeTitle);
+  const quedanTitulos = candidatosTitulos.filter(
+    (t) => !excluidosTitulos.includes(normalizeTitle(t)),
+  );
+  if (candidatosTitulos.length > 0 && quedanTitulos.length === 0) {
+    vaciadas.push("cargos");
+  }
+
+  const excluidosTramos = rules.excludedSizes ?? [];
+  if (APOLLO_EMPLOYEE_RANGES.every((r) => excluidosTramos.includes(r))) {
+    vaciadas.push("tramos");
+  }
+
+  return vaciadas;
+}
+
 // Días transcurridos desde la época Unix. No pretende ser un número de día del
 // año: solo un entero que avanza de uno en uno, que es lo que necesita la
 // rotación.
@@ -165,31 +227,9 @@ export function buildApolloQuery(
   profile = BUYER_PROFILE,
   { combo, rules = {}, ...overrides } = {},
 ) {
-  const excludedTitles = rules.excludedTitles ?? [];
-  const excludedSizes = rules.excludedSizes ?? [];
-
-  const titles = titlesFromRoles(profile.roles).filter(
-    (t) => !excludedTitles.includes(t),
-  );
+  const titles = effectiveTitles(profile, rules);
   const sectors = combo?.sector ? [combo.sector] : profile.sectors;
-
-  // El tramo de la combinación del día NO se usa a ciegas: si las reglas ya lo
-  // excluyeron (SIZE_STRIKES descartes y ningún sí que lo salve, ver
-  // app/lib/prospecting/rules.js), buscar en él de todas formas sería ignorar
-  // precisamente la señal que esas reglas existen para aplicar — "hoy tocaba
-  // ese tramo" no es un motivo para gastar búsquedas en uno que ya se sabe que
-  // no sirve. En su lugar, esta función pura cae al mismo comportamiento que
-  // cuando no hay combinación: buscar en todos los tramos no excluidos. No
-  // busca en OTRO tramo dentro del par sector+tramo (eso rompería la lectura
-  // de "qué combinación tocaba hoy" en el panel de aprendizaje) ni deja de
-  // buscar (un día sin búsqueda no aporta nada). Decidir qué combinación toca
-  // DE VERDAD ese día — saltar a otra o no buscar — es una decisión de nivel
-  // de orquestación diaria, no de esta función pura: no vive aquí.
-  const comboSizeExcluded = combo?.size && excludedSizes.includes(combo.size);
-  const sizes =
-    combo?.size && !comboSizeExcluded
-      ? [combo.size]
-      : APOLLO_EMPLOYEE_RANGES.filter((r) => !excludedSizes.includes(r));
+  const sizes = effectiveSizes(combo, rules);
 
   return {
     person_titles: titles,

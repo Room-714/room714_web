@@ -128,7 +128,17 @@ export function ruleStats(decisions = []) {
     // Mismo criterio que deriveRules para "decidida": yes/no explícitos, no
     // "distinto de pending". Si la columna acabara admitiendo null como
     // pendiente, `!== "pending"` contaría todo lo pendiente como decidido.
-    decided: decisions.filter((d) => d.decision === "yes" || d.decision === "no").length,
-    accepted: decisions.filter((d) => d.decision === "yes").length,
+    //
+    // Y, como reasonCounts un poco más arriba, se excluyen las filas
+    // 'legacy': son decisiones que puso una migración, no una persona. Si
+    // nadie las excluyera aquí, el día uno de este panel el contador diría
+    // "48 decisiones, 22 aceptadas" sin que nadie hubiera decidido nada
+    // todavía — el mismo trinquete de credibilidad que reasonCounts ya evita.
+    decided: decisions.filter(
+      (d) => (d.decision === "yes" || d.decision === "no") && d.reasonCode !== REASON_LEGACY,
+    ).length,
+    accepted: decisions.filter(
+      (d) => d.decision === "yes" && d.reasonCode !== REASON_LEGACY,
+    ).length,
   };
 }

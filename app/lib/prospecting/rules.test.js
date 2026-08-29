@@ -207,6 +207,21 @@ describe("ruleStats", () => {
     expect(stats.decided).toBe(2);
   });
 
+  it("decided y accepted no cuentan las filas legacy, igual que reasonCounts", () => {
+    // Sin esta guarda, el día uno de este panel una migración de 48 filas
+    // legacy diría "48 decisiones, 22 aceptadas" sin que nadie hubiera
+    // decidido nada todavía.
+    const decisiones = [
+      si({ sectorQuery: "Educación" }), // yes real: cuenta
+      no({ title: "CEO" }), // no real: cuenta
+      { decision: "yes", reasonCode: "legacy", sectorQuery: "Educación" }, // legacy: no cuenta
+      { decision: "no", reasonCode: "legacy", title: "CEO" }, // legacy: no cuenta
+    ];
+    const stats = ruleStats(decisiones);
+    expect(stats.decided).toBe(2);
+    expect(stats.accepted).toBe(1);
+  });
+
   it("incluye también las reglas derivadas (excludedTitles, etc.)", () => {
     const decisiones = Array.from({ length: TITLE_STRIKES }, () =>
       no({ title: "Director Comercial" }),
