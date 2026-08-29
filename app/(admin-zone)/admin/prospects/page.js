@@ -1,553 +1,485 @@
 "use client";
 
-import { Suspense, useCallback, useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import {
-  deleteProspect,
+  acceptCandidate,
   listProspects,
-  registerEngagement,
-  runDiscovery,
-  saveProspect,
+  loadQueue,
+  rejectCandidate,
   setProspectStatus,
-  skipProspect,
 } from "./actions";
 
-const KIND_LABEL = {
-  buyer: "Comprador",
-  reference: "Referencia",
-};
+// Los cinco motivos, con el texto que se le enseña a quien decide. El orden
+// importa: los tres primeros son los que más se van a usar.
+const REASONS = [
+  ["role", "El cargo no encaja"],
+  ["sector", "El sector no encaja"],
+  ["size", "El tamaño no encaja"],
+  ["in_house_team", "Ya tienen equipo propio"],
+  ["other", "Otro motivo"],
+];
 
 const STATUS_LABEL = {
   ACTIVE: "En rotación",
-  PAUSED: "Pausado",
-  CLIENT: "Cliente 🎉",
+  CLIENT: "Cliente",
   DISCARDED: "Descartado",
 };
 
-const EMPTY_FORM = {
-  id: null,
-  name: "",
-  company: "",
-  role: "",
-  linkedinUrl: "",
-  sector: "",
-  interest: "",
-  keywords: "",
-  notes: "",
-  status: "ACTIVE",
-  kind: "buyer",
-};
+function CreditHeader({ credits, decididosSesion }) {
+  const fecha = new Intl.DateTimeFormat("es-ES", {
+    day: "numeric",
+    month: "long",
+    timeZone: "UTC",
+  }).format(new Date(credits.nextReset));
 
-function daysAgo(date) {
-  if (!date) return null;
-  const days = Math.floor((Date.now() - new Date(date).getTime()) / 86400000);
-  return days === 0 ? "hoy" : days === 1 ? "ayer" : `hace ${days} d`;
+  return (
+    <div className="rounded-xl border p-4 mb-6 bg-white">
+      <p className="text-2xl font-black">
+        {credits.remaining} de {credits.cap} créditos
+      </p>
+      <p className="text-sm text-gray-600">
+        Renueva el {fecha}, dentro de {credits.daysToReset} días ·{" "}
+        {credits.pacePerWorkday.toFixed(1)} al día si te los quieres gastar todos
+      </p>
+      {/* "En esta sesión" y no "hoy": esta pestaña se abre una vez cada
+          mañana, pero si alguien la recarga a media revisión (un F5, volver
+          después de comer para terminar la cola) un contador que dijera "hoy"
+          mentiría a cero aunque ya hubiera diez decisiones tomadas. "Sesión"
+          es la única frase que es siempre verdad, se recargue cuando se
+          recargue. Cuenta también los descartes, no solo los "sí": la
+          cabecera habla de "decisiones", y un "no" es una decisión tan real
+          como un "sí". */}
+      <p className="text-sm text-gray-600">
+        En esta sesión llevas {decididosSesion} decisiones.
+      </p>
+      {credits.exhausted && (
+        <p className="mt-2 text-sm font-bold text-red-700">
+          Sin créditos en este ciclo. Puedes seguir descartando, que es gratis.
+        </p>
+      )}
+    </div>
+  );
 }
 
-function ProspectsInner() {
-  const searchParams = useSearchParams();
-  const preselectedId = searchParams.get("prospectId");
-  // El briefing enlaza aquí con ?kind=reference cuando la tarea es buscar
-  // referencias: llegas con el filtro puesto y el alta preparada para ese
-  // público, sin tener que acordarte de cambiarlo.
-  const preselectedKind = searchParams.get("kind");
-
-  const [prospects, setProspects] = useState([]);
-  const [form, setForm] = useState(EMPTY_FORM);
-  const [showForm, setShowForm] = useState(false);
-  const [notice, setNotice] = useState(null);
-
-  // Redactor
-  const [drafting, setDrafting] = useState(null); // prospect seleccionado
-  const [postText, setPostText] = useState("");
-  const [postUrl, setPostUrl] = useState("");
-  const [options, setOptions] = useState([]);
+function CandidateCard({ candidato, exhausted, onAccept, onReject }) {
+  const [eligiendoMotivo, setEligiendoMotivo] = useState(false);
+  const [note, setNote] = useState("");
   const [busy, setBusy] = useState(false);
 
-  // Origen: lo primero que se hace tras una tanda de Apollo es revisarla en
-  // bloque, así que el filtro va arriba y no escondido.
-  const [sourceFilter, setSourceFilter] = useState("all");
-  const [kindFilter, setKindFilter] = useState(
-    preselectedKind === "buyer" || preselectedKind === "reference"
-      ? preselectedKind
-      : "all",
+  const criterio = [
+    candidato.sectorQuery,
+    candidato.sizeQuery ? `${candidato.sizeQuery.replace(",", "-")} empleados` : null,
+  ]
+    .filter(Boolean)
+    .join(" · ");
+
+  return (
+    <div className="rounded-xl border p-4 bg-white">
+      <p className="text-lg font-bold">{candidato.title || "(sin cargo)"}</p>
+      <p className="text-gray-800">{candidato.company || "(sin empresa)"}</p>
+
+      {criterio && (
+        <p className="mt-1 text-xs text-gray-500">
+          Buscado como: {criterio}.{" "}
+          <span className="italic">
+            Es el criterio con el que se buscó, no datos comprobados de la empresa:
+            la búsqueda de Apollo no devuelve ni sector ni plantilla.
+          </span>
+        </p>
+      )}
+
+      <textarea
+        className="mt-3 w-full rounded border p-2 text-sm"
+        rows={2}
+        placeholder="Nota (opcional): lo que no cabe en los cinco motivos"
+        value={note}
+        onChange={(e) => setNote(e.target.value)}
+      />
+
+      {!eligiendoMotivo ? (
+        <div className="mt-3 flex items-center gap-3">
+          <button
+            disabled={busy || exhausted}
+            title={exhausted ? "Sin créditos en este ciclo" : undefined}
+            className="rounded bg-black px-4 py-2 font-bold text-white disabled:opacity-40"
+            onClick={async () => {
+              setBusy(true);
+              await onAccept(candidato.id, note);
+              setBusy(false);
+            }}
+          >
+            Sí · 1 crédito
+          </button>
+          <button
+            disabled={busy}
+            className="rounded border px-4 py-2 font-bold"
+            onClick={() => setEligiendoMotivo(true)}
+          >
+            No
+          </button>
+          {exhausted && (
+            <span className="text-xs text-red-700">Sin créditos: solo puedes descartar</span>
+          )}
+        </div>
+      ) : (
+        <div className="mt-3">
+          <p className="mb-2 text-sm font-bold">¿Por qué no?</p>
+          <div className="flex flex-wrap gap-2">
+            {REASONS.map(([code, label]) => (
+              <button
+                key={code}
+                disabled={busy}
+                className="rounded border px-3 py-1 text-sm"
+                onClick={async () => {
+                  setBusy(true);
+                  await onReject(candidato.id, code, note);
+                  setBusy(false);
+                }}
+              >
+                {label}
+              </button>
+            ))}
+            <button
+              className="px-3 py-1 text-sm underline"
+              onClick={() => setEligiendoMotivo(false)}
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
   );
+}
+
+// Lo primero que se quiere hacer tras decir que sí: abrir el perfil. Se
+// enseña solo lo aceptado en ESTA sesión porque es justo lo que se acaba de
+// decidir y todavía no se ha abierto; lo de sesiones anteriores ya vive en la
+// pestaña de validados.
+function AceptadosRecientes({ aceptados }) {
+  if (aceptados.length === 0) return null;
+
+  return (
+    <div className="mb-6 rounded-xl border p-4 bg-white">
+      <p className="mb-2 text-sm font-bold">
+        Aceptados en esta sesión, para abrir ahora:
+      </p>
+      <ul className="flex flex-col gap-1">
+        {aceptados.map((a) => (
+          <li key={a.id}>
+            <a
+              href={a.linkedinUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm underline break-all"
+            >
+              {a.linkedinUrl} ↗
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+// El panel de "por qué la búsqueda hace lo que hace". Plegado por defecto:
+// es material de auditoría, no algo que haya que mirar en cada decisión.
+function LearningPanel({ stats, notes }) {
+  // "Cronológico" de verdad, no "como llegó de la BD": el servidor manda las
+  // notas más recientes primero (para poder cortar en las últimas 30 sin
+  // perder las importantes), pero un panel que explica el aprendizaje se lee
+  // mejor como una historia, de la más antigua a la más nueva.
+  const notasCronologicas = [...notes].sort(
+    (a, b) => new Date(a.decidedAt) - new Date(b.decidedAt),
+  );
+
+  const motivos = REASONS.filter(([code]) => stats.reasonCounts[code]);
+
+  return (
+    <details className="mb-6 rounded-xl border bg-white p-4">
+      <summary className="cursor-pointer font-bold">
+        Lo que ha aprendido el filtro
+      </summary>
+
+      <div className="mt-4 grid gap-6 text-sm md:grid-cols-2">
+        <div>
+          <p className="font-bold">
+            Cargos excluidos ({stats.excludedTitles.length})
+          </p>
+          {stats.excludedTitles.length === 0 ? (
+            <p className="text-gray-500">Ninguno todavía.</p>
+          ) : (
+            <ul className="list-disc pl-5">
+              {stats.excludedTitles.map((t) => (
+                <li key={t}>{t}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        <div>
+          <p className="font-bold">
+            Tramos de plantilla excluidos ({stats.excludedSizes.length})
+          </p>
+          {stats.excludedSizes.length === 0 ? (
+            <p className="text-gray-500">Ninguno todavía.</p>
+          ) : (
+            <ul className="list-disc pl-5">
+              {stats.excludedSizes.map((s) => (
+                <li key={s}>{s.replace(",", "-")} empleados</li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        <div>
+          <p className="font-bold">Sectores por tasa de acierto</p>
+          {stats.sectorsByHitRate.length === 0 ? (
+            <p className="text-gray-500">Aún sin datos.</p>
+          ) : (
+            <ul className="list-disc pl-5">
+              {stats.sectorsByHitRate.map((s) => (
+                <li key={s.sector}>
+                  {s.sector}: {s.hits}/{s.total} ({Math.round(s.rate * 100)}%)
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        <div>
+          <p className="font-bold">Motivos de descarte</p>
+          {motivos.length === 0 ? (
+            <p className="text-gray-500">Ningún descarte todavía.</p>
+          ) : (
+            <ul className="list-disc pl-5">
+              {motivos.map(([code, label]) => (
+                <li key={code}>
+                  {label}: {stats.reasonCounts[code]}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        <div className="md:col-span-2">
+          <p className="font-bold">Notas dejadas al decidir</p>
+          {notasCronologicas.length === 0 ? (
+            <p className="text-gray-500">Ninguna todavía.</p>
+          ) : (
+            <ul className="list-disc pl-5">
+              {notasCronologicas.map((n, i) => (
+                <li key={i}>
+                  <span className="text-gray-500">
+                    {new Date(n.decidedAt).toLocaleDateString("es-ES")} ·{" "}
+                    {n.company || "(sin empresa)"}:
+                  </span>{" "}
+                  {n.note}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+    </details>
+  );
+}
+
+// La pestaña de validados: el resultado del sistema, y el único sitio donde
+// se corrige el estado de alguien ya aceptado (por ejemplo, a "Cliente"
+// cuando firma).
+function ValidadosTab() {
+  const [prospects, setProspects] = useState(null);
 
   const load = useCallback(async () => {
     const res = await listProspects();
-    if (res?.success) setProspects(res.prospects || []);
+    if (res.success) setProspects(res.prospects || []);
   }, []);
 
   useEffect(() => {
-    load();
+    const fetchData = async () => {
+      await load();
+    };
+    fetchData();
   }, [load]);
 
-  // Si venimos del briefing con ?prospectId=, abrimos el redactor directamente.
-  useEffect(() => {
-    if (!preselectedId || drafting || prospects.length === 0) return;
-    const p = prospects.find((x) => x.id === Number(preselectedId));
-    if (p) setDrafting(p);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [preselectedId, prospects]);
+  if (prospects === null) {
+    return <p className="p-4 text-gray-600">Cargando…</p>;
+  }
 
-  const flash = (msg) => {
-    setNotice(msg);
-    setTimeout(() => setNotice(null), 4000);
-  };
-
-  const handleSave = async (e) => {
-    e.preventDefault();
-    setBusy(true);
-    const res = await saveProspect(form);
-    setBusy(false);
-    if (!res.success) return flash(`⚠️ ${res.error}`);
-    setForm(EMPTY_FORM);
-    setShowForm(false);
-    flash("Prospecto guardado");
-    load();
-  };
-
-  const handleDraft = async () => {
-    if (postText.trim().length < 40) {
-      return flash("⚠️ Pega el texto del post (mínimo 40 caracteres)");
-    }
-    setBusy(true);
-    setOptions([]);
-    try {
-      const res = await fetch("/api/admin/prospects/draft-comment", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          prospectId: drafting?.id || null,
-          postText,
-        }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
-      setOptions(data.options || []);
-    } catch (err) {
-      flash(`⚠️ ${err.message}`);
-    } finally {
-      setBusy(false);
-    }
-  };
-
-  const handleUsed = async (text) => {
-    try {
-      await navigator.clipboard.writeText(text);
-    } catch {
-      /* portapapeles no disponible: el registro sigue */
-    }
-    if (drafting) {
-      const res = await registerEngagement({
-        prospectId: drafting.id,
-        comment: text,
-        postUrl,
-        postExcerpt: postText,
-      });
-      if (!res.success) return flash(`⚠️ ${res.error}`);
-    }
-    flash("Copiado y registrado. Pégalo en LinkedIn 👌");
-    setDrafting(null);
-    setPostText("");
-    setPostUrl("");
-    setOptions([]);
-    load();
-  };
-
-  // Sin nada que comentar. Lo saca de la cabeza de la cola sin registrar un
-  // comentario que no existe.
-  const handleSkip = async () => {
-    if (!drafting) return;
-    setBusy(true);
-    const res = await skipProspect(drafting.id, "sin actividad reciente");
-    setBusy(false);
-    if (!res.success) return flash(`⚠️ ${res.error}`);
-    flash(res.message);
-    setDrafting(null);
-    setPostText("");
-    setPostUrl("");
-    setOptions([]);
-    load();
-  };
-
-  const handleDelete = async (p) => {
-    // Borrado real e irreversible: se lleva por delante su historial de
-    // comentarios. Por eso confirma con el nombre delante.
-    if (
-      !window.confirm(
-        `¿Borrar a ${p.name} definitivamente?\n\nSe eliminan también sus ${p.engagements?.length || 0} comentario(s) registrados. Esto no se puede deshacer.`,
-      )
-    ) {
-      return;
-    }
-    setBusy(true);
-    const res = await deleteProspect(p.id);
-    setBusy(false);
-    if (!res.success) return flash(`⚠️ ${res.error}`);
-    flash(`${p.name} borrado`);
-    load();
-  };
-
-  const handleDiscover = async () => {
-    // Esto cuesta dinero: 1 crédito por persona enriquecida, de 75 al mes.
-    // Sin confirmación, dos clics distraídos son un tercio del presupuesto.
-    if (
-      !window.confirm(
-        "Buscar prospectos gasta créditos de Apollo: hasta 10 en esta ejecución (1 por persona).\n\n¿Continuar?",
-      )
-    ) {
-      return;
-    }
-    setBusy(true);
-    flash("Buscando en Apollo...");
-    const res = await runDiscovery();
-    setBusy(false);
-    if (!res.success) return flash(`⚠️ ${res.error}`);
-    const r = res.result || {};
-    flash(
-      r.skipped
-        ? `Sin cambios: ${r.reason}`
-        : `${r.imported ?? 0} importados de ${r.enriched ?? 0} enriquecidos (${r.creditsSpent ?? 0} créditos). Quedan ${r.budgetLeft ?? "?"} este mes.`,
+  if (prospects.length === 0) {
+    return (
+      <p className="rounded-xl border bg-white p-6 text-center text-gray-600">
+        Todavía no hay nadie validado.
+      </p>
     );
-    load();
-  };
-
-  const visibleProspects = prospects
-    .filter((p) => sourceFilter === "all" || (p.source || "manual") === sourceFilter)
-    .filter((p) => kindFilter === "all" || (p.kind || "buyer") === kindFilter);
+  }
 
   return (
-    <main className="min-h-screen bg-gray-100 text-black p-4 md:p-8 max-w-5xl mx-auto">
-      <div className="flex items-center justify-between flex-wrap gap-4 mb-6">
-        <h1 className="text-3xl font-black">Prospectos LinkedIn</h1>
-        <div className="flex gap-4 items-center">
-          <button
-            onClick={handleDiscover}
-            disabled={busy}
-            className="border-2 border-black text-sm font-bold px-4 py-2 rounded-xl disabled:opacity-50"
-          >
-            {busy ? "Buscando..." : "Buscar prospectos ahora"}
-          </button>
-          <button
-            onClick={() => {
-              setForm({
-                ...EMPTY_FORM,
-                kind: kindFilter === "all" ? "buyer" : kindFilter,
-              });
-              setShowForm((v) => !v);
-            }}
-            className="bg-black text-white text-sm font-bold px-4 py-2 rounded-xl"
-          >
-            {showForm ? "Cerrar" : "+ Añadir prospecto"}
-          </button>
-          <Link href="/admin" className="text-sm font-bold underline">
-            ← Volver al admin
-          </Link>
-        </div>
-      </div>
-
-      {notice && (
-        <div className="mb-4 bg-white border border-gray-300 rounded-xl px-4 py-3 text-sm font-bold">
-          {notice}
-        </div>
-      )}
-
-      {showForm && (
-        <form
-          onSubmit={handleSave}
-          className="bg-white rounded-3xl border border-gray-200 p-6 mb-6 grid grid-cols-1 md:grid-cols-2 gap-4"
+    <div className="grid gap-3">
+      {prospects.map((p) => (
+        <div
+          key={p.id}
+          className="flex flex-wrap items-center justify-between gap-3 rounded-xl border bg-white p-4"
         >
-          {[
-            ["name", "Nombre *", "Ana García"],
-            ["company", "Empresa", "Acme SL"],
-            ["role", "Cargo", "Director General"],
-            ["linkedinUrl", "URL LinkedIn *", "https://www.linkedin.com/in/..."],
-            ["sector", "Sector", "Industria / retail / salud..."],
-            ["interest", "Servicio que encaja", "Rediseno UX/UI"],
-            ["keywords", "Temas (coma)", "UX, churn, IA en producto"],
-          ].map(([key, label, placeholder]) => (
-            <label key={key} className="text-sm font-bold">
-              {label}
-              <input
-                className="mt-1 w-full border border-gray-300 rounded-xl px-3 py-2 font-normal"
-                value={form[key]}
-                placeholder={placeholder}
-                onChange={(e) => setForm({ ...form, [key]: e.target.value })}
-              />
-            </label>
-          ))}
-          <label className="text-sm font-bold">
-            Público
-            <select
-              className="mt-1 w-full border border-gray-300 rounded-xl px-3 py-2 font-normal bg-white"
-              value={form.kind}
-              onChange={(e) => setForm({ ...form, kind: e.target.value })}
-            >
-              <option value="buyer">
-                Comprador — puede contratarnos
-              </option>
-              <option value="reference">
-                Referencia — publica mucho, da alcance
-              </option>
-            </select>
-          </label>
-          <label className="text-sm font-bold md:col-span-2">
-            Notas
-            <textarea
-              className="mt-1 w-full border border-gray-300 rounded-xl px-3 py-2 font-normal"
-              rows={2}
-              value={form.notes}
-              onChange={(e) => setForm({ ...form, notes: e.target.value })}
-            />
-          </label>
-          <button
-            disabled={busy}
-            className="bg-black text-white font-bold px-6 py-2 rounded-xl md:col-span-2 disabled:opacity-50"
-          >
-            Guardar
-          </button>
-        </form>
-      )}
-
-      {/* Redactor de comentarios */}
-      {drafting && (
-        <div className="bg-white rounded-3xl border-2 border-black p-6 mb-6">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-xl font-black">
-              Comentario para {drafting.name}
-            </h2>
-            <button
-              onClick={() => {
-                setDrafting(null);
-                setOptions([]);
-              }}
+          <div className="min-w-0">
+            <p className="font-bold">{p.name}</p>
+            <p className="text-sm text-gray-600">
+              {[p.role, p.company].filter(Boolean).join(" · ") || "—"}
+            </p>
+          </div>
+          <div className="flex items-center gap-3">
+            <a
+              href={p.linkedinUrl}
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-sm underline"
             >
-              cerrar
-            </button>
-          </div>
-          <p className="text-sm text-gray-500 mb-3">
-            Pega el texto del post de {drafting.name} y te propongo dos
-            comentarios con tu voz. Nada se publica solo: eliges, copias y
-            pegas tú en LinkedIn.
-          </p>
-          <textarea
-            className="w-full border border-gray-300 rounded-xl px-3 py-2 mb-3"
-            rows={5}
-            placeholder="Texto del post del prospecto..."
-            value={postText}
-            onChange={(e) => setPostText(e.target.value)}
-          />
-          <input
-            className="w-full border border-gray-300 rounded-xl px-3 py-2 mb-3 text-sm"
-            placeholder="URL del post (opcional, para el historial)"
-            value={postUrl}
-            onChange={(e) => setPostUrl(e.target.value)}
-          />
-          <div className="flex gap-3 items-center flex-wrap">
-            <button
-              onClick={handleDraft}
-              disabled={busy}
-              className="bg-black text-white font-bold px-6 py-2 rounded-xl disabled:opacity-50"
+              LinkedIn ↗
+            </a>
+            <select
+              value={p.status}
+              onChange={async (e) => {
+                const nuevoEstado = e.target.value;
+                // Optimista: se ve el cambio al instante y, si el servidor lo
+                // rechazara, la siguiente carga de la pestaña lo corregiría.
+                setProspects((prev) =>
+                  prev.map((x) =>
+                    x.id === p.id ? { ...x, status: nuevoEstado } : x,
+                  ),
+                );
+                await setProspectStatus(p.id, nuevoEstado);
+              }}
+              className="rounded border px-2 py-1 text-sm bg-white"
             >
-              {busy ? "Redactando..." : "Proponme dos comentarios"}
-            </button>
-            <button
-              onClick={handleSkip}
-              disabled={busy}
-              className="border border-gray-400 text-gray-700 font-bold px-6 py-2 rounded-xl disabled:opacity-50"
-            >
-              No ha publicado nada — saltar
-            </button>
-          </div>
-
-          {options.length > 0 && (
-            <div className="grid md:grid-cols-2 gap-4 mt-4">
-              {options.map((opt, i) => (
-                <div
-                  key={i}
-                  className="border border-gray-300 rounded-2xl p-4 flex flex-col"
-                >
-                  <span className="text-xs uppercase tracking-wide text-gray-500 mb-2">
-                    {opt.approach}
-                  </span>
-                  <p className="text-sm whitespace-pre-wrap flex-1">{opt.text}</p>
-                  <button
-                    onClick={() => handleUsed(opt.text)}
-                    className="mt-3 bg-black text-white text-sm font-bold px-4 py-2 rounded-xl"
-                  >
-                    Copiar y marcar como comentado
-                  </button>
-                </div>
+              {Object.entries(STATUS_LABEL).map(([value, label]) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
               ))}
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Lista */}
-      {prospects.length === 0 ? (
-        <div className="bg-white rounded-3xl p-10 border border-gray-200 text-center text-gray-500">
-          Aún no hay prospectos. Añade el primero: el briefing diario empezará
-          a incluirlo en la rotación de comentarios.
-        </div>
-      ) : (
-        <div className="bg-white rounded-3xl border border-gray-200 overflow-hidden divide-y divide-gray-100">
-          <div className="flex items-center gap-2 p-4 pb-0 text-sm">
-            <span className="text-gray-500 font-bold mr-1">Público:</span>
-            {[
-              ["all", "Todos"],
-              ["buyer", "Compradores"],
-              ["reference", "Referencias"],
-            ].map(([value, label]) => {
-              const count =
-                value === "all"
-                  ? prospects.length
-                  : prospects.filter((p) => (p.kind || "buyer") === value).length;
-              return (
-                <button
-                  key={value}
-                  onClick={() => setKindFilter(value)}
-                  className={`px-3 py-1 rounded-full font-bold ${
-                    kindFilter === value
-                      ? "bg-black text-white"
-                      : "bg-gray-100 text-gray-600"
-                  }`}
-                >
-                  {label} ({count})
-                </button>
-              );
-            })}
+            </select>
           </div>
-          <div className="flex items-center gap-2 p-4 text-sm">
-            <span className="text-gray-500 font-bold mr-1">Origen:</span>
-            {[
-              ["all", "Todos"],
-              ["apollo", "Apollo"],
-              ["manual", "Manual"],
-            ].map(([value, label]) => {
-              const count =
-                value === "all"
-                  ? prospects.length
-                  : prospects.filter((p) => (p.source || "manual") === value)
-                      .length;
-              return (
-                <button
-                  key={value}
-                  onClick={() => setSourceFilter(value)}
-                  className={`px-3 py-1 rounded-full font-bold ${
-                    sourceFilter === value
-                      ? "bg-black text-white"
-                      : "bg-gray-100 text-gray-600"
-                  }`}
-                >
-                  {label} ({count})
-                </button>
-              );
-            })}
-          </div>
-          {visibleProspects.map((p) => (
-            <div
-              key={p.id}
-              className="flex items-center justify-between gap-4 p-5 flex-wrap"
-            >
-              <div className="min-w-0">
-                <p className="font-black">
-                  {p.name}
-                  <span
-                    className={`ml-2 align-middle text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full ${
-                      (p.kind || "buyer") === "reference"
-                        ? "bg-amber-100 text-amber-700"
-                        : "bg-emerald-100 text-emerald-700"
-                    }`}
-                  >
-                    {KIND_LABEL[p.kind || "buyer"]}
-                  </span>
-                  <span
-                    className={`ml-1 align-middle text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full ${
-                      p.source === "apollo"
-                        ? "bg-indigo-100 text-indigo-700"
-                        : "bg-gray-100 text-gray-500"
-                    }`}
-                  >
-                    {p.source === "apollo" ? "Apollo" : "Manual"}
-                  </span>
-                  {p.company ? (
-                    <span className="font-normal text-gray-500">
-                      {" "}
-                      · {p.role ? `${p.role}, ` : ""}
-                      {p.company}
-                    </span>
-                  ) : null}
-                </p>
-                <p className="text-sm text-gray-500">
-                  {STATUS_LABEL[p.status]}
-                  {" · "}
-                  {p.lastEngagedAt
-                    ? `último comentario ${daysAgo(p.lastEngagedAt)}`
-                    : "sin comentar aún"}
-                  {p.engagements?.length
-                    ? ` · ${p.engagements.length}+ registrados`
-                    : ""}
-                </p>
-              </div>
-              <div className="flex gap-2 items-center flex-wrap">
-                <a
-                  href={p.linkedinUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm underline"
-                >
-                  LinkedIn ↗
-                </a>
-                <button
-                  onClick={() => {
-                    setDrafting(p);
-                    setOptions([]);
-                    setPostText("");
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                  }}
-                  className="bg-black text-white text-sm font-bold px-4 py-2 rounded-xl"
-                >
-                  Comentar
-                </button>
-                <select
-                  value={p.status}
-                  onChange={async (e) => {
-                    await setProspectStatus(p.id, e.target.value);
-                    load();
-                  }}
-                  className="text-sm border border-gray-300 rounded-xl px-2 py-2 bg-white"
-                >
-                  {Object.entries(STATUS_LABEL).map(([value, label]) => (
-                    <option key={value} value={value}>
-                      {label}
-                    </option>
-                  ))}
-                </select>
-                <button
-                  onClick={() => handleDelete(p)}
-                  disabled={busy}
-                  title="Borrar definitivamente"
-                  className="text-sm font-bold text-red-600 px-2 py-2 rounded-xl hover:bg-red-50 disabled:opacity-50"
-                >
-                  Borrar
-                </button>
-              </div>
-            </div>
-          ))}
         </div>
-      )}
-    </main>
+      ))}
+    </div>
   );
 }
 
 export default function ProspectsPage() {
+  const [data, setData] = useState(null);
+  const [notice, setNotice] = useState(null);
+  const [aceptados, setAceptados] = useState([]); // {id, linkedinUrl}
+  // Cuenta sí Y no de esta sesión: ver el comentario dentro de CreditHeader
+  // para por qué es "sesión" y por qué cuenta los descartes.
+  const [decididosSesion, setDecididosSesion] = useState(0);
+  const [vista, setVista] = useState("cola"); // "cola" | "validados"
+
+  const flash = (msg) => {
+    setNotice(msg);
+    setTimeout(() => setNotice(null), 5000);
+  };
+
+  const load = useCallback(async () => {
+    const res = await loadQueue();
+    if (res.success) setData(res);
+    else flash(`⚠️ ${res.error}`);
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await load();
+    };
+    fetchData();
+  }, [load]);
+
+  // NOTA sobre `load()` y las tarjetas que NO se deciden: recarga la cola
+  // entera, pero cada <CandidateCard> va con `key={c.id}`. Mientras ese id
+  // siga en `data.queue` (que es el caso de cualquier candidato pendiente que
+  // no acabas de decidir), React reutiliza la misma instancia del componente
+  // en vez de desmontarla y crear otra: el `note` y el `eligiendoMotivo` que
+  // alguien dejó a medias en OTRA ficha sobreviven a la recarga tal cual.
+  // Solo desaparece, con razón, la ficha que se acaba de decidir. Comprobado
+  // a propósito antes de dar esto por bueno: es la razón de usar `c.id` como
+  // key y no el índice de la lista.
+  const handleAccept = async (id, note) => {
+    const res = await acceptCandidate({ id, note });
+    if (!res.success) return flash(`⚠️ ${res.error}`);
+    // Se guarda el enlace para poder abrirlo sin buscarlo: es lo primero que se
+    // quiere hacer después de decir que sí.
+    setAceptados((prev) => [...prev, { id, linkedinUrl: res.linkedinUrl }]);
+    setDecididosSesion((n) => n + 1);
+    flash(res.duplicado ? "Ya estaba en la lista" : "Añadido a validados");
+    load();
+  };
+
+  const handleReject = async (id, reasonCode, note) => {
+    const res = await rejectCandidate({ id, reasonCode, note });
+    if (!res.success) return flash(`⚠️ ${res.error}`);
+    setDecididosSesion((n) => n + 1);
+    load();
+  };
+
+  if (!data) return <p className="p-6">Cargando…</p>;
+
   return (
-    <Suspense fallback={null}>
-      <ProspectsInner />
-    </Suspense>
+    <main className="min-h-screen bg-gray-100 p-4 text-black md:p-8 max-w-5xl mx-auto">
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+        <h1 className="text-3xl font-black">Prospección: cola diaria</h1>
+        <Link href="/admin" className="text-sm font-bold underline">
+          ← Volver al admin
+        </Link>
+      </div>
+
+      {notice && (
+        <div className="mb-4 rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm font-bold">
+          {notice}
+        </div>
+      )}
+
+      <CreditHeader credits={data.credits} decididosSesion={decididosSesion} />
+      <AceptadosRecientes aceptados={aceptados} />
+      <LearningPanel stats={data.stats} notes={data.notes} />
+
+      <div className="mb-4 flex gap-2">
+        {[
+          ["cola", `Cola (${data.queue.length})`],
+          ["validados", "Validados"],
+        ].map(([value, label]) => (
+          <button
+            key={value}
+            onClick={() => setVista(value)}
+            className={`rounded-full px-4 py-1.5 text-sm font-bold ${
+              vista === value ? "bg-black text-white" : "border bg-white"
+            }`}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {vista === "cola" ? (
+        <>
+          <div className="grid gap-4">
+            {data.queue.map((c) => (
+              <CandidateCard
+                key={c.id}
+                candidato={c}
+                exhausted={data.credits.exhausted}
+                onAccept={handleAccept}
+                onReject={handleReject}
+              />
+            ))}
+          </div>
+          {data.queue.length === 0 && (
+            <p className="rounded-xl border bg-white p-6 text-center text-gray-600">
+              Cola vacía. La siguiente llega mañana a las 06:00.
+            </p>
+          )}
+        </>
+      ) : (
+        <ValidadosTab />
+      )}
+    </main>
   );
 }
