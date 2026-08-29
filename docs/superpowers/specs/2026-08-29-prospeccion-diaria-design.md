@@ -319,7 +319,17 @@ esperábamos. Por persona: `id`, `first_name`, `last_name_obfuscated`, `title`,
 `last_refreshed_at` y banderas `has_email` / `has_city` / `has_direct_phone`.
 Y dentro de `organization`, **solo `name` y banderas booleanas**
 (`has_industry`, `has_employee_count`, `has_revenue`…): **nunca el sector ni la
-plantilla**. La respuesta sí trae `pagination.total_entries`.
+plantilla**.
+
+Y `pagination.total_entries` **viene vacío**: la documentación lo describe, pero
+en producción llega a cero y se propaga como `null`. Confirmado con una llamada
+real el 2026-08-29. Consecuencia práctica: **no hay forma de medir el tamaño del
+pozo de una combinación por adelantado**. Lo único que se puede observar es
+cuántas caras nuevas devuelve cada ejecución y si `exhausted` empieza a salir a
+`true`, que es una señal a posteriori y lenta. Si un día hace falta saber si el
+perfil se está quedando corto, habrá que medirlo contando descartes por "ya
+estaba en el historial" a lo largo de varias semanas, no preguntándoselo a
+Apollo.
 
 **2. Si el enriquecimiento de empresa es gratis.** No lo es. Enriquecer una
 organización cuesta **1 crédito**, lo mismo que enriquecer a la persona, y la
