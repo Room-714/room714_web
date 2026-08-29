@@ -585,8 +585,7 @@ const MAX_TAKES_OUTPUT_TOKENS = 8000;
 
 // Bloque de sistema propio. NO se reutiliza buildCachedSystemBlocks(): aquel
 // lleva la guía del artículo, que pide 1500-2500 palabras, HTML de TipTap y
-// enlaces internos obligatorios, y además fijaba el número de variantes en tres
-// — lo que contradecía al prompt de usuario los miércoles, que piden dos.
+// enlaces internos obligatorios — nada de eso aplica a una toma de LinkedIn.
 //
 // Sin cache_control a propósito: son unos 900 tokens, por debajo del mínimo
 // cacheable, y la llamada corre dos veces por semana con más de una hora entre
