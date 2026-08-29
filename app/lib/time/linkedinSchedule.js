@@ -15,9 +15,17 @@
 // a las 08:30, a partir del artículo que se acaba de revisar a mano. No puede
 // existir antes. Es la única excepción del calendario y es deliberada.
 //
-// Por qué se puede sumar milisegundos sin preocuparse del cambio de hora: las
-// tomas de un artículo van de lunes a viernes y los cambios de horario ocurren
-// en domingo de madrugada, así que ninguna suma cruza uno.
+// Por qué se puede sumar milisegundos sin hacer aritmética de zona horaria: con
+// los planes de lunes y miércoles, las tomas van de lunes a viernes y los
+// cambios de horario ocurren en domingo de madrugada, así que ninguna suma
+// cruza uno. Comprobado contra las semanas del 29 de marzo y del 25 de octubre.
+//
+// Ojo: eso NO vale para FALLBACK_PLAN. Un artículo publicado un jueves o un
+// viernes hereda los offsets del lunes, y entonces +1d puede caer en sábado
+// (donde el cron de publicación no corre) y +4d puede cruzar un domingo de
+// cambio de hora y desviar la publicación ±1 hora. Es un camino de
+// recuperación manual, no el flujo normal; si deja de serlo, hay que calcular
+// los días en zona horaria en vez de en milisegundos.
 import { getMadridWeekday } from "./madrid";
 
 const MIN_MS = 60 * 1000;
@@ -47,8 +55,9 @@ const TAKE_PLAN = {
 };
 
 // Si un artículo cae en un día no previsto (recuperación manual, cambio de
-// calendario), se aplica el plan del lunes en vez de fallar: perder el
-// equilibrio de la semana es preferible a quedarse sin publicar.
+// calendario), se aplica el plan del lunes en vez de fallar: publicar con el
+// calendario equivocado es preferible a no publicar. Hereda los offsets del
+// lunes además del reparto de canales — ver el aviso de la cabecera.
 const FALLBACK_PLAN = TAKE_PLAN.Mon;
 
 function planFor(postPublishDate) {
@@ -95,7 +104,17 @@ export function variantScheduleFor(postPublishDate) {
 
 export function slotFor({ postPublishDate, variant }) {
   const plan = planFor(postPublishDate);
-  return plan[variant - 1] || plan[0];
+  const take = plan[variant - 1];
+  if (take) return take;
+
+  // Variante fuera del plan. Pasa con las filas del calendario anterior, que
+  // tenía tres tomas también los miércoles. Se avisa y se sigue: publicar por
+  // el canal de la primera toma es menos malo que no publicar, pero tiene que
+  // quedar rastro.
+  console.warn(
+    `slotFor: variante ${variant} fuera del plan de ${postPublishDate.toISOString()}; se usa la primera toma`,
+  );
+  return plan[0];
 }
 
 export function channelForVariant({ postPublishDate, variant }) {

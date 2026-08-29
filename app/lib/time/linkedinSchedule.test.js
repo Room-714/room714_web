@@ -7,6 +7,7 @@ import {
   takeCountFor,
   variantScheduleFor,
 } from "./linkedinSchedule";
+import { formatMadridTime } from "./madrid";
 
 // Los artículos se publican a las 07:30 de Madrid.
 // Lunes 27 de julio de 2026 (CEST = UTC+2) → 05:30 UTC.
@@ -63,18 +64,31 @@ describe("variantScheduleFor", () => {
     expect(off2).toBeLessThanOrEqual(28);
   });
 
-  it("ninguna toma se sale de su franja de publicación", () => {
-    const todas = [
-      ...variantScheduleFor(LUNES),
-      ...variantScheduleFor(MIERCOLES),
+  it("ninguna toma se sale de su franja, en invierno y en verano", () => {
+    const bases = [
+      LUNES,
+      MIERCOLES,
+      // Lunes 5 y miércoles 7 de enero de 2026, 07:30 Madrid (CET = UTC+1).
+      new Date("2026-01-05T06:30:00Z"),
+      new Date("2026-01-07T06:30:00Z"),
+      // Lunes 23 de marzo: su toma 3 cae el viernes 27, aún en CET (el cambio
+      // es el domingo 29).
+      new Date("2026-03-23T06:30:00Z"),
+      // Lunes 19 de octubre: su toma 3 cae el viernes 23, aún en CEST (el
+      // cambio es el domingo 25).
+      new Date("2026-10-19T05:30:00Z"),
     ];
-    for (const fecha of todas) {
-      const minutos = fecha.getUTCHours() * 60 + fecha.getUTCMinutes();
-      // En CEST: la franja de mañana es 05:30-05:58 UTC y la de después de
-      // la revisión 06:35-06:43 UTC.
-      const enFranjaManana = minutos >= 5 * 60 + 30 && minutos <= 5 * 60 + 58;
-      const enFranjaRevision = minutos >= 6 * 60 + 35 && minutos <= 6 * 60 + 43;
-      expect(enFranjaManana || enFranjaRevision).toBe(true);
+
+    for (const base of bases) {
+      for (const fecha of variantScheduleFor(base)) {
+        const hhmm = formatMadridTime(fecha);
+        const enFranjaManana = hhmm >= "07:30" && hhmm <= "07:58";
+        const enFranjaRevision = hhmm >= "08:35" && hhmm <= "08:43";
+        expect(
+          enFranjaManana || enFranjaRevision,
+          `artículo ${base.toISOString()} → toma a las ${hhmm} de Madrid`,
+        ).toBe(true);
+      }
     }
   });
 
@@ -97,11 +111,14 @@ describe("variantScheduleFor", () => {
     expect(orden).toEqual([...orden].sort((a, b) => a - b));
   });
 
-  it("el jitter varía entre artículos y entre tomas", () => {
-    const offsets = [LUNES, MIERCOLES].flatMap((fecha) =>
-      [0, 1, 2].map((idx) => jitterMinutesFor(fecha, idx)),
-    );
-    expect(new Set(offsets).size).toBeGreaterThan(1);
+  it("el jitter dispersa las tomas de un mismo artículo", () => {
+    const lunes = [0, 1, 2].map((idx) => jitterMinutesFor(LUNES, idx));
+    expect(new Set(lunes).size).toBeGreaterThan(1);
+
+    // Solo dos índices: el plan del miércoles no tiene una tercera toma y
+    // pedirla caería en el respaldo sin que el test lo dijera.
+    const miercoles = [0, 1].map((idx) => jitterMinutesFor(MIERCOLES, idx));
+    expect(new Set(miercoles).size).toBeGreaterThan(1);
   });
 });
 
