@@ -60,6 +60,12 @@ const TAKE_PLAN = {
 // lunes además del reparto de canales — ver el aviso de la cabecera.
 const FALLBACK_PLAN = TAKE_PLAN.Mon;
 
+// Días en que un artículo tiene plan propio de tomas. Un artículo fechado
+// fuera de estos días cae en FALLBACK_PLAN y además no lo recoge el cron de
+// las 08:30, así que se queda sin tomas: por eso hay que poder preguntarlo
+// desde fuera y no solo deducirlo.
+export const PLANNED_WEEKDAYS = Object.keys(TAKE_PLAN);
+
 function planFor(postPublishDate) {
   const weekday = getMadridWeekday(postPublishDate);
   return TAKE_PLAN[weekday] || FALLBACK_PLAN;

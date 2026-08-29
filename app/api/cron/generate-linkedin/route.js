@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { generateTakesForToday } from "@/app/lib/ai/orchestrator";
 import { getMadridWeekday, isMadridHour } from "@/app/lib/time/madrid";
+import { PLANNED_WEEKDAYS } from "@/app/lib/time/linkedinSchedule";
 
 export const maxDuration = 300;
 
@@ -12,9 +13,6 @@ export const maxDuration = 300;
 // horario estacional) y aquí se descarta la que no toca. Eso resuelve de paso
 // la idempotencia frente al cambio de hora.
 const TARGET_HOUR = 8;
-
-// Solo hay artículo que convertir en tomas los días en que se publica uno.
-const PUBLISH_WEEKDAYS = ["Mon", "Wed"];
 
 export async function GET(request) {
   const authHeader = request.headers.get("authorization");
@@ -35,11 +33,11 @@ export async function GET(request) {
     }
 
     const weekday = getMadridWeekday();
-    if (!PUBLISH_WEEKDAYS.includes(weekday)) {
+    if (!PLANNED_WEEKDAYS.includes(weekday)) {
       return NextResponse.json({
         message: "Saltado: hoy no se publica artículo",
         weekday,
-        publishWeekdays: PUBLISH_WEEKDAYS,
+        publishWeekdays: PLANNED_WEEKDAYS,
       });
     }
   }

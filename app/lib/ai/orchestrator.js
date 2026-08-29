@@ -24,6 +24,7 @@ import {
 import {
   channelForVariant,
   crossActionsFor,
+  PLANNED_WEEKDAYS,
   takeCountFor,
   variantScheduleFor,
 } from "@/app/lib/time/linkedinSchedule";
@@ -61,17 +62,6 @@ async function ensureUniqueSlug(slug, lang) {
 export async function generateDraftForToday({ categoryOverride, sendEmail = true } = {}) {
   const today = new Date();
   const publishDate = nextMadridSlot(PUBLISH_HOUR_MADRID, PUBLISH_MINUTE_MADRID);
-
-  // Si el cron llegó tarde, nextMadridSlot salta al siguiente día laborable sin
-  // decir nada, y entonces el artículo se fecha un día en que generate-linkedin
-  // no corre: la semana se queda sin tomas. No lo impedimos —publicar mañana es
-  // mejor que no publicar— pero que quede en el log.
-  if (getMadridWeekday(publishDate) !== getMadridWeekday(new Date())) {
-    console.warn(
-      `generateDraftForToday: las 07:30 de hoy ya pasaron; el artículo se fecha el ${publishDate.toISOString()}`,
-    );
-  }
-
   const category = categoryOverride ?? categoryForDate(today);
 
   if (!category) {
@@ -79,6 +69,18 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
       skipped: true,
       reason: "No es día laborable (sin rotación de categoría)",
     };
+  }
+
+  // Dos formas de acabar sin tomas y en silencio: que el cron llegue tarde y
+  // nextMadridSlot salte al siguiente día laborable, o que se genere a mano
+  // (p. ej. desde /api/admin/generate-draft) en un día que sí es laborable
+  // pero no tiene plan de tomas (martes, jueves, viernes). En los dos casos
+  // generate-linkedin no recogerá el artículo esa semana. No lo impedimos
+  // —publicar sin tomas es preferible a no publicar— pero que quede en el log.
+  if (!PLANNED_WEEKDAYS.includes(getMadridWeekday(publishDate))) {
+    console.warn(
+      `generateDraftForToday: el artículo se fecha el ${publishDate.toISOString()}, un día sin plan de tomas; no lo recogerá el cron de las 08:30`,
+    );
   }
 
   const [trending, recentPosts, publishedCorpus] = await Promise.all([
