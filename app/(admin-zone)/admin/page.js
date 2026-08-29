@@ -170,7 +170,7 @@ export default function AdminPage() {
 
   const handleGenerateAi = async () => {
     const confirmed = window.confirm(
-      "¿Generar un post automático con IA ahora?\n\nTarda hasta 2 minutos y consume tokens. Se creará como publicado en la próxima franja de 10:00 (Madrid) y aparecerá en 'Próximamente' para que lo valides.",
+      "¿Generar un post automático con IA ahora?\n\nTarda hasta 2 minutos y consume tokens. Se creará como publicado en la próxima franja de 07:30 (Madrid) y aparecerá en 'Próximamente' para que lo valides.",
     );
     if (!confirmed) return;
     setIsGenerating(true);
@@ -233,7 +233,7 @@ export default function AdminPage() {
 
   const renderPostButton = (post, extraClasses = "") => {
     const isFuture = new Date(post.date) > new Date();
-    const publishTime = post.source === "AUTO" ? "10:00 AM" : "5:00 PM";
+    const publishTime = post.source === "AUTO" ? "07:30" : "17:00";
     return (
       <button
         key={post.id}

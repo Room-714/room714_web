@@ -55,7 +55,7 @@ export default function PublishWorkflowModal({ post, onClose, onConfirm }) {
               />
               <p className="text-xs text-gray-400 leading-relaxed text-center">
                 * Se publicará automáticamente <br />
-                el día elegido a las 09:00 AM.
+                el día elegido a las 08:00.
               </p>
               <button
                 onClick={() =>

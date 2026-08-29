@@ -12,17 +12,28 @@ import {
   fetchAndStoreCoverImage,
   fallbackQueryForCategory,
 } from "@/app/lib/sources/unsplash";
-import { generatePostDraft } from "./generator";
+import { generateLinkedInTakes, generatePostDraft } from "./generator";
 import { backlinkOldPosts } from "./backlinker";
 import { computeOutboundLinksForPost } from "./internalLinker";
 import { sendDraftReadyEmail } from "@/app/lib/notifications/draftReady";
-import { nextMadridSlot } from "@/app/lib/time/madrid";
 import {
+  getMadridWeekday,
+  madridDayRange,
+  nextMadridSlot,
+} from "@/app/lib/time/madrid";
+import {
+  channelForVariant,
   crossActionsFor,
+  PLANNED_WEEKDAYS,
+  takeCountFor,
   variantScheduleFor,
 } from "@/app/lib/time/linkedinSchedule";
 
-const PUBLISH_HOUR_MADRID = 10;
+// El artículo se hace visible a las 07:30 de Madrid: el blog filtra date <= now,
+// así que esta fecha ES la hora de publicación. La revisión manual va de 08:00
+// a 08:30 y las tomas de LinkedIn se generan a las 08:30, en un cron aparte.
+const PUBLISH_HOUR_MADRID = 7;
+const PUBLISH_MINUTE_MADRID = 30;
 
 function slugifyFallback(text) {
   return text
@@ -50,7 +61,7 @@ async function ensureUniqueSlug(slug, lang) {
 
 export async function generateDraftForToday({ categoryOverride, sendEmail = true } = {}) {
   const today = new Date();
-  const publishDate = nextMadridSlot(PUBLISH_HOUR_MADRID);
+  const publishDate = nextMadridSlot(PUBLISH_HOUR_MADRID, PUBLISH_MINUTE_MADRID);
   const category = categoryOverride ?? categoryForDate(today);
 
   if (!category) {
@@ -58,6 +69,18 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
       skipped: true,
       reason: "No es día laborable (sin rotación de categoría)",
     };
+  }
+
+  // Dos formas de acabar sin tomas y en silencio: que el cron llegue tarde y
+  // nextMadridSlot salte al siguiente día laborable, o que se genere a mano
+  // (p. ej. desde /api/admin/generate-draft) en un día que sí es laborable
+  // pero no tiene plan de tomas (martes, jueves, viernes). En los dos casos
+  // generate-linkedin no recogerá el artículo esa semana. No lo impedimos
+  // —publicar sin tomas es preferible a no publicar— pero que quede en el log.
+  if (!PLANNED_WEEKDAYS.includes(getMadridWeekday(publishDate))) {
+    console.warn(
+      `generateDraftForToday: el artículo se fecha el ${publishDate.toISOString()}, un día sin plan de tomas; no lo recogerá el cron de las 08:30`,
+    );
   }
 
   const [trending, recentPosts, publishedCorpus] = await Promise.all([
@@ -71,7 +94,6 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
     trending,
     recentPosts,
     publishedCorpus,
-    crossActions: crossActionsFor(publishDate),
   });
 
   const datePrefix = today.toISOString().split("T")[0];
@@ -86,30 +108,6 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
   const slugEn = await ensureUniqueSlug(
     draft.slug_en || slugifyFallback(draft.title_en),
     "en",
-  );
-
-  // Fetch 3 imágenes adicionales para las variantes de LinkedIn (una por
-  // variante, con su image_query propia). Best-effort: si alguna falla,
-  // usamos la imagen del post como fallback.
-  const variants = draft.linkedin_variants || [];
-  const variantSchedules = variantScheduleFor(publishDate);
-  const variantImages = await Promise.all(
-    variants.map(async (v, idx) => {
-      try {
-        const img = await fetchAndStoreCoverImage(
-          v.image_query,
-          `${datePrefix}-li${idx + 1}`,
-          { fallbackQuery: fallbackQueryForCategory(category) },
-        );
-        return img.url;
-      } catch (err) {
-        console.error(
-          `Imagen variante ${idx + 1} falló (query "${v.image_query}"):`,
-          err.message,
-        );
-        return cover.url;
-      }
-    }),
   );
 
   const post = await prisma.post.create({
@@ -140,20 +138,8 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
           },
         ],
       },
-      linkedinVariants: {
-        create: variants.map((v, idx) => ({
-          variant: idx + 1,
-          angle: v.angle,
-          text: v.text,
-          hashtags: v.hashtags || [],
-          imageBlobUrl: variantImages[idx],
-          imageQuery: v.image_query,
-          crossNote: v.cross_note?.trim() || null,
-          scheduledFor: variantSchedules[idx],
-        })),
-      },
     },
-    include: { translations: true, linkedinVariants: true },
+    include: { translations: true },
   });
 
   const translationEs = post.translations.find((t) => t.lang === "es");
@@ -215,13 +201,13 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
       post,
       translationEs,
       category,
-      linkedinVariants: post.linkedinVariants,
       postUrl,
     });
 
-    // Make reactivado (jul 2026): las variantes se quedan en sent=false para
-    // que /api/cron/publish-linkedin las publique automáticamente a su hora.
-    // El email es solo informativo (muestra qué se publicará y cuándo).
+    // linkedinVariants no se pasa: a las 06:00 (cuando corre esta función)
+    // todavía no existen — se generan a las 08:30, en generateTakesForToday,
+    // después de la ventana de revisión manual. El parámetro por defecto ([])
+    // hace que sendDraftReadyEmail omita sola la sección de LinkedIn del correo.
   }
 
   return {
@@ -240,10 +226,173 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
     email: emailResult,
     backlinks,
     outboundLinks,
-    linkedinVariants: post.linkedinVariants.map((v) => ({
-      variant: v.variant,
-      angle: v.angle,
-      scheduledFor: v.scheduledFor.toISOString(),
-    })),
+  };
+}
+
+/* ─── Tomas de LinkedIn del artículo de hoy ──────────────────────────────────
+ * Corre a las 08:30 de lunes y miércoles, después de la ventana de revisión
+ * manual (08:00-08:30). Lee el artículo tal y como haya quedado en base de
+ * datos: si se editó, las tomas salen del texto editado; si no se tocó, del
+ * generado. Nada bloquea.
+ * ────────────────────────────────────────────────────────────────────────── */
+// Pura y exportada para poder probarla: es lo único de esta función que el
+// modo preview no enseña, y donde viven las dos normalizaciones que importan
+// (hashtags ausentes → array vacío, nota en blanco → null).
+export function buildTakeRows({ postId, takes, schedules, images }) {
+  return takes.map((take, idx) => ({
+    postId,
+    variant: idx + 1,
+    angle: take.angle,
+    text: take.text,
+    hashtags: take.hashtags || [],
+    imageBlobUrl: images[idx],
+    imageQuery: take.image_query,
+    crossNote: take.cross_note?.trim() || null,
+    scheduledFor: schedules[idx],
+  }));
+}
+
+export async function generateTakesForToday({ preview = false } = {}) {
+  const { start, end } = madridDayRange(new Date());
+
+  // `take: 2` y no `findFirst` para poder avisar si hay más de un candidato.
+  // El desempate por id es imprescindible: `nextMadridSlot` pone segundos y
+  // milisegundos a cero, así que dos generaciones del mismo día empatan al
+  // milisegundo en `date` y sin él ganaría una cualquiera — normalmente la
+  // más antigua, es decir, el artículo que se descartó al regenerar.
+  const candidatos = await prisma.post.findMany({
+    where: {
+      source: "AUTO",
+      published: true,
+      date: { gte: start, lte: end },
+    },
+    include: { translations: true, linkedinVariants: true },
+    orderBy: [{ date: "desc" }, { id: "desc" }],
+    take: 2,
+  });
+
+  const post = candidatos[0];
+
+  if (candidatos.length > 1) {
+    console.warn(
+      `generateTakesForToday: hay ${candidatos.length} artículos AUTO publicados hoy; se usa el ${post.id}, el más reciente`,
+    );
+  }
+
+  if (!post) {
+    return {
+      skipped: true,
+      reason: `No hay artículo AUTO publicado entre ${start.toISOString()} y ${end.toISOString()}`,
+    };
+  }
+
+  // El preview no escribe, así que no le aplica la idempotencia: tiene que
+  // poder enseñar qué saldría también en un día ya procesado, aunque ese post
+  // ya tenga tomas guardadas.
+  if (!preview && post.linkedinVariants.length > 0) {
+    return {
+      skipped: true,
+      postId: post.id,
+      reason: `El post ${post.id} ya tiene ${post.linkedinVariants.length} tomas`,
+    };
+  }
+
+  const translationEs = post.translations.find((t) => t.lang === "es");
+  if (!translationEs) {
+    return {
+      skipped: true,
+      postId: post.id,
+      reason: `El post ${post.id} no tiene traducción española`,
+    };
+  }
+
+  const count = takeCountFor(post.date);
+  const crossActions = crossActionsFor(post.date);
+  const schedules = variantScheduleFor(post.date);
+  // Constante y no NEXTAUTH_URL: esta URL entra en el prompt de un texto que
+  // se publica sin revisión, y desde local NEXTAUTH_URL es localhost.
+  const articleUrl = `https://www.room714.com/es/blog/${translationEs.slug}`;
+
+  const { takes, usage } = await generateLinkedInTakes({
+    articleTitle: translationEs.title,
+    articleContentEs: translationEs.content,
+    articleUrl,
+    count,
+    crossActions,
+  });
+
+  const describe = (take, idx) => ({
+    take: idx + 1,
+    angle: take.angle,
+    canal: channelForVariant({ postPublishDate: post.date, variant: idx + 1 }),
+    cross: crossActions[idx],
+    scheduledFor: schedules[idx].toISOString(),
+  });
+
+  // Preview: enseña qué se publicaría y cuándo, sin descargar imágenes ni
+  // escribir en base de datos. Es la forma de validar un cambio sin ensuciar.
+  if (preview) {
+    return {
+      preview: true,
+      postId: post.id,
+      articleTitle: translationEs.title,
+      count,
+      existingTakes: post.linkedinVariants.length,
+      usage,
+      takes: takes.map((take, idx) => ({
+        ...describe(take, idx),
+        text: take.text,
+        hashtags: take.hashtags,
+        crossNote: take.cross_note?.trim() || null,
+      })),
+    };
+  }
+
+  // Una imagen por toma, con su propia consulta. Best-effort: si Unsplash
+  // falla, se usa la portada del artículo, como hacía el flujo anterior.
+  const datePrefix = new Date().toISOString().split("T")[0];
+  const images = await Promise.all(
+    takes.map(async (take, idx) => {
+      try {
+        const img = await fetchAndStoreCoverImage(
+          take.image_query,
+          `${datePrefix}-li${idx + 1}`,
+          { fallbackQuery: fallbackQueryForCategory(post.category) },
+        );
+        return img.url;
+      } catch (err) {
+        console.error(
+          `Imagen de la toma ${idx + 1} falló (query "${take.image_query}"):`,
+          err.message,
+        );
+        return post.image;
+      }
+    }),
+  );
+
+  try {
+    await prisma.linkedInVariant.createMany({
+      data: buildTakeRows({ postId: post.id, takes, schedules, images }),
+    });
+  } catch (err) {
+    // Otra ejecución solapada llegó antes. El @@unique aborta la sentencia
+    // entera, así que no queda media semana escrita: o están todas o ninguna.
+    if (err.code === "P2002") {
+      return {
+        skipped: true,
+        postId: post.id,
+        reason: "otra ejecución escribió las tomas primero",
+      };
+    }
+    throw err;
+  }
+
+  return {
+    skipped: false,
+    postId: post.id,
+    articleTitle: translationEs.title,
+    count,
+    usage,
+    takes: takes.map(describe),
   };
 }

@@ -1,5 +1,5 @@
 import { getAnthropicClient, MODEL } from "./anthropic";
-import { EDITORIAL_GUIDE, FEW_SHOT_EXAMPLES } from "./editorialGuide";
+import { EDITORIAL_GUIDE, FEW_SHOT_EXAMPLES, LINKEDIN_GUIDE } from "./editorialGuide";
 
 const POST_TOOL = {
   name: "create_blog_post",
@@ -58,46 +58,6 @@ const POST_TOOL = {
         type: "string",
         description: "Meta description en inglés (140-160 chars).",
       },
-      linkedin_variants: {
-        type: "array",
-        description:
-          "Exactamente 3 variantes de post nativo de LinkedIn en español que apuntan al mismo artículo del blog desde ángulos distintos. NO traducciones: tres tomas distintas sobre el mismo tema.",
-        minItems: 3,
-        maxItems: 3,
-        items: {
-          type: "object",
-          properties: {
-            angle: {
-              type: "string",
-              enum: ["data", "polemica", "conclusion"],
-              description:
-                "Ángulo del que tira la variante. 'data': empieza con un número/hecho/cifra concreta. 'polemica': afirmación contraintuitiva o crítica con el sector. 'conclusion': lección práctica/accionable que se llevan a la oficina.",
-            },
-            text: {
-              type: "string",
-              description:
-                "Post nativo de LinkedIn en español (1000-1800 chars). Empieza con un HOOK punzante en la primera línea (lo que se ve antes del 'ver más'). Tono coloquial-profesional. 3-5 párrafos cortos separados por doble salto de línea. SIN enlaces. SIN hashtags al final (van en otro campo). Termina con una pregunta o invitación a comentar. El hook debe ser ÚNICO en cada variante — distinto framing del mismo artículo.",
-            },
-            hashtags: {
-              type: "array",
-              items: { type: "string" },
-              description:
-                "3-5 hashtags (formato #SinEspacios). Pueden coincidir entre variantes en algunos generales; mezcla específicos (#JTBD, #ProductoDigital) con generales (#IA, #UX). Sin acentos.",
-            },
-            image_query: {
-              type: "string",
-              description:
-                "Frase corta en inglés (3-6 palabras) para buscar UNA imagen en Unsplash que ilustre ESTA variante en particular. Las 3 image_query del post deben ser distintas entre sí: cada variante tira de una metáfora visual diferente para que las 3 publicaciones de LinkedIn no parezcan copia. Pensadas para devolver fotografías abstractas/profesionales, NO ilustraciones obvias del tema.",
-            },
-            cross_note: {
-              type: "string",
-              description:
-                "Texto sugerido para la ACCIÓN CRUZADA de esta variante, si la tiene (te la indico en el prompt). Máximo 2 frases. Si la variante no tiene acción cruzada, cadena vacía.",
-            },
-          },
-          required: ["angle", "text", "hashtags", "image_query"],
-        },
-      },
     },
     required: [
       "title_es",
@@ -111,7 +71,6 @@ const POST_TOOL = {
       "image_query",
       "meta_description_es",
       "meta_description_en",
-      "linkedin_variants",
     ],
   },
 };
@@ -155,25 +114,6 @@ const CROSS_ACTION_BRIEF = {
     "RECOMPARTICIÓN DE ROOM714. Esta variante la publica José desde su perfil, y la página de Room714 la recomparte. Escribe en cross_note la línea con la que la página lo comparte: 1-2 frases en voz corporativa de Room714, que enmarquen por qué el tema importa. NO repitas el hook del post.",
 };
 
-function buildCrossNotesBlock(crossActions) {
-  if (!crossActions || crossActions.every((a) => !a)) return "";
-
-  const lines = crossActions.map((action, i) => {
-    const n = i + 1;
-    return action
-      ? `- Variante ${n}: ${CROSS_ACTION_BRIEF[action]}`
-      : `- Variante ${n}: sin acción cruzada. Deja cross_note como cadena vacía.`;
-  });
-
-  return `
-
-## ACCIONES CRUZADAS (campo cross_note de cada variante)
-
-Cada variante se publica en una sola cuenta, y algunas llevan una acción en la otra cuenta. Rellena cross_note según lo que le toque a cada una:
-
-${lines.join("\n")}`;
-}
-
 // Corpus completo agrupado por categoría. Con más de 75 artículos publicados,
 // pasarle al modelo solo los 10 recientes dejaba libre cualquier tema de hace
 // más de cinco semanas, y Google ya marcó varios pares como duplicados.
@@ -209,7 +149,6 @@ export function buildUserPrompt({
   trending,
   recentPosts,
   publishedCorpus,
-  crossActions,
 }) {
   const trendingText =
     trending.length > 0
@@ -263,7 +202,7 @@ REGLAS CRÍTICAS:
 4. Genera ambas versiones (ES y EN) coherentes pero NO traducción literal: cada una en su idioma nativo.
 5. Embedde 2-3 internal links a posts recientes relacionados (sección INTERNAL LINKING).
 
-Llama al tool create_blog_post con los campos correspondientes.${buildPublishedCorpusBlock(publishedCorpus)}${buildCrossNotesBlock(crossActions)}`;
+Llama al tool create_blog_post con los campos correspondientes.${buildPublishedCorpusBlock(publishedCorpus)}`;
 }
 
 function sanitizeInvalidLinks(html, validSlugs, lang) {
@@ -300,7 +239,6 @@ function validateGenerated(data, { recentPosts = [] } = {}) {
     "image_query",
     "meta_description_es",
     "meta_description_en",
-    "linkedin_variants",
   ];
   for (const key of required) {
     if (data[key] === undefined || data[key] === null || data[key] === "") {
@@ -309,17 +247,6 @@ function validateGenerated(data, { recentPosts = [] } = {}) {
   }
   if (!Array.isArray(data.tags_es) || !Array.isArray(data.tags_en)) {
     throw new Error("tags_es y tags_en deben ser arrays");
-  }
-  if (
-    !Array.isArray(data.linkedin_variants) ||
-    data.linkedin_variants.length !== 3
-  ) {
-    throw new Error("linkedin_variants debe ser un array con exactamente 3 variantes");
-  }
-  for (const [i, v] of data.linkedin_variants.entries()) {
-    if (!v.text || !v.angle || !v.image_query || !Array.isArray(v.hashtags)) {
-      throw new Error(`linkedin_variants[${i}] incompleto`);
-    }
   }
   if (!data.content_es.includes("<p>") || !data.content_es.includes("<h2>")) {
     throw new Error("content_es no parece HTML válido (faltan <p> o <h2>)");
@@ -398,17 +325,16 @@ USA SOLO los slugs literales de la lista (slug_es / slug_en). NO inventes. 1-2 e
 Llama al tool create_blog_post con los campos correspondientes.`;
 }
 
-// Presupuesto de tokens de salida. Dos artículos HTML de 1500-2500 palabras
-// (ES + EN) + 3 variantes de LinkedIn caben de sobra en 32k; el valor anterior
-// (16k) se truncaba en generaciones largas, cortando linkedin_variants (último
-// campo del schema) y haciendo fallar la validación.
+// Presupuesto de tokens de salida para el artículo (ES + EN, 1500-2500 palabras
+// cada uno). Las tomas de LinkedIn ya no van en esta llamada: se generan aparte
+// en generateLinkedInTakes.
 const MAX_OUTPUT_TOKENS = 32000;
 
 // 2 intentos = 1 reintento. Cada intento es una generación completa (streaming,
 // ~1-2 min), así que dos caben holgados en el maxDuration=300 de las rutas
 // cron/admin. Cubre truncados puntuales y no-conformidades del modelo (el
-// schema minItems/maxItems NO se aplica en tool use, así que la validación es
-// la única garantía de las 3 variantes).
+// schema del tool no se valida solo en tool use, así que validateGenerated es
+// la única garantía de que el post llega completo).
 const MAX_GENERATION_ATTEMPTS = 2;
 
 // Llama al tool create_blog_post con streaming (obligatorio por encima de ~16k
@@ -439,12 +365,12 @@ async function generateViaCreateBlogPostTool({ userPrompt, recentPosts }) {
     }
 
     // El truncado por presupuesto de tokens deja el JSON del tool a medias
-    // (típicamente sin las 3 variantes). Detectarlo aquí evita el fallo
-    // confuso "linkedin_variants debe ser un array con exactamente 3 variantes".
+    // (típicamente cortando content_es/content_en a mitad de frase). Detectarlo
+    // aquí evita el fallo confuso de "content_es no parece HTML válido".
     if (response.stop_reason === "max_tokens") {
       lastError = new Error(
         `Respuesta truncada por max_tokens (output_tokens=${response.usage?.output_tokens}). ` +
-          `El post + variantes no cupo en ${MAX_OUTPUT_TOKENS} tokens.`,
+          `El post no cupo en ${MAX_OUTPUT_TOKENS} tokens.`,
       );
       console.error(
         `generatePost intento ${attempt}/${MAX_GENERATION_ATTEMPTS}: ${lastError.message}`,
@@ -490,14 +416,12 @@ export async function generatePostDraft({
   trending,
   recentPosts,
   publishedCorpus,
-  crossActions,
 }) {
   const userPrompt = buildUserPrompt({
     category,
     trending,
     recentPosts,
     publishedCorpus,
-    crossActions,
   });
   return generateViaCreateBlogPostTool({ userPrompt, recentPosts });
 }
@@ -515,4 +439,237 @@ export async function generatePostFromIdea({
     recentPosts,
   });
   return generateViaCreateBlogPostTool({ userPrompt, recentPosts });
+}
+
+/* ─── Tomas de LinkedIn ──────────────────────────────────────────────────────
+ * Se generan APARTE del artículo y DESPUÉS de él, a las 08:30, leyendo el
+ * texto tal y como haya quedado tras la revisión manual. Antes salían en la
+ * misma llamada que el artículo, del borrador sin revisar.
+ * ────────────────────────────────────────────────────────────────────────── */
+
+const TAKES_TOOL = {
+  name: "create_linkedin_takes",
+  description:
+    "Escribe las tomas de LinkedIn de un artículo ya publicado de Room 714.",
+  input_schema: {
+    type: "object",
+    properties: {
+      takes: {
+        type: "array",
+        description:
+          "Tomas de post nativo de LinkedIn en español sobre el mismo artículo, cada una desde un ángulo distinto. NO son traducciones ni resúmenes: son tomas distintas sobre el mismo tema.",
+        items: {
+          type: "object",
+          properties: {
+            angle: {
+              type: "string",
+              enum: ["data", "polemica", "conclusion"],
+              description:
+                "Ángulo del que tira la toma. 'data': empieza con un número o hecho concreto. 'polemica': afirmación contraintuitiva o crítica con el sector. 'conclusion': lección práctica que se llevan a la oficina.",
+            },
+            text: {
+              type: "string",
+              description:
+                "Post nativo de LinkedIn en español (1000-1800 chars). Empieza con un HOOK punzante en la primera línea (lo que se ve antes del 'ver más'). Tono coloquial-profesional. 3-5 párrafos cortos separados por doble salto de línea. SIN enlaces. SIN hashtags al final (van en otro campo). Termina con una pregunta o invitación a comentar. El hook debe ser ÚNICO en cada toma.",
+            },
+            hashtags: {
+              type: "array",
+              items: { type: "string" },
+              description:
+                "3-5 hashtags (formato #SinEspacios). Mezcla específicos (#JTBD, #ProductoDigital) con generales (#IA, #UX). Sin acentos.",
+            },
+            image_query: {
+              type: "string",
+              description:
+                "Frase corta en inglés (3-6 palabras) para buscar UNA imagen en Unsplash que ilustre ESTA toma. Las image_query de un mismo artículo deben ser distintas entre sí para que las publicaciones no parezcan copia. Fotografía abstracta o profesional, NO ilustración obvia del tema.",
+            },
+            cross_note: {
+              type: "string",
+              description:
+                "Texto sugerido para la ACCIÓN CRUZADA de esta toma (te la indico en el prompt). Máximo 2 frases. Si no tiene acción cruzada, cadena vacía.",
+            },
+          },
+          required: ["angle", "text", "hashtags", "image_query"],
+        },
+      },
+    },
+    required: ["takes"],
+  },
+};
+
+// Exportada para poder probarla; el flujo normal entra por generateLinkedInTakes.
+export function buildTakesPrompt({
+  articleTitle,
+  articleContentEs,
+  articleUrl,
+  count,
+  crossActions = [],
+}) {
+  const crossBlock = crossActions.slice(0, count).some(Boolean)
+    ? `
+
+## ACCIONES CRUZADAS (campo cross_note de cada toma)
+
+Cada toma se publica en una sola cuenta y lleva una acción en la otra. Rellena cross_note según lo que le toque a cada una:
+
+${crossActions
+  .slice(0, count)
+  .map((action, i) =>
+    action
+      ? `- Toma ${i + 1}: ${CROSS_ACTION_BRIEF[action]}`
+      : `- Toma ${i + 1}: sin acción cruzada. Deja cross_note como cadena vacía.`,
+  )
+  .join("\n")}`
+    : "";
+
+  return `Este artículo acaba de publicarse en el blog de Room 714. Escribe **exactamente ${count} tomas** de LinkedIn que apunten a él desde ángulos distintos.
+
+## Artículo
+
+**Título:** ${articleTitle}
+
+**URL:** ${articleUrl}
+
+**Contenido:**
+
+${articleContentEs}
+
+## Tu tarea
+
+1. Lee el artículo y quédate con sus ${count} ideas más fuertes: una por toma.
+2. Escribe cada toma como post nativo de LinkedIn con la voz de Room 714 — la misma del artículo: crítica, pragmática, con analogías concretas y sin tono de nota de prensa.
+3. Cada toma tiene que sostenerse sola: quien lea solo esa debe llevarse una idea completa, no un anzuelo vacío.
+4. Los hooks de las ${count} tomas tienen que ser claramente distintos entre sí. Se publican en días diferentes de la misma semana y las lee la misma gente.
+5. NO metas la URL en el texto: el enlace va aparte.
+
+Llama al tool create_linkedin_takes con las ${count} tomas.${crossBlock}`;
+}
+
+// Exportada para poder probarla.
+export function validateTakes(data, count) {
+  if (!Array.isArray(data?.takes)) {
+    throw new Error(
+      `takes debe ser un array con exactamente ${count} tomas (llegó ${typeof data?.takes})`,
+    );
+  }
+
+  // De menos no hay nada que hacer: una toma no se inventa, hay que reintentar.
+  if (data.takes.length < count) {
+    throw new Error(
+      `takes debe ser un array con exactamente ${count} tomas (llegaron ${data.takes.length})`,
+    );
+  }
+
+  // De más sí: las primeras `count` son las que llevan briefing de acción
+  // cruzada (el prompt las numera "Toma 1", "Toma 2"…), así que quedarse con
+  // ellas conserva el alineamiento. Recortar cuesta una línea; reintentar
+  // cuesta una generación entera y arriesga quedarse sin publicaciones.
+  if (data.takes.length > count) {
+    console.warn(
+      `validateTakes: llegaron ${data.takes.length} tomas y se pidieron ${count}; se recortan las sobrantes`,
+    );
+    data.takes = data.takes.slice(0, count);
+  }
+
+  for (const [i, t] of data.takes.entries()) {
+    if (!t.text || !t.angle || !t.image_query || !Array.isArray(t.hashtags)) {
+      throw new Error(`takes[${i}] incompleto`);
+    }
+  }
+  return data;
+}
+
+// Presupuesto holgado: tres posts de 1800 caracteres son ~1.500 tokens. 8k deja
+// margen de sobra sin acercarse al timeout HTTP del SDK en modo no-streaming.
+const MAX_TAKES_OUTPUT_TOKENS = 8000;
+
+// Bloque de sistema propio. NO se reutiliza buildCachedSystemBlocks(): aquel
+// lleva la guía del artículo, que pide 1500-2500 palabras, HTML de TipTap y
+// enlaces internos obligatorios — nada de eso aplica a una toma de LinkedIn.
+//
+// Sin cache_control a propósito: son unos 900 tokens, por debajo del mínimo
+// cacheable, y la llamada corre dos veces por semana con más de una hora entre
+// una y otra, así que no habría lectura que amortizara la escritura.
+function buildTakesSystemBlocks() {
+  return [{ type: "text", text: LINKEDIN_GUIDE }];
+}
+
+export async function generateLinkedInTakes({
+  articleTitle,
+  articleContentEs,
+  articleUrl,
+  count,
+  crossActions,
+}) {
+  const client = getAnthropicClient();
+  const userPrompt = buildTakesPrompt({
+    articleTitle,
+    articleContentEs,
+    articleUrl,
+    count,
+    crossActions,
+  });
+
+  let lastError;
+
+  for (let attempt = 1; attempt <= MAX_GENERATION_ATTEMPTS; attempt += 1) {
+    let response;
+    try {
+      response = await client.messages.create({
+        model: MODEL,
+        max_tokens: MAX_TAKES_OUTPUT_TOKENS,
+        system: buildTakesSystemBlocks(),
+        tools: [TAKES_TOOL],
+        tool_choice: { type: "tool", name: "create_linkedin_takes" },
+        messages: [{ role: "user", content: userPrompt }],
+      });
+    } catch (err) {
+      lastError = err;
+      console.error(
+        `generateLinkedInTakes intento ${attempt}/${MAX_GENERATION_ATTEMPTS} — error de API: ${err.message}`,
+      );
+      continue;
+    }
+
+    if (response.stop_reason === "max_tokens") {
+      lastError = new Error(
+        `Respuesta truncada por max_tokens (output_tokens=${response.usage?.output_tokens})`,
+      );
+      console.error(
+        `generateLinkedInTakes intento ${attempt}/${MAX_GENERATION_ATTEMPTS}: ${lastError.message}`,
+      );
+      continue;
+    }
+
+    const toolUse = response.content.find((b) => b.type === "tool_use");
+    if (!toolUse) {
+      lastError = new Error("Claude no llamó al tool create_linkedin_takes");
+      console.error(
+        `generateLinkedInTakes intento ${attempt}/${MAX_GENERATION_ATTEMPTS}: ${lastError.message}`,
+      );
+      continue;
+    }
+
+    try {
+      const validated = validateTakes(toolUse.input, count);
+      return {
+        takes: validated.takes,
+        usage: {
+          input_tokens: response.usage.input_tokens,
+          output_tokens: response.usage.output_tokens,
+          cache_creation_input_tokens: response.usage.cache_creation_input_tokens,
+          cache_read_input_tokens: response.usage.cache_read_input_tokens,
+        },
+      };
+    } catch (err) {
+      lastError = err;
+      console.error(
+        `generateLinkedInTakes intento ${attempt}/${MAX_GENERATION_ATTEMPTS} — validación falló: ${err.message}`,
+      );
+    }
+  }
+
+  throw new Error(
+    `No se pudieron generar las tomas tras ${MAX_GENERATION_ATTEMPTS} intentos: ${lastError?.message}`,
+  );
 }

@@ -35,7 +35,7 @@ export async function sendDraftReadyEmail({
       html: `
 <div style="font-family: sans-serif; color: #333; max-width: 640px;">
   <h2 style="border-bottom: 1px solid #eee; padding-bottom: 10px;">Post generado y programado</h2>
-  <p>Se ha generado el post de hoy. <strong>Se publicará automáticamente a las 10:00 en la web</strong>, salvo que lo despubliques o lo borres antes. <strong>En LinkedIn se publica automáticamente vía Make</strong> (ver fechas más abajo); no hace falta que publiques a mano.</p>
+  <p>Se ha generado el artículo de hoy. <strong>Se publicará automáticamente a las 07:30 en la web</strong>, salvo que lo despubliques o lo borres antes. Tienes de <strong>08:00 a 08:30</strong> para revisarlo: a las 08:30 se generan a partir de él los posts de LinkedIn de esta semana, y salen del texto que hayas dejado. Si no lo tocas, se publica igual.</p>
   <p><strong>Categoría:</strong> ${category}</p>
   <p><strong>Título:</strong> ${translationEs.title}</p>
   <p><strong>Tags:</strong> ${translationEs.tags.join(", ")}</p>
@@ -45,9 +45,9 @@ export async function sendDraftReadyEmail({
     </a>
   </p>
   <p style="margin-top: 30px; font-size: 13px; color: #666;">
-    Si no haces nada en las próximas 3h: el post se publica tal cual.<br>
-    Si quieres editarlo: entra en el admin, modifica lo que necesites y guarda (sigue marcado como publicado).<br>
-    Si quieres rechazarlo: despublícalo o bórralo desde el admin antes de las 10:00.
+    Si no haces nada: el artículo se publica a las 07:30 tal cual, y a las 08:30 se generan sus posts de LinkedIn.<br>
+    Si quieres editarlo: entra en el admin, modifica lo que necesites y guarda. Hazlo <strong>antes de las 08:30</strong>: después, los posts de LinkedIn ya habrán salido del texto anterior.<br>
+    Si quieres rechazarlo: despublícalo o bórralo desde el admin antes de las 07:30.
   </p>
   ${linkedinSection}
 </div>

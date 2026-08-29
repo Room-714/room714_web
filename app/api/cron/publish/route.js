@@ -9,10 +9,12 @@ import { notifyUrlUpdated, buildPostUrls } from "@/app/lib/seo/indexingApi";
 import { NextResponse } from "next/server";
 
 // Mapeo: hora Madrid → source que se publica en ese tick
-// 10:00 Madrid → posts auto-generados (cron de generación los crea con date=10:00)
+// 07:00 Madrid → posts auto-generados. El cron dispara a las 07:30 y
+// getMadridHour() devuelve 7; los posts AUTO llevan date = 07:30, así que en
+// ese tick ya cumplen date <= now.
 // 17:00 Madrid → posts manuales (creados desde admin)
 const SOURCE_BY_HOUR = {
-  10: "AUTO",
+  7: "AUTO",
   17: "MANUAL",
 };
 
@@ -60,17 +62,22 @@ export async function GET(request) {
       const enData = post.translations.find((t) => t.lang === "en");
       const hasVariants = post.linkedinVariants.length > 0;
 
-      // Si el post tiene variantes de LinkedIn (flujo nuevo, AUTO posts a
-      // partir de PR B), NO disparamos el webhook aquí — lo hace el cron
-      // /api/cron/publish-linkedin variante a variante en su día. Sólo
-      // marcamos published_sent=true y notificamos Google Indexing API.
-      if (hasVariants) {
+      // Los AUTO nunca van por el webhook legacy: su LinkedIn son las tomas,
+      // que escribe /api/cron/generate-linkedin a las 08:30 y publica
+      // /api/cron/publish-linkedin a la hora de cada una. Este cron corre a las
+      // 07:30, antes de que existan, así que sin esta condición cada artículo
+      // se publicaría en LinkedIn como un resumen truncado del HTML.
+      if (hasVariants || post.source === "AUTO") {
         await prisma.post.update({
           where: { id: post.id },
           data: { published_sent: true },
         });
         results.push(
-          `Post ID ${post.id} ("${esData.title}"): publicado (variantes LinkedIn a su cron).`,
+          `Post ID ${post.id} ("${esData.title}"): publicado (${
+            hasVariants
+              ? "variantes LinkedIn a su cron"
+              : "AUTO sin tomas todavía; las generará el cron de las 8:30"
+          }).`,
         );
       } else {
         // Flujo legacy (MANUAL posts u otros sin variantes): disparamos el

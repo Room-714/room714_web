@@ -92,7 +92,11 @@ export function madridDayRange(date = new Date()) {
   return { start, end };
 }
 
-export function nextMadridSlot(targetHour) {
+// Próximo instante en que Madrid marque `targetHour:targetMinute` en un día
+// laborable. El bucle recorre horas UTC porque los desfases de Madrid son de
+// hora entera: el minuto de Madrid y el minuto UTC coinciden siempre, así que
+// fijarlo aquí no altera la comprobación de la hora.
+export function nextMadridSlot(targetHour, targetMinute = 0) {
   const now = new Date();
   const targetStr = String(targetHour).padStart(2, "0");
 
@@ -100,7 +104,7 @@ export function nextMadridSlot(targetHour) {
     for (let utcHour = 0; utcHour < 24; utcHour++) {
       const candidate = new Date(now);
       candidate.setUTCDate(candidate.getUTCDate() + dayOffset);
-      candidate.setUTCHours(utcHour, 0, 0, 0);
+      candidate.setUTCHours(utcHour, targetMinute, 0, 0);
 
       if (candidate <= now) continue;
 
@@ -110,5 +114,7 @@ export function nextMadridSlot(targetHour) {
       }
     }
   }
-  throw new Error(`nextMadridSlot: no se encontró slot para hora ${targetHour}`);
+  throw new Error(
+    `nextMadridSlot: no se encontró slot para ${targetStr}:${String(targetMinute).padStart(2, "0")}`,
+  );
 }

@@ -1,48 +1,79 @@
-// Calcula las fechas de publicación de las 3 variantes de LinkedIn para
-// un post. Asume que el post se publica un Lunes o Miércoles a las 10:00
-// Madrid. Variantes (horas base, antes del jitter):
-//   1 → mismo día del post a las 10:00 (anuncio principal)
-//   2 → día siguiente a las 10:00 (refuerzo)
-//   3 → dos días después a las 16:00 (recall por la tarde)
+// Calendario de las tomas de LinkedIn de un artículo.
 //
-// El offset de 6 horas en la variante 3 evita que choque con la variante 1
-// del siguiente post (que se publica el miércoles a las 10:00). Resultado:
-//   Lunes    → [Lun ~10, Mar ~10, Mié ~16]
-//   Miércoles→ [Mié ~10, Jue ~10, Vie ~16]
-// El miércoles tiene dos publicaciones espaciadas: ~10:00 (anuncio del post
-// nuevo) + ~16:00 (recall del post del lunes).
+// Supuesto de entrada: el artículo se publica a las 07:30 de Madrid, un lunes
+// o un miércoles. Todo lo de aquí se calcula como desplazamiento respecto a esa
+// fecha, así que si cambia la hora de publicación hay que revisar TAKE_PLAN.
 //
-// DST puede desplazar la hora ±1 entre variantes. No es crítico porque el
-// cron /publish-linkedin corre múltiples veces al día y recoge variantes
-// con scheduledFor <= now.
+// La semana queda así:
+//   L 08:35  art.1 toma 1  personal  → Room714 recomparte
+//   M 07:30  art.1 toma 2  empresa   → José comenta desde su perfil
+//   X 08:35  art.2 toma 1  personal  → Room714 recomparte
+//   J 07:30  art.2 toma 2  empresa   → José comenta desde su perfil
+//   V 07:30  art.1 toma 3  personal  → Room714 recomparte
+//
+// Por qué la toma 1 sale a las 08:35 y no en la franja de las 07:30: se genera
+// a las 08:30, a partir del artículo que se acaba de revisar a mano. No puede
+// existir antes. Es la única excepción del calendario y es deliberada.
+//
+// Por qué se puede sumar milisegundos sin hacer aritmética de zona horaria: con
+// los planes de lunes y miércoles, las tomas van de lunes a viernes y los
+// cambios de horario ocurren en domingo de madrugada, así que ninguna suma
+// cruza uno. Comprobado contra las semanas del 29 de marzo y del 25 de octubre.
+//
+// Ojo: eso NO vale para FALLBACK_PLAN. Un artículo publicado un jueves o un
+// viernes hereda los offsets del lunes, y entonces +1d puede caer en sábado
+// (donde el cron de publicación no corre) y +4d puede cruzar un domingo de
+// cambio de hora y desviar la publicación ±1 hora. Es un camino de
+// recuperación manual, no el flujo normal; si deja de serlo, hay que calcular
+// los días en zona horaria en vez de en milisegundos.
 import { getMadridWeekday } from "./madrid";
 
-// ─── Jitter humano ──────────────────────────────────────────────────────────
-// Publicar siempre a en punto delata al robot y concentra las 6 publicaciones
-// semanales en el mismo minuto exacto. Cada variante recibe un desplazamiento
-// en minutos DETERMINISTA (mismo post → mismo horario, lo que mantiene puras
-// las funciones y estables los tests) pero impredecible a simple vista,
-// derivado de un hash de la fecha del post y el número de variante.
+const MIN_MS = 60 * 1000;
+
+// El plan completo, en un solo sitio: cuándo sale cada toma respecto al
+// artículo, con cuánto margen aleatorio, por qué cuenta y qué le deja que hacer
+// a la otra. Cambiar la estrategia de publicación es cambiar esta tabla.
 //
-// Ventanas por variante (minutos respecto a la hora base):
-//   v1: [+4, +52]  — solo hacia delante: el artículo se hace visible en la web
-//                    exactamente a las 10:00 (blog.js filtra date <= now), así
-//                    que anunciar antes enlazaría a una página aún no publicada.
-//   v2: [-25, +65] — 9:35 a 11:05, dentro de la franja alta de LinkedIn
-//                    (media mañana laborable).
-//   v3: [-35, +55] — 15:25 a 16:55, la franja de después de comer.
+// `offsetMin` es la distancia en minutos desde la publicación del artículo
+// (07:30): 65 son las 08:35 del mismo día, 1440 las 07:30 del día siguiente y
+// 5760 las 07:30 del viernes.
 //
-// El cron publish-linkedin corre cada 10 minutos en la ventana laboral (ver
-// vercel.json), así que el instante real de publicación respeta el jitter con
-// una granularidad de ~10 min en vez de redondearse a la hora.
-const JITTER_WINDOWS = [
-  { min: 4, max: 52 },
-  { min: -25, max: 65 },
-  { min: -35, max: 55 },
-];
+// `jitter` evita que las cinco publicaciones semanales caigan siempre en el
+// mismo minuto exacto, que es lo que delata a un robot. La ventana de la toma 1
+// es corta a propósito: el briefing sale a las 08:50 y tiene que encontrarla ya
+// publicada.
+const TAKE_PLAN = {
+  Mon: [
+    { offsetMin: 65, jitter: { min: 0, max: 8 }, canal: "personal", cross: "reshare_company" },
+    { offsetMin: 1440, jitter: { min: 0, max: 28 }, canal: "empresa", cross: "comment_personal" },
+    { offsetMin: 5760, jitter: { min: 0, max: 28 }, canal: "personal", cross: "reshare_company" },
+  ],
+  Wed: [
+    { offsetMin: 65, jitter: { min: 0, max: 8 }, canal: "personal", cross: "reshare_company" },
+    { offsetMin: 1440, jitter: { min: 0, max: 28 }, canal: "empresa", cross: "comment_personal" },
+  ],
+};
+
+// Si un artículo cae en un día no previsto (recuperación manual, cambio de
+// calendario), se aplica el plan del lunes en vez de fallar: publicar con el
+// calendario equivocado es preferible a no publicar. Hereda los offsets del
+// lunes además del reparto de canales — ver el aviso de la cabecera.
+const FALLBACK_PLAN = TAKE_PLAN.Mon;
+
+// Días en que un artículo tiene plan propio de tomas. Un artículo fechado
+// fuera de estos días cae en FALLBACK_PLAN y además no lo recoge el cron de
+// las 08:30, así que se queda sin tomas: por eso hay que poder preguntarlo
+// desde fuera y no solo deducirlo.
+export const PLANNED_WEEKDAYS = Object.keys(TAKE_PLAN);
+
+function planFor(postPublishDate) {
+  const weekday = getMadridWeekday(postPublishDate);
+  return TAKE_PLAN[weekday] || FALLBACK_PLAN;
+}
 
 // FNV-1a de 32 bits. No necesitamos calidad criptográfica: solo dispersión
-// estable entre ejecuciones y entornos (nada de Math.random).
+// estable entre ejecuciones y entornos (nada de Math.random, que rompería los
+// tests y daría horarios distintos en cada despliegue).
 function hash32(str) {
   let h = 0x811c9dc5;
   for (let i = 0; i < str.length; i++) {
@@ -52,73 +83,52 @@ function hash32(str) {
   return h >>> 0;
 }
 
-export function jitterMinutesFor(postPublishDate, variantIndex) {
-  const window = JITTER_WINDOWS[variantIndex] || JITTER_WINDOWS[0];
-  const seed = hash32(`${postPublishDate.toISOString()}#v${variantIndex + 1}`);
+export function jitterMinutesFor(postPublishDate, takeIndex) {
+  const plan = planFor(postPublishDate);
+  const window = (plan[takeIndex] || plan[0]).jitter;
+  const seed = hash32(`${postPublishDate.toISOString()}#t${takeIndex + 1}`);
   return window.min + (seed % (window.max - window.min + 1));
+}
+
+// Cuántas tomas de LinkedIn lleva el artículo de esa fecha. Lo consume el
+// generador para pedirle al modelo exactamente ese número.
+export function takeCountFor(postPublishDate) {
+  return planFor(postPublishDate).length;
 }
 
 export function variantScheduleFor(postPublishDate) {
   const base = postPublishDate.getTime();
-  const dayMs = 24 * 60 * 60 * 1000;
-  const hourMs = 60 * 60 * 1000;
-  const minMs = 60 * 1000;
-  const bases = [base, base + 1 * dayMs, base + 2 * dayMs + 6 * hourMs];
-  return bases.map(
-    (b, idx) =>
-      new Date(b + jitterMinutesFor(postPublishDate, idx) * minMs),
+  return planFor(postPublishDate).map(
+    (take, idx) =>
+      new Date(
+        base +
+          take.offsetMin * MIN_MS +
+          jitterMinutesFor(postPublishDate, idx) * MIN_MS,
+      ),
   );
 }
 
-// ─── Reparto perfil personal / página de empresa ───────────────────────────
-// Único sitio donde se decide qué cuenta publica cada variante y qué le toca
-// hacer al otro canal. El Router de Make solo filtra por el campo `canal` del
-// payload y el briefing diario lee `cross`, así que cambiar el reparto es
-// cambiar esta tabla.
-//
-// Con dos posts por semana (Lunes y Miércoles), los 6 slots quedan 3 y 3:
-//   L 10:00  art.1 v1  personal  → Room714 lo recomparte
-//   M 10:00  art.1 v2  empresa   → José comenta desde su perfil
-//   X 10:00  art.2 v1  personal  → —
-//   X 16:00  art.1 v3  empresa   → —
-//   J 10:00  art.2 v2  empresa   → José comenta desde su perfil
-//   V 16:00  art.2 v3  personal  → Room714 lo recomparte
-//
-// Ojo a la asimetría de v3: es intencionada. Es lo que equilibra la semana y
-// evita que el miércoles las dos publicaciones salgan por la misma cuenta.
-const SLOTS_BY_PUBLISH_WEEKDAY = {
-  Mon: [
-    { canal: "personal", cross: "reshare_company" },
-    { canal: "empresa", cross: "comment_personal" },
-    { canal: "empresa", cross: null },
-  ],
-  Wed: [
-    { canal: "personal", cross: null },
-    { canal: "empresa", cross: "comment_personal" },
-    { canal: "personal", cross: "reshare_company" },
-  ],
-};
-
-// Si un post cae en un día no previsto (recuperación manual, cambio de
-// calendario), aplicamos el reparto del lunes en vez de fallar: perder el
-// equilibrio de la semana es preferible a no publicar.
-const FALLBACK_SLOTS = SLOTS_BY_PUBLISH_WEEKDAY.Mon;
-
-function slotsFor(postPublishDate) {
-  const weekday = getMadridWeekday(postPublishDate);
-  return SLOTS_BY_PUBLISH_WEEKDAY[weekday] || FALLBACK_SLOTS;
-}
-
 export function slotFor({ postPublishDate, variant }) {
-  return slotsFor(postPublishDate)[variant - 1] || FALLBACK_SLOTS[0];
+  const plan = planFor(postPublishDate);
+  const take = plan[variant - 1];
+  if (take) return take;
+
+  // Variante fuera del plan. Pasa con las filas del calendario anterior, que
+  // tenía tres tomas también los miércoles. Se avisa y se sigue: publicar por
+  // el canal de la primera toma es menos malo que no publicar, pero tiene que
+  // quedar rastro.
+  console.warn(
+    `slotFor: variante ${variant} fuera del plan de ${postPublishDate.toISOString()}; se usa la primera toma`,
+  );
+  return plan[0];
 }
 
 export function channelForVariant({ postPublishDate, variant }) {
   return slotFor({ postPublishDate, variant }).canal;
 }
 
-// Las tres acciones cruzadas en el orden de las variantes. Lo consume el
-// orquestador para decirle al generador qué sugerencia escribir en cada una.
+// Las acciones cruzadas en el orden de las tomas. Lo consume el generador para
+// decirle al modelo qué sugerencia escribir en cada una.
 export function crossActionsFor(postPublishDate) {
-  return slotsFor(postPublishDate).map((slot) => slot.cross);
+  return planFor(postPublishDate).map((take) => take.cross);
 }
