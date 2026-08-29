@@ -18,7 +18,14 @@
 
 **El artículo se hace visible solo.** `Post.date` es la hora de publicación y el blog filtra `date <= now`. El cron `/api/cron/publish` no publica: marca `published_sent` y avisa a la Google Indexing API. Cambiar la hora de publicación es cambiar `Post.date`.
 
-**Orden de ejecución de las tareas.** Está pensado para que el árbol quede verde en cada commit. Las tareas 4, 5 y 6 añaden código nuevo sin tocar el existente; la 7 es la que corta el cordón, y por eso cambia generador y orquestador en el mismo commit.
+**Orden de ejecución, y la ventana en que la rama está rota.** Las tareas 4, 5 y 6 añaden código nuevo sin tocar el existente; la 7 es la que corta el cordón, y por eso cambia generador y orquestador en el mismo commit.
+
+Pero **desde la Tarea 2 hasta la 7 la rama no es desplegable**, y conviene decirlo claro en vez de descubrirlo:
+
+- La Tarea 2 deja `variantScheduleFor` devolviendo 2 fechas para un artículo de miércoles, mientras `create_blog_post` sigue exigiendo exactamente 3 variantes. El orquestador programa la tercera con `scheduledFor: undefined`, y como en `prisma/schema.prisma` ese campo es obligatorio, `prisma.post.create` lanza y **el artículo del miércoles no llega a crearse**. Lo arregla la Tarea 7.
+- La Tarea 2 también deja en rojo dos tests de `app/lib/linkedin/dailyTasks.test.js`, escritos contra el calendario de seis huecos. Los arregla la Tarea 9.
+
+Nada de esto afecta a producción mientras el trabajo viva en `feat/calendario-publicacion`. La regla es simple: **no hacer push hasta que hayan aterrizado la 7 y la 9**, y comprobar antes que `npx vitest run` está entero en verde.
 
 **Comandos.** Tests: `npx vitest run <ruta>`. Todo: `npx vitest run`. Se ejecutan desde `my-app/`.
 
@@ -1179,9 +1186,11 @@ En `generatePostDraft`, quitar `crossActions` de la desestructuración y de la l
 
 Run: `grep -rn "buildCrossNotesBlock" app/`
 
-- [ ] **Step 4: Ajustar el comentario del presupuesto de tokens**
+- [ ] **Step 4: Limpiar el prompt del artículo**
 
-Sustituir el comentario de `MAX_OUTPUT_TOKENS` por:
+Dos cosas, las dos en la misma línea de trabajo: el prompt del artículo no debe seguir hablando de LinkedIn.
+
+Primero, el comentario de `MAX_OUTPUT_TOKENS` en `app/lib/ai/generator.js`:
 
 ```javascript
 // Presupuesto de tokens de salida para el artículo (ES + EN, 1500-2500 palabras
@@ -1189,6 +1198,13 @@ Sustituir el comentario de `MAX_OUTPUT_TOKENS` por:
 // en generateLinkedInTakes.
 const MAX_OUTPUT_TOKENS = 32000;
 ```
+
+Segundo, y más importante: **borrar de `EDITORIAL_GUIDE`, en `app/lib/ai/editorialGuide.js`, la sección `## LinkedIn — 3 variantes nativas por post` entera y la sección `## Hashtags LinkedIn`.** Ese texto describe un campo `linkedin_variants` que a partir de este commit ya no existe en `create_blog_post`, fija el número de variantes en tres y describe el calendario antiguo (`L,M,X` / `X,J,V`). Su contenido vive ya en `LINKEDIN_GUIDE`, en ese mismo fichero, que es lo que consume el generador de tomas.
+
+Comprueba después que nadie más dependía de esas secciones:
+
+Run: `grep -rn "linkedin_variants\|3 variantes" app/lib/ai/`
+Expected: sin resultados.
 
 - [ ] **Step 5: El orquestador publica a las 7:30 y no crea variantes**
 
