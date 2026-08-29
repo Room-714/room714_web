@@ -256,26 +256,62 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
  * datos: si se editó, las tomas salen del texto editado; si no se tocó, del
  * generado. Nada bloquea.
  * ────────────────────────────────────────────────────────────────────────── */
+// Pura y exportada para poder probarla: es lo único de esta función que el
+// modo preview no enseña, y donde viven las dos normalizaciones que importan
+// (hashtags ausentes → array vacío, nota en blanco → null).
+export function buildTakeRows({ postId, takes, schedules, images }) {
+  return takes.map((take, idx) => ({
+    postId,
+    variant: idx + 1,
+    angle: take.angle,
+    text: take.text,
+    hashtags: take.hashtags || [],
+    imageBlobUrl: images[idx],
+    imageQuery: take.image_query,
+    crossNote: take.cross_note?.trim() || null,
+    scheduledFor: schedules[idx],
+  }));
+}
+
 export async function generateTakesForToday({ preview = false } = {}) {
   const { start, end } = madridDayRange(new Date());
 
-  const post = await prisma.post.findFirst({
+  // `take: 2` y no `findFirst` para poder avisar si hay más de un candidato.
+  // El desempate por id es imprescindible: `nextMadridSlot` pone segundos y
+  // milisegundos a cero, así que dos generaciones del mismo día empatan al
+  // milisegundo en `date` y sin él ganaría una cualquiera — normalmente la
+  // más antigua, es decir, el artículo que se descartó al regenerar.
+  const candidatos = await prisma.post.findMany({
     where: {
       source: "AUTO",
       published: true,
       date: { gte: start, lte: end },
     },
     include: { translations: true, linkedinVariants: true },
-    orderBy: { date: "desc" },
+    orderBy: [{ date: "desc" }, { id: "desc" }],
+    take: 2,
   });
 
-  if (!post) {
-    return { skipped: true, reason: "No hay artículo AUTO publicado hoy" };
+  const post = candidatos[0];
+
+  if (candidatos.length > 1) {
+    console.warn(
+      `generateTakesForToday: hay ${candidatos.length} artículos AUTO publicados hoy; se usa el ${post.id}, el más reciente`,
+    );
   }
 
-  // Idempotencia: de las dos entradas de cron por horario solo pasa una, pero
-  // un reintento de Vercel sí puede repetir la ejecución.
-  if (post.linkedinVariants.length > 0) {
+  if (!post) {
+    return {
+      skipped: true,
+      reason: `No hay artículo AUTO publicado entre ${start.toISOString()} y ${end.toISOString()}`,
+    };
+  }
+
+  // El preview no escribe, así que no le aplica la idempotencia: tiene que
+  // poder enseñar qué saldría también en un día ya procesado. Sin esta
+  // excepción el preview es inservible mientras el flujo viejo siga creando
+  // variantes al generar el artículo.
+  if (!preview && post.linkedinVariants.length > 0) {
     return {
       skipped: true,
       postId: post.id,
@@ -295,8 +331,9 @@ export async function generateTakesForToday({ preview = false } = {}) {
   const count = takeCountFor(post.date);
   const crossActions = crossActionsFor(post.date);
   const schedules = variantScheduleFor(post.date);
-  const siteUrl = process.env.NEXTAUTH_URL || "https://www.room714.com";
-  const articleUrl = `${siteUrl}/es/blog/${translationEs.slug}`;
+  // Constante y no NEXTAUTH_URL: esta URL entra en el prompt de un texto que
+  // se publica sin revisión, y desde local NEXTAUTH_URL es localhost.
+  const articleUrl = `https://www.room714.com/es/blog/${translationEs.slug}`;
 
   const { takes, usage } = await generateLinkedInTakes({
     articleTitle: translationEs.title,
@@ -322,6 +359,7 @@ export async function generateTakesForToday({ preview = false } = {}) {
       postId: post.id,
       articleTitle: translationEs.title,
       count,
+      existingTakes: post.linkedinVariants.length,
       usage,
       takes: takes.map((take, idx) => ({
         ...describe(take, idx),
@@ -354,19 +392,22 @@ export async function generateTakesForToday({ preview = false } = {}) {
     }),
   );
 
-  await prisma.linkedInVariant.createMany({
-    data: takes.map((take, idx) => ({
-      postId: post.id,
-      variant: idx + 1,
-      angle: take.angle,
-      text: take.text,
-      hashtags: take.hashtags || [],
-      imageBlobUrl: images[idx],
-      imageQuery: take.image_query,
-      crossNote: take.cross_note?.trim() || null,
-      scheduledFor: schedules[idx],
-    })),
-  });
+  try {
+    await prisma.linkedInVariant.createMany({
+      data: buildTakeRows({ postId: post.id, takes, schedules, images }),
+    });
+  } catch (err) {
+    // Otra ejecución solapada llegó antes. El @@unique aborta la sentencia
+    // entera, así que no queda media semana escrita: o están todas o ninguna.
+    if (err.code === "P2002") {
+      return {
+        skipped: true,
+        postId: post.id,
+        reason: "otra ejecución escribió las tomas primero",
+      };
+    }
+    throw err;
+  }
 
   return {
     skipped: false,
