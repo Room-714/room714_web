@@ -20,11 +20,21 @@ export async function GET(request) {
     return new Response("No autorizado", { status: 401 });
   }
 
+  const url = new URL(request.url);
+
   // Preview: construye las tomas y las devuelve en JSON, sin descargar
   // imágenes, sin escribir en base de datos y sin comprobar hora ni día.
-  const preview = new URL(request.url).searchParams.get("preview") === "1";
+  const preview = url.searchParams.get("preview") === "1";
 
-  if (!preview) {
+  // Recuperación manual: si la generación de las 08:30 falló, el briefing de
+  // las 08:50 lo avisa, pero a esas alturas isMadridHour(8) ya no pasa y no
+  // hay forma de reintentar hasta el día siguiente. force=1 salta los guards
+  // de hora y día para poder relanzarla a mano en el momento. NO salta la
+  // autenticación (el Bearer de arriba) ni la idempotencia: si el post ya
+  // tiene tomas, generateTakesForToday sigue devolviendo skipped igual.
+  const force = url.searchParams.get("force") === "1";
+
+  if (!preview && !force) {
     if (!isMadridHour(TARGET_HOUR)) {
       return NextResponse.json({
         message: "Saltado: no es la hora correcta en Madrid",

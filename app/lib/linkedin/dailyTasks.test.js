@@ -174,6 +174,25 @@ describe("buildDailyTasks — blog, incidencias y orden", () => {
     expect(tasks[0].adminUrl).toBe(`${SITE}/admin?postId=77`);
   });
 
+  // El briefing sale a las 08:50: el artículo lleva 80 minutos publicado
+  // (07:30) y sus tomas de LinkedIn 20 minutos escritas (08:30). "before" ya
+  // no describe la realidad —invitaría a una revisión que llegó tarde y que
+  // además no cambiaría nada en LinkedIn— así que blog_review tiene que ser
+  // "after".
+  it("blog_review es 'after': el briefing llega cuando el artículo ya está publicado", () => {
+    const { tasks } = buildDailyTasks({
+      blogPost: {
+        id: 77,
+        date: LUNES,
+        translations: [
+          { lang: "es", slug: "articulo-nuevo", title: "Artículo nuevo" },
+        ],
+      },
+      siteUrl: SITE,
+    });
+    expect(tasks[0].when).toBe("after");
+  });
+
   it("no añade nada de blog si hoy no se publica artículo", () => {
     const { tasks } = buildDailyTasks({ blogPost: null, siteUrl: SITE });
     expect(tasks).toEqual([]);
@@ -244,13 +263,15 @@ describe("buildDailyTasks — blog, incidencias y orden", () => {
 
   // El caso viejo comparaba tres tareas que caían todas a la misma hora
   // (10:00), así que en realidad solo probaba el desempate before/antes de
-  // after/después y nunca el orden ascendente entre horas distintas. Al quitar
-  // review_own, blog_review sigue siendo la única tarea "before" del día, así
-  // que se conserva ese desempate y además se añaden horas distintas (07:30 y
-  // 08:35) para que el orden ascendente quede probado de verdad. Todas las
-  // horas van explícitas: este test comprueba el sort(), no el calendario de
-  // linkedinSchedule, así que no depende del valor por defecto de variante().
-  it("ordena por hora, y a igual hora lo previo antes que lo posterior", () => {
+  // after/después y nunca el orden ascendente entre horas distintas. Ahora que
+  // blog_review también es "after" (arreglo 1: el briefing llega cuando el
+  // artículo ya está publicado, no hay nada que revisar "antes"), ya no queda
+  // ninguna tarea "before" en un día normal, así que este test se centra en lo
+  // que de verdad importa: el orden ascendente por hora entre tareas
+  // distintas. Todas las horas van explícitas: este test comprueba el sort(),
+  // no el calendario de linkedinSchedule, así que no depende del valor por
+  // defecto de variante().
+  it("ordena por hora ascendente", () => {
     const { tasks } = buildDailyTasks({
       todayVariants: [
         // 08:35, canal personal → primer comentario + recompartir (después).
@@ -277,11 +298,32 @@ describe("buildDailyTasks — blog, incidencias y orden", () => {
       },
       siteUrl: SITE,
     });
-    expect(tasks.map((t) => [t.time, t.when])).toEqual([
-      ["07:30", "before"],
-      ["07:30", "after"],
-      ["08:35", "after"],
-      ["08:35", "after"],
+    expect(tasks.map((t) => t.time)).toEqual([
+      "07:30",
+      "07:30",
+      "08:35",
+      "08:35",
     ]);
+    expect(tasks.every((t) => t.when === "after")).toBe(true);
+  });
+});
+
+describe("buildDailyTasks — incidencia de artículo ausente", () => {
+  it("avisa cuando tocaba artículo hoy y no se generó ninguno", () => {
+    const { incidents } = buildDailyTasks({
+      blogPost: null,
+      expectsArticle: true,
+      siteUrl: SITE,
+    });
+    expect(incidents.map((i) => i.kind)).toContain("no_article");
+  });
+
+  it("no avisa de artículo ausente si hoy no tocaba ninguno", () => {
+    const { incidents } = buildDailyTasks({
+      blogPost: null,
+      expectsArticle: false,
+      siteUrl: SITE,
+    });
+    expect(incidents.map((i) => i.kind)).not.toContain("no_article");
   });
 });

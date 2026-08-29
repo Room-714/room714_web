@@ -90,13 +90,27 @@ export async function GET(request) {
   // scheduledFor ya venció. El cron corre varias veces al día.
   const now = new Date();
 
+  // Nada con más de medio día de retraso: una variante que se quedó sin enviar
+  // ayer ya no tiene sentido hoy, y publicarla fuera de su día la deja sin la
+  // acción cruzada que le tocaba y sin aparecer en ningún briefing. Además es lo
+  // que impide que una cola vieja se vacíe de golpe tras un cambio de calendario.
+  const MAX_RETRASO_MS = 12 * 60 * 60 * 1000;
+  const minScheduledFor = new Date(now.getTime() - MAX_RETRASO_MS);
+
   try {
     const dueVariants = await prisma.linkedInVariant.findMany({
-      where: { sent: false, scheduledFor: { lte: now } },
+      where: { sent: false, scheduledFor: { lte: now, gte: minScheduledFor } },
       include: {
         post: { include: { translations: true } },
       },
       orderBy: { scheduledFor: "asc" },
+    });
+
+    // Las que se quedan fuera solo por antiguas no deben desaparecer en
+    // silencio: se cuentan aparte para que se vean en la respuesta si alguien
+    // mira, aunque el cron no haga nada con ellas.
+    const staleCount = await prisma.linkedInVariant.count({
+      where: { sent: false, scheduledFor: { lt: minScheduledFor } },
     });
 
     if (dueVariants.length === 0) {
@@ -104,6 +118,7 @@ export async function GET(request) {
         mode: preview ? "preview" : "make-webhook",
         message: "Sin variantes pendientes",
         processed: 0,
+        staleSkipped: staleCount,
       });
     }
 
@@ -154,6 +169,7 @@ export async function GET(request) {
         ? "Preview: nada posteado ni marcado"
         : "Cron LinkedIn (webhook Make) ejecutado",
       processed: dueVariants.length,
+      staleSkipped: staleCount,
       results,
     });
   } catch (err) {

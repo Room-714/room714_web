@@ -2,9 +2,11 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/app/lib/prisma";
 import {
   formatMadridDateLabel,
+  getMadridWeekday,
   isMadridHour,
   madridDayRange,
 } from "@/app/lib/time/madrid";
+import { PLANNED_WEEKDAYS } from "@/app/lib/time/linkedinSchedule";
 import { buildDailyTasks } from "@/app/lib/linkedin/dailyTasks";
 import { buildProspectingTasks } from "@/app/lib/linkedin/prospecting";
 import { sendDailyBriefingEmail } from "@/app/lib/notifications/dailyBriefing";
@@ -38,7 +40,7 @@ export async function GET(request) {
   if (!preview && !isMadridHour(TARGET_HOUR)) {
     return NextResponse.json({
       message: "Saltado: no es la hora correcta en Madrid",
-      targetHour: `${TARGET_HOUR}:00 Madrid`,
+      targetHour: `${TARGET_HOUR}:50 Madrid`,
     });
   }
 
@@ -47,7 +49,7 @@ export async function GET(request) {
   const yesterdayStart = new Date(start.getTime() - DAY_MS);
 
   try {
-    const [todayVariants, yesterdayUnsent, blogPost, prospects, latestPost] =
+    const [todayVariants, yesterdayUnsent, todaysPosts, prospects, latestPost] =
       await Promise.all([
       prisma.linkedInVariant.findMany({
         where: { scheduledFor: { gte: start, lte: end } },
@@ -59,9 +61,16 @@ export async function GET(request) {
         include: { post: { include: { translations: true } } },
         orderBy: { scheduledFor: "asc" },
       }),
-      prisma.post.findFirst({
+      // findMany y no findFirst: si el mismo día hay un post MANUAL y uno AUTO,
+      // un findFirst sin filtrar por source puede devolver el manual, y
+      // entonces blog_review apuntaría al artículo equivocado y la incidencia
+      // no_takes (que exige source === "AUTO") desaparecería en silencio.
+      // orderBy date desc para que, si hubiera dos AUTO (no debería), gane el
+      // más reciente al elegir abajo.
+      prisma.post.findMany({
         where: { published: true, date: { gte: start, lte: end } },
         include: { translations: true, linkedinVariants: true },
+        orderBy: { date: "desc" },
       }),
       // Prospección: los ACTIVE menos atendidos primero (nulls first = nunca
       // atendidos). Se ordena por `lastTouchedAt`, no por `lastEngagedAt`:
@@ -83,6 +92,12 @@ export async function GET(request) {
       }),
     ]);
 
+    // De los posts de hoy, prioriza el AUTO: es el que lleva tomas de
+    // LinkedIn y el que espera la incidencia no_takes. Si no hay AUTO (día
+    // manual), se queda con el primero (el más reciente, por el orderBy).
+    const blogPost =
+      todaysPosts.find((p) => p.source === "AUTO") ?? todaysPosts[0] ?? null;
+
     const siteUrl = process.env.NEXTAUTH_URL || SITE;
 
     const { tasks, incidents } = buildDailyTasks({
@@ -91,6 +106,10 @@ export async function GET(request) {
       blogPost,
       siteUrl,
       firstCommentAutomated: process.env.FIRST_COMMENT_AUTOMATED === "true",
+      // Hoy tocaba artículo (lunes o miércoles) y no lo hay: la generación de
+      // las 06:00 falló y los crones de Vercel no reintentan. Sin esto el
+      // hueco de la semana se descubre cuando no llegan las publicaciones.
+      expectsArticle: PLANNED_WEEKDAYS.includes(getMadridWeekday(now)),
     });
 
     // Las tareas de prospección van al final: son "después de comer" y no

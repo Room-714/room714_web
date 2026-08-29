@@ -131,6 +131,32 @@ describe("renderBriefingHtml", () => {
     expect(html).toContain("primer comentario");
   });
 
+  // El correo sale a las 08:50: el artículo lleva rato publicado y sus tomas
+  // de LinkedIn ya se generaron a partir de él. El texto tiene que decir eso,
+  // no invitar a una revisión "antes de que se publique" que ya no aplica.
+  it("blog_review dice que el artículo ya está publicado, no que falta por publicarse", () => {
+    const html = renderBriefingHtml({
+      tasks: [
+        {
+          id: "blog-77",
+          kind: "blog_review",
+          when: "after",
+          time: "07:30",
+          channel: null,
+          title: "El artículo de hoy ya está publicado",
+          articleTitle: "Mi post",
+          articleUrl: "https://www.room714.com/es/blog/mi-post",
+          adminUrl: "https://www.room714.com/admin?postId=77",
+        },
+      ],
+      incidents: [],
+      dateLabel: "lunes 27",
+    });
+    expect(html).toContain("ya está publicado");
+    expect(html).toContain("Se publicó a las 07:30");
+    expect(html).not.toContain("Se publica solo a las");
+  });
+
   it("lista las incidencias de ayer", () => {
     const html = renderBriefingHtml({
       tasks: [],
@@ -168,5 +194,51 @@ describe("renderBriefingHtml", () => {
     });
     expect(html).toContain("se publicó sin tomas de LinkedIn");
     expect(html).toContain("Mi post");
+  });
+
+  // El botón "Generar en el admin" no llevaba a ningún sitio: no existe una
+  // pantalla de admin que dispare la generación de tomas. La recuperación real
+  // es relanzar el cron a mano con ?force=1 (arreglo 4).
+  it("la incidencia no_takes indica cómo relanzar el cron a mano, sin botón inexistente", () => {
+    const html = renderBriefingHtml({
+      tasks: [],
+      incidents: [
+        {
+          id: "no-takes-10",
+          kind: "no_takes",
+          when: "before",
+          time: "07:30",
+          channel: null,
+          title: "El artículo de hoy se publicó sin tomas de LinkedIn",
+          articleTitle: "Mi post",
+        },
+      ],
+      dateLabel: "lunes 27",
+    });
+    expect(html).toContain("/api/cron/generate-linkedin?force=1");
+    expect(html).not.toContain("Generar en el admin");
+  });
+
+  // Sin esta incidencia, un fallo en el cron de las 06:00 es indistinguible
+  // de un día sin artículo previsto: las tareas de prospección siempre
+  // generan algo, así que el correo llegaría con aspecto de día normal.
+  it("avisa cuando no se generó el artículo del día", () => {
+    const html = renderBriefingHtml({
+      tasks: [],
+      incidents: [
+        {
+          id: "no-article",
+          kind: "no_article",
+          when: "before",
+          time: "06:00",
+          channel: null,
+          title: "Hoy tocaba artículo y no se generó ninguno",
+          articleTitle: null,
+        },
+      ],
+      dateLabel: "lunes 27",
+    });
+    expect(html).toContain("Hoy tocaba artículo y no se generó ninguno");
+    expect(html).toContain("cron de las 06:00");
   });
 });

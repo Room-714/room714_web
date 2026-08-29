@@ -136,7 +136,7 @@ Cada toma es INDEPENDIENTE: su hook, sus párrafos de desarrollo y su pregunta d
 
 - **Hook (primera línea)**: la afirmación, dato o promesa que se ve antes del "ver más". Es lo que decide el CTR.
 - Dos saltos de línea.
-- **3-5 párrafos cortos** (máx 2-3 frases cada uno), separados por \n\n.
+- **3-5 párrafos cortos** (máx 2-3 frases cada uno), separados por \\n\\n.
 - **Cierre con pregunta o invitación a comentar**.
 - 1000-1800 **caracteres** en total. Caracteres, no palabras: una toma es corta.
 - Texto plano. NADA de HTML: lo que escribas se publica tal cual y una etiqueta saldría como texto visible.

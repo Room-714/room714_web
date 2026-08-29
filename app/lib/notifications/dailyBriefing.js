@@ -117,7 +117,7 @@ export function renderTaskHtml(task) {
         ${eyebrow(timing(task))}
         ${heading(task.title)}
         <p style="margin:0 0 4px;font-size:15px;color:#111;"><strong>${esc(task.articleTitle)}</strong></p>
-        ${note(`Se publica solo a las ${task.time}. Échale un ojo por si quieres corregir algo antes.`)}
+        ${note(`Se publicó a las ${task.time}. Si lo editas ahora el cambio solo se ve en la web: las tomas de LinkedIn ya salieron a las 08:30 con el texto de entonces.`)}
         ${button(task.articleUrl, "Ver artículo")}${button(task.adminUrl, "Editar en el admin")}
       `);
 
@@ -170,12 +170,26 @@ export function renderTaskHtml(task) {
     // al no reintentar Vercel, nadie más lo detecta antes del viernes. El
     // eyebrow no usa task.time: esa es la hora de publicación del artículo
     // (07:30), y el fallo ocurre en el cron de las 08:30 — mezclarlas despista.
+    // No hay botón "Generar en el admin" porque no existe: no hay pantalla de
+    // admin que dispare la generación de tomas. Lo que sí existe es la propia
+    // ruta del cron, protegida por CRON_SECRET, con un ?force=1 (arreglo 4)
+    // pensado justo para esto: recuperar a mano una generación fallida sin
+    // esperar a que vuelva a tocarle su hora.
     case "no_takes":
       return block(`
         ${eyebrow("Hoy · cron de las 08:30")}
         ${heading(task.title)}
-        <p style="margin:0;color:#666;font-size:13px;">${esc(task.articleTitle)}. Genera las variantes a mano desde el admin o revisa los logs del cron de las 08:30.</p>
-        ${button(task.adminUrl, "Generar en el admin")}
+        <p style="margin:0;color:#666;font-size:13px;">${esc(task.articleTitle)}. Revisa los logs del cron de las 08:30 en Vercel, o vuelve a lanzarlo a mano: GET /api/cron/generate-linkedin?force=1 con el header Authorization: Bearer CRON_SECRET.</p>
+      `);
+
+    // El cron de las 06:00 no llegó a generar el artículo (fallo o timeout) y
+    // Vercel no reintenta. No hay post que enlazar —por eso no lleva botón—,
+    // así que la única acción posible es mirar los logs o generarlo a mano.
+    case "no_article":
+      return block(`
+        ${eyebrow("Hoy · cron de las 06:00")}
+        ${heading(task.title)}
+        <p style="margin:0;color:#666;font-size:13px;">Revisa los logs del cron de las 06:00 en Vercel, o genera el artículo a mano desde el admin (botón "Generar borrador").</p>
       `);
 
     default:

@@ -7,7 +7,7 @@ const PROFILE_FALLBACK = "https://www.linkedin.com/in/";
 const COMPANY_FALLBACK = "https://www.linkedin.com/company/";
 
 // Redirección que se resuelve en el momento del clic. El briefing sale a las
-// 08:00, cuando el post todavía no existe en LinkedIn; si para cuando se pulsa
+// 08:50, cuando el post todavía no existe en LinkedIn; si para cuando se pulsa
 // Make ya ha devuelto la URL vía callback, se cae en el post exacto, y si no,
 // en el perfil o la página.
 //
@@ -48,7 +48,7 @@ export async function GET(_request, { params }) {
   );
 }
 
-// 302 y sin caché: un cliente de correo que precargue el enlace a las 08:00 no
+// 302 y sin caché: un cliente de correo que precargue el enlace a las 08:50 no
 // debe dejar congelado el redirect al perfil de por vida.
 function redirectTo(target) {
   return new Response(null, {

@@ -14,6 +14,7 @@ export function buildDailyTasks({
   blogPost = null,
   siteUrl,
   firstCommentAutomated = false,
+  expectsArticle = false,
 }) {
   const tasks = [];
 
@@ -81,13 +82,19 @@ export function buildDailyTasks({
   if (blogPost) {
     const translationEs = blogPost.translations?.find((t) => t.lang === "es");
     if (translationEs) {
+      // "after" y no "before": el briefing sale a las 08:50, cuando el
+      // artículo lleva ya 80 minutos publicado (07:30) y sus tomas de
+      // LinkedIn 20 minutos escritas (08:30). Invitar a revisarlo "antes"
+      // llega tarde y además contradice al correo de borrador listo, que ya
+      // avisó de que la ventana de edición con efecto en LinkedIn cerró a
+      // las 08:30.
       tasks.push({
         id: `blog-${blogPost.id}`,
         kind: "blog_review",
-        when: "before",
+        when: "after",
         time: formatMadridTime(blogPost.date),
         channel: null,
-        title: "Artículo nuevo hoy en la web",
+        title: "El artículo de hoy ya está publicado",
         articleTitle: translationEs.title,
         articleUrl: `${siteUrl}/es/blog/${translationEs.slug}`,
         adminUrl: `${siteUrl}/admin?postId=${blogPost.id}`,
@@ -135,6 +142,22 @@ export function buildDailyTasks({
         blogPost.translations?.find((t) => t.lang === "es")?.title ??
         `Post ${blogPost.id}`,
       adminUrl: `${siteUrl}/admin?postId=${blogPost.id}`,
+    });
+  }
+
+  // Hoy tocaba artículo y no hay ninguno: la generación de las 06:00 falló y
+  // los crones de Vercel no reintentan. Sin esta incidencia el correo llega con
+  // aspecto de día normal —las tareas de prospección siempre generan algo— y el
+  // hueco de la semana se descubre cuando no llegan las publicaciones.
+  if (expectsArticle && !blogPost) {
+    incidents.push({
+      id: "no-article",
+      kind: "no_article",
+      when: "before",
+      time: "06:00",
+      channel: null,
+      title: "Hoy tocaba artículo y no se generó ninguno",
+      articleTitle: null,
     });
   }
 
