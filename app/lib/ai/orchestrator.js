@@ -16,7 +16,11 @@ import { generateLinkedInTakes, generatePostDraft } from "./generator";
 import { backlinkOldPosts } from "./backlinker";
 import { computeOutboundLinksForPost } from "./internalLinker";
 import { sendDraftReadyEmail } from "@/app/lib/notifications/draftReady";
-import { madridDayRange, nextMadridSlot } from "@/app/lib/time/madrid";
+import {
+  getMadridWeekday,
+  madridDayRange,
+  nextMadridSlot,
+} from "@/app/lib/time/madrid";
 import {
   channelForVariant,
   crossActionsFor,
@@ -57,6 +61,17 @@ async function ensureUniqueSlug(slug, lang) {
 export async function generateDraftForToday({ categoryOverride, sendEmail = true } = {}) {
   const today = new Date();
   const publishDate = nextMadridSlot(PUBLISH_HOUR_MADRID, PUBLISH_MINUTE_MADRID);
+
+  // Si el cron llegó tarde, nextMadridSlot salta al siguiente día laborable sin
+  // decir nada, y entonces el artículo se fecha un día en que generate-linkedin
+  // no corre: la semana se queda sin tomas. No lo impedimos —publicar mañana es
+  // mejor que no publicar— pero que quede en el log.
+  if (getMadridWeekday(publishDate) !== getMadridWeekday(new Date())) {
+    console.warn(
+      `generateDraftForToday: las 07:30 de hoy ya pasaron; el artículo se fecha el ${publishDate.toISOString()}`,
+    );
+  }
+
   const category = categoryOverride ?? categoryForDate(today);
 
   if (!category) {

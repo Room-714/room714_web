@@ -4,7 +4,14 @@ import { isMadridHour } from "@/app/lib/time/madrid";
 
 export const maxDuration = 300;
 
-const TARGET_HOUR = 7;
+// 06:00: hora y media antes de que el artículo se haga visible (07:30). La
+// generación completa tarda 1-2 minutos, así que el margen es de sobra, y deja
+// tiempo a que llegue el correo de borrador listo antes de que nadie se siente.
+//
+// El margen importa más de lo que parece: nextMadridSlot(7, 30) devuelve el
+// SIGUIENTE día laborable si las 07:30 ya pasaron, y entonces el artículo se
+// fecharía un día en que generate-linkedin no corre.
+const TARGET_HOUR = 6;
 
 export async function GET(request) {
   const authHeader = request.headers.get("authorization");
