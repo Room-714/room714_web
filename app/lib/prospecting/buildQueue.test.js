@@ -76,8 +76,11 @@ describe("collectFreshCandidates", () => {
       knownIds,
     });
 
-    expect(search.mock.calls.length).toBeGreaterThan(1);
-    expect(r.candidates.length).toBeGreaterThan(0);
+    // El mock está construido para dar exactamente 5 caras nuevas por página
+    // (20 conocidas + 5 nuevas de 25), y wanted es QUEUE_SIZE (20): hacen
+    // falta 4 páginas para reunir 20 = 4 × 5.
+    expect(search).toHaveBeenCalledTimes(4);
+    expect(r.candidates).toHaveLength(20);
   });
 
   it("se rinde al llegar al tope de páginas y lo dice", async () => {
@@ -166,6 +169,37 @@ describe("collectFreshCandidates", () => {
     });
     const ids = r.candidates.map((c) => c.id);
     expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  it("no mete dos personas de la misma empresa aunque estén en páginas distintas", async () => {
+    let n = 0;
+    const search = vi.fn(async () => ({
+      people: [persona(`p${n++}`, "Envases Ruiz SL"), persona(`q${n++}`, `Otra ${n}`)],
+      totalEntries: 500,
+    }));
+    const r = await collectFreshCandidates({
+      search,
+      query: {},
+      wanted: QUEUE_SIZE,
+      rules: {},
+      knownIds: new Set(),
+    });
+    const deEnvases = r.candidates.filter(
+      (c) => c.organization?.name === "Envases Ruiz SL",
+    );
+    expect(deEnvases).toHaveLength(1);
+  });
+
+  it("impone su propio per_page en la consulta, aunque la consulta traiga otro", async () => {
+    const search = vi.fn(async () => ({ people: [], totalEntries: 0 }));
+    await collectFreshCandidates({
+      search,
+      query: { per_page: 999 },
+      wanted: QUEUE_SIZE,
+      rules: {},
+      knownIds: new Set(),
+    });
+    expect(search).toHaveBeenCalledWith(expect.objectContaining({ per_page: PER_PAGE }));
   });
 
   it("no devuelve más de los que se le piden", async () => {

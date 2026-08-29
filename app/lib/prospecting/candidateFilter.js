@@ -28,22 +28,41 @@ export const EXCLUDED_COMPANY_PATTERNS = [
   /\bsaas\b/i,
 ];
 
-function normalizeTitle(title) {
+// Se exportan porque `rules.js` necesita normalizar el mismo campo (`title` de
+// una decisión histórica es el mismo `title` crudo que devuelve Apollo) y
+// `buildQueue.js` necesita normalizar empresas de la misma forma para que el
+// set que pasa entre páginas case con el que usa este filtro por dentro. Vivir
+// en un solo sitio evita que las dos normalizaciones diverjan en silencio: si
+// lo hicieran, un cargo excluido por `deriveRules` podría dejar de filtrarse
+// aquí sin que ningún test que mire un solo módulo lo note.
+export function normalizeTitle(title) {
   return String(title || "").trim().toLowerCase().replace(/\s+/g, " ");
 }
 
-function normalizeCompany(name) {
+export function normalizeCompany(name) {
   return String(name || "").trim().toLowerCase();
 }
 
 // Devuelve `{ kept, dropped }`. `dropped` lleva el motivo de cada descarte para
 // que la respuesta del cron sea diagnosticable sin abrir la base de datos: si un
 // día la cola sale vacía, el porqué tiene que estar a la vista.
-export function filterCandidates(people = [], { rules = {}, knownIds = new Set() } = {}) {
+//
+// `knownCompanies` son empresas ya colocadas en la cola en llamadas anteriores
+// (otras páginas de la misma búsqueda): se tratan exactamente igual que las
+// empresas vistas dentro de esta misma llamada, para que no se cuelen dos
+// candidatos de la misma compañía repartidos entre páginas distintas. Debe
+// venir ya normalizado con `normalizeCompany` (el que llama, típicamente
+// `collectFreshCandidates`, usa la función exportada de aquí mismo para que sea
+// imposible que la normalización diverja entre las dos llamadas).
+export function filterCandidates(
+  people = [],
+  { rules = {}, knownIds = new Set(), knownCompanies = new Set() } = {},
+) {
   const excludedTitles = (rules.excludedTitles ?? []).map(normalizeTitle);
   const kept = [];
   const dropped = [];
-  const empresasVistas = new Set();
+  // Copia, no referencia: esta función no debe mutar el set que le pasan.
+  const empresasVistas = new Set(knownCompanies);
 
   for (const p of people) {
     const drop = (reason) => dropped.push({ apolloId: p?.id ?? null, reason });
@@ -69,7 +88,8 @@ export function filterCandidates(people = [], { rules = {}, knownIds = new Set()
     }
 
     // Una persona por empresa: dos directores de la misma compañía son un solo
-    // contacto y gastarían dos créditos por la misma puerta.
+    // contacto y gastarían dos créditos por la misma puerta. `knownCompanies`
+    // extiende esta misma regla a lo visto en llamadas anteriores.
     const companyKey = normalizeCompany(company);
     if (companyKey && empresasVistas.has(companyKey)) {
       drop("ya hay otro candidato de esa empresa");

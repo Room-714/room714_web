@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { filterCandidates, EXCLUDED_COMPANY_PATTERNS } from "./candidateFilter";
+import { deriveRules, TITLE_STRIKES } from "./rules";
 
 const persona = (extra) => ({
   id: "a1",
@@ -51,6 +52,15 @@ describe("filterCandidates", () => {
     expect(dropped[0].reason).toBe("ya hay otro candidato de esa empresa");
   });
 
+  it("respeta las empresas ya elegidas en llamadas anteriores", () => {
+    const { kept, dropped } = filterCandidates([persona()], {
+      rules: {},
+      knownCompanies: new Set(["envases ruiz sl"]),
+    });
+    expect(kept).toHaveLength(0);
+    expect(dropped[0].reason).toBe("ya hay otro candidato de esa empresa");
+  });
+
   it("descarta los cargos que las reglas han excluido", () => {
     const { kept, dropped } = filterCandidates([persona({ title: "Director Comercial" })], {
       rules: { excludedTitles: ["Director Comercial"] },
@@ -92,5 +102,23 @@ describe("filterCandidates", () => {
     );
     expect(dropped[0].apolloId).toBe("x");
     expect(dropped[0].reason).toBeTruthy();
+  });
+
+  // Recorre deriveRules (rules.js) y filterCandidates (candidateFilter.js) en
+  // el mismo test: ninguno de los dos módulos por separado se daría cuenta si
+  // normalizeTitle divergiera entre los dos, porque cada uno prueba solo el
+  // suyo.
+  it("un cargo excluido por las reglas lo filtra de verdad el filtro", () => {
+    const decisiones = Array.from({ length: TITLE_STRIKES }, () => ({
+      decision: "no",
+      reasonCode: "role",
+      title: "Director Comercial",
+    }));
+    const rules = deriveRules(decisiones);
+    const { kept } = filterCandidates(
+      [{ id: "z", title: "  DIRECTOR COMERCIAL ", organization: { name: "Envases Ruiz" } }],
+      { rules },
+    );
+    expect(kept).toHaveLength(0);
   });
 });

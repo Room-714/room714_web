@@ -31,12 +31,20 @@ describe("deriveRules — cargos", () => {
     expect(deriveRules(decisiones).excludedTitles).toEqual([]);
   });
 
-  it("un sí posterior no salva un cargo ya excluido: manda el recuento", () => {
+  it("un solo sí salva el cargo: el recuento sin denominador seria un trinquete", () => {
     const decisiones = [
       ...Array.from({ length: TITLE_STRIKES }, () => no({ title: "CIO" })),
       si({ title: "CIO" }),
     ];
-    expect(deriveRules(decisiones).excludedTitles).toContain("CIO");
+    expect(deriveRules(decisiones).excludedTitles).toEqual([]);
+  });
+
+  it("no excluye un cargo que funciona, por muchos noes sueltos que acumule", () => {
+    const decisiones = [
+      ...Array.from({ length: 30 }, () => si({ title: "CEO" })),
+      ...Array.from({ length: 5 }, () => no({ title: "CEO" })),
+    ];
+    expect(deriveRules(decisiones).excludedTitles).toEqual([]);
   });
 
   it("normaliza mayúsculas y espacios al contar", () => {
@@ -66,6 +74,19 @@ describe("deriveRules — tramos de plantilla", () => {
     ];
     expect(deriveRules(decisiones).excludedSizes).toEqual([]);
   });
+
+  it("un sí legacy no salva un tramo: la guarda mira el motivo, no la decisión", () => {
+    // La migración va a crear 22 filas 'yes'+'legacy' exactamente así. Si la
+    // guarda de legacy solo mirara los 'no', un sí de esos salvaría tramos que
+    // nadie ha aprobado de verdad.
+    const decisiones = [
+      ...Array.from({ length: SIZE_STRIKES }, () =>
+        no({ sizeQuery: "101,250", reasonCode: "size" }),
+      ),
+      si({ sizeQuery: "101,250", reasonCode: "legacy" }),
+    ];
+    expect(deriveRules(decisiones).excludedSizes).toContain("101,250");
+  });
 });
 
 describe("deriveRules — orden de sectores", () => {
@@ -92,6 +113,16 @@ describe("deriveRules — orden de sectores", () => {
     );
     expect(s.hits).toBe(0);
     expect(s.total).toBe(3);
+  });
+
+  it("una muestra de uno no adelanta a una muestra grande y buena", () => {
+    const decisiones = [
+      si({ sectorQuery: "Suerte" }),
+      ...Array.from({ length: 40 }, () => si({ sectorQuery: "Solido" })),
+      ...Array.from({ length: 10 }, () => no({ sectorQuery: "Solido", reasonCode: "sector" })),
+    ];
+    const orden = deriveRules(decisiones).sectorsByHitRate.map((s) => s.sector);
+    expect(orden[0]).toBe("Solido");
   });
 
   it("devuelve listas vacías sin decisiones", () => {
@@ -161,6 +192,19 @@ describe("ruleStats", () => {
     const stats = ruleStats(decisiones);
     expect(stats.decided).toBe(3);
     expect(stats.accepted).toBe(1);
+  });
+
+  it("decided usa el mismo criterio explícito que deriveRules, no '!== pending'", () => {
+    // Si la columna admitiera null como pendiente, `!== "pending"` contaría
+    // ese null como decidido. deriveRules ya exige "yes"/"no" explícito;
+    // ruleStats tiene que exigir lo mismo.
+    const decisiones = [
+      si({ sectorQuery: "Educación" }),
+      no({ title: "CEO" }),
+      { decision: null, sectorQuery: "Educación", title: "CEO" },
+    ];
+    const stats = ruleStats(decisiones);
+    expect(stats.decided).toBe(2);
   });
 
   it("incluye también las reglas derivadas (excludedTitles, etc.)", () => {

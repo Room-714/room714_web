@@ -78,13 +78,30 @@ describe("buildCreditStatus", () => {
   });
 
   it("no divide por cero el día antes de renovar", () => {
+    // El 15 de agosto de 2026 es sábado y el reset es el domingo 16: no queda
+    // ningún laborable entre hoy y la renovación. El código documenta que en
+    // ese caso el ritmo es "todo lo que queda", así que se fija ese valor
+    // concreto y no solo que sea un número finito (con eso pasaría igual un 0,
+    // un 42 o cualquier otra cosa).
     const s = buildCreditStatus({
       spent: 10,
       cap: 60,
       now: new Date("2026-08-15T10:00:00Z"),
       resetDay: 16,
     });
-    expect(Number.isFinite(s.pacePerWorkday)).toBe(true);
+    expect(s.workdaysToReset).toBe(0);
+    expect(s.pacePerWorkday).toBe(50);
+  });
+
+  it("con spent roto (undefined, null o NaN) se asume el cupo agotado: falla en cerrado", () => {
+    // undefined: 60 - undefined = NaN, y NaN === 0 es false — sin esta guarda
+    // la puerta se quedaría abierta. null: 60 - null = 60, "no se ha gastado
+    // nada", que es el error contrario y peor porque parece dato bueno.
+    for (const spent of [undefined, null, NaN]) {
+      const s = buildCreditStatus({ spent, cap: 60, now, resetDay: 16 });
+      expect(s.remaining).toBe(0);
+      expect(s.exhausted).toBe(true);
+    }
   });
 });
 

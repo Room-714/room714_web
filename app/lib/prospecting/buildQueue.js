@@ -1,4 +1,4 @@
-import { filterCandidates } from "./candidateFilter";
+import { filterCandidates, normalizeCompany } from "./candidateFilter";
 
 // Cuántas fichas se le ponen delante cada mañana. Veinte y no cuatro o cinco
 // porque buscar es gratis: el cuello de botella es el presupuesto de créditos,
@@ -10,7 +10,12 @@ export const QUEUE_SIZE = 20;
 export const MAX_SEARCH_PAGES = 5;
 
 // Resultados por página que devuelve Apollo. Se usa para deducir por qué página
-// va cada combinación.
+// va cada combinación (ver `startPageFor`), y `collectFreshCandidates` la
+// impone en toda consulta que envía para que sea imposible que las dos
+// dejen de coincidir: si el `per_page` real de la búsqueda divergiera de esta
+// constante, `startPageFor` calcularía la ventana con el número equivocado y
+// se saltaría páginas enteras sin que nadie lo notara — con 50 de verdad y 100
+// vistos arrancaría en la página 4 en vez de la 3, perdiendo 50 personas.
 export const PER_PAGE = 25;
 
 // Por qué página empezar en una combinación de la que ya hemos visto gente.
@@ -20,10 +25,12 @@ export const PER_PAGE = 25;
 // pero cuando una combinación lleva 125 caras vistas, las cinco páginas del
 // recorrido son todas conocidas y deja de encontrar a nadie para siempre.
 //
-// En vez de guardar un puntero por combinación, se deduce de lo que ya hay en la
-// base: si de esta combinación hemos visto 60 personas, están en las páginas 1 a
-// 3, así que se empieza por la 3. Se resta una página de solape a propósito,
-// porque el índice de Apollo se mueve y las fronteras no son exactas.
+// En vez de guardar un puntero por combinación, se deduce de lo que ya hay en
+// la base: a 25 por página, 60 personas vistas caen a mitad de la página 3
+// (60 / 25 = 2.4), así que la página 3 todavía puede tener caras nuevas — y por
+// eso se empieza en la 2, una página de solape antes, no en la 3. Restar esa
+// página es intencional: el índice de Apollo se mueve y las fronteras no son
+// exactas.
 export function startPageFor(seenInCombo) {
   if (!seenInCombo) return 1;
   return Math.max(1, Math.floor(seenInCombo / PER_PAGE));
@@ -45,6 +52,13 @@ export async function collectFreshCandidates({
   const candidates = [];
   const dropped = [];
   const yaElegidos = new Set();
+  // Empresas ya colocadas en la cola en páginas anteriores de esta misma
+  // llamada. Se normalizan con `normalizeCompany`, la misma función que usa
+  // `filterCandidates` por dentro, importada de allí en vez de reimplementada
+  // aquí: así es imposible que las dos normalizaciones diverjan y dejen de
+  // casar (que es justo el bug que hacía que se colaran varios candidatos de
+  // la misma empresa repartidos entre páginas).
+  const empresasElegidas = new Set();
   let searched = 0;
   let lastPageFetched = 0;
   let pagesFetched = 0;
@@ -52,7 +66,10 @@ export async function collectFreshCandidates({
 
   const lastPage = startPage + MAX_SEARCH_PAGES - 1;
   for (let page = startPage; page <= lastPage && candidates.length < wanted; page++) {
-    const result = await search({ ...query, page });
+    // `per_page: PER_PAGE` va después de `...query` a propósito, para que gane
+    // siempre y la consulta no pueda colar un valor distinto (ver el
+    // comentario de PER_PAGE).
+    const result = await search({ ...query, page, per_page: PER_PAGE });
     lastPageFetched = page;
     pagesFetched += 1;
     searched += result.people.length;
@@ -67,6 +84,7 @@ export async function collectFreshCandidates({
     const { kept, dropped: fuera } = filterCandidates(result.people, {
       rules,
       knownIds: vistos,
+      knownCompanies: empresasElegidas,
     });
     dropped.push(...fuera);
 
@@ -74,6 +92,8 @@ export async function collectFreshCandidates({
       if (candidates.length >= wanted) break;
       candidates.push(p);
       yaElegidos.add(p.id);
+      const companyKey = normalizeCompany(p.organization?.name ?? null);
+      if (companyKey) empresasElegidas.add(companyKey);
     }
   }
 

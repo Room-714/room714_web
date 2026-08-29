@@ -8,6 +8,8 @@
 // tests puedan situarse en cualquier día del ciclo.
 
 export const DEFAULT_RESET_DAY = 16;
+// El plan real de Apollo da 75 créditos al mes; 60 es un margen autoimpuesto
+// para no llegar nunca a rozar el límite real de la cuenta.
 export const DEFAULT_CAP = 60;
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -66,7 +68,14 @@ export function buildCreditStatus({
   resetDay = DEFAULT_RESET_DAY,
 }) {
   const nextReset = nextResetFor(now, resetDay);
-  const remaining = Math.max(0, cap - spent);
+  // Si `spent` llega roto (undefined, null, NaN...) este módulo no sabe cuánto
+  // se ha gastado de verdad. Este es el único sitio que frena el gasto, así
+  // que ante una entrada rota hay que fallar en CERRADO, no en abierto: se
+  // asume el peor caso (el cupo entero ya consumido) en vez de dejar pasar. Con
+  // `spent` tal cual, `60 - undefined` da NaN y `NaN === 0` da `false`: la
+  // entrada rota abriría la puerta a seguir gastando sin límite.
+  const gastados = Number.isFinite(spent) ? spent : cap;
+  const remaining = Math.max(0, cap - gastados);
   const daysToReset = Math.ceil((nextReset.getTime() - now.getTime()) / DAY_MS);
   const workdaysToReset = workdaysBetween(now, nextReset);
 
