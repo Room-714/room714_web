@@ -42,3 +42,5 @@ next-env.d.ts
 
 /app/generated/prisma
 backup-prospeccion-*.json
+
+backup-consolidacion-*.json
