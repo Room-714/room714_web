@@ -326,12 +326,15 @@ model ProspectMemory {
 }
 ```
 
-- [ ] **Step 4: Aplica el esquema**
+- [ ] **Step 4: NO apliques el esquema todavía**
 
-Run: `npx prisma db push && npx prisma generate`
-Expected: `Your database is now in sync with your Prisma schema.` sin ninguna pregunta sobre resetear.
+⚠️ **El orden importa y es un círculo vicioso si se hace mal.** Comprobado en la
+ejecución real del 2026-08-31: lanzar `db push` antes de crear la extensión falla
+con `ERROR: type "vector" does not exist`, porque no puede crear la tabla
+`ProspectMemory` sin el tipo. Y el índice HNSW no se puede crear antes que la
+tabla. La secuencia correcta es la del Step 6.
 
-Si `db push` se queja de `Unsupported`, es esperado que avise pero no que falle: Prisma crea la columna igual y solo se niega a leerla o escribirla desde el cliente tipado, que es justo por lo que memory.js usa `$queryRaw`.
+`npx prisma validate` sí se puede ejecutar ahora: no toca la base.
 
 - [ ] **Step 5: Crea el script de la extensión y el índice**
 
