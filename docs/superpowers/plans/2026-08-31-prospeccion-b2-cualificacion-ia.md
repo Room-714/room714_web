@@ -180,7 +180,31 @@ await probar("F · opus-5 + web_search + output_config.format a la vez", {
 
 Run: `node --env-file=.env.local scripts/probe-modelos.mjs`
 
-- [ ] **Step 3: Anota los resultados y ajusta el plan**
+### RESULTADOS (ejecutado el 2026-08-31)
+
+**Los seis casos pasaron.** Lo que importa:
+
+| Caso | Resultado | Tokens entrada | Búsquedas |
+|---|---|---|---|
+| A · haiku + `web_search_20250305` | ✅ | 10.487 | 1 |
+| B · haiku + `web_search_20260318` + direct | ✅ | 10.487 | 1 |
+| C · haiku + `output_config.format` | ✅ | 194 | — |
+| D · haiku + búsqueda **y** estructura | ✅ buscó **y** devolvió JSON | 9.891 | 1 |
+| E · opus-5 + `20260318` + `excluded` | ✅ | **49.974** | 3 |
+| F · opus-5 + búsqueda y estructura | ✅ pero **no buscó** | 5.564 | 0 |
+
+**Decisiones que salen de aquí:**
+
+1. **`quickLook` se colapsa en UNA llamada.** D lo demuestra: buscó y devolvió JSON válido. Ahorra ~20% del coste del vistazo.
+2. **`deepDive` mantiene las dos llamadas.** F fue aceptada por la API pero no buscó ni una vez — una sola muestra no prueba incompatibilidad, pero el valor entero del análisis a fondo es que investigue, y no vamos a jugárnoslo a que el esquema no suprima la búsqueda. Se revisa cuando haya más muestras.
+3. **El análisis a fondo cuesta ~0,33 $, no ~0,15 $.** El caso E gastó 49.974 tokens de entrada: los resultados de búsqueda entran como input aunque el filtrado dinámico los cribe. `response_inclusion: "excluded"` recorta la SALIDA, no la entrada. Cuenta: 0,250 $ (entrada) + 0,049 $ (salida) + 0,030 $ (3 búsquedas) = **0,329 $**.
+   - El botón de la pantalla dice **`~0,35 $`**, no `~0,15 $`.
+   - `BUSQUEDA_FONDO` baja a `max_uses: 3`, que es lo que midió E.
+   - Hay que actualizar la tabla de costes del spec.
+4. **El vistazo se confirma en ~0,022 $**: 10.487 entrada × 1 $/M + 292 salida × 5 $/M + 1 búsqueda = 0,022 $. La estimación de 0,03 $ aguanta con margen.
+5. Se usa `web_search_20250305` en el vistazo: A funciona y es la más simple.
+
+- [ ] **Step 3: Anota los resultados y ajusta el plan** — HECHO, ver arriba
 
 Escribe los seis resultados en el propio fichero del plan, bajo esta tarea. Reglas de decisión:
 
@@ -651,7 +675,7 @@ const FACTOR = { pass: 1, unclear: 0.4, fail: 0 };
 
 // Por debajo del umbral no entra en la cola. Está deliberadamente bajo: el
 // filtrado de verdad lo hacen las dos puertas duras de abajo, y el score sirve
-// sobre todo para ORDENAR y para que se vea de un golpe cuál merece los 0,15 $
+// sobre todo para ORDENAR y para que se vea de un golpe cuál merece los 0,35 $
 // del análisis a fondo.
 export const QUALIFY_THRESHOLD = 50;
 
@@ -1433,17 +1457,13 @@ describe("construirEjemplos", () => {
 });
 
 describe("quickLook", () => {
-  function clienteFalso({ informe = "informe", json = JSON.stringify(VEREDICTOS_OK) } = {}) {
-    const create = vi
-      .fn()
-      .mockResolvedValueOnce({
-        content: [{ type: "text", text: informe }],
-        usage: { input_tokens: 100, output_tokens: 50 },
-      })
-      .mockResolvedValueOnce({
-        content: [{ type: "text", text: json }],
-        usage: { input_tokens: 80, output_tokens: 40 },
-      });
+  // El vistazo va en UNA sola llamada: la misma petición busca en la web y
+  // devuelve el JSON (medido en la Task 0, caso D).
+  function clienteFalso({ json = JSON.stringify(VEREDICTOS_OK) } = {}) {
+    const create = vi.fn().mockResolvedValue({
+      content: [{ type: "text", text: json }],
+      usage: { input_tokens: 10_000, output_tokens: 300 },
+    });
     return { messages: { create } };
   }
 
@@ -1454,9 +1474,22 @@ describe("quickLook", () => {
     );
     expect(r.ok).toBe(true);
     expect(r.veredictos.revenue.verdict).toBe("pass");
-    expect(r.report).toBe("informe");
     expect(r.cost).toBeGreaterThan(0);
     expect(r.depth).toBe("vistazo");
+  });
+
+  it("el vistazo hace UNA sola llamada, no dos", async () => {
+    const client = clienteFalso();
+    await quickLook({ company: "X" }, { client, ejemplos: [] });
+    expect(client.messages.create).toHaveBeenCalledTimes(1);
+  });
+
+  it("el vistazo pide la salida estructurada en la misma llamada que busca", async () => {
+    const client = clienteFalso();
+    await quickLook({ company: "X" }, { client, ejemplos: [] });
+    const params = client.messages.create.mock.calls[0][0];
+    expect(params.output_config?.format).toBeTruthy();
+    expect(params.tools).toHaveLength(1);
   });
 
   it("usa el modelo del vistazo, no el caro", async () => {
@@ -1499,7 +1532,7 @@ Expected: FAIL, `Failed to resolve import "./qualify"`.
 // Dos funciones con la MISMA forma de salida, para que la ficha no tenga que
 // saber cuál la produjo:
 //   quickLook()  — Haiku 4.5, automático en el cron, ~0,03 $
-//   deepDive()   — Opus 5, solo cuando el humano pulsa el botón, ~0,15 $
+//   deepDive()   — Opus 5, solo cuando el humano pulsa el botón, ~0,33 $ medido
 //
 // El cliente de Anthropic se inyecta para poder probar esto sin red.
 
@@ -1520,10 +1553,14 @@ const BUSQUEDA_VISTAZO = { type: "web_search_20250305", name: "web_search", max_
 // los resultados antes de que entren en contexto, y `response_inclusion`
 // excluido para no pagar de salida por devolver el contenido bruto.
 // NO se declara `code_execution` aparte: la API lo provisiona sola.
+// max_uses 3, medido: con 3 búsquedas el análisis consumió 49.974 tokens de
+// ENTRADA. Los resultados entran como input aunque el filtrado dinámico los
+// criba; `response_inclusion: "excluded"` recorta la salida, no la entrada. Cada
+// búsqueda de más son ~0,08 $, así que este número es la palanca de coste real.
 const BUSQUEDA_FONDO = {
   type: "web_search_20260318",
   name: "web_search",
-  max_uses: 4,
+  max_uses: 3,
   response_inclusion: "excluded",
 };
 
@@ -1660,7 +1697,18 @@ Investiga esta empresa y responde a los cuatro criterios.${extra}`;
 
 // ─── Con la API ─────────────────────────────────────────────────────────────
 
-async function cualificar(candidato, { client, ejemplos = [], modelo, herramienta, extraPrompt = "", thinking }) {
+// `estructurarAparte` decide si van dos llamadas o una. Lo mide la Task 0:
+//
+//   - El VISTAZO va en UNA llamada. Se comprobó (caso D) que Haiku busca en la
+//     web y devuelve el JSON estructurado en la misma petición. Ahorra ~20%.
+//   - El ANÁLISIS A FONDO va en DOS. La API acepta la combinación en Opus 5
+//     (caso F), pero en esa ejecución el modelo NO buscó ni una vez, y el valor
+//     entero del análisis a fondo es que investigue. Una sola muestra no prueba
+//     que el esquema suprima la búsqueda, pero tampoco vamos a jugárnosla.
+async function cualificar(
+  candidato,
+  { client, ejemplos = [], modelo, herramienta, extraPrompt = "", thinking, estructurarAparte },
+) {
   const llamadas = [];
   const sistema = [
     { type: "text", text: SISTEMA, cache_control: { type: "ephemeral" } },
@@ -1668,11 +1716,13 @@ async function cualificar(candidato, { client, ejemplos = [], modelo, herramient
   ];
 
   try {
-    // 1 · Investigar, con búsqueda web y salida libre.
+    // 1 · Investigar, con búsqueda web. Si no se estructura aparte, esta misma
+    // llamada devuelve ya el JSON.
     const investigacion = await client.messages.create({
       model: modelo,
       max_tokens: 4096,
       ...(thinking ? { thinking } : {}),
+      ...(estructurarAparte ? {} : { output_config: { format: ESQUEMA_SALIDA } }),
       system: sistema,
       tools: [herramienta],
       messages: [{ role: "user", content: promptCandidato(candidato, extraPrompt) }],
@@ -1685,29 +1735,30 @@ async function cualificar(candidato, { client, ejemplos = [], modelo, herramient
       .join("\n")
       .trim();
 
-    // 2 · Estructurar, sin herramientas. Va aparte porque las citas de búsqueda
-    // web se adjuntan a los bloques de texto y no está establecido que convivan
-    // con una salida estructurada (ver Task 0 del plan).
-    const estructura = await client.messages.create({
-      model: modelo,
-      max_tokens: 2048,
-      output_config: { format: ESQUEMA_SALIDA },
-      messages: [
-        {
-          role: "user",
-          content: `Convierte este análisis en el JSON de los cuatro criterios.
+    let texto = report;
+
+    if (estructurarAparte) {
+      // 2 · Estructurar, sin herramientas.
+      const estructura = await client.messages.create({
+        model: modelo,
+        max_tokens: 2048,
+        output_config: { format: ESQUEMA_SALIDA },
+        messages: [
+          {
+            role: "user",
+            content: `Convierte este análisis en el JSON de los cuatro criterios.
 No añadas información que no esté en el análisis.
 
 ${report}`,
-        },
-      ],
-    });
-    llamadas.push({ model: modelo, usage: estructura.usage });
-
-    const texto = estructura.content
-      .filter((b) => b.type === "text")
-      .map((b) => b.text)
-      .join("");
+          },
+        ],
+      });
+      llamadas.push({ model: modelo, usage: estructura.usage });
+      texto = estructura.content
+        .filter((b) => b.type === "text")
+        .map((b) => b.text)
+        .join("");
+    }
 
     const cost = llamadas.reduce((t, l) => t + costOf(l.model, l.usage), 0);
     const parseado = parseVerdicts(texto);
@@ -1737,6 +1788,7 @@ export async function quickLook(candidato, { client, ejemplos = [] } = {}) {
     // Haiku 4.5 no admite `output_config.effort` y su thinking es el antiguo
     // con budget_tokens: lo más simple y seguro es no mandar nada.
     thinking: null,
+    estructurarAparte: false, // medido en la Task 0, caso D
   });
   return { ...r, depth: "vistazo" };
 }
@@ -1763,6 +1815,7 @@ export async function deepDive(candidato, { client, ejemplos = [], dossierPrevio
     herramienta: BUSQUEDA_FONDO,
     extraPrompt: extra,
     thinking: { type: "adaptive" },
+    estructurarAparte: true, // ver el comentario de `cualificar`
   });
   return { ...r, depth: "fondo" };
 }
@@ -2699,7 +2752,7 @@ import { rememberDecision, nearest, remember } from "@/app/lib/prospecting/memor
 import { embedTexts } from "@/app/lib/prospecting/embeddings";
 import { efficiencyMetrics } from "@/app/lib/prospecting/metrics";
 
-// El análisis a fondo: lo dispara el humano, cuesta ~0,15 $ y reescribe el
+// El análisis a fondo: lo dispara el humano, cuesta ~0,35 $ y reescribe el
 // dossier. No consume del presupuesto del cron a propósito — su freno es que
 // hay que pulsarlo.
 export async function deepenCandidate(id) {
@@ -3004,7 +3057,7 @@ Entre la zona gratis y la de decidir, una regla horizontal con el texto centrado
       load();
     }}
   >
-    Analizar a fondo · ~0,15 $
+    Analizar a fondo · ~0,35 $
   </button>
 )}
 ```

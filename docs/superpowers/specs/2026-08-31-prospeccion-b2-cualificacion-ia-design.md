@@ -65,7 +65,7 @@ distintas y se atacan con herramientas distintas.
 |---|---|---|---|
 | **Memoria vectorial** | a quién mirar primero, y con qué ejemplos juzgarlo | antes de gastar nada | ~0 (tramo gratuito) |
 | **Vistazo (Haiku)** | una primera lectura de los 4 criterios | automático, en el cron | ~0,03 $/empresa |
-| **Análisis a fondo y chat (Opus 5)** | resolver las dudas de una ficha concreta | cuando tú lo pides | ~0,15 $ / 0,05-0,15 $ |
+| **Análisis a fondo y chat (Opus 5)** | resolver las dudas de una ficha concreta | cuando tú lo pides | ~0,33 $ / 0,05-0,15 $ |
 
 La memoria va **delante** de todo lo que cuesta dinero. Ese es su trabajo
 principal y la razón de que entre en esta fase: no es un adorno de precisión, es
@@ -122,7 +122,7 @@ cuando toque  /admin/prospects                    ─── todo esto es gratis 
             ├─► 5 fichas ordenadas por encaje, con los 4 criterios y sus fuentes
             │   y «se parece a X, que aceptaste»
             │
-            ├─► [Analizar a fondo · ~0,15 $]    Opus 5 · ≤4 búsquedas     tú decides
+            ├─► [Analizar a fondo · ~0,35 $]    Opus 5 · ≤3 búsquedas     tú decides
             ├─► [Chat sobre esta empresa]       Opus 5 · ≤4 búsquedas/msg tú decides
             │
             ├─► "Sí"  → enriquece                                    [1 crédito]
@@ -321,7 +321,7 @@ no tenga que saber cuál la produjo.
   lo que quedó en `unclear`.
 - **Efecto**: reescribe el dossier, sube el nivel a `fondo` y recalcula el score.
   La ficha enseña el cambio («58 → 85 tras el análisis a fondo»).
-- **Coste**: ~0,15 $ por empresa.
+- **Coste**: ~0,33 $ por empresa, medido contra la API el 2026-08-31.
 
 En los dos casos, el filtrado dinámico de `web_search_20260318` criba los
 resultados antes de que entren en contexto, y `response_inclusion: "excluded"`
@@ -365,7 +365,7 @@ discrepar del 68 es discrepar de un veredicto concreto.
 
 **`QUALIFY_THRESHOLD = 50`**, deliberadamente bajo: el filtrado lo hacen las
 puertas duras, y el score está sobre todo para **ordenar** la cola y para que se
-vea de un golpe cuál merece los 0,15 $ del análisis a fondo.
+vea de un golpe cuál merece los 0,35 $ del análisis a fondo.
 
 ### Los topes del cron
 
@@ -475,7 +475,7 @@ métricas.
   fuente clicable
 - **«se parece a…»**: hasta tres vecinos con lo que decidiste de cada uno
 - el resumen de dos líneas y los enlaces de búsqueda manual
-- **`[Analizar a fondo · ~0,15 $]`**, que desaparece cuando ya se ha hecho
+- **`[Analizar a fondo · ~0,35 $]`**, que desaparece cuando ya se ha hecho
 - **`[Chat sobre esta empresa]`**, plegado
 - **la línea que separa lo gratis de lo que cuesta**: `a partir de aquí se gasta 1
   crédito`
@@ -521,11 +521,11 @@ Precios verificados el 2026-08-31: Opus 5 a 5 $ / 25 $ por millón de tokens, Ha
 
 | Concepto | Por unidad | Si usas… | Al mes |
 |---|---|---|---|
-| Analizar a fondo | ~0,15 $ | 2 al día | ~6 $ |
+| Analizar a fondo | ~0,33 $ medido | 2 al día | ~14 $ |
 | Chat | 0,05-0,15 $ | 2 al día | ~4 $ |
 | Nota de conexión | ~0,01 $ | 1 al día | <1 $ |
 
-**Total: ~23 $/mes al principio, bajando hacia ~17 $ si la memoria cumple.** El
+**Total: ~31 $/mes al principio, bajando hacia ~24 $ si la memoria cumple.** El
 techo del cron lo fija el tope diario de 0,75 $ ≈ 16 $/mes.
 
 Esa bajada es precisamente la hipótesis que mide «vistazos por ficha». No es una
