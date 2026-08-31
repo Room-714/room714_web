@@ -113,49 +113,61 @@ export async function GET(request) {
     // `comboForDay` se comporta como la rotación fija de siempre, así que lo
     // único que aporta este bloque es que las combinaciones que aciertan
     // salgan más — sin dejar de muestrear las demás (ver SUELO_EJECUCIONES).
-    const [porCombo, aciertos] = await Promise.all([
-      prisma.prospectDiscovery.groupBy({
-        by: ["sectorQuery", "sizeQuery"],
-        _count: { _all: true },
-        _max: { shownOn: true },
-      }),
-      prisma.prospectDiscovery.groupBy({
-        by: ["sectorQuery", "sizeQuery"],
-        where: {
-          decision: "yes",
-          // OJO: aquí NO vale `reasonCode: { not: "legacy" }`, y no es una
-          // preferencia de estilo. Prisma lo traduce a `"reasonCode" <>
-          // 'legacy'`, y en SQL `NULL <> 'legacy'` es NULL, no true: ese
-          // filtro se lleva por delante TODOS los sí con motivo nulo, que son
-          // precisamente los que toma una persona (el motivo solo se rellena
-          // al descartar). Comprobado contra la base real: de 24 filas con
-          // decisión "yes", 22 son legacy y las 2 reales tienen reasonCode
-          // NULL, así que la versión con `not` devolvía exactamente 0
-          // aciertos. La ponderación se habría quedado ciega para siempre, sin
-          // fallar ni avisar. Con el OR salen las 2.
-          OR: [{ reasonCode: null }, { reasonCode: { not: "legacy" } }],
-        },
-        _count: { _all: true },
-      }),
-    ]);
+    // Cuándo salió por última vez cada combinación. Esto sí va contra todas las
+    // filas, decididas o no: lo que mide es cuándo se buscó, no qué se decidió.
+    const porCombo = await prisma.prospectDiscovery.groupBy({
+      by: ["sectorQuery", "sizeQuery"],
+      _max: { shownOn: true },
+    });
 
     const hoy = dayIndexFor(new Date());
     const claveDe = (sector, size) => `${sector}|${size}`;
-    const hitsPorClave = new Map(
-      aciertos.map((a) => [claveDe(a.sectorQuery, a.sizeQuery), a._count._all]),
-    );
 
-    const historial = porCombo.map((g) => ({
-      // `sector` y `size`, no `sectorQuery`/`sizeQuery`: son los nombres con
-      // los que `comboForDay` construye su clave.
-      sector: g.sectorQuery,
-      size: g.sizeQuery,
-      // Sin fecha no sabemos cuándo salió esta combinación. Infinity la da por
-      // vencida, que es el lado seguro: se muestrea antes, no se condena.
-      ejecucionesDesde: g._max.shownOn ? hoy - dayIndexFor(g._max.shownOn) : Infinity,
-      hits: hitsPorClave.get(claveDe(g.sectorQuery, g.sizeQuery)) ?? 0,
-      total: g._count._all,
-    }));
+    // Aciertos y decisiones por combinación, contados EN MEMORIA sobre las
+    // decisiones que ya se trajeron arriba. Dos motivos para no hacerlo con un
+    // groupBy más:
+    //
+    // 1. Ahorra una consulta: `decisiones` ya trae sector, tramo, decisión y
+    //    motivo de todas las filas decididas.
+    // 2. Y sobre todo, esquiva una trampa de SQL con la que es fácil tropezar.
+    //    `reasonCode: { not: "legacy" }` se traduce a `"reasonCode" <>
+    //    'legacy'`, y en SQL `NULL <> 'legacy'` es NULL, no true: ese filtro se
+    //    lleva por delante TODOS los sí con motivo nulo, que son justamente los
+    //    que toma una persona (el motivo solo se rellena al descartar).
+    //    Comprobado contra la base real: de 24 filas con decisión "yes", 22 son
+    //    legacy y las 2 reales tienen reasonCode NULL, así que esa versión
+    //    devolvía CERO aciertos y la ponderación se habría quedado ciega para
+    //    siempre sin fallar ni avisar. En JavaScript, `!== "legacy"` sobre null
+    //    es true y no hay sorpresa.
+    const conteos = new Map();
+    for (const d of decisiones) {
+      if (d.reasonCode === "legacy") continue; // nadie las decidió de verdad
+      const clave = claveDe(d.sectorQuery, d.sizeQuery);
+      const acc = conteos.get(clave) ?? { hits: 0, total: 0 };
+      acc.total += 1;
+      if (d.decision === "yes") acc.hits += 1;
+      conteos.set(clave, acc);
+    }
+
+    const historial = porCombo.map((g) => {
+      const clave = claveDe(g.sectorQuery, g.sizeQuery);
+      const c = conteos.get(clave) ?? { hits: 0, total: 0 };
+      return {
+        // `sector` y `size`, no `sectorQuery`/`sizeQuery`: son los nombres con
+        // los que `comboForDay` construye su clave.
+        sector: g.sectorQuery,
+        size: g.sizeQuery,
+        // Sin fecha no sabemos cuándo salió esta combinación. Infinity la da
+        // por vencida, que es el lado seguro: se muestrea antes, no se condena.
+        ejecucionesDesde: g._max.shownOn ? hoy - dayIndexFor(g._max.shownOn) : Infinity,
+        hits: c.hits,
+        // `total` son DECISIONES REALES, no filas. Contando filas, las
+        // pendientes y las legacy inflaban el denominador de la tasa de
+        // Laplace, así que las combinaciones que arrastran historial legacy
+        // quedaban infravaloradas de forma sistemática y para siempre.
+        total: c.total,
+      };
+    });
 
     const combo = comboForDay(BUYER_PROFILE, hoy, { historial });
     const query = buildApolloQuery(BUYER_PROFILE, { combo, rules });
@@ -191,14 +203,33 @@ export async function GET(request) {
       where: { sectorQuery: combo?.sector ?? null, sizeQuery },
     });
 
-    // En preview, `wanted` NO se ata a los pendientes de hoy: el caso que
-    // motiva el arreglo de arriba es justo la cola ya llena, y con
-    // `QUEUE_SIZE - pendientes` eso habría dado un número negativo o cero —
-    // `collectFreshCandidates` ni siquiera habría intentado buscar, así que
-    // se vería la consulta construida pero ningún candidato de muestra. Lo
-    // que se quiere ver en preview es qué traería una ejecución fresca, no
-    // cuántos huecos quedan en la cola de hoy.
-    const wanted = preview ? QUEUE_SIZE : QUEUE_SIZE - pendientes;
+    // Cuántas caras se le piden a Apollo. NO es el tamaño de la cola, y
+    // confundir las dos cosas mata el diseño entero.
+    //
+    // En la fase anterior sí eran lo mismo: todo lo que Apollo devolvía se
+    // encolaba, así que pedir veinte y encolar veinte era correcto. Ahora, en
+    // medio, hay un vistazo de IA que descarta a la mayoría, y el pozo tiene
+    // que ser MUCHO más grande que la cola para que quede algo que ordenar.
+    // Atado a `QUEUE_SIZE` como estaba, Apollo traía cinco candidatos, se
+    // miraban los cinco igual, y `rankPool` ordenaba una lista que se iba a
+    // recorrer entera: la memoria vectorial no ahorraba un solo céntimo y su
+    // razón de existir —mirar diez de cincuenta en vez de treinta— desaparecía.
+    //
+    // Cincuenta y no ciento veinticinco (el máximo que dan las cinco páginas)
+    // porque cada candidato del pozo cuesta una consulta de vecindad contra la
+    // base, y ciento veinticinco viajes de ida y vuelta se notan en el
+    // presupuesto de tiempo. Con cincuenta la profundidad de orden ya es
+    // holgada frente a los treinta vistazos como mucho que permite el tope.
+    //
+    // Buscar sigue siendo gratis, así que pedir de más no cuesta dinero: solo
+    // páginas de Apollo, que tampoco cuestan créditos.
+    const POOL_SIZE = 50;
+
+    // Tampoco se descuentan los pendientes: los huecos de la cola limitan
+    // cuántos se APRUEBAN, no cuántos se miran. Restarlos aquí encogía el pozo
+    // justo los días en que la cola venía medio llena, que es cuando más falta
+    // hace ordenar bien para encontrar los pocos que faltan.
+    const wanted = POOL_SIZE;
     const startPage = startPageFor(vistosEnCombo);
 
     const primerIntento = await collectFreshCandidates({
@@ -305,12 +336,17 @@ export async function GET(request) {
     const arranque = Date.now();
     const aprobados = [];
     const rechazados = [];
+    // Aprobados que se quedaron sin hueco. No se escriben: vuelven mañana.
+    const sobrantes = [];
+    // Los huecos que quedan HOY, no el tamaño de la cola: si ya había tres
+    // pendientes sin decidir, hoy solo caben dos más.
+    const huecos = Math.max(0, QUEUE_SIZE - pendientes);
     let gastado = 0;
     let miradas = 0;
     let corte = null;
 
     for (let i = 0; i < ordenados.length; i += LOTE_VISTAZOS) {
-      if (aprobados.length >= QUEUE_SIZE) break;
+      if (aprobados.length >= huecos) break;
       if (gastado >= TOPE_GASTO_USD) { corte = "gasto"; break; }
       if (miradas >= TOPE_MIRADAS) { corte = "miradas"; break; }
       if (Date.now() - arranque > TOPE_MS) { corte = "tiempo"; break; }
@@ -345,11 +381,29 @@ export async function GET(request) {
           cost: r.cost,
         };
 
-        if (puerta.ok && aprobados.length < QUEUE_SIZE) {
-          aprobados.push({ candidato, dossier, score: puerta.score });
-        } else {
+        if (!puerta.ok) {
           rechazados.push({ candidato, motivo: puerta.reasonCode, score: puerta.score, dossier });
+          continue;
         }
+
+        if (aprobados.length < huecos) {
+          aprobados.push({ candidato, dossier, score: puerta.score });
+          continue;
+        }
+
+        // Aprobado pero sin hueco: el lote va de cinco en cinco y puede aprobar
+        // más de los que caben. NO se escribe nada.
+        //
+        // Antes caía en la rama de descarte y se grababa con `decision: "no"`:
+        // una empresa que la IA había aprobado, con score alto y dossier
+        // favorable, quedaba marcada como descartada para siempre. Y era
+        // irreversible en la práctica, porque `knownIds` la excluye de las
+        // búsquedas futuras, `deriveRules` la cuenta como "el sector no dio
+        // fruto" y la memoria la aprende como un "no".
+        //
+        // Dejándola sin escribir vuelve a salir mañana. Se paga otro vistazo,
+        // que son cuatro céntimos; perder un buen candidato cuesta mucho más.
+        sobrantes.push(candidato.organization?.name ?? candidato.id);
       }
     }
 
@@ -448,6 +502,10 @@ export async function GET(request) {
       // ordenó, y eso explica por qué hicieron falta más vistazos de la cuenta.
       ordenSinVecindario:
         memoria > 0 && ordenados.every((c) => (c._vecinos?.length ?? 0) === 0),
+      // Aprobados que no cabían en los huecos de hoy. No se escriben, así que
+      // vuelven mañana; se listan aquí porque un número alto significa que la
+      // cola se está quedando corta para lo que el pozo da de sí.
+      sobrantes,
       message:
         `${encolados} en la cola tras ${miradas} vistazos (${gastadoUSD} $), ` +
         `${descartadosEscritos} descartados` +
