@@ -20,6 +20,29 @@ describe("recortar", () => {
     expect(r.endsWith("palabra")).toBe(true);
   });
 
+  it("reconoce un punto seguido de salto de línea, no solo de espacio", () => {
+    // El modelo formatea en párrafos de vez en cuando, y buscar ". " con
+    // espacio literal dejaba invisible ese cierre.
+    const conSalto = "Frase una.\n" + "x".repeat(LIMITE_CARACTERES) + " final";
+    expect(recortar(conSalto)).toBe("Frase una.");
+  });
+
+  it("no pierde una frase que acaba justo en el límite", () => {
+    // El punto en el último carácter que cabe: antes se perdía porque el
+    // espacio que lo seguía quedaba fuera del corte, y se tiraba contenido que
+    // sí cabía entero.
+    const relleno = "a".repeat(LIMITE_CARACTERES - 1);
+    const texto = relleno + ". Y esta frase ya no cabe.";
+    const r = recortar(texto);
+    expect(r).toBe(relleno + ".");
+    expect(r.length).toBe(LIMITE_CARACTERES);
+  });
+
+  it("reconoce interrogación y exclamación como cierre de frase", () => {
+    const largo = "¿Hablamos un rato? " + "x".repeat(LIMITE_CARACTERES);
+    expect(recortar(largo)).toBe("¿Hablamos un rato?");
+  });
+
   it("aguanta vacío y nulo", () => {
     expect(recortar("")).toBe("");
     expect(recortar(null)).toBe("");

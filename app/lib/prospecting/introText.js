@@ -20,15 +20,24 @@ export function recortar(texto) {
   if (limpio.length <= LIMITE_CARACTERES) return limpio;
 
   // Primero por frase completa.
-  const hastaLimite = limpio.slice(0, LIMITE_CARACTERES);
-  const ultimoPunto = Math.max(
-    hastaLimite.lastIndexOf(". "),
-    hastaLimite.lastIndexOf("? "),
-    hastaLimite.lastIndexOf("! "),
-  );
-  if (ultimoPunto > 0) return hastaLimite.slice(0, ultimoPunto + 1).trim();
+  //
+  // Se busca el cierre con una expresión y no con `lastIndexOf(". ")`, que era
+  // la primera versión y tenía dos agujeros: un punto seguido de salto de línea
+  // no coincidía (el modelo formatea en párrafos a veces), y un punto que
+  // cayera en el carácter 300 justo se perdía porque el espacio que lo seguía
+  // quedaba fuera del corte, tirando contenido que sí cabía entero.
+  //
+  // `(?=\s|$)` acepta espacio, salto de línea o fin de cadena como separador, y
+  // se mira un carácter más allá del límite para poder ver ese separador.
+  const conMargen = limpio.slice(0, LIMITE_CARACTERES + 1);
+  const cierres = [...conMargen.matchAll(/[.?!](?=\s|$)/g)]
+    .map((m) => m.index)
+    .filter((i) => i < LIMITE_CARACTERES);
+  const ultimoPunto = cierres.length ? cierres[cierres.length - 1] : -1;
+  if (ultimoPunto > 0) return limpio.slice(0, ultimoPunto + 1).trim();
 
   // Si ni la primera frase cabe, por palabra.
+  const hastaLimite = limpio.slice(0, LIMITE_CARACTERES);
   const ultimoEspacio = hastaLimite.lastIndexOf(" ");
   return (ultimoEspacio > 0 ? hastaLimite.slice(0, ultimoEspacio) : hastaLimite).trim();
 }
