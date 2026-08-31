@@ -58,14 +58,14 @@ describe("collectFreshCandidates", () => {
       page += 1;
       return {
         people: Array.from({ length: 25 }, (_, i) =>
-          persona(i < 20 ? `conocido-${page}-${i}` : `nuevo-${page}-${i}`),
+          persona(i < 23 ? `conocido-${page}-${i}` : `nuevo-${page}-${i}`),
         ),
         totalEntries: 500,
       };
     });
     const knownIds = new Set();
     for (let p = 1; p <= 10; p++) {
-      for (let i = 0; i < 20; i++) knownIds.add(`conocido-${p}-${i}`);
+      for (let i = 0; i < 23; i++) knownIds.add(`conocido-${p}-${i}`);
     }
 
     const r = await collectFreshCandidates({
@@ -76,11 +76,11 @@ describe("collectFreshCandidates", () => {
       knownIds,
     });
 
-    // El mock está construido para dar exactamente 5 caras nuevas por página
-    // (20 conocidas + 5 nuevas de 25), y wanted es QUEUE_SIZE (20): hacen
-    // falta 4 páginas para reunir 20 = 4 × 5.
-    expect(search).toHaveBeenCalledTimes(4);
-    expect(r.candidates).toHaveLength(20);
+    // El mock está construido para dar exactamente 2 caras nuevas por página
+    // (23 conocidas + 2 nuevas de 25), y wanted es QUEUE_SIZE (5): hacen
+    // falta 3 páginas para reunir 5 (2 + 2 + 1).
+    expect(search).toHaveBeenCalledTimes(3);
+    expect(r.candidates).toHaveLength(5);
   });
 
   it("se rinde al llegar al tope de páginas y lo dice", async () => {

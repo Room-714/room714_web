@@ -1,9 +1,12 @@
 import { filterCandidates, normalizeCompany } from "./candidateFilter";
 
-// Cuántas fichas se le ponen delante cada mañana. Veinte y no cuatro o cinco
-// porque buscar es gratis: el cuello de botella es el presupuesto de créditos,
-// que se gasta al decir que sí, no al mirar.
-export const QUEUE_SIZE = 20;
+// Cuántas fichas se le ponen delante cada mañana.
+//
+// Eran veinte cuando la ficha no costaba nada: buscar en Apollo es gratis y el
+// cuello de botella era el presupuesto de créditos. Ahora cada ficha lleva un
+// análisis de IA detrás y se revisa con criterio, así que el cuello de botella
+// pasa a ser el tiempo de quien decide. Cinco es lo que se puede mirar bien.
+export const QUEUE_SIZE = 5;
 
 // Cuántas páginas recorrer en una ejecución buscando caras nuevas. Con 25 por
 // página son hasta 125 personas revisadas, y buscar no cuesta créditos.

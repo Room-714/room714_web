@@ -71,16 +71,19 @@ export const BUYER_PROFILE = {
 // Lo primero que se va a querer cambiar. Apollo acepta país, región o ciudad.
 export const APOLLO_PERSON_LOCATIONS = ["Spain"];
 
-// "Mediana empresa" según la definición europea: 50 a 250 empleados. Por debajo
-// no hay presupuesto; por encima suele haber equipo propio.
+// El tramo de plantilla que se corresponde con facturar 50-100 M€ en España.
+// Antes eran 51-100 y 101-250, la definición europea de mediana empresa; con el
+// criterio nuevo de facturación esos tramos apuntan demasiado bajo, porque
+// 50-100 M€ rara vez caben en menos de cien empleados.
 //
-// Va partido en dos tramos, y no como un rango único, por una razón que no es
-// obvia: la búsqueda de Apollo NO devuelve la plantilla de la empresa (solo una
-// bandera de si la tiene), así que la única forma de saber en qué tramo cae un
-// candidato es haberlo preguntado. Sin esta partición, el motivo de descarte
-// "el tamaño no encaja" no tendría a qué apuntar y la regla derivada que quita
-// un tramo de la consulta no podría existir.
-export const APOLLO_EMPLOYEE_RANGES = ["51,100", "101,250"];
+// Consecuencia asumida del cambio: las reglas aprendidas sobre "51,100" dejan de
+// aplicar. No se borra nada — deriveRules cuenta decisiones, y las de un tramo
+// que ya no se busca simplemente no afectan a ninguna consulta.
+//
+// Sigue partido en dos tramos por la misma razón que antes: la búsqueda de
+// Apollo NO devuelve la plantilla, así que la única forma de saber en qué tramo
+// cae un candidato es haberlo preguntado.
+export const APOLLO_EMPLOYEE_RANGES = ["101,250", "251,500"];
 
 // Valores del enum de Apollo: owner, founder, c_suite, partner, vp, head,
 // director, manager, senior, entry, intern.
@@ -206,16 +209,69 @@ export function searchCombos(profile = BUYER_PROFILE) {
   );
 }
 
-// Qué combinación toca hoy. El ciclo es FIJO, y eso es deliberado: garantiza que
-// todas las combinaciones se sigan muestreando. Ponderarlo por tasa de acierto
-// sería un trinquete — una combinación con una mala racha temprana dejaría de
-// salir y no podría demostrar nunca que era buena. La tasa se calcula y se
-// enseña en el panel de aprendizaje, para que la decisión de estrechar el perfil
-// la tome una persona.
-export function comboForDay(profile = BUYER_PROFILE, dayIndex) {
+// Cada cuántas ejecuciones tiene que salir OBLIGATORIAMENTE una combinación,
+// tenga la tasa de acierto que tenga.
+//
+// Este número es lo único que separa una rotación ponderada de un trinquete. Sin
+// él, una combinación con mala racha temprana deja de salir, y al no salir no
+// puede generar decisiones nuevas, y sin decisiones nuevas su tasa no cambia
+// jamás: queda condenada por tres semanas malas.
+//
+// Con 14 combinaciones y una al día, la rotación fija anterior muestreaba cada
+// una cada 14 ejecuciones. 20 es por tanto una relajación deliberada: da margen
+// a la ponderación sin dejar que nada desaparezca más de un mes natural. Es el
+// parámetro a revisar con datos a los tres meses.
+export const SUELO_EJECUCIONES = 20;
+
+// Qué combinación toca hoy.
+//
+// `historial` trae, por combinación, cuántas ejecuciones han pasado desde la
+// última vez que salió y su recuento de aciertos. **Sin historial, esto se
+// comporta exactamente como la rotación fija de antes**, que es lo que garantiza
+// que el cambio no altere el comportamiento del primer día.
+export function comboForDay(profile = BUYER_PROFILE, dayIndex, { historial = [] } = {}) {
   const combos = searchCombos(profile);
   if (!combos.length || !Number.isFinite(dayIndex)) return combos[0] ?? null;
-  return combos[((dayIndex % combos.length) + combos.length) % combos.length];
+
+  const porClave = new Map(historial.map((h) => [`${h.sector}|${h.size}`, h]));
+  const datos = (c) => porClave.get(`${c.sector}|${c.size}`);
+
+  // 1 · El suelo manda sobre todo lo demás. Si varias lo han superado, sale la
+  // que lleve más tiempo sin aparecer.
+  const vencidas = combos
+    .filter((c) => (datos(c)?.ejecucionesDesde ?? Infinity) >= SUELO_EJECUCIONES)
+    .sort(
+      (a, b) =>
+        (datos(b)?.ejecucionesDesde ?? Infinity) - (datos(a)?.ejecucionesDesde ?? Infinity),
+    );
+  if (vencidas.length) return vencidas[0];
+
+  // 2 · Sin historial en absoluto, rotación fija: el comportamiento anterior.
+  if (historial.length === 0) {
+    return combos[((dayIndex % combos.length) + combos.length) % combos.length];
+  }
+
+  // 3 · Ponderado por tasa suavizada (Laplace: +1 acierto, +2 total). Sin
+  // suavizar, una combinación con un solo acierto de un intento (1/1)
+  // adelantaría a una con cuarenta de cincuenta, que es de la que más sabemos.
+  //
+  // La elección es DETERMINISTA a partir de `dayIndex`, no aleatoria: el mismo
+  // día con los mismos datos da la misma combinación, y eso es lo que permite
+  // que el modo `?preview=1` del cron enseñe de verdad lo que va a hacer.
+  const pesos = combos.map((c) => {
+    const h = datos(c);
+    return ((h?.hits ?? 0) + 1) / ((h?.total ?? 0) + 2);
+  });
+
+  const suma = pesos.reduce((a, b) => a + b, 0);
+  // Rueda de ruleta recorrida con una posición derivada del día.
+  const posicion = ((dayIndex % 1000) / 1000) * suma;
+  let acumulado = 0;
+  for (let i = 0; i < combos.length; i++) {
+    acumulado += pesos[i];
+    if (posicion < acumulado) return combos[i];
+  }
+  return combos[combos.length - 1];
 }
 
 // Pura: mismo perfil, misma combinación y mismas reglas, misma consulta. Es la

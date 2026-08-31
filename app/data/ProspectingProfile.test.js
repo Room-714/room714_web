@@ -10,6 +10,7 @@ import {
   effectiveSizes,
   emptiedDimensions,
   searchCombos,
+  SUELO_EJECUCIONES,
 } from "./ProspectingProfile";
 
 describe("buildApolloQuery", () => {
@@ -121,9 +122,9 @@ describe("buildApolloQuery", () => {
 
   it("pide un solo sector y un solo tramo cuando se le da una combinación", () => {
     const q = buildApolloQuery(BUYER_PROFILE, {
-      combo: { sector: "Industria y fabricación", size: "51,100" },
+      combo: { sector: "Industria y fabricación", size: "101,250" },
     });
-    expect(q.organization_num_employees_ranges).toEqual(["51,100"]);
+    expect(q.organization_num_employees_ranges).toEqual(["101,250"]);
     expect(q.q_organization_keyword_tags).toEqual([
       "manufacturing",
       "industrial automation",
@@ -132,7 +133,7 @@ describe("buildApolloQuery", () => {
 
   it("quita de la consulta los cargos excluidos por las reglas", () => {
     const q = buildApolloQuery(BUYER_PROFILE, {
-      combo: { sector: "Educación", size: "51,100" },
+      combo: { sector: "Educación", size: "101,250" },
       rules: { excludedTitles: ["CEO"], excludedSizes: [] },
     });
     expect(q.person_titles).not.toContain("CEO");
@@ -148,7 +149,7 @@ describe("buildApolloQuery", () => {
   // "CEO" en el perfil coinciden letra por letra. Este no.
   it("quita el cargo aunque Apollo lo escriba de otra forma", () => {
     const q = buildApolloQuery(BUYER_PROFILE, {
-      combo: { sector: "Educación", size: "51,100" },
+      combo: { sector: "Educación", size: "101,250" },
       rules: { excludedTitles: ["  chief executive officer ", "CEO"] },
     });
     expect(q.person_titles).not.toContain("CEO");
@@ -170,7 +171,7 @@ describe("buildApolloQuery", () => {
   it("no revienta sin reglas ni combinación", () => {
     const q = buildApolloQuery();
     expect(q.person_titles.length).toBeGreaterThan(0);
-    expect(q.organization_num_employees_ranges).toEqual(["51,100", "101,250"]);
+    expect(q.organization_num_employees_ranges).toEqual(["101,250", "251,500"]);
   });
 
   // ─── La incoherencia del Paso 4, resuelta ─────────────────────────────────
@@ -184,10 +185,10 @@ describe("buildApolloQuery", () => {
   // desaconsejado.
   it("si el tramo de la combinación del día está excluido, cae a los tramos no excluidos sin dejar de buscar", () => {
     const q = buildApolloQuery(BUYER_PROFILE, {
-      combo: { sector: "Educación", size: "51,100" },
-      rules: { excludedSizes: ["51,100"] },
+      combo: { sector: "Educación", size: "101,250" },
+      rules: { excludedSizes: ["101,250"] },
     });
-    expect(q.organization_num_employees_ranges).toEqual(["101,250"]);
+    expect(q.organization_num_employees_ranges).toEqual(["251,500"]);
     // El sector de la combinación se mantiene: solo el tramo se ensancha.
     expect(q.q_organization_keyword_tags).toEqual([
       "education management",
@@ -197,7 +198,7 @@ describe("buildApolloQuery", () => {
 
   it("no filtra `combo` ni `rules` a la consulta final", () => {
     const q = buildApolloQuery(BUYER_PROFILE, {
-      combo: { sector: "Educación", size: "51,100" },
+      combo: { sector: "Educación", size: "101,250" },
       rules: { excludedTitles: ["CEO"] },
       page: 3,
     });
@@ -216,25 +217,25 @@ describe("buildApolloQuery", () => {
 // reglas).
 describe("effectiveSizes", () => {
   it("caso normal: el tramo de la combinación no está excluido", () => {
-    expect(effectiveSizes({ sector: "Educación", size: "51,100" }, {})).toEqual([
-      "51,100",
+    expect(effectiveSizes({ sector: "Educación", size: "101,250" }, {})).toEqual([
+      "101,250",
     ]);
   });
 
   it("el tramo del día está excluido: ensancha a los tramos no excluidos", () => {
     expect(
       effectiveSizes(
-        { sector: "Educación", size: "51,100" },
-        { excludedSizes: ["51,100"] },
+        { sector: "Educación", size: "101,250" },
+        { excludedSizes: ["101,250"] },
       ),
-    ).toEqual(["101,250"]);
+    ).toEqual(["251,500"]);
   });
 
   it("los dos tramos están excluidos: ignora la exclusión y busca en todos (una lista vacía sería «cualquier tamaño» para Apollo, no «ninguno»)", () => {
     expect(
       effectiveSizes(
-        { sector: "Educación", size: "51,100" },
-        { excludedSizes: ["51,100", "101,250"] },
+        { sector: "Educación", size: "101,250" },
+        { excludedSizes: ["101,250", "251,500"] },
       ),
     ).toEqual(APOLLO_EMPLOYEE_RANGES);
   });
@@ -246,12 +247,12 @@ describe("emptiedDimensions", () => {
   });
 
   it("con un solo tramo excluido, no se ha vaciado nada: todavía queda el otro", () => {
-    expect(emptiedDimensions(BUYER_PROFILE, { excludedSizes: ["51,100"] })).toEqual([]);
+    expect(emptiedDimensions(BUYER_PROFILE, { excludedSizes: ["101,250"] })).toEqual([]);
   });
 
   it("con los dos tramos excluidos, marca «tramos» como vaciada", () => {
     expect(
-      emptiedDimensions(BUYER_PROFILE, { excludedSizes: ["51,100", "101,250"] }),
+      emptiedDimensions(BUYER_PROFILE, { excludedSizes: ["101,250", "251,500"] }),
     ).toEqual(["tramos"]);
   });
 
@@ -266,7 +267,7 @@ describe("emptiedDimensions", () => {
     const todosLosCargos = buildApolloQuery(BUYER_PROFILE).person_titles;
     const vaciadas = emptiedDimensions(BUYER_PROFILE, {
       excludedTitles: todosLosCargos,
-      excludedSizes: ["51,100", "101,250"],
+      excludedSizes: ["101,250", "251,500"],
     });
     expect(vaciadas).toEqual(["cargos", "tramos"]);
   });
@@ -303,6 +304,77 @@ describe("comboForDay", () => {
   it("aguanta índices negativos", () => {
     const combos = searchCombos(BUYER_PROFILE);
     expect(comboForDay(BUYER_PROFILE, -1)).toEqual(combos[combos.length - 1]);
+  });
+});
+
+describe("comboForDay con ponderación", () => {
+  const combos = searchCombos(BUYER_PROFILE);
+
+  it("respeta el suelo: una combinación sin muestrear vuelve a salir aunque su tasa sea cero", () => {
+    const olvidada = combos[7];
+    const historial = combos.map((c) => ({
+      sector: c.sector,
+      size: c.size,
+      ejecucionesDesde: c === olvidada ? SUELO_EJECUCIONES + 1 : 1,
+      hits: c === olvidada ? 0 : 10,
+      total: c === olvidada ? 20 : 10,
+    }));
+    expect(comboForDay(BUYER_PROFILE, 0, { historial })).toEqual(olvidada);
+  });
+
+  it("entre varias vencidas, sale la que lleva más tiempo sin aparecer", () => {
+    const historial = combos.map((c, i) => ({
+      sector: c.sector,
+      size: c.size,
+      ejecucionesDesde: i === 3 ? 99 : i === 5 ? 30 : 1,
+      hits: 5,
+      total: 10,
+    }));
+    expect(comboForDay(BUYER_PROFILE, 0, { historial })).toEqual(combos[3]);
+  });
+
+  it("una combinación con tasa cero sigue saliendo alguna vez: no hay trinquete", () => {
+    // Es la propiedad que hace sostenible la ponderación. Si este test cae,
+    // se ha reintroducido el trinquete que el proyecto ya rechazó una vez.
+    const mala = combos[3];
+    const salidas = [];
+    for (let dia = 0; dia < SUELO_EJECUCIONES; dia++) {
+      const historial = combos.map((c) => ({
+        sector: c.sector,
+        size: c.size,
+        ejecucionesDesde: c === mala ? dia : 0,
+        hits: c === mala ? 0 : 5,
+        total: c === mala ? 20 : 10,
+      }));
+      salidas.push(comboForDay(BUYER_PROFILE, dia, { historial }));
+    }
+    expect(salidas).toContainEqual(mala);
+  });
+
+  it("prefiere las combinaciones que aciertan más, en igualdad de recencia", () => {
+    const buena = combos[2];
+    const historial = combos.map((c) => ({
+      sector: c.sector,
+      size: c.size,
+      ejecucionesDesde: 1,
+      hits: c === buena ? 15 : 0,
+      total: 20,
+    }));
+    const salidas = Array.from({ length: 20 }, (_, i) =>
+      comboForDay(BUYER_PROFILE, i, { historial }),
+    );
+    const veces = salidas.filter(
+      (c) => c.sector === buena.sector && c.size === buena.size,
+    ).length;
+    expect(veces).toBeGreaterThan(1);
+  });
+
+  it("sin historial se comporta igual que la rotación fija de siempre", () => {
+    for (let d = 0; d < 14; d++) {
+      expect(comboForDay(BUYER_PROFILE, d, { historial: [] })).toEqual(
+        comboForDay(BUYER_PROFILE, d),
+      );
+    }
   });
 });
 
