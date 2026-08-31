@@ -491,6 +491,18 @@ export const PRECIO_BUSQUEDA_WEB = 10 / 1000;
 // La lectura de caché cuesta una décima parte del precio de entrada.
 const FACTOR_CACHE = 0.1;
 
+// Escribir en caché tiene RECARGO, al contrario que leer: 1,25× el precio de
+// entrada con TTL de 5 minutos y 2× con TTL de 1 hora. Y no es un caso raro: la
+// búsqueda web inserta una escritura de caché de 5 minutos por su cuenta cuando
+// la petición ya usa `cache_control`, que es exactamente lo que hace el
+// cualificador. Sin esto se subestimaba el gasto en cada llamada.
+//
+// `usage.cache_creation` desglosa por TTL (`ephemeral_5m_input_tokens` /
+// `ephemeral_1h_input_tokens`). Cuando solo llega el agregado sin desglose se
+// cobra al 2×, el peor caso: mismo principio de fallar en cerrado que MAS_CARO.
+const FACTOR_ESCRITURA_5M = 1.25;
+const FACTOR_ESCRITURA_1H = 2;
+
 // Fallar en CERRADO ante un modelo desconocido. Creerse más barato de lo que
 // uno es lleva a pasarse del tope diario sin que nada avise; creerse más caro
 // solo hace que el cron pare antes, que es el lado seguro.
