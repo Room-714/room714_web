@@ -347,7 +347,7 @@ export async function GET(request) {
 
     for (let i = 0; i < ordenados.length; i += LOTE_VISTAZOS) {
       if (aprobados.length >= huecos) break;
-      if (gastado >= TOPE_GASTO_USD) { corte = "gasto"; break; }
+      if (corte === "gasto" || gastado >= TOPE_GASTO_USD) { corte = "gasto"; break; }
       if (miradas >= TOPE_MIRADAS) { corte = "miradas"; break; }
       if (Date.now() - arranque > TOPE_MS) { corte = "tiempo"; break; }
 
@@ -364,6 +364,17 @@ export async function GET(request) {
       for (const { candidato, resultado: r } of vistos) {
         miradas += 1;
         gastado += r.cost ?? 0;
+        // El tope se comprueba también AQUÍ, no solo entre lotes. Los cinco
+        // vistazos de un lote salen en paralelo, así que sus cinco costes
+        // aterrizan de golpe: comprobando solo antes del lote, el gasto podía
+        // pasarse de la raya por un lote entero. Medido en la primera ejecución
+        // real: 1,42 $ con el tope en 1,20 $, un 18 % de más.
+        //
+        // Marcar el corte aquí no evita el gasto de este lote —ya está hecho—
+        // pero sí que se lance el siguiente, y sobre todo hace que `corte`
+        // diga la verdad: antes salía "gasto" solo cuando el bucle ya había
+        // terminado por otra razón.
+        if (gastado >= TOPE_GASTO_USD) corte = "gasto";
 
         if (!r.ok) {
           // Un fallo de la IA no es un descarte: no sabemos nada de esa
