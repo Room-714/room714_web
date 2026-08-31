@@ -64,7 +64,7 @@ distintas y se atacan con herramientas distintas.
 | Capa | Qué resuelve | Cuándo actúa | Coste |
 |---|---|---|---|
 | **Memoria vectorial** | a quién mirar primero, y con qué ejemplos juzgarlo | antes de gastar nada | ~0 (tramo gratuito) |
-| **Vistazo (Haiku)** | una primera lectura de los 4 criterios | automático, en el cron | ~0,03 $/empresa |
+| **Vistazo (Haiku)** | una primera lectura de los 4 criterios | automático, en el cron | ~0,04 $/empresa medido |
 | **Análisis a fondo y chat (Opus 5)** | resolver las dudas de una ficha concreta | cuando tú lo pides | ~0,33 $ / 0,05-0,15 $ |
 
 La memoria va **delante** de todo lo que cuesta dinero. Ese es su trabajo
@@ -108,7 +108,7 @@ lo que hace que cada día haga falta gastar menos para llenar la cola.
             ├─► EMBEBE los ~125 candidatos y los ORDENA            [~0 $]
             │   por parecido con lo que aceptaste y lo que descartaste
             │
-            ├─► VISTAZO, empezando por los mejores                 [~0,03 $/empresa]
+            ├─► VISTAZO, empezando por los mejores                 [~0,04 $/empresa]
             │   Haiku 4.5 · ≤2 búsquedas web · ejemplos = vecinos de la memoria
             │   los cuatro criterios, con lo que se ve en una pasada corta
             │
@@ -371,7 +371,7 @@ vea de un golpe cuál merece los 0,35 $ del análisis a fondo.
 
 | Tope | Valor por defecto | Qué pasa al alcanzarlo |
 |---|---|---|
-| Gasto en IA del día | `PROSPECT_QUALIFY_DAILY_BUDGET_USD = 0.75` | se para y se escribe lo que haya |
+| Gasto en IA del día | `PROSPECT_QUALIFY_DAILY_BUDGET_USD = 1.20` | se para y se escribe lo que haya |
 | Empresas miradas | 30 | ídem |
 | Tiempo de ejecución | 240 s (con `maxDuration = 300`) | ídem, antes de que Vercel corte |
 
@@ -514,8 +514,8 @@ Precios verificados el 2026-08-31: Opus 5 a 5 $ / 25 $ por millón de tokens, Ha
 | Concepto | Al día | Al mes (21 laborables) |
 |---|---|---|
 | Embeddings (~125 candidatos) | ~0,00 $ | **0 $** (tramo gratuito) |
-| Vistazo, arranque en frío (~20 empresas) | ~0,60 $ | ~13 $ |
-| Vistazo, con la memoria funcionando (~8-10) | ~0,27 $ | **~6 $** |
+| Vistazo, arranque en frío (~20 empresas) | ~0,82 $ | ~17 $ |
+| Vistazo, con la memoria funcionando (~8-10) | ~0,37 $ | **~8 $** |
 
 **A demanda (lo disparas tú):**
 

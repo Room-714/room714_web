@@ -2457,7 +2457,11 @@ export const maxDuration = 300;
 // Los tres topes que pueden cortar la mañana. Los tres escriben lo que haya
 // conseguido hasta ese momento, y el resumen dice cuál cortó: una cola corta
 // tiene que ser legible, no un misterio.
-const TOPE_GASTO_USD = Number(process.env.PROSPECT_QUALIFY_DAILY_BUDGET_USD) || 0.75;
+// 1,20 $ da para los 30 vistazos que permite TOPE_MIRADAS, asi que el limite
+// real del dia pasa a ser el numero de empresas y no el dinero, y este tope
+// queda como freno de emergencia. Basado en 0,041 $ por vistazo, medido sobre
+// 9 llamadas reales. Un dia normal se gastan 0,40-0,60 $.
+const TOPE_GASTO_USD = Number(process.env.PROSPECT_QUALIFY_DAILY_BUDGET_USD) || 1.2;
 const TOPE_MIRADAS = 30;
 const TOPE_MS = 240_000;
 const LOTE_VISTAZOS = 5;
