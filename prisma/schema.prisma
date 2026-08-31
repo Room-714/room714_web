@@ -142,7 +142,7 @@ model ProspectDiscovery {
   shownOn    DateTime? // día en que entró en la cola
   decision   String    @default("pending") // pending | yes | no
   decidedAt  DateTime?
-  reasonCode String? // role | sector | size | in_house_team | other | legacy
+  reasonCode String? // role | sector | size | in_house_team | revenue | no_digital_need | other | legacy
   note       String?   @db.Text
   enrichedAt DateTime? // null = nunca gastó crédito
   imported   Boolean   @default(false)
