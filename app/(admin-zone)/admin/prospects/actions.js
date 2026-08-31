@@ -13,7 +13,6 @@ import {
   cycleStartFor,
 } from "@/app/lib/prospecting/creditCycle";
 import { ruleStats } from "@/app/lib/prospecting/rules";
-import { QUEUE_SIZE } from "@/app/lib/prospecting/buildQueue";
 import { deepDive } from "@/app/lib/prospecting/qualify";
 import { passesGate } from "@/app/lib/prospecting/score";
 import { generateIntro, recortar } from "@/app/lib/prospecting/introText";
@@ -180,7 +179,22 @@ export async function loadQueue() {
         // justo lo que el esquema advierte que no puede pasar, y el botón de
         // profundizar gastaría 0,35 $ sobre filas sin análisis previo.
         orderBy: [{ score: { sort: "desc", nulls: "last" } }, { id: "asc" }],
-        take: QUEUE_SIZE,
+        // SIN `take`. La cola ES el conjunto de pendientes, y quien limita su
+        // tamaño es el cron, que no rellena mientras haya QUEUE_SIZE sin
+        // decidir. Recortar aquí a los cinco mejores por puntuación creaba dos
+        // problemas:
+        //
+        //   - El análisis a fondo puede BAJAR el score (es uno de sus
+        //     desenlaces). Si bajaba lo bastante, la ficha se caía del top y
+        //     desaparecía de la pantalla: seguía pendiente, con 0,35 $ ya
+        //     gastados, y sin forma de decidirla.
+        //   - Y escondía el atasco en vez de enseñarlo. Si algún día hay más
+        //     pendientes de la cuenta —hoy los hay: quedan filas anteriores a
+        //     esta fase— el cron se salta la mañana entera por «cola llena»
+        //     mientras la pantalla enseña cinco y aparenta normalidad.
+        //
+        // El orden por puntuación se queda: sirve para decidir por dónde
+        // empezar, no para esconder nada.
       }),
       prisma.prospectDiscovery.findMany({
         where: { decision: { in: ["yes", "no"] } },
