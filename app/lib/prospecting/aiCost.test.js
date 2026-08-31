@@ -44,6 +44,33 @@ describe("costOf", () => {
     expect(costOf("claude-opus-5", undefined)).toBe(0);
     expect(costOf("claude-opus-5", { input_tokens: null })).toBe(0);
   });
+
+  it("cobra la escritura de caché de 5 minutos a 1,25x la entrada", () => {
+    const c = costOf("claude-opus-5", {
+      input_tokens: 0,
+      output_tokens: 0,
+      cache_creation: { ephemeral_5m_input_tokens: 1_000_000, ephemeral_1h_input_tokens: 0 },
+    });
+    expect(c).toBeCloseTo(6.25, 6);
+  });
+
+  it("cobra la escritura de caché de 1 hora a 2x la entrada", () => {
+    const c = costOf("claude-opus-5", {
+      input_tokens: 0,
+      output_tokens: 0,
+      cache_creation: { ephemeral_5m_input_tokens: 0, ephemeral_1h_input_tokens: 1_000_000 },
+    });
+    expect(c).toBeCloseTo(10, 6);
+  });
+
+  it("sin desglose de TTL, la escritura de caché se cobra al 2x a propósito: es el peor caso, no una media", () => {
+    const c = costOf("claude-opus-5", {
+      input_tokens: 0,
+      output_tokens: 0,
+      cache_creation_input_tokens: 1_000_000,
+    });
+    expect(c).toBeCloseTo(10, 6);
+  });
 });
 
 describe("sumCosts", () => {
