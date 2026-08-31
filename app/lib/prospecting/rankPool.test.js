@@ -35,6 +35,15 @@ describe("afinidad", () => {
     ]);
     expect(a).toBeCloseTo(soloDecision, 10);
   });
+
+  it("un vecino sin decisión explícita no resta: es ausencia de señal", () => {
+    // El sesgo tiene que ir hacia neutro, no hacia "no". Restar por un
+    // documento que nadie decidió sería inventarse un descarte.
+    expect(afinidad([{ distance: 0.05, kind: "decision", metadata: {} }])).toBe(0);
+    expect(
+      afinidad([{ distance: 0.05, kind: "decision", metadata: { decision: "quizá" } }]),
+    ).toBe(0);
+  });
 });
 
 describe("rankPool", () => {
@@ -84,6 +93,23 @@ describe("rankPool", () => {
       buscarVecinos: async () => [],
     });
     expect(ordenados.map((c) => c.id)).toEqual(["a", "b", "c"]);
+  });
+
+  it("la ruta degradada devuelve la misma forma que la normal", async () => {
+    // Si Voyage se cae, el consumidor no debe notarlo en la forma del objeto:
+    // reventar al leer `_vecinos.length` sería fallar justo en el momento que
+    // esta degradación existe para sobrevivir.
+    const ordenados = await rankPool(candidatos, {
+      embed: async () => {
+        throw new Error("Voyage caído");
+      },
+      buscarVecinos: async () => [],
+    });
+    for (const c of ordenados) {
+      expect(c._vecinos).toEqual([]);
+      expect(c._afinidad).toBe(0);
+      expect(typeof c._orden).toBe("number");
+    }
   });
 
   it("si la consulta de vecinos falla, sigue devolviendo a todos", async () => {

@@ -36,8 +36,13 @@ export function afinidad(vecinos) {
     // modelo, no para ordenar.
     .filter((v) => (v.kind ?? "decision") === "decision")
     .reduce((suma, v) => {
-      const signo = v.metadata?.decision === "yes" ? 1 : -1;
-      return suma + signo * peso(v.distance);
+      const decision = v.metadata?.decision;
+      // Solo cuentan los veredictos EXPLÍCITOS, igual que hace `esMemorizabe`
+      // en memory.js. Un documento sin decisión —o con `kind` mal puesto por un
+      // error de escritura en otro punto— no es un descarte: es ausencia de
+      // señal, y restar por ausencia de señal es inventarse información.
+      if (decision !== "yes" && decision !== "no") return suma;
+      return suma + (decision === "yes" ? 1 : -1) * peso(v.distance);
     }, 0);
 }
 
@@ -59,7 +64,11 @@ export async function rankPool(candidatos = [], { embed, buscarVecinos } = {}) {
     );
   } catch (err) {
     console.error("[prospeccion] no se pudieron embeber los candidatos:", err.message);
-    return [...candidatos];
+    // Se devuelven con la MISMA forma que el camino normal, no los candidatos
+    // en crudo. Un consumidor que lea `_vecinos.length` reventaría justo
+    // cuando Voyage está caído, que es exactamente el momento que esta
+    // degradación existe para sobrevivir.
+    return candidatos.map((c, i) => ({ ...c, _vecinos: [], _afinidad: 0, _orden: i }));
   }
 
   const conAfinidad = [];
