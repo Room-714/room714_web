@@ -13,9 +13,23 @@ const DIA_MS = 24 * 60 * 60 * 1000;
 
 function dentroDeVentana(fecha, ahora) {
   if (!fecha) return false;
-  return ahora.getTime() - new Date(fecha).getTime() <= VENTANA_DIAS * DIA_MS;
+  const diferencia = ahora.getTime() - new Date(fecha).getTime();
+  if (!Number.isFinite(diferencia)) return false;
+  // La guarda de `>= 0` no sobra: sin ella una fecha del FUTURO da diferencia
+  // negativa, que también es "menor que siete días", y la fila entra. Pasa con
+  // un reloj de servidor adelantado o con datos de prueba mal fechados, y el
+  // efecto es que una fila corrupta contamina las tres métricas sin dejar
+  // ningún rastro — justo lo contrario de un módulo cuyo propósito es que se
+  // pueda desconfiar del número mirando la muestra.
+  return diferencia >= 0 && diferencia <= VENTANA_DIAS * DIA_MS;
 }
 
+// CONTRATO CON QUIEN LLAMA: `costeTotal` tiene que venir ya acotado a la misma
+// ventana de siete días que las ejecuciones y las decisiones. Este módulo no
+// puede filtrarlo —le llega un número, no filas fechadas— así que es lo único
+// aquí que se confía en vez de comprobarse. Si alguien le pasa el gasto de todo
+// el histórico, `costePorValidado` sube sola con el tiempo y no hay ningún
+// síntoma: ni NaN, ni null, ni nada en `muestra` que lo delate.
 export function efficiencyMetrics({
   ejecuciones = [],
   decisiones = [],

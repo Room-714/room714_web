@@ -79,6 +79,35 @@ describe("efficiencyMetrics", () => {
     expect(m.vistazosPorFicha).toBeCloseTo(2, 5);
   });
 
+  it("una fecha del futuro NO entra en la ventana", () => {
+    // Sin la guarda de diferencia >= 0, una fila de mañana da diferencia
+    // negativa, que también es "menor que siete días", y contamina las tres
+    // métricas sin dejar rastro. Pasa con un reloj adelantado o con datos de
+    // prueba mal fechados.
+    const m = efficiencyMetrics({
+      ejecuciones: [
+        { shownOn: dia(22), miradas: 1000, encoladas: 1 },
+        { shownOn: dia(21), miradas: 10, encoladas: 5 },
+      ],
+      decisiones: [{ decision: "yes", decidedAt: dia(25) }],
+      costeTotal: 0,
+      ahora: dia(21),
+    });
+    expect(m.vistazosPorFicha).toBeCloseTo(2, 5);
+    expect(m.muestra.miradas).toBe(10);
+    expect(m.tasaAceptacion).toBeNull();
+  });
+
+  it("una fecha ilegible no entra ni revienta", () => {
+    const m = efficiencyMetrics({
+      ejecuciones: [{ shownOn: "no soy una fecha", miradas: 99, encoladas: 9 }],
+      decisiones: [],
+      costeTotal: 0,
+      ahora: dia(21),
+    });
+    expect(m.vistazosPorFicha).toBeNull();
+  });
+
   it("sin datos devuelve nulls, no NaN", () => {
     const m = efficiencyMetrics({ ejecuciones: [], decisiones: [], costeTotal: 0, ahora: dia(21) });
     expect(m.vistazosPorFicha).toBeNull();
