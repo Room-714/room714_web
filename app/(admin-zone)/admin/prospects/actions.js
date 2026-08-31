@@ -226,6 +226,15 @@ export async function loadQueue() {
       queue,
       credits,
       stats: ruleStats(decisiones),
+      // El mismo `costeTotal` que alimenta `costePorValidado`, pero suelto: la
+      // cabecera lo enseña como "gasto estimado del periodo" y no puede
+      // derivarlo de la métrica. `costePorValidado` es null mientras no haya
+      // ningún aceptado —que es justo el día en que más se quiere ver lo que
+      // se lleva gastado— y multiplicarlo por `muestra.aceptadas` daría "—"
+      // por un gasto que sí es real. Va aquí, de la misma reducción y de las
+      // mismas filas de la ventana, para que los dos números no puedan
+      // discrepar.
+      costeDelPeriodo: costeTotal,
       metrics: efficiencyMetrics({
         ejecuciones: ejecucionesPorDia(mostradasEnVentana),
         // Para la tasa de aceptación solo cuentan las decisiones de UNA
