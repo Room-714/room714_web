@@ -643,7 +643,7 @@ describe("passesGate", () => {
 
   it("justo en el umbral entra", () => {
     // digitalNeed pass (30) + revenue unclear (12) + itTeam unclear (10)
-    // + advisory unclear (6) = 58. Bajamos advisory a fail: 52. Sigue entrando.
+    // + advisory fail (0) = 52. Por encima de 50, entra.
     const justo = {
       revenue: { verdict: "unclear" },
       digitalNeed: { verdict: "pass" },
