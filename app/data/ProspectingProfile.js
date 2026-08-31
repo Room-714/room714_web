@@ -233,11 +233,25 @@ export function comboForDay(profile = BUYER_PROFILE, dayIndex, { historial = [] 
   const combos = searchCombos(profile);
   if (!combos.length || !Number.isFinite(dayIndex)) return combos[0] ?? null;
 
+  // 1 · Sin historial en absoluto, rotación fija: el comportamiento anterior.
+  //
+  // Esta comprobación va LA PRIMERA, y esa posición es el arreglo de un fallo
+  // real. Estaba después del filtro del suelo, y ahí no se alcanzaba nunca: sin
+  // historial, `datos(c)` es undefined para todas las combinaciones, así que el
+  // `?? Infinity` las daba a las catorce por vencidas, el filtro se las llevaba
+  // todas y la función devolvía siempre la primera del array. Es decir, el día
+  // uno —y cualquier día sin historial— salía siempre la misma combinación,
+  // justo lo contrario de lo que prometía este comentario.
+  if (historial.length === 0) {
+    return combos[((dayIndex % combos.length) + combos.length) % combos.length];
+  }
+
   const porClave = new Map(historial.map((h) => [`${h.sector}|${h.size}`, h]));
   const datos = (c) => porClave.get(`${c.sector}|${c.size}`);
 
-  // 1 · El suelo manda sobre todo lo demás. Si varias lo han superado, sale la
-  // que lleve más tiempo sin aparecer.
+  // 2 · El suelo manda sobre la ponderación. Si varias lo han superado, sale la
+  // que lleve más tiempo sin aparecer; entre empatadas decide el orden del
+  // array, y el atasco se drena una por día.
   const vencidas = combos
     .filter((c) => (datos(c)?.ejecucionesDesde ?? Infinity) >= SUELO_EJECUCIONES)
     .sort(
@@ -245,11 +259,6 @@ export function comboForDay(profile = BUYER_PROFILE, dayIndex, { historial = [] 
         (datos(b)?.ejecucionesDesde ?? Infinity) - (datos(a)?.ejecucionesDesde ?? Infinity),
     );
   if (vencidas.length) return vencidas[0];
-
-  // 2 · Sin historial en absoluto, rotación fija: el comportamiento anterior.
-  if (historial.length === 0) {
-    return combos[((dayIndex % combos.length) + combos.length) % combos.length];
-  }
 
   // 3 · Ponderado por tasa suavizada (Laplace: +1 acierto, +2 total). Sin
   // suavizar, una combinación con un solo acierto de un intento (1/1)
@@ -264,8 +273,20 @@ export function comboForDay(profile = BUYER_PROFILE, dayIndex, { historial = [] 
   });
 
   const suma = pesos.reduce((a, b) => a + b, 0);
-  // Rueda de ruleta recorrida con una posición derivada del día.
-  const posicion = ((dayIndex % 1000) / 1000) * suma;
+
+  // Dónde cae la bola de la ruleta hoy. La posición se saca de la sucesión de
+  // baja discrepancia del número áureo —la parte fraccionaria de `día × φ⁻¹`—
+  // y no de `(día % 1000) / 1000`, que era la primera versión y tenía un
+  // problema serio: avanzaba `suma/1000` por día, así que con catorce
+  // combinaciones de peso parecido cada una ocupaba unos setenta días de rueda.
+  // La ponderación no daba variedad diaria, daba RACHAS DE DIEZ SEMANAS con la
+  // misma combinación, y todo el trabajo real de rotar acababa haciéndolo el
+  // suelo. Con φ⁻¹ los días consecutivos caen repartidos por toda la rueda y
+  // sigue siendo determinista: el mismo día da siempre lo mismo, que es lo que
+  // permite que `?preview=1` enseñe de verdad lo que hará el cron.
+  const PHI_INV = 0.6180339887498949;
+  const fraccion = ((dayIndex * PHI_INV) % 1 + 1) % 1;
+  const posicion = fraccion * suma;
   let acumulado = 0;
   for (let i = 0; i < combos.length; i++) {
     acumulado += pesos[i];
