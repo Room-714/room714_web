@@ -172,7 +172,14 @@ export async function loadQueue() {
         // decide dónde merece la pena gastar los 0,35 $ del análisis a fondo.
         // El `id` desempata para que dos fichas con el mismo score no se
         // intercambien entre recargas.
-        orderBy: [{ score: "desc" }, { id: "asc" }],
+        // `nulls: "last"` no sobra: en Postgres los NULL ordenan como MAYORES
+        // que cualquier valor, así que `DESC` a secas los pone los PRIMEROS.
+        // Las 16 fichas que ya estaban pendientes cuando llegó la cualificación
+        // con IA tienen `score` nulo, y sin esto se llevarían los cinco huecos
+        // de la cola: la pantalla enseñaría cinco fichas sin dossier, que es
+        // justo lo que el esquema advierte que no puede pasar, y el botón de
+        // profundizar gastaría 0,35 $ sobre filas sin análisis previo.
+        orderBy: [{ score: { sort: "desc", nulls: "last" } }, { id: "asc" }],
         take: QUEUE_SIZE,
       }),
       prisma.prospectDiscovery.findMany({

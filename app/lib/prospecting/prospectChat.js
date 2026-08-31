@@ -11,6 +11,11 @@ import { costOf } from "./aiCost";
 
 export const MODELO = "claude-opus-5";
 
+// Verificada contra la API real el 2026-08-31: `web_search_20260318` con
+// `response_inclusion: "excluded"` responde 200 sobre claude-opus-5 y ejecuta
+// las busquedas. Se deja anotado porque este `type` no lo ejercita el cron -que
+// usa la version basica sobre Haiku- y si estuviera mal, la API devolveria 400
+// y fallarian TODOS los chats y TODOS los analisis a fondo a la vez.
 const BUSQUEDA = {
   type: "web_search_20260318",
   name: "web_search",
