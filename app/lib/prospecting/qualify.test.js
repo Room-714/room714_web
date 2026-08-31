@@ -49,6 +49,67 @@ describe("parseVerdicts", () => {
     expect(parseVerdicts(envuelto).ok).toBe(true);
   });
 
+  it("se queda con el PRIMER objeto completo si vienen dos JSON seguidos", () => {
+    // Caso real: la respuesta trajo dos objetos y el corte de la primera `{` a
+    // la última `}` los abarcaba a los dos, produciendo algo que no parsea.
+    // Costó un análisis ya pagado descubrirlo.
+    const doble = JSON.stringify(VEREDICTOS_OK) + "\n" + JSON.stringify(VEREDICTOS_OK);
+    const r = parseVerdicts(doble);
+    expect(r.ok).toBe(true);
+    expect(r.veredictos.summary).toBe(VEREDICTOS_OK.summary);
+  });
+
+  it("aguanta llaves dentro de las cadenas del JSON", () => {
+    const conLlaves = {
+      ...VEREDICTOS_OK,
+      summary: "Usa una plantilla con {llaves} y \"comillas\" dentro",
+    };
+    const r = parseVerdicts(JSON.stringify(conLlaves));
+    expect(r.ok).toBe(true);
+    expect(r.veredictos.summary).toContain("{llaves}");
+  });
+
+  it("una cifra de facturación fuera de rango fuerza fail, diga lo que diga el modelo", () => {
+    // Caso real: a una empresa de 424 M€ el modelo le puso "pass" con la cifra
+    // correcta escrita al lado. Comprobar si un número cae en un rango es
+    // aritmética, no criterio, y la aritmética no se delega al modelo.
+    const grande = {
+      ...VEREDICTOS_OK,
+      revenue: { ...VEREDICTOS_OK.revenue, verdict: "pass", amountEurM: 424 },
+    };
+    const r = parseVerdicts(JSON.stringify(grande));
+    expect(r.veredictos.revenue.verdict).toBe("fail");
+    expect(r.veredictos.revenue.evidence).toMatch(/fuera del rango/i);
+  });
+
+  it("una cifra por debajo del rango también fuerza fail", () => {
+    const pequena = {
+      ...VEREDICTOS_OK,
+      revenue: { ...VEREDICTOS_OK.revenue, verdict: "pass", amountEurM: 12 },
+    };
+    expect(parseVerdicts(JSON.stringify(pequena)).veredictos.revenue.verdict).toBe("fail");
+  });
+
+  it("dentro de rango respeta el veredicto del modelo, incluso si duda", () => {
+    // Dentro del rango sí hay criterio que respetar: un grupo que no consolida,
+    // una cifra de hace tres años. Eso el modelo lo ve y nosotros no.
+    const dudoso = {
+      ...VEREDICTOS_OK,
+      revenue: { ...VEREDICTOS_OK.revenue, verdict: "unclear", amountEurM: 71 },
+    };
+    expect(parseVerdicts(JSON.stringify(dudoso)).veredictos.revenue.verdict).toBe("unclear");
+  });
+
+  it("sin cifra numérica no toca el veredicto", () => {
+    const sinCifra = {
+      ...VEREDICTOS_OK,
+      revenue: { ...VEREDICTOS_OK.revenue, verdict: "unclear", amountEurM: null },
+    };
+    const r = parseVerdicts(JSON.stringify(sinCifra));
+    expect(r.veredictos.revenue.verdict).toBe("unclear");
+    expect(r.veredictos.revenue.amountEurM).toBeNull();
+  });
+
   it("normaliza sources a array de strings aunque llegue basura", () => {
     const sucio = { ...VEREDICTOS_OK, revenue: { ...VEREDICTOS_OK.revenue, sources: null } };
     const r = parseVerdicts(JSON.stringify(sucio));
@@ -125,6 +186,46 @@ describe("quickLook", () => {
     const params = client.messages.create.mock.calls[0][0];
     expect(params.thinking).toBeUndefined();
     expect(params.output_config?.effort).toBeUndefined();
+  });
+
+  it("sin ejemplos NO manda un segundo bloque de sistema", async () => {
+    // La API rechaza con 400 los bloques de texto vacíos o de solo espacios:
+    // "text content blocks must contain non-whitespace text". Con la memoria
+    // vacía —que es el estado del primer día— mandar " " hacía fallar TODAS
+    // las llamadas. Comprobado contra la API real, no en teoría.
+    const client = clienteFalso();
+    await quickLook({ company: "X" }, { client, ejemplos: [] });
+    const { system } = client.messages.create.mock.calls[0][0];
+    expect(system).toHaveLength(1);
+    expect(system[0].text.trim().length).toBeGreaterThan(0);
+  });
+
+  it("con ejemplos manda dos bloques, y el de ejemplos no va cacheado", async () => {
+    const client = clienteFalso();
+    await quickLook(
+      { company: "X" },
+      {
+        client,
+        ejemplos: [
+          { text: "COO · Herrajes Nordeste · ACEPTADO", metadata: { decision: "yes" } },
+        ],
+      },
+    );
+    const { system } = client.messages.create.mock.calls[0][0];
+    expect(system).toHaveLength(2);
+    expect(system[0].cache_control).toEqual({ type: "ephemeral" });
+    expect(system[1].cache_control).toBeUndefined();
+    expect(system[1].text).toContain("Herrajes Nordeste");
+  });
+
+  it("ningún bloque de sistema puede ser vacío o de solo espacios", async () => {
+    for (const ejemplos of [[], [{ kind: "criterio", text: "x", metadata: {} }]]) {
+      const client = clienteFalso();
+      await quickLook({ company: "X" }, { client, ejemplos });
+      for (const bloque of client.messages.create.mock.calls[0][0].system) {
+        expect(bloque.text.trim().length).toBeGreaterThan(0);
+      }
+    }
   });
 
   it("usa el modelo del vistazo, no el caro", async () => {

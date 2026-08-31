@@ -51,7 +51,11 @@ dentro.
 
 Tu trabajo es juzgar si una empresa encaja como cliente, según cuatro criterios:
 
-1. revenue — factura entre 50 y 100 millones de euros.
+1. revenue — factura entre 50 y 100 millones de euros. Devuelve la cifra que
+   encuentres en el campo amountEurM, EN MILLONES DE EUROS y como número (424,
+   no "424 millones"; 0.5 para medio millón), o null si no la encuentras. El
+   veredicto es "pass" SOLO si la cifra está dentro de 50-100: una empresa de
+   424 M€ es "fail", no "pass", por mucho que encaje en todo lo demás.
 2. digitalNeed — su actividad NO es hacer producto digital, pero necesita uno
    para funcionar. Una empresa de software, una agencia digital o una
    consultora tecnológica NO encaja: resuelven dentro lo que vendemos.
@@ -70,7 +74,36 @@ Reglas de disciplina, y son lo más importante de estas instrucciones:
 - Cita siempre de dónde sale cada dato, con URL cuando la tengas.
 - En España las cuentas se depositan con uno o dos años de retraso y los grupos
   con varias sociedades no consolidan en público. Di el ejercicio del dato y no
-  presentes una estimación como un dato verificado.`;
+  presentes una estimación como un dato verificado.
+
+Dónde buscar la facturación de una empresa española, por orden de utilidad:
+einforma, Axesor, Infoempresa, Empresite de El Economista y el Registro
+Mercantil. Buscar el nombre de la empresa junto a "facturación", "ingresos" o
+"cuentas anuales" suele dar antes que buscar el nombre solo. Si con las búsquedas
+que tienes no llegas a una cifra con fuente, el veredicto es "unclear" y
+amountEurM es null: eso es correcto, y alguien profundizará después.`;
+
+// El rango de facturación que buscamos, en millones de euros. Vive aquí porque
+// es lo único de los cuatro criterios que se puede comprobar con aritmética en
+// vez de con juicio (ver `forzarRangoDeFacturacion`).
+export const FACTURACION_MIN_M = 50;
+export const FACTURACION_MAX_M = 100;
+
+function propiedadesDeCriterio(extra = {}) {
+  const propiedades = {
+    verdict: { type: "string", enum: VEREDICTOS_VALIDOS },
+    value: { type: "string" },
+    evidence: { type: "string" },
+    sources: { type: "array", items: { type: "string" } },
+    ...extra,
+  };
+  return {
+    type: "object",
+    properties: propiedades,
+    required: Object.keys(propiedades),
+    additionalProperties: false,
+  };
+}
 
 const ESQUEMA_SALIDA = {
   type: "json_schema",
@@ -79,17 +112,19 @@ const ESQUEMA_SALIDA = {
     properties: Object.fromEntries([
       ...CRITERIOS.map((c) => [
         c,
-        {
-          type: "object",
-          properties: {
-            verdict: { type: "string", enum: VEREDICTOS_VALIDOS },
-            value: { type: "string" },
-            evidence: { type: "string" },
-            sources: { type: "array", items: { type: "string" } },
-          },
-          required: ["verdict", "value", "evidence", "sources"],
-          additionalProperties: false,
-        },
+        // A la facturación se le pide además la cifra COMO NÚMERO, para poder
+        // comprobar el rango en código en vez de creernos el veredicto.
+        propiedadesDeCriterio(
+          c === "revenue"
+            ? {
+                amountEurM: {
+                  type: ["number", "null"],
+                  description:
+                    "Facturación anual en millones de euros, como número. null si no se ha encontrado.",
+                },
+              }
+            : {},
+        ),
       ]),
       ["summary", { type: "string" }],
     ]),
@@ -106,11 +141,41 @@ const ESQUEMA_SALIDA = {
 function extraerJSON(texto) {
   const limpio = String(texto ?? "").trim();
   const enBloque = limpio.match(/```(?:json)?\s*([\s\S]*?)```/);
-  const candidato = enBloque ? enBloque[1] : limpio;
+  const candidato = (enBloque ? enBloque[1] : limpio).trim();
+
   const inicio = candidato.indexOf("{");
-  const fin = candidato.lastIndexOf("}");
-  if (inicio === -1 || fin === -1) return null;
-  return candidato.slice(inicio, fin + 1);
+  if (inicio === -1) return null;
+
+  // Se recorre contando llaves para quedarse con el PRIMER objeto completo y
+  // bien balanceado, ignorando las llaves que van dentro de cadenas.
+  //
+  // Antes esto era `slice(indexOf("{"), lastIndexOf("}") + 1)`, y se rompió en
+  // un caso real: cuando la respuesta trae dos objetos JSON seguidos, ese corte
+  // los abarca a los dos y produce algo que no parsea
+  // ("Unexpected non-whitespace character after JSON at position 2987").
+  // Descubrirlo costó un análisis ya pagado, así que el recorrido con contador
+  // se queda aunque parezca desproporcionado para un `slice`.
+  let profundidad = 0;
+  let enCadena = false;
+  let escapado = false;
+
+  for (let i = inicio; i < candidato.length; i++) {
+    const ch = candidato[i];
+    if (enCadena) {
+      if (escapado) escapado = false;
+      else if (ch === "\\") escapado = true;
+      else if (ch === '"') enCadena = false;
+      continue;
+    }
+    if (ch === '"') enCadena = true;
+    else if (ch === "{") profundidad += 1;
+    else if (ch === "}") {
+      profundidad -= 1;
+      if (profundidad === 0) return candidato.slice(inicio, i + 1);
+    }
+  }
+
+  return null;
 }
 
 export function parseVerdicts(texto) {
@@ -140,10 +205,43 @@ export function parseVerdicts(texto) {
       value: String(bruto.value ?? ""),
       evidence: String(bruto.evidence ?? ""),
       sources: Array.isArray(bruto.sources) ? bruto.sources.filter(Boolean).map(String) : [],
+      // Solo la facturación trae cifra numérica, y se conserva porque
+      // `forzarRangoDeFacturacion` la necesita para comprobar el rango.
+      ...(c === "revenue"
+        ? { amountEurM: Number.isFinite(bruto.amountEurM) ? bruto.amountEurM : null }
+        : {}),
     };
   }
 
-  return { ok: true, veredictos };
+  return { ok: true, veredictos: forzarRangoDeFacturacion(veredictos) };
+}
+
+// La facturación es el único criterio donde el NÚMERO manda sobre el juicio del
+// modelo, y hace falta porque falló en una prueba real: a Grupo Siro, con 424
+// millones de euros, le puso veredicto "pass" — con la cifra correcta escrita
+// al lado, en el mismo objeto. Comprobar si un número cae dentro de un rango es
+// aritmética, no criterio, y la aritmética no se delega.
+//
+// Solo corrige hacia "fail" cuando la cifra está fuera de rango. Si está
+// dentro, se respeta el veredicto del modelo: puede tener motivos para dudar
+// que nosotros no vemos (un grupo que no consolida, una cifra de hace tres
+// años), y esos sí son criterio.
+export function forzarRangoDeFacturacion(veredictos) {
+  const cifra = veredictos?.revenue?.amountEurM;
+  if (!Number.isFinite(cifra)) return veredictos;
+  if (cifra >= FACTURACION_MIN_M && cifra <= FACTURACION_MAX_M) return veredictos;
+
+  return {
+    ...veredictos,
+    revenue: {
+      ...veredictos.revenue,
+      verdict: "fail",
+      evidence:
+        `${veredictos.revenue.evidence} ` +
+        `[${cifra} M€ está fuera del rango ${FACTURACION_MIN_M}-${FACTURACION_MAX_M} M€: ` +
+        `veredicto corregido en código.]`.trim(),
+    },
+  };
 }
 
 // Los ejemplos que van en el prompt: las decisiones pasadas más parecidas a
@@ -200,9 +298,24 @@ async function cualificar(
   { client, ejemplos = [], modelo, herramienta, extraPrompt = "", thinking, estructurarAparte },
 ) {
   const llamadas = [];
+
+  // El bloque de ejemplos SOLO se añade si hay ejemplos de verdad.
+  //
+  // Aquí había un `|| " "` para evitar mandar un bloque vacío, y no valía: la
+  // API rechaza con 400 cualquier bloque de texto vacío O QUE SEA SOLO
+  // ESPACIOS ("system: text content blocks must contain non-whitespace text").
+  // Comprobado contra la API real: con la memoria vacía fallaban TODAS las
+  // llamadas, así que la cola habría salido vacía cada mañana. Y la memoria
+  // está vacía precisamente el primer día, que es cuando menos se puede
+  // permitir que esto falle.
+  //
+  // Los ejemplos van DESPUÉS del breakpoint de caché a propósito: cambian por
+  // candidato, así que dejarlos fuera del prefijo cacheado es lo que permite
+  // que el bloque de sistema se pague entero una sola vez al día.
+  const ejemplosTexto = construirEjemplos(ejemplos);
   const sistema = [
     { type: "text", text: SISTEMA, cache_control: { type: "ephemeral" } },
-    { type: "text", text: construirEjemplos(ejemplos) || " " },
+    ...(ejemplosTexto ? [{ type: "text", text: ejemplosTexto }] : []),
   ];
 
   try {
