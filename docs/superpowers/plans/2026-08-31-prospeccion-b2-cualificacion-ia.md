@@ -545,7 +545,7 @@ export function sumCosts(llamadas = []) {
 - [ ] **Step 4: Ejecuta el test para verlo pasar**
 
 Run: `npx vitest run app/lib/prospecting/aiCost.test.js`
-Expected: PASS, 7 tests.
+Expected: PASS, 10 tests (7 iniciales + 3 del recargo de escritura de caché).
 
 - [ ] **Step 5: Commit**
 
@@ -1167,7 +1167,7 @@ export async function memorySize(prisma) {
 - [ ] **Step 4: Ejecuta el test para verlo pasar**
 
 Run: `npx vitest run app/lib/prospecting/memory.test.js`
-Expected: PASS, 8 tests.
+Expected: PASS, 11 tests.
 
 - [ ] **Step 5: Commit**
 
@@ -1389,7 +1389,7 @@ export async function rankPool(candidatos = [], { embed, buscarVecinos } = {}) {
 - [ ] **Step 4: Ejecuta el test para verlo pasar**
 
 Run: `npx vitest run app/lib/prospecting/rankPool.test.js`
-Expected: PASS, 11 tests.
+Expected: PASS, 15 tests.
 
 - [ ] **Step 5: Commit**
 
