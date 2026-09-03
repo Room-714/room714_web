@@ -6,6 +6,7 @@ import PrimaryButton from "@/app/components/PrimaryButton";
 import ProjectsList from "@/app/components/ProjectList";
 import { getProjectsData } from "@/app/data/Projects";
 import { SITE_URL, buildAlternates, samePath } from "@/app/lib/seo/urls";
+import { ORGANIZATION_ID, jsonLdGraph } from "@/app/lib/seo/schema";
 
 const baseUrl = SITE_URL;
 
@@ -43,9 +44,10 @@ export default async function ProjectsPage({ params }) {
     key.startsWith("case_study_"),
   );
 
-  // 2. Construimos el JSON-LD dinámicamente
-  const jsonLd = {
-    "@context": "https://schema.org",
+  // 2. Construimos el JSON-LD dinámicamente.
+  // Estaba construido y no se renderizaba: el <script> no existía, así que
+  // estas 25 líneas eran código muerto.
+  const jsonLd = jsonLdGraph({
     "@type": "ItemList",
     name: dict.projects.title_1 + " " + dict.projects.title_2,
     description: dict.projects.description,
@@ -58,17 +60,18 @@ export default async function ProjectsPage({ params }) {
           "@type": "CreativeWork",
           name: project.title,
           description: `${project.challenge} ${project.outcome}`, // Combinamos para dar contexto a la IA
-          author: {
-            "@type": "Organization",
-            name: "Room 714",
-          },
+          author: { "@id": ORGANIZATION_ID },
         },
       };
     }),
-  };
+  });
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Navbar dict={dict} isDark={true} />
 
       <main className="min-h-screen bg-black text-white pt-24 mb-20">
@@ -127,6 +130,8 @@ export default async function ProjectsPage({ params }) {
             isRed={true}
             icon={Phone}
             href={`/${lang}/contact`}
+            track="cta_click"
+            trackPlacement="proyectos_cierre"
           />
         </div>
       </section>

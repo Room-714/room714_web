@@ -6,7 +6,13 @@ import Navbar from "@/app/components/Navbar";
 import ShareButton from "@/app/components/ShareButton";
 import { getPostBySlug, getAllPosts } from "@/app/lib/blog";
 import { normalizeSlugParam } from "@/app/lib/slug";
-import { blogUrl, buildAlternates } from "@/app/lib/seo/urls";
+import { SITE_URL, blogUrl, buildAlternates } from "@/app/lib/seo/urls";
+import {
+  articleSchema,
+  breadcrumbSchema,
+  jsonLdGraph,
+} from "@/app/lib/seo/schema";
+import { LINKEDIN_FOUNDER, withUtm } from "@/app/lib/links";
 import { prisma } from "@/app/lib/prisma";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
@@ -101,40 +107,31 @@ export default async function PostPage({ params }) {
     en: `/en/blog/${alternateSlugs.en}`,
   };
 
-  // JSON-LD structured data for blog post
+  // JSON-LD: el artículo y su miga de pan. La organización y la Person del
+  // autor ya las declara el layout, así que aquí se referencian por @id.
   const plainText = content?.replace(/<[^>]*>/g, "").slice(0, 500) || "";
   const imageUrl = image?.startsWith("http")
     ? image
-    : `https://www.room714.com${image?.startsWith("/") ? "" : "/"}${image}`;
+    : `${SITE_URL}${image?.startsWith("/") ? "" : "/"}${image}`;
+  const pageUrl = blogUrl(lang, post.slug);
 
-  const blogJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    headline: title,
-    description: metaDescription || plainText.slice(0, 160),
-    image: imageUrl,
-    datePublished: date,
-    dateModified: date,
-    author: {
-      "@type": "Organization",
-      name: "Room 714",
-      url: "https://www.room714.com",
-    },
-    publisher: {
-      "@type": "Organization",
-      name: "Room 714",
-      logo: {
-        "@type": "ImageObject",
-        url: "https://www.room714.com/og-image.png",
-      },
-    },
-    mainEntityOfPage: {
-      "@type": "WebPage",
-      "@id": blogUrl(lang, post.slug),
-    },
-    articleBody: plainText,
-    inLanguage: lang === "es" ? "es-ES" : "en-US",
-  };
+  const blogJsonLd = jsonLdGraph(
+    articleSchema({
+      lang,
+      url: pageUrl,
+      headline: title,
+      description: metaDescription || plainText.slice(0, 160),
+      imageUrl,
+      datePublished: post.datePublished,
+      dateModified: post.dateModified,
+      articleBody: plainText,
+    }),
+    breadcrumbSchema([
+      { name: dict.nav.home, url: `${SITE_URL}/${lang}` },
+      { name: dict.nav.blog, url: `${SITE_URL}/${lang}/blog` },
+      { name: title, url: pageUrl },
+    ]),
+  );
 
   // 3. Artículos relacionados: misma categoría primero, fallback cronológico
   const RELATED_LIMIT = 6;
@@ -208,6 +205,35 @@ export default async function PostPage({ params }) {
             <span className="text-gray-400 text-sm sm:text-base md:text-lg lg:text-xl font-medium">
               {post.date}
             </span>
+            {/* Firma del autor. Mismos tamaños y colores que la categoría y
+                la fecha de arriba: el artículo no cambia de aspecto, solo
+                dice quién lo escribe. La foto es un placeholder. */}
+            <div className="flex items-center gap-3 mt-6">
+              <Image
+                src="/author-placeholder.svg"
+                alt={dict.blog.author.name}
+                width={48}
+                height={48}
+                className="rounded-full shrink-0"
+              />
+              <div className="flex flex-col">
+                <span className="text-red-500 text-base sm:text-lg md:text-xl font-hand">
+                  {dict.blog.author.by} {dict.blog.author.name}
+                </span>
+                <Link
+                  href={withUtm(LINKEDIN_FOUNDER, {
+                    campaign: "blog",
+                    content: "firma-articulo",
+                  })}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-track-placement="firma-articulo"
+                  className="text-gray-400 hover:text-red-500 transition-colors text-sm sm:text-base font-medium"
+                >
+                  {dict.blog.author.role} · {dict.blog.author.linkedin}
+                </Link>
+              </div>
+            </div>
           </div>
 
           {/* Grupo Inferior: Tags - Se alinearán con el fondo de la imagen gracias al justify-between */}

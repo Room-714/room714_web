@@ -616,6 +616,12 @@
     }
   },
   "blog": {
+    "author": {
+      "by": "By",
+      "name": "José Antonio Ces Franjo",
+      "role": "Founder of Room 714",
+      "linkedin": "View LinkedIn profile"
+    },
     "our": "our",
     "your": "your",
     "blog": "blog",

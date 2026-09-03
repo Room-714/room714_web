@@ -56,6 +56,8 @@ export default async function Home({ params }) {
           <PrimaryButton
             text={dict.home.buttons.discover}
             href={`/${lang}/diagnostic`}
+            track="cta_click"
+            trackPlacement="home_hero"
           />
         </div>
       </section>
@@ -168,6 +170,8 @@ export default async function Home({ params }) {
             text={dict.home.buttons.clients}
             icon={Phone}
             href={`/${lang}/contact`}
+            track="cta_click"
+            trackPlacement="home_clientes"
           />
         </div>
       </section>

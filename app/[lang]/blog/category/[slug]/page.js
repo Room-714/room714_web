@@ -11,7 +11,13 @@ import { CATEGORY_LABELS } from "@/app/data/BlogCategories";
 import { getDictionary } from "@/app/dictionaries";
 import Navbar from "@/app/components/Navbar";
 import BlogCard from "@/app/components/BlogCard";
-import { SITE_URL, buildAlternates, langPaths } from "@/app/lib/seo/urls";
+import {
+  SITE_URL,
+  blogUrl,
+  buildAlternates,
+  langPaths,
+} from "@/app/lib/seo/urls";
+import { breadcrumbSchema, jsonLdGraph } from "@/app/lib/seo/schema";
 
 const baseUrl = SITE_URL;
 
@@ -93,33 +99,32 @@ export default async function CategoryPage({ params }) {
   const slugEs = getSlugFromCategory("es", category);
   const slugEn = getSlugFromCategory("en", category);
 
-  const collectionJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    name: label,
-    description,
-    url: `${baseUrl}/${lang}/blog/category/${slug}`,
-    inLanguage: lang === "es" ? "es-ES" : "en-US",
-    isPartOf: {
-      "@type": "WebSite",
-      name: "Room 714",
-      url: baseUrl,
+  const pageUrl = `${baseUrl}/${lang}/blog/category/${slug}`;
+
+  // La miga arrancaba en "Blog", sin la portada. Ahora es la cadena completa
+  // y con URL en cada eslabón, que es lo que valida Google.
+  const collectionJsonLd = jsonLdGraph(
+    {
+      "@type": "CollectionPage",
+      name: label,
+      description,
+      url: pageUrl,
+      inLanguage: lang === "es" ? "es-ES" : "en-US",
+      isPartOf: { "@type": "WebSite", name: "Room 714", url: baseUrl },
+      hasPart: posts.map((p) => ({
+        "@type": "BlogPosting",
+        headline: p.title,
+        url: blogUrl(lang, p.slug),
+        datePublished: p.date,
+        image: p.image,
+      })),
     },
-    breadcrumb: {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Blog", item: `${baseUrl}/${lang}/blog` },
-        { "@type": "ListItem", position: 2, name: label },
-      ],
-    },
-    hasPart: posts.map((p) => ({
-      "@type": "BlogPosting",
-      headline: p.title,
-      url: `${baseUrl}/${lang}/blog/${p.slug}`,
-      datePublished: p.date,
-      image: p.image,
-    })),
-  };
+    breadcrumbSchema([
+      { name: dict.nav.home, url: `${baseUrl}/${lang}` },
+      { name: dict.nav.blog, url: `${baseUrl}/${lang}/blog` },
+      { name: label, url: pageUrl },
+    ]),
+  );
 
   const alternatePaths = {
     es: `/es/blog/category/${slugEs}`,

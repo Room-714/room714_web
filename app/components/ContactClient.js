@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useParams, useSearchParams } from "next/navigation";
 import { Send, CheckCircle2, Loader2, AlertCircle } from "lucide-react";
 import PrimaryButton from "@/app/components/PrimaryButton";
+import { trackEvent } from "@/app/lib/analytics";
 
 export default function ContactClient({ dict, interests }) {
   const [status, setStatus] = useState("idle");
@@ -49,8 +50,13 @@ export default function ContactClient({ dict, interests }) {
         body: JSON.stringify(data),
       });
 
-      if (res.ok) setStatus("success");
-      else setStatus("error");
+      if (res.ok) {
+        setStatus("success");
+        trackEvent("contact_form_submit", {
+          lang,
+          interests: selectedInterests.length,
+        });
+      } else setStatus("error");
     } catch (error) {
       setStatus("error");
     }

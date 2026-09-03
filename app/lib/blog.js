@@ -118,6 +118,10 @@ export async function getPostBySlug(rawSlug, lang = "es") {
     return {
       id: currentTranslation.post.id,
       date: currentTranslation.post.date.toISOString().split("T")[0],
+      // Fechas completas para el JSON-LD. `date` se queda como está porque es
+      // la que se pinta en la página.
+      datePublished: currentTranslation.post.date.toISOString(),
+      dateModified: currentTranslation.post.updatedAt?.toISOString() ?? null,
       image: currentTranslation.post.image,
       category: currentTranslation.post.category,
       slug: currentTranslation.slug,

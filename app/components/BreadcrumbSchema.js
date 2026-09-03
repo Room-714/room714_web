@@ -4,20 +4,40 @@ import { usePathname } from "next/navigation";
 
 const PAGE_NAMES = {
   en: {
+    home: "Home",
     about: "About Us",
     projects: "Projects",
     contact: "Contact",
     diagnostic: "Diagnostic",
     blog: "Blog",
+    careers: "Careers",
+    privacy: "Privacy Policy",
+    terms: "Terms",
+    cookies: "Cookie Policy",
   },
   es: {
+    home: "Inicio",
     about: "Nosotros",
     projects: "Proyectos",
     contact: "Contacto",
     diagnostic: "Diagnóstico",
     blog: "Blog",
+    careers: "Empleo",
+    privacy: "Política de Privacidad",
+    terms: "Términos",
+    cookies: "Política de Cookies",
   },
 };
+
+// Rutas cuyo último segmento es un slug: el nombre legible no se puede
+// deducir del pathname, así que la miga la emite la propia página, que sí
+// tiene el título. Aquí nos apartamos para no duplicar el BreadcrumbList.
+function laEmiteLaPagina(segments) {
+  const esPostDeBlog = segments.length === 3 && segments[1] === "blog";
+  const esCategoria =
+    segments.length === 4 && segments[1] === "blog" && segments[2] === "category";
+  return esPostDeBlog || esCategoria;
+}
 
 export default function BreadcrumbSchema() {
   const pathname = usePathname();
@@ -25,6 +45,7 @@ export default function BreadcrumbSchema() {
 
   const segments = pathname.split("/").filter(Boolean);
   if (segments.length < 2) return null;
+  if (laEmiteLaPagina(segments)) return null;
 
   const lang = segments[0];
   const names = PAGE_NAMES[lang] || PAGE_NAMES.en;
@@ -33,7 +54,7 @@ export default function BreadcrumbSchema() {
     {
       "@type": "ListItem",
       position: 1,
-      name: "Home",
+      name: names.home,
       item: `${baseUrl}/${lang}`,
     },
   ];

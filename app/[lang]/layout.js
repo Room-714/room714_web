@@ -13,6 +13,14 @@ import { GoogleTagManager } from "@next/third-parties/google";
 import CookieBanner from "@/app/components/CookieBanner";
 import BreadcrumbSchema from "@/app/components/BreadcrumbSchema";
 import { SITE_URL, buildAlternates, samePath } from "@/app/lib/seo/urls";
+import {
+  founderSchema,
+  jsonLdGraph,
+  organizationSchema,
+} from "@/app/lib/seo/schema";
+import { LINKEDIN_COMPANY, withUtm } from "@/app/lib/links";
+import AnalyticsEvents from "@/app/components/AnalyticsEvents";
+import { Analytics } from "@vercel/analytics/next";
 import { cookies } from "next/headers";
 
 const fontGantari = Gantari({
@@ -110,29 +118,10 @@ export default async function RootLayout({ children, params }) {
   const cookieStore = await cookies();
   const hasConsent = cookieStore.get("cookie_consent")?.value === "true";
 
-  // --- DATOS ESTRUCTURADOS MEJORADOS ---
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "ProfessionalService",
-    "@id": "https://www.room714.com/#organization",
-    name: "Room 714",
-    image: "https://www.room714.com/og-image.png",
-    url: "https://www.room714.com",
-    priceRange: "$$$", // Ayuda a segmentar en búsquedas
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: "Madrid",
-      addressCountry: "ES",
-    },
-    sameAs: [
-      "https://www.linkedin.com/company/room714",
-      "https://www.instagram.com/room714",
-    ],
-    description:
-      lang === "es"
-        ? "Estudio de producto digital especializado en UX/UI, investigación CX y desarrollo a medida."
-        : "Digital product studio specializing in UX/UI, CX research, and custom development.",
-  };
+  // La organización y su fundador van en TODAS las páginas, con @id estables:
+  // los artículos y las páginas de caso los referencian por @id en lugar de
+  // volver a describirlos.
+  const jsonLd = jsonLdGraph(organizationSchema(lang), founderSchema());
 
   return (
     <html
@@ -229,9 +218,13 @@ export default async function RootLayout({ children, params }) {
                   <div className="flex items-center justify-end gap-4">
                     {/* LinkedIn */}
                     <Link
-                      href="https://www.linkedin.com/company/room-714"
+                      href={withUtm(LINKEDIN_COMPANY, {
+                        campaign: "web",
+                        content: "footer",
+                      })}
                       target="_blank"
                       rel="noopener noreferrer"
+                      data-track-placement="footer"
                       className="p-2 bg-white rounded-full hover:opacity-70 transition-opacity"
                     >
                       <Image
@@ -291,6 +284,12 @@ export default async function RootLayout({ children, params }) {
           </footer>
         </div>
         <CookieBanner dict={dict} lang={lang} />
+
+        {/* Vercel Analytics no usa cookies ni datos personales, así que no va
+            detrás del banner; GTM y Clarity sí siguen esperando el
+            consentimiento. AnalyticsEvents es el oyente único de clics. */}
+        <Analytics />
+        <AnalyticsEvents />
       </body>
     </html>
   );
