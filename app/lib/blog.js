@@ -1,4 +1,5 @@
 import { prisma } from "./prisma";
+import { normalizeSlugParam } from "./slug";
 
 export async function getAllPosts(lang = "es") {
   try {
@@ -76,9 +77,13 @@ export async function getPostsByCategory(category, lang = "es") {
   }
 }
 
-export async function getPostBySlug(slug, lang = "es") {
+export async function getPostBySlug(rawSlug, lang = "es") {
   try {
     const now = new Date();
+
+    // Único punto por el que pasan todas las consultas por slug, así que es
+    // aquí donde se deshace el percent-encoding de los params.
+    const slug = normalizeSlugParam(rawSlug);
 
     const currentTranslation = await prisma.postTranslation.findFirst({
       where: {

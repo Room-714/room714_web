@@ -5,13 +5,16 @@ import { getDictionary } from "@/app/dictionaries";
 import Navbar from "@/app/components/Navbar";
 import ShareButton from "@/app/components/ShareButton";
 import { getPostBySlug, getAllPosts } from "@/app/lib/blog";
+import { normalizeSlugParam } from "@/app/lib/slug";
+import { blogUrl } from "@/app/lib/seo/urls";
 import { prisma } from "@/app/lib/prisma";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
-async function maybeRedirect(slug, lang) {
+async function maybeRedirect(rawSlug, lang) {
+  // Igual que en getPostBySlug: el param llega percent-encoded.
   const r = await prisma.postRedirect.findUnique({
-    where: { fromSlug_lang: { fromSlug: slug, lang } },
+    where: { fromSlug_lang: { fromSlug: normalizeSlugParam(rawSlug), lang } },
   });
   if (!r) return null;
   if (r.toSlug) {
@@ -35,7 +38,19 @@ export async function generateMetadata({ params }) {
   const imageUrl = image.startsWith("http")
     ? image
     : `https://www.room714.com${image.startsWith("/") ? "" : "/"}${image}`;
-  const pageUrl = `https://www.room714.com/${lang}/blog/${slug}`;
+  // La canónica se construye con el slug que guarda la base de datos, no con
+  // el param, y percent-encodeada: un slug con caracteres no ASCII produce
+  // una URL inválida si se interpola en crudo.
+  const pageUrl = blogUrl(lang, post.slug);
+
+  // Hay posts sin traducción en un idioma: esas entradas se omiten en lugar
+  // de declarar un hreflang que apunta a una URL inexistente.
+  const urlEs = blogUrl("es", post.alternateSlugs.es);
+  const urlEn = blogUrl("en", post.alternateSlugs.en);
+  const languages = {};
+  if (urlEs) languages.es = urlEs;
+  if (urlEn) languages.en = urlEn;
+  if (urlEn || urlEs) languages["x-default"] = urlEn || urlEs;
 
   return {
     title: `${title} | Room 714`,
@@ -57,11 +72,7 @@ export async function generateMetadata({ params }) {
     },
     alternates: {
       canonical: pageUrl,
-      languages: {
-        "es-ES": `https://www.room714.com/es/blog/${post.alternateSlugs.es}`,
-        "en-US": `https://www.room714.com/en/blog/${post.alternateSlugs.en}`,
-        "x-default": `https://www.room714.com/en/blog/${post.alternateSlugs.en}`,
-      },
+      languages,
     },
   };
 }
@@ -124,7 +135,7 @@ export default async function PostPage({ params }) {
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `https://www.room714.com/${lang}/blog/${slug}`,
+      "@id": blogUrl(lang, post.slug),
     },
     articleBody: plainText,
     inLanguage: lang === "es" ? "es-ES" : "en-US",

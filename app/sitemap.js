@@ -1,5 +1,6 @@
 import { getAllPosts } from "@/app/lib/blog";
 import { listAllCategoryRoutes } from "@/app/lib/categoryRoutes";
+import { blogUrl } from "@/app/lib/seo/urls";
 
 // Regenera el sitemap cada hora aunque no haya deploy, para que los posts
 // generados por cron (lunes/miércoles) aparezcan sin esperar a un despliegue.
@@ -84,10 +85,13 @@ export default async function sitemap() {
   });
 
   // 2. Blog posts: su fecha real (updatedAt o date).
+  // El slug va percent-encodeado: uno con caracteres no ASCII interpolado en
+  // crudo produce una URL que el servidor rechaza antes de enrutar (500), y
+  // aquí la estaríamos anunciando a Google.
   const toRoute = (post, lang) => {
     const mod = postMod(post);
     return {
-      url: `${baseUrl}/${lang}/blog/${post.slug}`,
+      url: blogUrl(lang, post.slug),
       ...(mod ? { lastModified: mod.toISOString() } : {}),
       changeFrequency: "weekly",
       priority: priorityFor(0.6, lang),
