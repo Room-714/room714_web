@@ -188,7 +188,59 @@
       "heroTitle": "Every unnecessary step in your product is a customer walking away",
       "heroDescription": "We redesign and build the flows your customers use to sign up, get started, operate and come back: onboarding, activation, customer area, app. And we measure it where it shows: conversion, drop-off, ARPU and support cost.",
       "seoTitle": "Onboarding, sign-up and customer area redesign · Room 714",
-      "seoDescription": "We redesign and build the digital flows your customers use to sign up, get started and operate. Measured in conversion, drop-off and ARPU."
+      "seoDescription": "We redesign and build the digital flows your customers use to sign up, get started and operate. Measured in conversion, drop-off and ARPU.",
+      "teSuenaSi": [
+        "Sign-up or activation is abandoned halfway through and nobody knows exactly at which step, or why.",
+        "Onboarding a customer takes paper, phone calls or days of waiting, and your competitor does it in minutes.",
+        "The customer area generates more calls to the contact centre than it prevents.",
+        "You have data on everything, but each team tells a different story about what is broken.",
+        "You ran a “pretty” redesign and the numbers didn't move."
+      ],
+      "queHacemos": [
+        {
+          "title": "Diagnosis of the real flow.",
+          "body": "Analytics, sessions, customer support and internal process. We look for where the money is lost, not where it looks ugly."
+        },
+        {
+          "title": "Redesign aimed at the metric.",
+          "body": "We remove steps, decisions and fields. We design so the customer knows what to do on the first screen."
+        },
+        {
+          "title": "Building on what you have.",
+          "body": "Front, back and integrations with your current systems (CRM, billing, identity, e-signature, KYC). Without “rebuild everything” as a precondition."
+        },
+        {
+          "title": "A look at the business behind it.",
+          "body": "If the sales process, the pricing or the operation make a good flow impossible, we tell you before drawing anything."
+        },
+        {
+          "title": "Measurement and evolution.",
+          "body": "We define the target metric up front and follow it after launch."
+        }
+      ],
+      "hechoAntes": [
+        {
+          "clave": "activacionCanonico",
+          "title": "B2B2C platform via service providers · activation.",
+          "body": "Personas, a discovery journey, a multi-brand design system and a new mobile app."
+        },
+        {
+          "clave": "saasAutogestion",
+          "title": "Regulated B2B SaaS · customer self-service.",
+          "body": "From support operating on behalf of customers to customers operating on their own."
+        },
+        {
+          "clave": "iaEcommerce",
+          "title": "Grocery e-commerce · intelligent repeat purchase.",
+          "body": "Substitutes for stock-outs and AI-proposed baskets."
+        }
+      ],
+      "otros": "telco bundle activation (+45% completed, +12% ARPU), digital onboarding in wealth management (from weeks to 48 hours).",
+      "noHacemos": "Campaigns, branding or “visual redesigns” with no metric behind them. If what you need is a coat of paint, others do it cheaper.",
+      "cierre": {
+        "title": "Start with 45 minutes",
+        "body": "Tell us which flow is losing customers. We reply within 24 working hours and leave the session with a hypothesis of where the problem is and what we would do first."
+      }
     },
     "productoEquipo": {
       "cardTitle": "The product your team uses is slowing the operation down",
@@ -197,7 +249,54 @@
       "heroTitle": "The software your team uses is a product too. And it shows when you don't treat it like one.",
       "heroDescription": "We modernise and build the tools your company runs on: back-office, dashboards, incident management, data platforms, legacy systems. Without stopping the operation, measured in errors, time and cost.",
       "seoTitle": "Modernising internal software, back-office and dashboards · Room 714",
-      "seoDescription": "We modernise and build the tools your company runs on: back-office, dashboards, legacy systems. Without stopping the operation, with AI where it earns its place, measured in errors and time."
+      "seoDescription": "We modernise and build the tools your company runs on: back-office, dashboards, legacy systems. Without stopping the operation, with AI where it earns its place, measured in errors and time.",
+      "teSuenaSi": [
+        "Your team works with three screens, a spreadsheet and the memory of whoever has been there longest.",
+        "The dashboards have all the data and nobody sees anything. Errors are spotted once they have already cost money.",
+        "There is a system “that works” which nobody dares touch, and every new feature takes months.",
+        "Your customers have an impeccable app and your employees an intranet from 2011.",
+        "You want AI in the operation but your data lives in five systems that don't speak the same language."
+      ],
+      "queHacemos": [
+        {
+          "title": "Diagnosis of the operation.",
+          "body": "How people actually work, what systems sit behind them, and where time is lost and errors are made."
+        },
+        {
+          "title": "Redesigning the tool around the task.",
+          "body": "Fewer screens, information in the order decisions are made, alerts that mean something."
+        },
+        {
+          "title": "Modernisation in layers.",
+          "body": "We live alongside the legacy while replacing it: APIs, a common data model, new front-ends over old systems. No big bang."
+        },
+        {
+          "title": "AI where it earns its place.",
+          "body": "Natural-language summaries over operational data, assistants with the right context, automation of the repetitive. With guardrails."
+        },
+        {
+          "title": "A look at the process.",
+          "body": "Sometimes the tool is bad because the process is. We say so and work on it with you."
+        }
+      ],
+      "hechoAntes": [
+        {
+          "clave": "saasAutogestion",
+          "title": "Regulated B2B SaaS · rebuilding the monolith.",
+          "body": "From over 200 tables to fewer than 20, microservices in a monorepo, continuous integration with end-to-end tests. Today we run the platform and own all of their technology."
+        },
+        {
+          "clave": "activacionCanonico",
+          "title": "B2B2C platform · canonical data model.",
+          "body": "A single representation of every entity in the company, ingested from all systems, governed from one place."
+        }
+      ],
+      "otros": "operations dashboards with generative AI (−38% critical errors), a collaborative tax ecosystem (−40% document exchange).",
+      "convivido": ".NET and Java monoliths, Angular and React front-ends, MariaDB, SQL Server, Azure and AWS, CRMs such as Zoho and Salesforce, ERPs such as Sage, contact centre platforms such as Five9, SIEM/SOAR in security environments.",
+      "cierre": {
+        "title": "Start with 45 minutes",
+        "body": "Tell us which tool is slowing your team down. We leave with a hypothesis of where to start without stopping the operation."
+      }
     },
     "iaProducto": {
       "cardTitle": "Your AI pilot never reaches production",
@@ -206,7 +305,59 @@
       "heroTitle": "The demo worked. So why is it still a demo?",
       "heroDescription": "We take AI from pilot to production inside your product: the data and context layer that stops it making things up, the interface that makes it usable, and the cost that makes it viable. We are not selling you a model or a platform.",
       "seoTitle": "AI from pilot to production inside your product · Room 714",
-      "seoDescription": "We take AI from pilot to production: semantic layer and canonical model so it doesn't hallucinate, the architecture your case actually needs, a usable interface and a viable cost."
+      "seoDescription": "We take AI from pilot to production: semantic layer and canonical model so it doesn't hallucinate, the architecture your case actually needs, a usable interface and a viable cost.",
+      "teSuenaSi": [
+        "The assistant answers well in the demo and makes things up with real data.",
+        "Every system calls the same thing by a different name and the AI inherits the chaos.",
+        "The inference bill grows faster than the value it generates.",
+        "You put a chat on top of everything and users don't use it.",
+        "There are five AI pilots in the company and none has an owner, a metric or a path to production."
+      ],
+      "queHacemos": [
+        {
+          "title": "Diagnosis of the pilot.",
+          "body": "What task it solves, for whom, with what data, at what cost. If the answer is “we don't know”, that is where we start."
+        },
+        {
+          "title": "Semantic layer and canonical model.",
+          "body": "A common language over your systems so the AI works with reliable context instead of the quirks of each database."
+        },
+        {
+          "title": "The architecture your case needs.",
+          "body": "RAG, agents, fine-tuning, private inference: we choose by task and cost, not by trend."
+        },
+        {
+          "title": "Interface for AI.",
+          "body": "Chat is not the answer to everything. We design how the user sees, corrects and trusts what the AI proposes."
+        },
+        {
+          "title": "Production and operations.",
+          "body": "Evaluation, observability, guardrails and cost under control. What separates a pilot from a product."
+        }
+      ],
+      "hechoAntes": [
+        {
+          "clave": "iaEcommerce",
+          "title": "Grocery e-commerce · AI without touching the store.",
+          "body": "A separate platform with RAG and MCP: substitutes, combinations, intelligent repeat purchase and a virtual nutritionist."
+        },
+        {
+          "clave": "activacionCanonico",
+          "title": "B2B2C platform · canonical model for agents.",
+          "body": "Airflow, Azure Data Lake, dbt and Snowflake with governance: the true, simple knowledge base an agent needs to work on its own."
+        },
+        {
+          "clave": "saasAutogestion",
+          "title": "Regulated B2B SaaS · AI as the coding engine.",
+          "body": "Continuous integration with end-to-end and regression tests as the quality guarantee for generated code."
+        }
+      ],
+      "otros": "operations dashboards with generative AI (−38% critical errors), private-cloud AI inference for an operator (in progress).",
+      "noHacemos": "We don't sell a model, a platform or hours of “AI consulting”. If your problem can be solved without AI, we will tell you; it will be cheaper.",
+      "cierre": {
+        "title": "Start with 45 minutes",
+        "body": "Bring the pilot. We leave the session knowing what it needs in order to become a product."
+      }
     },
     "empezarDeCero": {
       "cardTitle": "You are starting from scratch",
@@ -215,7 +366,56 @@
       "heroTitle": "Before the first screen, the first question: is this a business?",
       "heroDescription": "We take ideas and new lines of business to a product in production. We review the model before designing, design before building, and build so it holds up when it works.",
       "seoTitle": "From idea to a digital product in production · Room 714",
-      "seoDescription": "We take ideas and new lines of business to a product in production. We review the business before designing, design before building, and build with no lock-in."
+      "seoDescription": "We take ideas and new lines of business to a product in production. We review the business before designing, design before building, and build with no lock-in.",
+      "teSuenaSi": [
+        "You have an idea or a mandate from the board and you need to turn it into something a customer can use and pay for.",
+        "Your current product can't be evolved and has to be rebuilt without losing the customers already using it.",
+        "You had an external team that delivered screens and an invoice, but not a product."
+      ],
+      "queHacemos": [
+        {
+          "title": "A look at the business.",
+          "body": "Customer, problem, value proposition, revenue model, operations. Roadmap, JTBD and metrics on the table before drawing. If the idea doesn't survive that conversation, the rest doesn't matter."
+        },
+        {
+          "title": "A minimum product someone can actually want.",
+          "body": "We design the essentials, properly. We build with a modern, stable stack any team can maintain."
+        },
+        {
+          "title": "In production early and in phases.",
+          "body": "The market will tell you more than any specification."
+        },
+        {
+          "title": "No lock-in.",
+          "body": "The code is yours. If another team takes it over tomorrow, they will be able to."
+        }
+      ],
+      "hechoAntes": [
+        {
+          "clave": "saasAutogestion",
+          "title": "Regulated B2B SaaS · a new platform from scratch",
+          "body": "to replace the old one without stopping the business: on the market with new customers while existing ones migrate in waves."
+        },
+        {
+          "clave": "iaEcommerce",
+          "title": "Grocery e-commerce · an AI platform",
+          "body": "we already think of as a product, valid for any catalogue."
+        }
+      ],
+      "otros": "a premium security app with Zero-Trust architecture for high-net-worth profiles.",
+      "cierre": {
+        "title": "Start with 45 minutes",
+        "body": "Bring the idea. You will leave knowing what would need validating first and what it would cost to reach production."
+      }
+    },
+    "labels": {
+      "teSuena": "This sounds familiar if…",
+      "queHacemos": "What we do",
+      "hechoAntes": "We have done this before",
+      "convivido": "What we have worked alongside",
+      "noHacemos": "What we don't do",
+      "otros": "Others:",
+      "verCaso": "Read case"
     }
   },
   "home": {

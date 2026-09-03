@@ -188,7 +188,59 @@
       "heroTitle": "Cada paso que sobra en tu producto es un cliente que se va",
       "heroDescription": "Rediseñamos y construimos los flujos que tus clientes usan para contratar, darse de alta, operar y volver: onboarding, activación, área de cliente, app. Y lo medimos donde se nota: conversión, abandono, ARPU y coste de atención.",
       "seoTitle": "Rediseño de onboarding, contratación y área de cliente · Room 714",
-      "seoDescription": "Rediseñamos y construimos los flujos digitales que tus clientes usan para contratar, darse de alta y operar. Medido en conversión, abandono y ARPU."
+      "seoDescription": "Rediseñamos y construimos los flujos digitales que tus clientes usan para contratar, darse de alta y operar. Medido en conversión, abandono y ARPU.",
+      "teSuenaSi": [
+        "La contratación o la activación se abandona a mitad y nadie sabe exactamente en qué paso ni por qué.",
+        "El alta de un cliente exige papel, llamadas o días de espera, y la competencia lo hace en minutos.",
+        "El área de cliente genera más llamadas al call center de las que evita.",
+        "Tienes datos de todo, pero cada equipo cuenta una historia distinta sobre qué falla.",
+        "Has hecho un rediseño «bonito» y los números no se han movido."
+      ],
+      "queHacemos": [
+        {
+          "title": "Diagnóstico del flujo real.",
+          "body": "Analítica, sesiones, atención al cliente y proceso interno. Buscamos dónde se pierde el dinero, no dónde se ve feo."
+        },
+        {
+          "title": "Rediseño orientado a la métrica.",
+          "body": "Quitamos pasos, decisiones y campos. Diseñamos para que el cliente sepa qué hacer en la primera pantalla."
+        },
+        {
+          "title": "Construcción sobre lo que tienes.",
+          "body": "Front, back e integraciones con tus sistemas actuales (CRM, facturación, identidad, firma, KYC). Sin «rehacer todo» como condición."
+        },
+        {
+          "title": "Revisión del negocio detrás.",
+          "body": "Si el proceso comercial, el pricing o la operativa hacen imposible un buen flujo, te lo decimos antes de dibujar nada."
+        },
+        {
+          "title": "Medición y evolución.",
+          "body": "Definimos la métrica objetivo al principio y la seguimos después del lanzamiento."
+        }
+      ],
+      "hechoAntes": [
+        {
+          "clave": "activacionCanonico",
+          "title": "Plataforma B2B2C vía service providers · activación.",
+          "body": "Personas, journey de descubrimiento, sistema de diseño multimarca y una app móvil nueva."
+        },
+        {
+          "clave": "saasAutogestion",
+          "title": "SaaS B2B regulado · autogestión del cliente.",
+          "body": "De un soporte que operaba por los clientes a clientes que operan solos."
+        },
+        {
+          "clave": "iaEcommerce",
+          "title": "E-commerce de alimentación · recompra inteligente.",
+          "body": "Sustitutos ante roturas de stock y cestas propuestas por IA."
+        }
+      ],
+      "otros": "activación de paquetes en telco (+45 % completadas, +12 % ARPU), onboarding digital en gestión de patrimonios (de semanas a 48 h).",
+      "noHacemos": "Campañas, branding ni «rediseños visuales» sin métrica detrás. Si lo que necesitas es una capa de pintura, hay quien lo hace más barato.",
+      "cierre": {
+        "title": "Empieza por 45 minutos",
+        "body": "Cuéntanos qué flujo pierde clientes. Te respondemos en 24 h laborables y salimos de la sesión con una hipótesis de dónde está el problema y qué haríamos primero."
+      }
     },
     "productoEquipo": {
       "cardTitle": "El producto que usa tu equipo frena la operación",
@@ -197,7 +249,54 @@
       "heroTitle": "El software que usa tu equipo también es un producto. Y se nota cuando no lo tratas como tal.",
       "heroDescription": "Modernizamos y construimos las herramientas con las que tu empresa opera: back-office, dashboards, gestión de incidencias, plataformas de datos, sistemas heredados. Sin parar la operación y medido en errores, tiempo y coste.",
       "seoTitle": "Modernizar software interno, back-office y dashboards · Room 714",
-      "seoDescription": "Modernizamos y construimos las herramientas con las que opera tu empresa: back-office, dashboards, sistemas heredados. Sin parar la operación, con IA donde aporta, medido en errores y tiempo."
+      "seoDescription": "Modernizamos y construimos las herramientas con las que opera tu empresa: back-office, dashboards, sistemas heredados. Sin parar la operación, con IA donde aporta, medido en errores y tiempo.",
+      "teSuenaSi": [
+        "Tu equipo trabaja con tres pantallas, un Excel y la memoria de la persona que lleva más años.",
+        "Los dashboards tienen todos los datos y nadie ve nada. Los errores se detectan cuando ya han costado dinero.",
+        "Hay un sistema «que funciona» que nadie se atreve a tocar, y cada nueva funcionalidad tarda meses.",
+        "Los clientes tienen una app impecable y los empleados, una intranet de 2011.",
+        "Quieres meter IA en la operación pero tus datos viven en cinco sistemas que no hablan el mismo idioma."
+      ],
+      "queHacemos": [
+        {
+          "title": "Diagnóstico de la operación.",
+          "body": "Cómo trabaja de verdad la gente, qué sistemas hay detrás y dónde se pierde el tiempo y se generan los errores."
+        },
+        {
+          "title": "Rediseño de la herramienta desde la tarea.",
+          "body": "Menos pantallas, información en el orden en que se decide, alertas que significan algo."
+        },
+        {
+          "title": "Modernización por capas.",
+          "body": "Convivimos con el legacy mientras lo sustituimos: APIs, modelo de datos común, nuevos frontales sobre sistemas antiguos. Nada de «big bang»."
+        },
+        {
+          "title": "IA donde aporta.",
+          "body": "Resúmenes en lenguaje natural sobre datos operativos, asistentes con el contexto correcto, automatización de lo repetitivo. Con guardarraíles."
+        },
+        {
+          "title": "Revisión del proceso.",
+          "body": "A veces la herramienta es mala porque el proceso lo es. Lo decimos y lo trabajamos contigo."
+        }
+      ],
+      "hechoAntes": [
+        {
+          "clave": "saasAutogestion",
+          "title": "SaaS B2B regulado · reconstrucción del monolito.",
+          "body": "De más de 200 tablas a menos de 20, microservicios en monorepo, integración continua con pruebas end-to-end. Hoy operamos la plataforma y asumimos toda su tecnología."
+        },
+        {
+          "clave": "activacionCanonico",
+          "title": "Plataforma B2B2C · modelo canónico de datos.",
+          "body": "Una sola representación de cada entidad de la empresa, ingestada desde todos los sistemas, gobernada desde un solo sitio."
+        }
+      ],
+      "otros": "dashboards de operaciones con IA generativa (−38 % errores críticos), ecosistema fiscal colaborativo (−40 % intercambio documental).",
+      "convivido": "Monolitos .NET y Java, frontales Angular y React, MariaDB, SQL Server, Azure y AWS, CRMs como Zoho y Salesforce, ERPs como Sage, plataformas de contact center como Five9, SIEM/SOAR en entornos de seguridad.",
+      "cierre": {
+        "title": "Empieza por 45 minutos",
+        "body": "Cuéntanos qué herramienta frena a tu equipo. Salimos con una hipótesis de por dónde empezar sin parar la operación."
+      }
     },
     "iaProducto": {
       "cardTitle": "Tienes IA en piloto y no llega a producción",
@@ -206,7 +305,59 @@
       "heroTitle": "La demo funcionó. ¿Por qué sigue siendo una demo?",
       "heroDescription": "Llevamos la IA de piloto a producción dentro de tu producto: la capa de datos y contexto que evita que invente, la interfaz que la hace usable y el coste que la hace viable. Sin vender un modelo ni una plataforma.",
       "seoTitle": "IA de piloto a producción dentro de tu producto · Room 714",
-      "seoDescription": "Llevamos la IA de piloto a producción: capa semántica y modelo canónico para que no alucine, arquitectura que aplica al caso, interfaz usable y coste viable."
+      "seoDescription": "Llevamos la IA de piloto a producción: capa semántica y modelo canónico para que no alucine, arquitectura que aplica al caso, interfaz usable y coste viable.",
+      "teSuenaSi": [
+        "El asistente responde bien en la demo y se inventa cosas con datos reales.",
+        "Cada sistema llama de forma distinta a la misma cosa y la IA hereda el caos.",
+        "La factura de inferencia crece más rápido que el valor que genera.",
+        "Habéis puesto un chat encima de todo y los usuarios no lo usan.",
+        "Hay cinco pilotos de IA en la empresa y ninguno tiene dueño, métrica ni camino a producción."
+      ],
+      "queHacemos": [
+        {
+          "title": "Diagnóstico del piloto.",
+          "body": "Qué tarea resuelve, para quién, con qué datos, a qué coste. Si la respuesta es «no lo sabemos», empezamos ahí."
+        },
+        {
+          "title": "Capa semántica y modelo canónico.",
+          "body": "Un lenguaje común sobre tus sistemas para que la IA trabaje con contexto fiable y no con la peculiaridad de cada base de datos."
+        },
+        {
+          "title": "Arquitectura que aplica al caso.",
+          "body": "RAG, agentes, fine-tuning, inferencia privada: elegimos según la tarea y el coste, no según la tendencia."
+        },
+        {
+          "title": "Interfaz para IA.",
+          "body": "El chat no es la respuesta a todo. Diseñamos cómo el usuario ve, corrige y confía en lo que la IA propone."
+        },
+        {
+          "title": "Producción y operación.",
+          "body": "Evaluación, observabilidad, guardarraíles y coste bajo control. Lo que separa el piloto del producto."
+        }
+      ],
+      "hechoAntes": [
+        {
+          "clave": "iaEcommerce",
+          "title": "E-commerce de alimentación · IA sin tocar la tienda.",
+          "body": "Plataforma aparte con RAG y MCP: sustitutos, combinaciones, recompra inteligente y nutricionista virtual."
+        },
+        {
+          "clave": "activacionCanonico",
+          "title": "Plataforma B2B2C · modelo canónico para agentes.",
+          "body": "Airflow, Azure Data Lake, dbt y Snowflake con gobernanza: la base de conocimiento cierta y simple que un agente necesita para trabajar solo."
+        },
+        {
+          "clave": "saasAutogestion",
+          "title": "SaaS B2B regulado · IA como motor de codificación.",
+          "body": "Integración continua con pruebas end-to-end y de regresión como garantía de calidad del código generado."
+        }
+      ],
+      "otros": "dashboards de operaciones con IA generativa (−38 % errores críticos), inferencia de IA en nube privada para un operador (en curso).",
+      "noHacemos": "No vendemos un modelo, una plataforma ni horas de «consultoría de IA». Si tu problema se resuelve sin IA, te lo diremos; será más barato.",
+      "cierre": {
+        "title": "Empieza por 45 minutos",
+        "body": "Trae el piloto. Salimos de la sesión sabiendo qué le falta para ser producto."
+      }
     },
     "empezarDeCero": {
       "cardTitle": "Empiezas de cero",
@@ -215,7 +366,56 @@
       "heroTitle": "Antes de la primera pantalla, la primera pregunta: ¿esto es un negocio?",
       "heroDescription": "Llevamos ideas y nuevas líneas de negocio a producto en producción. Revisamos el modelo antes de diseñar, diseñamos antes de construir y construimos para que aguante cuando funcione.",
       "seoTitle": "De idea a producto digital en producción · Room 714",
-      "seoDescription": "Llevamos ideas y nuevas líneas de negocio a producto en producción. Revisamos el negocio antes de diseñar, diseñamos antes de construir y construimos sin lock-in."
+      "seoDescription": "Llevamos ideas y nuevas líneas de negocio a producto en producción. Revisamos el negocio antes de diseñar, diseñamos antes de construir y construimos sin lock-in.",
+      "teSuenaSi": [
+        "Tienes una idea o un mandato de dirección y necesitas convertirlo en algo que un cliente pueda usar y pagar.",
+        "Tu producto actual no se puede evolucionar y hay que rehacerlo sin perder a los clientes que ya lo usan.",
+        "Has tenido un equipo externo que entregó pantallas y una factura, pero no un producto."
+      ],
+      "queHacemos": [
+        {
+          "title": "Revisión del negocio.",
+          "body": "Cliente, problema, propuesta de valor, modelo de ingresos, operativa. Roadmap, JTBD y métricas sobre la mesa antes de dibujar. Si la idea no aguanta esa conversación, el resto da igual."
+        },
+        {
+          "title": "Producto mínimo que se pueda querer.",
+          "body": "Diseñamos lo imprescindible, bien. Construimos con un stack moderno y estable que cualquier equipo pueda mantener."
+        },
+        {
+          "title": "En producción pronto y por fases.",
+          "body": "El mercado te dirá más que cualquier especificación."
+        },
+        {
+          "title": "Sin lock-in.",
+          "body": "El código es tuyo. Si el día de mañana lo lleva otro equipo, lo podrá hacer."
+        }
+      ],
+      "hechoAntes": [
+        {
+          "clave": "saasAutogestion",
+          "title": "SaaS B2B regulado · plataforma nueva desde cero",
+          "body": "para sustituir a la antigua sin parar el negocio: en el mercado con clientes nuevos mientras los existentes migran por oleadas."
+        },
+        {
+          "clave": "iaEcommerce",
+          "title": "E-commerce de alimentación · una plataforma de IA",
+          "body": "que ya pensamos como producto, válida para cualquier catálogo."
+        }
+      ],
+      "otros": "app de seguridad premium con arquitectura Zero-Trust para perfiles de alto patrimonio.",
+      "cierre": {
+        "title": "Empieza por 45 minutos",
+        "body": "Trae la idea. Saldrás sabiendo qué habría que validar primero y cuánto costaría llegar a producción."
+      }
+    },
+    "labels": {
+      "teSuena": "Te suena si…",
+      "queHacemos": "Qué hacemos",
+      "hechoAntes": "Lo hemos hecho antes",
+      "convivido": "Con qué hemos convivido",
+      "noHacemos": "Lo que no hacemos",
+      "otros": "Otros:",
+      "verCaso": "Ver caso"
     }
   },
   "home": {
