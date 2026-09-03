@@ -13,7 +13,7 @@ const nextConfig = {
           },
         ],
         destination: "https://www.room714.com/en/:path*",
-        permanent: true, // Esto genera el código 301 que Google exige
+        statusCode: 301, // `permanent: true` emite 308, no 301
       },
       {
         source: "/:path*",
@@ -24,7 +24,7 @@ const nextConfig = {
           },
         ],
         destination: "https://www.room714.com/en/:path*",
-        permanent: true,
+        statusCode: 301,
       },
       {
         // URL legacy '/legal' que Google sigue recordando. El i18n
@@ -32,17 +32,17 @@ const nextConfig = {
         // eso cubrimos también las variantes con locale.
         source: "/legal",
         destination: "/en/privacy",
-        permanent: true,
+        statusCode: 301,
       },
       {
         source: "/en/legal",
         destination: "/en/privacy",
-        permanent: true,
+        statusCode: 301,
       },
       {
         source: "/es/legal",
         destination: "/es/privacy",
-        permanent: true,
+        statusCode: 301,
       },
     ];
   },
