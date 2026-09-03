@@ -149,10 +149,13 @@ export default async function Home({ params }) {
                        w-50 md:w-75 lg:w-100 
                        px-8 md:px-12 lg:px-20"
                   >
+                    {/* El alt nombra la empresa y su sector: "Client-01" no
+                        decía nada, y con dos logos de telecos el sector a
+                        secas tampoco los distinguiría. */}
                     <div className="relative w-full h-20 md:h-28 lg:h-32 transition-all duration-500 transform hover:scale-110">
                       <Image
                         src={`/clients/client-0${num}.svg`}
-                        alt={`Client-0${num}`}
+                        alt={dict.home.customers.logos[num - 1]}
                         fill
                         className="object-contain"
                         sizes="(max-width: 768px) 200px, (max-width: 1024px) 300px, 400px"

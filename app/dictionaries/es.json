@@ -37,6 +37,14 @@
       }
     },
     "customers": {
+      "logos": [
+        "Samsung — electrónica de consumo",
+        "Grupo Fractalia — servicios tecnológicos",
+        "Telefónica — telecomunicaciones",
+        "hellotax — software de cumplimiento fiscal",
+        "Orange — telecomunicaciones",
+        "ComeFruta — comercio online de alimentación"
+      ],
       "title": {
         "line1": "Pero...",
         "line2": "¿os contrata alguien?"

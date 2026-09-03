@@ -11,7 +11,7 @@ tomar durante el rediseño. Se va rellenando por fases.
 
 | Qué | Dónde | Estado |
 |---|---|---|
-| **Sectores de los 6 logos de clientes** | `app/[lang]/page.js`, carrusel de la home | Los `alt` siguen siendo `Client-01`…`Client-06`. No los he cambiado porque inventar el sector de un cliente es exactamente lo que no toca hacer. En cuanto me des la lista, van al diccionario y salen de ahí. |
+| ~~Sectores de los 6 logos de clientes~~ | `dict.home.customers.logos` | **Resuelto.** Ver «Los logos identifican a los tres clientes bajo NDA» más abajo. |
 | **Foto de José Antonio Ces Franjo** | firma del artículo | Hay un placeholder en `public/author-placeholder.svg`. El JSON-LD de la `Person` **no** declara `image` a propósito: un avatar genérico no es una foto suya, y declararlo sería afirmar algo falso. |
 | **Logo para datos estructurados** | `organizationSchema` | Usa `/logo.svg`. Google acepta SVG, pero recomienda un raster cuadrado de 112 px o más para el logo de `Organization`. Conviene un PNG cuadrado cuando lo haya. |
 | **Dirección postal** | `organizationSchema` | Solo `Madrid, ES`. Sin calle ni código postal no se puede aspirar a resultados de negocio local completos. Dime si quieres añadirla. |
@@ -23,7 +23,89 @@ tomar durante el rediseño. Se va rellenando por fases.
   714». El Anexo A dice «fundador y CEO»; he puesto la versión corta porque
   es una línea de metadatos, no una bio. Cámbialo si prefieres la otra.
 
+### ⚠ Los logos identifican a los tres clientes bajo NDA
+
+Me pediste elegir yo los sectores de los seis logos. Para no inventarlos,
+extraje los PNG que los SVG llevan embebidos y los miré. Son:
+
+| Fichero | Empresa | Sector en el `alt` |
+|---|---|---|
+| `client-01.svg` | Samsung | electrónica de consumo |
+| `client-02.svg` | Grupo Fractalia | servicios tecnológicos |
+| `client-03.svg` | Telefónica | telecomunicaciones |
+| `client-04.svg` | hellotax | software de cumplimiento fiscal |
+| `client-05.svg` | Orange | telecomunicaciones |
+| `client-06.svg` | ComeFruta | comercio online de alimentación |
+
+El `alt` nombra empresa **y** sector, no solo el sector: hay dos logos de
+telecos, y con «telecomunicaciones» a secas un lector de pantalla no podría
+distinguirlos. Y lo que un logo comunica es de quién es.
+
+**Y aquí está el problema.** Tres de esos seis logos son, casi con certeza,
+los tres clientes de los casos anonimizados del Anexo A:
+
+- **hellotax** hace software de cumplimiento de IVA en la UE para
+  e-commerce → el «SaaS B2B de cumplimiento regulatorio para compañías que
+  operan en varios países» del Caso 1.
+- **Grupo Fractalia** vende servicios de protección y productividad digital
+  a través de operadores → la «plataforma SaaS vendida por operadores y
+  service providers bajo su marca» del Caso 2.
+- **ComeFruta** es comercio online de alimentación fresca → el «comercio
+  online de alimentación fresca y de temporada sobre WooCommerce» del
+  Caso 3.
+
+El propio Anexo A razona la anonimización diciendo: «Tienes razón en que
+"empresa de gestión de IVA en la UE" con un logo al lado identifica al
+cliente en dos segundos. **Pero el logo no va a estar.**» Si los logos se
+quedan en la web —aunque sea en otra sección— el logo sí está, y la
+anonimización de los tres casos no sirve de nada: cualquiera cruza «SaaS de
+cumplimiento en varios países» con el logo de hellotax en la misma web.
+
+No es una decisión que pueda tomar yo. Las salidas que veo:
+
+1. **Quitar del carrusel los tres logos de los casos** y dejar Samsung,
+   Telefónica y Orange, que no aparecen en ningún caso. Es la única opción
+   que mantiene el carrusel *y* la confidencialidad.
+2. **Pedirles permiso para nombrarlos.** Un caso con nombre vale mucho más
+   que uno anonimizado, y ya tienes su logo publicado.
+3. **Dejarlo como está** asumiendo que la anonimización es de cortesía, no
+   real. Legítimo si los NDA no prohíben mencionar la relación, pero
+   entonces sobra el aviso «Sector y algunos detalles alterados».
+
+Hasta que lo decidas he dejado los seis logos con su `alt` correcto: el
+problema no es el texto alternativo, es qué logos se publican.
+
 ### Decisiones
+
+**El artículo pilar al que redirige el modelo canónico no habla del modelo
+canónico.** Al preparar la reversión de esa consolidación encontré esto:
+
+- «El Modelo Canónico: Que no "alucine" tu IA» es el post #74, hoy
+  **despublicado**, y son solo **2.730 caracteres**. Era un artículo corto.
+- «RAG no es Magia» es el post #126, publicado, **13.601 caracteres**, y
+  absorbió **siete** artículos (14 filas de redirección, siete por idioma).
+- «RAG no es Magia» menciona «canónico» **cero veces**.
+
+O sea: quien busca «modelo canónico» y llega a esa URL antigua aterriza en
+un artículo que no trata el tema. Eso no es una consolidación, es una fuga.
+Tres salidas, y ninguna la he ejecutado porque toca la base de datos de
+producción:
+
+1. **Añadir la sección del modelo canónico al pilar** (una edición) y dejar
+   la redirección. Mejor para SEO —una página fuerte en vez de dos flojas—
+   pero el modelo canónico deja de tener URL propia, y tú lo quieres como
+   reclamo comercial.
+2. **Republicar el #74 y borrar las dos filas de redirección** (ids 72 y
+   73). Recupera la URL propia, pero publica un artículo de 2.730
+   caracteres, que es probablemente por lo que se fusionó.
+3. **Reescribirlo y ampliarlo** hasta que sostenga por sí solo, y entonces
+   quitar la redirección. Es lo que pide el posicionamiento nuevo (el modelo
+   canónico aparece en dos de los tres casos y en la página de IA), pero
+   escribir ese artículo es trabajo de contenido que no está en las cuatro
+   fases.
+
+Mi recomendación es la 3, con la 2 como paso intermedio solo si te corre
+prisa tener la URL viva.
 
 **Las tres URLs del blog que «devolvían otro artículo» no eran un fallo.**
 Son redirecciones deliberadas de la consolidación SEO: `PostRedirect` tiene
@@ -85,8 +167,10 @@ no se hace desde el código.
   un JSON-LD de 25 líneas y no existía el `<script>` que lo emitiera. Ahora
   se renderiza.
 - **`AGENTS.md` y `CLAUDE.md`** los ha creado `next dev` al arrancarlo (Next
-  16 los genera solo). Los he dejado **sin commitear**, porque son ficheros
-  que no pediste. Dime si los quieres en el repo o en `.gitignore`.
+  16 los genera solo). Van al repo, como pediste.
+- **Los logos se mueven de sitio en la Fase 3**, no desaparecen: el bloque
+  de prueba con los tres casos ocupa el lugar del carrusel en la home y el
+  carrusel baja a otra sección. Propondré dónde al llegar a esa fase.
 - **Cuatro errores de lint previos**, en ficheros que no he tocado:
   `RegenerateModal.js` (comillas sin escapar), `ContactClient.js`
   (`setState` sincrónico dentro de un efecto) y `DiagnosticClient.js`

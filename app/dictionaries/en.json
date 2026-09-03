@@ -37,6 +37,14 @@
       }
     },
     "customers": {
+      "logos": [
+        "Samsung — consumer electronics",
+        "Grupo Fractalia — technology services",
+        "Telefónica — telecommunications",
+        "hellotax — tax compliance software",
+        "Orange — telecommunications",
+        "ComeFruta — online grocery"
+      ],
       "title": {
         "line1": "But...",
         "line2": "does anyone actually hire you?"
