@@ -59,54 +59,76 @@
   },
   "home": {
     "hero": {
-      "title": "We design and build digital products that actually work",
-      "description": "No fluff: experience and quality technical execution to build products that hold up in the real world — demanding customers, shifting processes and AI agents already operating inside companies."
-    },
-    "services": {
-      "title": "So... what the f*** do you guys actually do?",
-      "num_1": {
-        "title": "UX & UI Design",
-        "description": "We kill complexity. We create interfaces so intuitive your users won't need a manual—just a desire to use your product."
-      },
-      "num_2": {
-        "title": "Product Management",
-        "description": "We prioritise what matters. We align your strategy with real goals, managing the product from the initial spark until it's in the customer's hands."
-      },
-      "num_3": {
-        "title": "CX Research & Audit",
-        "description": "We find where you're losing money. We analyse user behaviour to strip away friction and uncover high-impact growth opportunities."
-      },
-      "num_4": {
-        "title": "Digital Transformation",
-        "description": "Modernising your business from top to bottom. From legacy systems to internal culture and information structure, we prime your organisation for a digital world where AI is already part of the landscape."
-      },
-      "num_5": {
-        "title": "Software Development",
-        "description": "Clean, scalable code. We build robust solutions — back, front and integrations with agents or models when the case calls for it — that won't break the moment your business starts to scale."
-      }
-    },
-    "customers": {
-      "logos": [
-        "Samsung — consumer electronics",
-        "Grupo Fractalia — technology services",
-        "Telefónica — telecommunications",
-        "hellotax — tax compliance software",
-        "Orange — telecommunications",
-        "ComeFruta — online grocery"
-      ],
-      "title": {
-        "line1": "But...",
-        "line2": "does anyone actually hire you?"
-      },
-      "description": "We haven't been around long, but we’ve already landed some clients. We work with leaders in Telco and IT. But we’re open to anything, because the truth is, nobody is a saint when it comes to customer experience. If you’ve got a digital headache — from a flow bleeding users to an assistant that needs real context to stop hallucinating — we’re your team."
+      "title": "Your digital product already exists. The results don't.",
+      "description": "We improve and build the product your customers use and the one your team uses. User experience, technology and business in the same team, measured in what matters: conversion, time, errors and cost.",
+      "micro": "José Antonio Ces Franjo, founder, replies within 24 working hours · free 45-minute diagnostic session"
     },
     "buttons": {
-      "discover": "discover more",
-      "clients": "get in touch"
+      "tell_us": "Tell us about your case",
+      "see_cases": "See cases",
+      "all_cases": "Read all three cases →",
+      "how_we_work": "How we work and who we are →"
+    },
+    "situaciones": {
+      "title": "What's your situation?"
+    },
+    "diferencia": {
+      "title": "Fine, but what exactly do you do?",
+      "lead": "What a design agency doesn't do and a software factory doesn't either: all three at once, with the same team and the same P&L in front of us.",
+      "num_1": {
+        "title": "Experience",
+        "description": "If it needs explaining, we got it wrong. Every screen exists to move a metric."
+      },
+      "num_2": {
+        "title": "Technology",
+        "description": "The modern stack that fits your case, not the fashionable one. It lives alongside what you already have and doesn't break when you grow."
+      },
+      "num_3": {
+        "title": "Business",
+        "description": "We look at the model, the processes and the numbers underneath the product. A perfect product on top of a broken business fixes nothing, and we will tell you so."
+      }
+    },
+    "prueba": {
+      "title": "Results named by sector, not by client",
+      "disclaimer": "Real cases under confidentiality agreements: sector and details altered. We'll tell you the names in the first meeting.",
+      "link": "Case",
+      "casos": {
+        "saasAutogestion": "A regulated B2B SaaS whose support team was using the platform on behalf of its customers. Today customers do it themselves, the database went from over 200 tables to fewer than 20, and the margin from almost nothing to double digits. We now run all of their technology.",
+        "activacionCanonico": "A platform sold through service providers with an activation problem. Underneath it, 500 API schemas. Out came a mobile app, an API ten times smaller, and a canonical data model that AI agents work on today.",
+        "iaEcommerce": "An online grocery that wanted AI without touching its store. A separate platform that suggests substitutes, combines products and acts as a virtual nutritionist. Zero changes to their systems."
+      }
+    },
+    "metodo": {
+      "title": "How we work",
+      "closing": "The person you talk to is the person who does the work. No sales layer in between.",
+      "num_1": {
+        "title": "Diagnosis (2–3 weeks)",
+        "description": "Product, technology and business on the table. You leave with a prioritised plan even if you don't continue with us."
+      },
+      "num_2": {
+        "title": "Design and architecture",
+        "description": "Flows, screens and technical decisions together, because one without the other is just a drawing."
+      },
+      "num_3": {
+        "title": "Delivery in increments",
+        "description": "In production from the first weeks, living alongside your current systems."
+      },
+      "num_4": {
+        "title": "Measurement and evolution",
+        "description": "Live software doesn't end, it begins. We measure what we promised and stay for as long as we add value."
+      }
     },
     "latest": {
-      "title": "Latest from the blog",
-      "viewAll": "Read the blog →"
+      "title": "What we think, in case it helps before you call us",
+      "viewAll": "See the whole blog →"
+    },
+    "cierre": {
+      "title": "Tired of talking about metrics? Let's go build them.",
+      "description": "A 45-minute diagnostic session with José Antonio Ces Franjo. You write to us, we reply within 24 working hours and set a time. We tell you what we would do, in what order and what it would cost. If we are not the right team, we tell you that too."
+    },
+    "seo": {
+      "title": "Room 714 · Digital product for your customers and your team",
+      "description": "We improve and build the digital product your customers use and the one your team uses. Experience, technology and business in the same team, measured in results. Madrid."
     }
   },
   "contact": {
@@ -145,6 +167,17 @@
     }
   },
   "about": {
+    "sectors": {
+      "logos": [
+        "Samsung — consumer electronics",
+        "Grupo Fractalia — technology services",
+        "Telefónica — telecommunications",
+        "hellotax — tax compliance software",
+        "Orange — telecommunications",
+        "ComeFruta — online grocery"
+      ],
+      "title": "Sectors we have worked in"
+    },
     "title": "who we are",
     "hero_text": "We aren't your average agency. We’re a team of product, design, usability and engineering specialists — obsessed with delivering digital products that hit the bottom line, not just the aesthetic.",
     "quotes_line1": "Turning strategic goals into",

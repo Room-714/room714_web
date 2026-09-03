@@ -3,6 +3,7 @@ import Image from "next/image";
 import Navbar from "@/app/components/Navbar";
 import RulesSlider from "@/app/components/RulesSlider";
 import { getRules } from "@/app/data/Rules";
+import ClientLogos from "@/app/components/ClientLogos";
 import { SITE_URL, buildAlternates, langPaths } from "@/app/lib/seo/urls";
 import { pathsOf } from "@/app/lib/routes.mjs";
 
@@ -85,6 +86,15 @@ export default async function AboutPage({ params }) {
               className="object-contain"
             />
           </div>
+        </section>
+        {/* Sectores: aquí es donde viven ahora los logos de clientes. En la
+            portada su sitio lo ocupa el bloque de prueba con los tres casos,
+            que dice bastante más que seis logos sin contexto. */}
+        <section className="w-full bg-white pb-10 flex flex-col items-center text-center">
+          <h2 className="font-title font-bold text-red-500 text-2xl md:text-4xl lg:text-5xl px-6 mb-10 leading-tight">
+            {dict.about.sectors.title}
+          </h2>
+          <ClientLogos alts={dict.about.sectors.logos} />
         </section>
         {/* Sección Oscura: The Rules */}
         <section className="w-full bg-red-700 mt-4 py-16 flex flex-col items-center gap-2">

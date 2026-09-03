@@ -7,15 +7,29 @@ import ServiceCard from "@/app/components/ServiceCard";
 import PrimaryButton from "@/app/components/PrimaryButton";
 import Navbar from "@/app/components/Navbar";
 import BlogCard from "@/app/components/BlogCard";
-import { getServicesData } from "@/app/data/Services";
+import { getSituacionesData } from "@/app/data/Situaciones";
 import { getAllPosts, ordenarPorSlugs } from "@/app/lib/blog";
 import { PINNED_COUNT, PINNED_SLUGS } from "@/app/data/PinnedPosts";
 import { path } from "@/app/lib/routes.mjs";
+import { buildAlternates, samePath } from "@/app/lib/seo/urls";
+
+export async function generateMetadata({ params }) {
+  const { lang = "en" } = await params;
+  const dict = await getDictionary(lang);
+
+  return {
+    // `absolute` porque el título del Anexo A ya nombra la marca.
+    title: { absolute: dict.home.seo.title },
+    description: dict.home.seo.description,
+    alternates: buildAlternates(lang, samePath("")),
+  };
+}
 
 export default async function Home({ params }) {
   const { lang } = await params;
   const dict = await getDictionary(lang);
-  const services = getServicesData(dict);
+  const t = dict.home;
+  const situaciones = getSituacionesData(dict);
   // Tres piezas fijadas a mano por situación, no las últimas por fecha.
   const pinnedPosts = ordenarPorSlugs(
     await getAllPosts(lang),
@@ -24,6 +38,25 @@ export default async function Home({ params }) {
   );
   const BLOB_URL =
     "https://tzhsvjcv6h2qp8xy.public.blob.vercel-storage.com/Animacion%20final.mp4";
+
+  // Los tres casos del bloque de prueba, en el orden del Anexo A.
+  const casosDePrueba = [
+    { clave: "saasAutogestion", texto: t.prueba.casos.saasAutogestion },
+    { clave: "activacionCanonico", texto: t.prueba.casos.activacionCanonico },
+    { clave: "iaEcommerce", texto: t.prueba.casos.iaEcommerce },
+  ];
+
+  const diferencia = [
+    t.diferencia.num_1,
+    t.diferencia.num_2,
+    t.diferencia.num_3,
+  ];
+  const metodo = [
+    t.metodo.num_1,
+    t.metodo.num_2,
+    t.metodo.num_3,
+    t.metodo.num_4,
+  ];
 
   return (
     <div className="flex flex-col bg-black">
@@ -35,7 +68,7 @@ export default async function Home({ params }) {
         <div className="flex pb-10 justify-center w-full">
           <div
             className="relative transition-all duration-300
-                 w-[90%] 
+                 w-[90%]
                  max-w-200
                  aspect-square
                  overflow-hidden"
@@ -54,18 +87,33 @@ export default async function Home({ params }) {
         </div>
 
         <div className="px-4 md:px-12 flex flex-col justify-center items-center w-full">
-          <p className="font-hand font-black text-red-500 text-2xl md:text-3xl lg:text-5xl mb-8 lg:mb-16 md:px-4">
-            {dict.home.hero.title}
-          </p>
+          {/* h1 y no p: la portada no tenía ningún encabezado de primer nivel.
+              Las clases son las mismas, así que a la vista no cambia nada. */}
+          <h1 className="font-hand font-black text-red-500 text-2xl md:text-3xl lg:text-5xl mb-8 lg:mb-16 md:px-4">
+            {t.hero.title}
+          </h1>
           <p className="font-body text-base md:text-xl lg:text-2xl mb-8 lg:mb-16 md:px-4">
-            {dict.home.hero.description}
+            {t.hero.description}
           </p>
-          <PrimaryButton
-            text={dict.home.buttons.discover}
-            href={path("hablemos", lang)}
-            track="cta_click"
-            trackPlacement="home_hero"
-          />
+          {/* Dos botones: el primario y el secundario que ya existían */}
+          <div className="flex flex-col sm:flex-row items-center gap-4">
+            <PrimaryButton
+              text={t.buttons.tell_us}
+              isRed={true}
+              href={path("hablemos", lang)}
+              track="cta_click"
+              trackPlacement="home_hero"
+            />
+            <PrimaryButton
+              text={t.buttons.see_cases}
+              href={path("casos", lang)}
+              track="cta_click"
+              trackPlacement="home_hero_casos"
+            />
+          </div>
+          <p className="font-body text-xs md:text-sm text-gray-500 mt-6 max-w-xl md:px-4">
+            {t.hero.micro}
+          </p>
         </div>
       </section>
 
@@ -82,19 +130,20 @@ export default async function Home({ params }) {
         </div>
       </section>
 
-      {/* Services Section */}
+      {/* ¿Cuál es tu caso? Sustituye al bloque de cinco servicios con la misma
+          tarjeta numerada; ahora las cuatro llevan a su página. */}
       <section className="bg-black rounded-t-[50px] -mt-10 pt-20 pb-8 mb-4 z-20 relative">
         <div className="block w-full mx-auto">
           <div className="md:sticky top-12 mb-16 lg:mb-20 h-12 flex items-center justify-center px-4 md:px-8 lg:px-40">
             <h2 className="text-white z-30 font-title font-bold text-2xl md:text-4xl lg:text-5xl text-center px-2 md:px-8 lg:px-16 leading-tight">
-              {dict.home.services.title}
+              {t.situaciones.title}
             </h2>
           </div>
           {/* Dynamic mapping of Service Cards */}
-          {services.map((service, index) => {
+          {situaciones.map((situacion, index) => {
             return (
               <div
-                key={service.id}
+                key={situacion.clave}
                 className="md:sticky w-full"
                 style={{
                   top: "140px",
@@ -103,10 +152,14 @@ export default async function Home({ params }) {
                 }}
               >
                 <ServiceCard
-                  number={service.number}
-                  image={service.image}
-                  title={service.title}
-                  description={service.description}
+                  number={situacion.number}
+                  image={situacion.image}
+                  title={situacion.title}
+                  description={situacion.description}
+                  cta={situacion.cta}
+                  href={path(situacion.clave, lang)}
+                  track="situacion_click"
+                  trackPlacement={`home_${situacion.clave}`}
                 />
               </div>
             );
@@ -114,91 +167,129 @@ export default async function Home({ params }) {
         </div>
       </section>
 
-      {/* Customers Section */}
-      <section className="bg-white rounded-t-[50px] overflow-hidden -mt-50px px-2 py-10 flex flex-col items-center text-center z-50">
-        <div className="mb-8 p-4">
-          <Image
-            src="/clients-hero.svg"
-            alt="Clients"
-            width={280}
-            height={280}
-            className="w-auto h-auto mx-auto"
-            priority
-          />
-        </div>
+      {/* Vale, pero ¿qué hacéis exactamente? y la prueba. Los dos en blanco,
+          donde antes vivía el bloque de clientes. */}
+      <section className="bg-white rounded-t-[50px] overflow-hidden px-6 md:px-10 lg:px-20 py-16 lg:py-20 z-50 relative">
+        <div className="mx-auto max-w-6xl">
+          <h2 className="font-title font-bold text-red-500 text-3xl lg:text-5xl mb-8 leading-tight">
+            {t.diferencia.title}
+          </h2>
+          <p className="font-body text-xl lg:text-3xl leading-relaxed text-black mb-12 max-w-4xl">
+            {t.diferencia.lead}
+          </p>
 
-        <h2 className="font-title font-bold text-red-500 text-3xl lg:text-5xl px-2 mb-6 leading-tight">
-          {dict.home.customers.title.line1}
-        </h2>
-        <h2 className="font-hand font-bold text-red-500 text-3xl lg:text-5xl px-2 mb-6 leading-tight">
-          {dict.home.customers.title.line2}
-        </h2>
-
-        <p className="font-body text-xl px-4 lg:text-4xl leading relaxed lg:px-30 text-black mb-10">
-          {dict.home.customers.description}
-        </p>
-
-        {/* Contenedor principal con ancho forzado */}
-        <div className="relative w-full mb-10 overflow-hidden group py-6">
-          {/* Degradados laterales */}
-          <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
-          <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
-
-          {/* Contenedor de la animación */}
-          <div className="flex w-max animate-infinite-scroll hover:[animation-play-state:paused]">
-            {/* Renderizamos el bloque de logos 2 veces para el loop infinito */}
-            {[1, 2].map((block) => (
-              <div key={block} className="flex flex-nowrap">
-                {[1, 2, 3, 4, 5, 6].map((num) => (
-                  <div
-                    key={`${block}-${num}`}
-                    className="flex-none flex justify-center items-center 
-                       w-50 md:w-75 lg:w-100 
-                       px-8 md:px-12 lg:px-20"
-                  >
-                    {/* El alt nombra la empresa y su sector: "Client-01" no
-                        decía nada, y con dos logos de telecos el sector a
-                        secas tampoco los distinguiría. */}
-                    <div className="relative w-full h-20 md:h-28 lg:h-32 transition-all duration-500 transform hover:scale-110">
-                      <Image
-                        src={`/clients/client-0${num}.svg`}
-                        alt={dict.home.customers.logos[num - 1]}
-                        fill
-                        className="object-contain"
-                        sizes="(max-width: 768px) 200px, (max-width: 1024px) 300px, 400px"
-                      />
-                    </div>
-                  </div>
-                ))}
+          <div className="flex flex-col gap-8 lg:gap-10 mb-20">
+            {diferencia.map((entrada, index) => (
+              <div key={entrada.title} className="flex gap-4 lg:gap-8">
+                <span className="font-hand text-xl md:text-2xl lg:text-3xl text-red-500 shrink-0 pt-1">
+                  {`0${index + 1}`}
+                </span>
+                <div>
+                  <h3 className="font-title font-bold text-xl md:text-2xl lg:text-3xl text-black mb-2 uppercase">
+                    {entrada.title}
+                  </h3>
+                  <p className="font-body text-lg md:text-xl lg:text-2xl leading-relaxed text-gray-700">
+                    {entrada.description}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
-        </div>
 
-        <div className="w-2/3 mb-10 flex justify-center">
+          {/* Prueba: un párrafo por caso. Sustituye al carrusel de logos, que
+              se muda a "Cómo trabajamos". */}
+          <h2 className="font-hand font-bold text-red-500 text-3xl lg:text-5xl mb-10 leading-tight">
+            {t.prueba.title}
+          </h2>
+
+          <div className="flex flex-col gap-6 mb-10">
+            {casosDePrueba.map((caso) => (
+              <Link
+                key={caso.clave}
+                href={path(caso.clave, lang)}
+                data-track="caso_click"
+                data-track-placement={`home_prueba_${caso.clave}`}
+                className="group block rounded-4xl overflow-hidden
+                  bg-[#F2F2F2]
+                  bg-[linear-gradient(to_right,rgba(0,0,0,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.05)_1px,transparent_1px)]
+                  bg-size-[40px_40px]
+                  hover:bg-[#F8F8F8] transition-all duration-500 p-6 lg:p-8"
+              >
+                <p className="font-body text-base md:text-lg lg:text-2xl leading-relaxed text-gray-900">
+                  {caso.texto}{" "}
+                  <span className="font-hand text-red-500 whitespace-nowrap group-hover:underline">
+                    → {t.prueba.link}
+                  </span>
+                </p>
+              </Link>
+            ))}
+          </div>
+
+          <p className="font-body text-sm md:text-base text-gray-500 mb-10 max-w-3xl">
+            {t.prueba.disclaimer}
+          </p>
+
           <PrimaryButton
-            text={dict.home.buttons.clients}
-            icon={Phone}
-            href={path("hablemos", lang)}
+            text={t.buttons.all_cases}
+            isRed={true}
+            href={path("casos", lang)}
             track="cta_click"
-            trackPlacement="home_clientes"
+            trackPlacement="home_prueba"
           />
         </div>
       </section>
 
-      {/* Últimos del blog */}
+      {/* Cómo trabajamos: el método en cuatro pasos */}
+      <section className="bg-black rounded-t-[50px] -mt-10 px-6 md:px-10 lg:px-20 py-20 relative z-50">
+        <div className="mx-auto max-w-6xl">
+          <h2 className="font-title font-black text-3xl md:text-5xl lg:text-6xl text-white mb-12 leading-tight">
+            {t.metodo.title}
+          </h2>
+
+          <div className="flex flex-col gap-8 lg:gap-10 mb-12">
+            {metodo.map((paso, index) => (
+              <div key={paso.title} className="flex gap-4 lg:gap-8">
+                <span className="font-hand text-xl md:text-2xl lg:text-3xl text-red-500 shrink-0 pt-1">
+                  {`0${index + 1}`}
+                </span>
+                <div>
+                  <h3 className="font-title font-bold text-xl md:text-2xl lg:text-3xl text-white mb-2 uppercase">
+                    {paso.title}
+                  </h3>
+                  <p className="font-body text-lg md:text-xl lg:text-2xl leading-relaxed text-gray-300">
+                    {paso.description}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <p className="font-hand text-2xl md:text-3xl lg:text-4xl text-white mb-10">
+            {t.metodo.closing}
+          </p>
+
+          <PrimaryButton
+            text={t.buttons.how_we_work}
+            href={path("comoTrabajamos", lang)}
+            track="cta_click"
+            trackPlacement="home_metodo"
+          />
+        </div>
+      </section>
+
+      {/* Ideas: tres piezas fijadas a mano */}
       {pinnedPosts.length > 0 && (
         <section className="bg-gray-300 rounded-t-[50px] -mt-10 px-4 md:px-8 py-20 relative z-50">
           <div className="mx-auto max-w-7xl">
             <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12">
               <h2 className="font-title font-black text-3xl md:text-5xl lg:text-6xl text-black leading-tight">
-                {dict.home.latest.title}
+                {t.latest.title}
               </h2>
               <Link
                 href={path("blog", lang)}
-                className="font-hand text-xl md:text-2xl text-red-500 hover:text-red-700 transition-colors"
+                className="font-hand text-xl md:text-2xl text-red-500 hover:text-red-700 transition-colors shrink-0"
               >
-                {dict.home.latest.viewAll}
+                {t.latest.viewAll}
               </Link>
             </div>
 
@@ -216,8 +307,28 @@ export default async function Home({ params }) {
         </section>
       )}
 
+      {/* Cierre, con el mismo patrón que el CTA final de Casos */}
+      <section className="relative z-50 -mt-10 w-full bg-white rounded-t-[50px] px-6 py-16 lg:px-16 lg:py-20 text-center text-black">
+        <h2 className="font-title font-black text-3xl md:text-5xl mb-8 max-w-4xl mx-auto leading-tight">
+          {t.cierre.title}
+        </h2>
+        <p className="font-body text-lg md:text-xl lg:text-2xl text-gray-700 mb-10 max-w-3xl mx-auto leading-relaxed">
+          {t.cierre.description}
+        </p>
+        <div className="flex justify-center">
+          <PrimaryButton
+            text={t.buttons.tell_us}
+            isRed={true}
+            icon={Phone}
+            href={path("hablemos", lang)}
+            track="cta_click"
+            trackPlacement="home_cierre"
+          />
+        </div>
+      </section>
+
       {/* 1. Contenedor del Skyline: Proporcional y siempre visible */}
-      <section className="w-full bg-gray-300 overflow-hidden">
+      <section className="w-full bg-white overflow-hidden">
         <div className="w-[60%] ml-auto leading-0 flex">
           <Image
             src="/skyline.svg"
