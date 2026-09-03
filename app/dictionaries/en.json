@@ -525,6 +525,57 @@
     },
     "buttons": {
       "send": "get in touch"
+    },
+    "hero": {
+      "title": "45 minutes to find out what's wrong with your product",
+      "description": "A free diagnostic session with José Antonio Ces Franjo. It is not a sales meeting: it is the first half hour of work. You write to us, we reply within 24 working hours and set a time."
+    },
+    "sesion": {
+      "title": "What happens in the session",
+      "items": [
+        "You tell us what product you have, what isn't performing and what you have tried.",
+        "We ask the uncomfortable questions about product, technology and business.",
+        "We tell you what we think is going on, what we would do first and what investment range it would take.",
+        "If we are not the right team for your case, we say so and, if we can, we tell you who is."
+      ]
+    },
+    "llevas": {
+      "title": "What you take away",
+      "body": "An email within 48 hours with the diagnostic hypothesis, the first steps we recommend and a rough estimate. It's yours, whether you do it with us or not."
+    },
+    "paraQuien": {
+      "title": "Who it's for",
+      "body": "For whoever is responsible for a digital product that already exists (the one customers use or the one the team uses) or for a new line that needs building. If what you are after is an hourly quote or a visual redesign, we are probably not your team."
+    },
+    "formulario": {
+      "title": "Tell us about your case",
+      "lead": "Three questions. José Antonio answers, not a form:",
+      "q1": "Which product is it?",
+      "q1_opciones": [
+        "The one my customers use",
+        "The one my team uses",
+        "AI in pilot",
+        "Starting from scratch"
+      ],
+      "q2": "What isn't working?",
+      "q2_ayuda": "Two lines is enough.",
+      "q3_nombre": "What's your name?",
+      "q3_empresa": "Which company?",
+      "q3_email": "How do we reach you?",
+      "enviar": "Send"
+    },
+    "micro": {
+      "respuesta": "Reply within 24 working hours.",
+      "linkedin": "If you prefer LinkedIn, write directly to José Antonio Ces Franjo.",
+      "lugar": "Madrid · Sessions in Spanish or English"
+    },
+    "diagnostico": {
+      "pregunta": "Not sure where to start?",
+      "enlace": "Answer 4 questions →"
+    },
+    "seo": {
+      "title": "Free diagnostic session · Room 714",
+      "description": "45 minutes with José Antonio Ces Franjo to find out what's wrong with your digital product and what we would do first. Free. Write to us and we reply within 24 working hours."
     }
   },
   "about": {
@@ -566,6 +617,55 @@
         "description_line1": "Clean code, solid architecture and technical common sense.",
         "description_line2": "We build with how it'll scale in mind, and how it'll coexist with what you already have — including the AI already starting to operate inside your processes."
       }
+    },
+    "hero": {
+      "title": "We are not your usual agency. Nor a consultancy.",
+      "description": "We are a small team of product, design, usability and engineering people, measured by what changes in your P&L, not by what we hand over. The person you talk to is the person who does the work."
+    },
+    "metodo": {
+      "title": "The method",
+      "pasos": [
+        {
+          "title": "Diagnosis (2–3 weeks).",
+          "body": "We look at all three at once: how your customers or your team use the product, what technology sits underneath, and what business sits behind it. We deliver a prioritised plan with estimates. It's yours even if you don't continue with us."
+        },
+        {
+          "title": "Design and architecture, together.",
+          "body": "Flows and screens are decided with the technical decisions in front of us. A design technology can't hold up is a drawing; architecture nobody uses is an expense."
+        },
+        {
+          "title": "Delivery in increments.",
+          "body": "In production from the first weeks, living alongside your current systems. Every delivery moves the metric we agreed on, or explains why it didn't."
+        },
+        {
+          "title": "Measurement and evolution.",
+          "body": "Live software doesn't end, it begins. We stay for as long as we add value; if it stops making sense, we are the ones who say so."
+        }
+      ]
+    },
+    "quien": {
+      "title": "Who is behind this",
+      "nombre": "José Antonio Ces Franjo",
+      "cargo": "founder and CEO",
+      "bio": "Telecommunications engineer from the Polytechnic University of Madrid and more than thirty years in technology, always in the same place: where product meets business. He started programming telephone exchanges at Ericsson. He spent sixteen years at Telefónica building the enterprise offering and then running business marketing, with the P&L for every segment and a team of more than a hundred people. In 2016 he founded Room 714 and, in parallel, co-founded and served as COO for seven years at The Wise Seeker, a talent management SaaS. Since then he has led more than thirty consulting and product projects for companies such as LaLiga, Ingenico, GMV, Cobas Asset Management, Orange, Sercide, Zelenza and Señalizaciones Villar.",
+      "cita": "I make digital transformation stop being a PowerPoint.",
+      "cierreBio": "He leads every project and he is the person you meet in the diagnostic session.",
+      "equipo": "With him, a stable team of senior people in product design and UX, software engineering, and data and AI architecture. No juniors learning on your budget, and no account managers between you and whoever builds."
+    },
+    "noHacemos": {
+      "title": "What we don't do",
+      "items": [
+        "Branding, campaigns or marketing content.",
+        "Body-shopping: we don't rent out people by the hour for someone else to manage.",
+        "Selling a model, a platform or a cloud. We choose the one that fits your case.",
+        "Saying yes to everything. If the problem isn't a product problem, we'll tell you in the first session."
+      ]
+    },
+    "sectoresLista": "Telecommunications, financial services and wealth management, cybersecurity, retail, technology and IT, sport and entertainment.",
+    "cta": "Tell us about your case",
+    "seo": {
+      "title": "How we work · Room 714",
+      "description": "Diagnosis, design and architecture together, delivery in increments, and measurement. A senior team of product, design and engineering led by José Antonio Ces Franjo. No agency, no consultancy."
     }
   },
   "projects": {
@@ -783,10 +883,10 @@
     "analyzing_sub": "Preparing your personalized diagnosis",
 
     "q1": "Which situation best describes your case?",
-    "q1_a": "I have an idea but don't know how to bring it to life",
-    "q1_b": "I have a product but users aren't engaging as expected",
-    "q1_c": "My product works but doesn't look professional",
-    "q1_d": "I need to build or scale something technical",
+    "q1_a": "The product my customers use is losing them",
+    "q1_b": "My team's tooling is slowing the operation down",
+    "q1_c": "My AI pilot never reaches production",
+    "q1_d": "I am starting from scratch",
 
     "q2_product": "What concerns you the most right now?",
     "q2_product_a": "I'm not sure if my idea has a market",

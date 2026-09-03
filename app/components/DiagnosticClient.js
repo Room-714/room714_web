@@ -6,6 +6,7 @@ import { ArrowLeft, RotateCcw, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import PrimaryButton from "@/app/components/PrimaryButton";
 import { path } from "@/app/lib/routes.mjs";
+import { CLAVES_SITUACION } from "@/app/data/Situaciones";
 import {
   diagnosticTree,
   diagnosticResults,
@@ -72,6 +73,11 @@ export default function DiagnosticClient({ dict }) {
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [analyzing, setAnalyzing] = useState(false);
   const [direction, setDirection] = useState(1); // 1 = forward, -1 = back
+  // La situacion que se elige en la PRIMERA pregunta. Es lo que decide a
+  // que pagina de situacion lleva el resultado: el arbol de abajo sigue
+  // siendo el de siempre, pero la puerta de entrada ya son las cuatro
+  // situaciones del menu.
+  const [situacion, setSituacion] = useState(null);
 
   const params = useParams();
   const lang = params?.lang || "en";
@@ -109,6 +115,7 @@ export default function DiagnosticClient({ dict }) {
       if (selectedIndex !== null) return; // prevent double-click
       setSelectedIndex(index);
       setDirection(1);
+      if (currentNode === "start") setSituacion(CLAVES_SITUACION[index] ?? null);
 
       setTimeout(() => {
         if (option.result) {
@@ -143,6 +150,7 @@ export default function DiagnosticClient({ dict }) {
 
   const handleReset = useCallback(() => {
     setDirection(-1);
+    setSituacion(null);
     setCurrentNode("start");
     setHistory([]);
     setResult(null);
@@ -150,16 +158,12 @@ export default function DiagnosticClient({ dict }) {
     setAnalyzing(false);
   }, []);
 
-  // Build contact URL with pre-filled interests
-  const getContactUrl = () => {
-    if (!result) return path("hablemos", lang);
-    const interestValues = result.interestKeys
-      .map((key) => dict.contact.interested[key])
-      .filter(Boolean);
-    const params = new URLSearchParams();
-    interestValues.forEach((v) => params.append("interest", v));
-    return `${path("hablemos", lang)}?${params.toString()}`;
-  };
+  // La URL del formulario lleva la situacion elegida, para que Hablemos
+  // llegue con la primera pregunta ya marcada.
+  const getContactUrl = () =>
+    situacion
+      ? `${path("hablemos", lang)}?situacion=${situacion}`
+      : path("hablemos", lang);
 
   // ─── ANALYZING SCREEN ───────────────────────────────────────
   if (analyzing) {
@@ -302,7 +306,18 @@ export default function DiagnosticClient({ dict }) {
                 href={getContactUrl()}
                 isRed={true}
                 icon={Sparkles}
+                track="cta_click"
+                trackPlacement="diagnostico_resultado"
               />
+              {/* Y la pagina de la situacion que se eligio al principio */}
+              {situacion && (
+                <PrimaryButton
+                  text={dict.situaciones[situacion].cardCta}
+                  href={path(situacion, lang)}
+                  track="situacion_click"
+                  trackPlacement="diagnostico_resultado"
+                />
+              )}
               <button
                 onClick={handleReset}
                 className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors font-title text-sm uppercase tracking-wider cursor-pointer"

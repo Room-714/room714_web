@@ -5,6 +5,86 @@ tomar durante el rediseño. Se va rellenando por fases.
 
 ---
 
+## Fase 3 · Contenidos
+
+### Datos que faltan
+
+| Qué | Dónde | Qué he hecho |
+|---|---|---|
+| **Foto de José Antonio** | firma del artículo y bio de *Cómo trabajamos* | Placeholder en los dos sitios (`public/author-placeholder.svg`). El JSON-LD de la `Person` sigue sin declarar `image`: un avatar genérico no es una foto suya. |
+| **Tamaño y experiencia del equipo** | *Cómo trabajamos* | El anexo dice «un equipo estable de **n** personas senior […] [PENDIENTE: años medios de experiencia, sectores]». He publicado la frase **sin el número y sin los años**: «un equipo estable de personas senior en diseño de producto y UX, ingeniería de software y arquitectura de datos e IA». En cuanto me des las cifras entran. |
+| **Correo de contacto** | *Hablemos* | El anexo dice «dirección por confirmar». He **omitido la línea del correo**: publicar «dirección por confirmar» en la web es peor que no ponerla. Quedan LinkedIn, Madrid y los idiomas de las sesiones. |
+| **Lista de tecnologías con las que habéis convivido** | *Producto para tu equipo* | Publicada tal cual («Monolitos .NET y Java, frontales Angular y React, MariaDB…»), porque el [PENDIENTE] pedía *confirmar y completar*, no rellenar un hueco. **Confírmala**: es una afirmación sobre vuestra experiencia. |
+| **Lista de sectores** | *Cómo trabajamos* | Igual: publicada tal cual, pendiente de que la confirmes. |
+
+### ⚠ Los clientes citados por su nombre en la bio
+
+La bio nombra a **LaLiga, Ingenico, GMV, Cobas Asset Management, Orange,
+Sercide, Zelenza y Señalizaciones Villar**. El propio anexo dice: «Confirma
+que puedes citarlos (basta que hayan sido clientes y no haya cláusula de no
+mención); los que no, fuera de la lista».
+
+Los he publicado porque son tu texto y tus clientes, pero **esa confirmación
+sigue pendiente y es tuya**. Va en el mismo saco que el asunto de los logos.
+
+### Textos EN provisionales
+
+Todo lo nuevo en inglés: portada completa, los tres casos enteros, las
+cuatro páginas de situación completas, *Cómo trabajamos*, *Hablemos* y las
+cuatro opciones del diagnóstico. Traducido con criterio y adaptando los
+juegos de palabras, no literal, pero **pendiente del copy final**. El
+castellano va literal del Anexo A.
+
+### Cambios de maqueta que el contenido obliga
+
+- **El h1 de *Cómo trabajamos* baja de escala.** El titular pasa de «quiénes
+  somos» (14 caracteres, a `text-9xl`) a «No somos una agencia al uso.
+  Tampoco una consultora.» (48). A `9xl` ocupaba la pantalla entera, así que
+  va a `text-3xl md:text-5xl lg:text-7xl`. La flecha ilustrada se queda.
+- **La primera pregunta del formulario es de selección única.** Antes eran
+  nueve intereses con selección múltiple; ahora son cuatro situaciones
+  excluyentes, y poder marcar las cuatro no informaba de nada. Mismas
+  pastillas, mismo estilo.
+- **Los bloques de «Vale, pero ¿qué hacéis exactamente?» y del método** en la
+  portada NO usan la tarjeta grande numerada. Con las cuatro situaciones ya
+  usándola encima, tres pilas de tarjetas seguidas hacían la portada
+  interminable; van con la tipografía del sitio y el número en `font-hand`
+  rojo, como los subtítulos de la tarjeta de proyecto.
+- **`ServiceCard` estrena `href` y `cta` opcionales** (Fase 2) y el
+  formulario de contacto manda ahora también la **empresa**, que aparece
+  como una fila más en el correo.
+
+### Decisiones
+
+**Los nueve proyectos se quedan los nueve.** El anexo dice «los otros
+**seis** proyectos actuales se mantienen como tarjetas cortas», pero la
+página tiene nueve, y varios son justamente las líneas «Otros:» que citan
+las páginas de situación (activación en telco, onboarding en gestión de
+patrimonios, dashboards con IA generativa, ecosistema fiscal, app Zero-Trust).
+Borrar tres sería borrar contenido, y encima contenido referenciado desde
+otras páginas. Si quieres seis, dime cuáles tres se van.
+
+**El diagnóstico: reescritas las cuatro opciones y conectado a las
+situaciones.** Las cuatro primeras respuestas son ahora las del Anexo A, y el
+resultado ofrece dos botones: el formulario y **la página de la situación que
+se eligió en la primera pregunta**. Al formulario llega
+`?situacion=<clave>`, así que *Hablemos* se abre con la primera pregunta ya
+marcada.
+
+Lo que **no** he tocado es el árbol de cuatro niveles que hay debajo: sus
+preguntas 2, 3 y 4 siguen con la taxonomía antigua (producto / UX / diseño /
+tecnología). El anexo solo pedía reescribir «las cuatro opciones del
+cuestionario», y rehacer el árbol entero es un trabajo de contenido que no
+está en las fases. Queda coherente porque la puerta de entrada y la salida
+ya son las cuatro situaciones, pero el camino de en medio habla otro idioma.
+**Merece una pasada.**
+
+**El copy antiguo no se ha perdido**: los cinco servicios de la portada, el
+«Pero… ¿os contrata alguien?» y el «quiénes somos» viven en el historial de
+git, en los commits anteriores a esta fase.
+
+---
+
 ## Fase 2 · Arquitectura de información
 
 ### Decisiones que tomé yo, porque me dijiste que las tomara
