@@ -19,6 +19,7 @@ import {
   organizationSchema,
 } from "@/app/lib/seo/schema";
 import { LINKEDIN_COMPANY, withUtm } from "@/app/lib/links";
+import { path } from "@/app/lib/routes.mjs";
 import AnalyticsEvents from "@/app/components/AnalyticsEvents";
 import { Analytics } from "@vercel/analytics/next";
 import { cookies } from "next/headers";
@@ -237,7 +238,7 @@ export default async function RootLayout({ children, params }) {
                     </Link>
                     {/* Blog */}
                     <Link
-                      href="/blog"
+                      href={path("blog", lang)}
                       className="p-2 bg-white rounded-full hover:opacity-70 transition-opacity"
                     >
                       <Image
@@ -254,23 +255,40 @@ export default async function RootLayout({ children, params }) {
             </div>
 
             {/* LINKS PRIVACY, COOKIES AND TERMS */}
+            {/* Diagnóstico y Empleo bajan aquí desde el menú: conservan su
+                URL y siguen accesibles, con el mismo estilo que los
+                legales. */}
             <div className="flex justify-center items-center gap-x-3 md:gap-x-6 text-white text-sm sm:text-base md:text-xl lg:text-2xl font-light">
               <Link
-                href={`/${lang}/privacy`}
+                href={path("diagnostico", lang)}
+                className="hover:text-red-500 transition-colors duration-300"
+              >
+                {dict.nav.diagnostic}
+              </Link>
+              <span className="w-px h-5 bg-white" aria-hidden="true" />
+              <Link
+                href={path("empleo", lang)}
+                className="hover:text-red-500 transition-colors duration-300"
+              >
+                {dict.nav.careers}
+              </Link>
+              <span className="w-px h-5 bg-white" aria-hidden="true" />
+              <Link
+                href={path("privacidad", lang)}
                 className="hover:text-red-500 transition-colors duration-300"
               >
                 {dict.footer.privacy}
               </Link>
               <span className="w-px h-5 bg-white" aria-hidden="true" />
               <Link
-                href={`/${lang}/terms`}
+                href={path("terminos", lang)}
                 className="hover:text-red-500 transition-colors duration-300"
               >
                 {dict.footer.terms}
               </Link>
               <span className="w-px h-5 bg-white" aria-hidden="true" />
               <Link
-                href={`/${lang}/cookies`}
+                href={path("cookies", lang)}
                 className="hover:text-red-500 transition-colors duration-300"
               >
                 {dict.footer.cookies}

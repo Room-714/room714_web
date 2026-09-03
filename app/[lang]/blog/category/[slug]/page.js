@@ -121,7 +121,7 @@ export default async function CategoryPage({ params }) {
     },
     breadcrumbSchema([
       { name: dict.nav.home, url: `${baseUrl}/${lang}` },
-      { name: dict.nav.blog, url: `${baseUrl}/${lang}/blog` },
+      { name: dict.nav.ideas, url: `${baseUrl}/${lang}/blog` },
       { name: label, url: pageUrl },
     ]),
   );

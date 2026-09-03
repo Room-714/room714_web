@@ -42,6 +42,37 @@ export async function getAllPosts(lang = "es") {
   }
 }
 
+/**
+ * Ordena los posts según una lista de slugs y rellena los huecos con lo más
+ * reciente hasta `cuantos`. Pura, para poder probarla sin base de datos.
+ *
+ * Un slug fijado que ya no existe (despublicado, renombrado) no deja hueco ni
+ * rompe la portada: simplemente entra el siguiente más reciente.
+ */
+export function ordenarPorSlugs(posts, slugs, cuantos) {
+  const porSlug = new Map(posts.filter((p) => p.slug).map((p) => [p.slug, p]));
+  const elegidos = [];
+  const usados = new Set();
+
+  for (const slug of slugs) {
+    const post = porSlug.get(slug);
+    if (post && !usados.has(post.id)) {
+      elegidos.push(post);
+      usados.add(post.id);
+    }
+  }
+
+  for (const post of posts) {
+    if (elegidos.length >= cuantos) break;
+    if (!usados.has(post.id) && post.slug) {
+      elegidos.push(post);
+      usados.add(post.id);
+    }
+  }
+
+  return elegidos.slice(0, cuantos);
+}
+
 export async function getPostsByCategory(category, lang = "es") {
   try {
     const now = new Date();

@@ -128,7 +128,7 @@ export default async function PostPage({ params }) {
     }),
     breadcrumbSchema([
       { name: dict.nav.home, url: `${SITE_URL}/${lang}` },
-      { name: dict.nav.blog, url: `${SITE_URL}/${lang}/blog` },
+      { name: dict.nav.ideas, url: `${SITE_URL}/${lang}/blog` },
       { name: title, url: pageUrl },
     ]),
   );

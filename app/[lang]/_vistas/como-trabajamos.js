@@ -3,12 +3,14 @@ import Image from "next/image";
 import Navbar from "@/app/components/Navbar";
 import RulesSlider from "@/app/components/RulesSlider";
 import { getRules } from "@/app/data/Rules";
-import { SITE_URL, buildAlternates, samePath } from "@/app/lib/seo/urls";
+import { SITE_URL, buildAlternates, langPaths } from "@/app/lib/seo/urls";
+import { pathsOf } from "@/app/lib/routes.mjs";
 
 const baseUrl = SITE_URL;
 
 export async function generateMetadata({ params }) {
   const { lang = "en" } = await params;
+  const rutas = pathsOf("comoTrabajamos");
   const titles = {
     en: "About Us — How We Work",
     es: "Nosotros — Cómo Trabajamos",
@@ -21,11 +23,11 @@ export async function generateMetadata({ params }) {
   return {
     title: titles[lang],
     description: descriptions[lang],
-    alternates: buildAlternates(lang, samePath("/about")),
+    alternates: buildAlternates(lang, langPaths(rutas.es, rutas.en)),
     openGraph: {
       title: titles[lang],
       description: descriptions[lang],
-      url: `${baseUrl}/${lang}/about`,
+      url: `${baseUrl}${rutas[lang]}`,
       type: "website",
     },
   };

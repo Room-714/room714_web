@@ -1,12 +1,61 @@
 {
   "nav": {
-    "home": "Home",
+    "home": "Inicio",
+    "que_hacemos": "Qué hacemos",
+    "casos": "Casos",
+    "como_trabajamos": "Cómo trabajamos",
+    "ideas": "Ideas",
+    "hablemos": "Hablemos",
     "projects": "Proyectos",
     "about": "Nosotros",
     "blog": "Blog",
     "diagnostic": "Diagnóstico",
     "careers": "Empleo",
     "contact": "Contacto"
+  },
+  "situaciones": {
+    "cta": "Cuéntanos tu caso",
+    "indice": {
+      "title": "¿Cuál es tu caso?",
+      "seoTitle": "Qué hacemos · Room 714",
+      "seoDescription": "Cuatro situaciones: el producto que usan tus clientes pierde gente, la herramienta de tu equipo frena la operación, tienes IA en piloto que no llega a producción, o empiezas de cero."
+    },
+    "productoClientes": {
+      "cardTitle": "El producto que usan tus clientes pierde gente",
+      "cardDescription": "Contratación, alta, onboarding, área de cliente, app. Cada paso que sobra es un cliente que se va. Rediseñamos el flujo, lo construimos y lo medimos en conversión, ARPU y coste de atención.",
+      "cardCta": "Producto para tus clientes →",
+      "heroTitle": "Cada paso que sobra en tu producto es un cliente que se va",
+      "heroDescription": "Rediseñamos y construimos los flujos que tus clientes usan para contratar, darse de alta, operar y volver: onboarding, activación, área de cliente, app. Y lo medimos donde se nota: conversión, abandono, ARPU y coste de atención.",
+      "seoTitle": "Rediseño de onboarding, contratación y área de cliente · Room 714",
+      "seoDescription": "Rediseñamos y construimos los flujos digitales que tus clientes usan para contratar, darse de alta y operar. Medido en conversión, abandono y ARPU."
+    },
+    "productoEquipo": {
+      "cardTitle": "El producto que usa tu equipo frena la operación",
+      "cardDescription": "Back-office, dashboards, herramientas internas, sistemas que nadie quiere tocar. Lo modernizamos sin parar el negocio, y si toca meter IA, la metemos con el contexto que necesita para no inventarse nada.",
+      "cardCta": "Producto para tu equipo →",
+      "heroTitle": "El software que usa tu equipo también es un producto. Y se nota cuando no lo tratas como tal.",
+      "heroDescription": "Modernizamos y construimos las herramientas con las que tu empresa opera: back-office, dashboards, gestión de incidencias, plataformas de datos, sistemas heredados. Sin parar la operación y medido en errores, tiempo y coste.",
+      "seoTitle": "Modernizar software interno, back-office y dashboards · Room 714",
+      "seoDescription": "Modernizamos y construimos las herramientas con las que opera tu empresa: back-office, dashboards, sistemas heredados. Sin parar la operación, con IA donde aporta, medido en errores y tiempo."
+    },
+    "iaProducto": {
+      "cardTitle": "Tienes IA en piloto y no llega a producción",
+      "cardDescription": "La demo funcionó. Seis meses después sigue siendo una demo. Trabajamos la capa que falta entre el modelo y tus sistemas: datos, contexto, interfaz y coste.",
+      "cardCta": "IA dentro del producto →",
+      "heroTitle": "La demo funcionó. ¿Por qué sigue siendo una demo?",
+      "heroDescription": "Llevamos la IA de piloto a producción dentro de tu producto: la capa de datos y contexto que evita que invente, la interfaz que la hace usable y el coste que la hace viable. Sin vender un modelo ni una plataforma.",
+      "seoTitle": "IA de piloto a producción dentro de tu producto · Room 714",
+      "seoDescription": "Llevamos la IA de piloto a producción: capa semántica y modelo canónico para que no alucine, arquitectura que aplica al caso, interfaz usable y coste viable."
+    },
+    "empezarDeCero": {
+      "cardTitle": "Empiezas de cero",
+      "cardDescription": "Una idea, una nueva línea de negocio o un producto que hay que rehacer entero. Revisamos el negocio antes de la primera pantalla y lo llevamos a producción.",
+      "cardCta": "Empezar de cero →",
+      "heroTitle": "Antes de la primera pantalla, la primera pregunta: ¿esto es un negocio?",
+      "heroDescription": "Llevamos ideas y nuevas líneas de negocio a producto en producción. Revisamos el modelo antes de diseñar, diseñamos antes de construir y construimos para que aguante cuando funcione.",
+      "seoTitle": "De idea a producto digital en producción · Room 714",
+      "seoDescription": "Llevamos ideas y nuevas líneas de negocio a producto en producción. Revisamos el negocio antes de diseñar, diseñamos antes de construir y construimos sin lock-in."
+    }
   },
   "home": {
     "hero": {

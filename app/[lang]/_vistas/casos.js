@@ -5,13 +5,14 @@ import Navbar from "@/app/components/Navbar";
 import PrimaryButton from "@/app/components/PrimaryButton";
 import ProjectsList from "@/app/components/ProjectList";
 import { getProjectsData } from "@/app/data/Projects";
-import { SITE_URL, buildAlternates, samePath } from "@/app/lib/seo/urls";
+import { buildAlternates, langPaths } from "@/app/lib/seo/urls";
 import { ORGANIZATION_ID, jsonLdGraph } from "@/app/lib/seo/schema";
+import { path, pathsOf } from "@/app/lib/routes.mjs";
 
-const baseUrl = SITE_URL;
 
 export async function generateMetadata({ params }) {
   const { lang } = await params;
+  const rutas = pathsOf("casos");
   const titles = {
     es: "Proyectos | Room 714",
     en: "Projects | Room 714",
@@ -27,9 +28,9 @@ export async function generateMetadata({ params }) {
     title: { absolute: titles[lang] },
     description: descriptions[lang],
     // Sin esto, Next fusiona los metadatos con los del layout y la página
-    // hereda `canonical: ${baseUrl}/${lang}`: le declara a Google que es una
+    // hereda la canónica de la portada: le declara a Google que es una
     // copia de la portada, y Google deja de indexarla.
-    alternates: buildAlternates(lang, samePath("/projects")),
+    alternates: buildAlternates(lang, langPaths(rutas.es, rutas.en)),
   };
 }
 
@@ -129,7 +130,7 @@ export default async function ProjectsPage({ params }) {
             text={dict.projects.buttons.view_case_study}
             isRed={true}
             icon={Phone}
-            href={`/${lang}/contact`}
+            href={path("hablemos", lang)}
             track="cta_click"
             trackPlacement="proyectos_cierre"
           />

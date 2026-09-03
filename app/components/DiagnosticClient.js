@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { ArrowLeft, RotateCcw, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import PrimaryButton from "@/app/components/PrimaryButton";
+import { path } from "@/app/lib/routes.mjs";
 import {
   diagnosticTree,
   diagnosticResults,
@@ -151,13 +152,13 @@ export default function DiagnosticClient({ dict }) {
 
   // Build contact URL with pre-filled interests
   const getContactUrl = () => {
-    if (!result) return `/${lang}/contact`;
+    if (!result) return path("hablemos", lang);
     const interestValues = result.interestKeys
       .map((key) => dict.contact.interested[key])
       .filter(Boolean);
     const params = new URLSearchParams();
     interestValues.forEach((v) => params.append("interest", v));
-    return `/${lang}/contact?${params.toString()}`;
+    return `${path("hablemos", lang)}?${params.toString()}`;
   };
 
   // ─── ANALYZING SCREEN ───────────────────────────────────────

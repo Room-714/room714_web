@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import { Menu, X, ChevronDown } from "lucide-react";
+import PrimaryButton from "@/app/components/PrimaryButton";
+import { path } from "@/app/lib/routes.mjs";
 
 export default function Navbar({
   dict,
@@ -29,14 +31,19 @@ export default function Navbar({
     return pathname.replace(`/${lang}`, `/${targetLang}`);
   };
 
+  // Diagnóstico y Empleo salen del menú y pasan al footer: conservan su URL
+  // y siguen accesibles, pero dejan de competir por la atención con las
+  // cuatro situaciones, que es por donde entra el cliente.
   const navLinks = [
-    { name: dict.nav.home, href: `/${lang}/` },
-    { name: dict.nav.projects, href: `/${lang}/projects` },
-    { name: dict.nav.about, href: `/${lang}/about` },
-    { name: dict.nav.blog, href: `/${lang}/blog` },
-    { name: dict.nav.diagnostic, href: `/${lang}/diagnostic` },
-    { name: dict.nav.careers, href: `/${lang}/careers` },
+    { name: dict.nav.home, href: path("home", lang) },
+    { name: dict.nav.que_hacemos, href: path("queHacemos", lang) },
+    { name: dict.nav.casos, href: path("casos", lang) },
+    { name: dict.nav.como_trabajamos, href: path("comoTrabajamos", lang) },
+    { name: dict.nav.ideas, href: path("blog", lang) },
   ];
+
+  // "Hablemos" va aparte: es el CTA, con el estilo de PrimaryButton.
+  const cta = { name: dict.nav.hablemos, href: path("hablemos", lang) };
 
   return (
     <header
@@ -76,6 +83,15 @@ export default function Navbar({
             );
           })}
         </nav>
+
+        {/* CTA: el mismo PrimaryButton que ya usa el resto del sitio */}
+        <PrimaryButton
+          text={cta.name}
+          href={cta.href}
+          isRed={true}
+          track="cta_click"
+          trackPlacement="header"
+        />
 
         {/* Selector de Idioma Desktop */}
         <div className="relative border-l pl-4 lg:pl-6 xl:pl-8 border-gray-500/30 font-hand text-base lg:text-lg uppercase">
@@ -150,6 +166,17 @@ export default function Navbar({
               </Link>
             );
           })}
+
+          {/* CTA también en móvil, donde el header no tiene sitio */}
+          <div onClick={() => setIsOpen(false)}>
+            <PrimaryButton
+              text={cta.name}
+              href={cta.href}
+              isRed={true}
+              track="cta_click"
+              trackPlacement="header_movil"
+            />
+          </div>
 
           {/* Selector de Idioma Móvil */}
           <div className="flex items-center gap-6 pt-4 border-t border-gray-500/20 uppercase font-bold tracking-widest text-sm">

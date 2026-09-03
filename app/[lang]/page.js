@@ -8,13 +8,20 @@ import PrimaryButton from "@/app/components/PrimaryButton";
 import Navbar from "@/app/components/Navbar";
 import BlogCard from "@/app/components/BlogCard";
 import { getServicesData } from "@/app/data/Services";
-import { getAllPosts } from "@/app/lib/blog";
+import { getAllPosts, ordenarPorSlugs } from "@/app/lib/blog";
+import { PINNED_COUNT, PINNED_SLUGS } from "@/app/data/PinnedPosts";
+import { path } from "@/app/lib/routes.mjs";
 
 export default async function Home({ params }) {
   const { lang } = await params;
   const dict = await getDictionary(lang);
   const services = getServicesData(dict);
-  const latestPosts = (await getAllPosts(lang)).slice(0, 4);
+  // Tres piezas fijadas a mano por situación, no las últimas por fecha.
+  const pinnedPosts = ordenarPorSlugs(
+    await getAllPosts(lang),
+    PINNED_SLUGS[lang] ?? [],
+    PINNED_COUNT,
+  );
   const BLOB_URL =
     "https://tzhsvjcv6h2qp8xy.public.blob.vercel-storage.com/Animacion%20final.mp4";
 
@@ -55,7 +62,7 @@ export default async function Home({ params }) {
           </p>
           <PrimaryButton
             text={dict.home.buttons.discover}
-            href={`/${lang}/diagnostic`}
+            href={path("hablemos", lang)}
             track="cta_click"
             trackPlacement="home_hero"
           />
@@ -172,7 +179,7 @@ export default async function Home({ params }) {
           <PrimaryButton
             text={dict.home.buttons.clients}
             icon={Phone}
-            href={`/${lang}/contact`}
+            href={path("hablemos", lang)}
             track="cta_click"
             trackPlacement="home_clientes"
           />
@@ -180,7 +187,7 @@ export default async function Home({ params }) {
       </section>
 
       {/* Últimos del blog */}
-      {latestPosts.length > 0 && (
+      {pinnedPosts.length > 0 && (
         <section className="bg-gray-300 rounded-t-[50px] -mt-10 px-4 md:px-8 py-20 relative z-50">
           <div className="mx-auto max-w-7xl">
             <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12">
@@ -188,15 +195,15 @@ export default async function Home({ params }) {
                 {dict.home.latest.title}
               </h2>
               <Link
-                href={`/${lang}/blog`}
+                href={path("blog", lang)}
                 className="font-hand text-xl md:text-2xl text-red-500 hover:text-red-700 transition-colors"
               >
                 {dict.home.latest.viewAll}
               </Link>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
-              {latestPosts.map((post) => (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+              {pinnedPosts.map((post) => (
                 <BlogCard
                   key={post.id}
                   post={post}

@@ -3,12 +3,14 @@ import Navbar from "@/app/components/Navbar";
 import Image from "next/image";
 import ContactClient from "@/app/components/ContactClient";
 import { getInterests } from "@/app/data/Interests";
-import { SITE_URL, buildAlternates, samePath } from "@/app/lib/seo/urls";
+import { SITE_URL, buildAlternates, langPaths } from "@/app/lib/seo/urls";
+import { pathsOf } from "@/app/lib/routes.mjs";
 
 const baseUrl = SITE_URL;
 
 export async function generateMetadata({ params }) {
   const { lang = "en" } = await params;
+  const rutas = pathsOf("hablemos");
   const titles = {
     en: "Contact Us",
     es: "Contacto",
@@ -21,11 +23,11 @@ export async function generateMetadata({ params }) {
   return {
     title: titles[lang],
     description: descriptions[lang],
-    alternates: buildAlternates(lang, samePath("/contact")),
+    alternates: buildAlternates(lang, langPaths(rutas.es, rutas.en)),
     openGraph: {
       title: titles[lang],
       description: descriptions[lang],
-      url: `${baseUrl}/${lang}/contact`,
+      url: `${baseUrl}${rutas[lang]}`,
       type: "website",
     },
   };

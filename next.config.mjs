@@ -1,8 +1,20 @@
+import { RENOMBRADAS, guardasDeIdioma } from "./app/lib/routes.mjs";
+
+// Las redirecciones del rediseño no se escriben a mano: salen del mapa de
+// rutas, así que añadir una página añade sus guardas sola y no hay forma de
+// que el menú apunte a una URL y la redirección a otra.
+const desdeElMapa = [...RENOMBRADAS, ...guardasDeIdioma()].map(({ de, a }) => ({
+  source: de,
+  destination: a,
+  statusCode: 301,
+}));
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // 1. Redirecciones de Dominio (SEO Force 301)
   async redirects() {
     return [
+      ...desdeElMapa,
       {
         // Redirige cualquier ruta de room714.es (con o sin www) al .com
         source: "/:path*",

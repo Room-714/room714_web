@@ -1,4 +1,5 @@
 import { prisma } from "@/app/lib/prisma";
+import { path } from "@/app/lib/routes.mjs";
 
 export const revalidate = 3600;
 
@@ -113,12 +114,12 @@ ${en.DESIGN.slice(0, 10).join("\n") || "(no recent articles)"}
 
 ## Enlaces de referencia
 
-- Blog completo (español): ${SITE}/es/blog
-- Blog (English): ${SITE}/en/blog
-- Sobre nosotros: ${SITE}/es/about
-- About us: ${SITE}/en/about
-- Contacto: ${SITE}/es/contact
-- Proyectos: ${SITE}/es/projects
+- Blog completo (español): ${SITE}${path("blog", "es")}
+- Blog (English): ${SITE}${path("blog", "en")}
+- Cómo trabajamos: ${SITE}${path("comoTrabajamos", "es")}
+- How we work: ${SITE}${path("comoTrabajamos", "en")}
+- Hablemos: ${SITE}${path("hablemos", "es")}
+- Casos: ${SITE}${path("casos", "es")}
 
 ## Política para crawlers de IA
 

@@ -5,6 +5,79 @@ tomar durante el rediseño. Se va rellenando por fases.
 
 ---
 
+## Fase 2 · Arquitectura de información
+
+### Decisiones que tomé yo, porque me dijiste que las tomara
+
+**URL del índice de «Qué hacemos»**: `/es/que-hacemos` · `/en/what-we-do`.
+
+**Slugs EN de los tres casos**: `saas-support-self-service`,
+`activation-canonical-model` y `ai-ecommerce-without-touching-the-store`.
+Del tercero me quedo con la versión larga, aunque son 46 caracteres: mantiene
+la estructura paralela al castellano y conserva «ecommerce», que es la
+palabra por la que se busca. La longitud de una URL no es un factor de
+posicionamiento.
+
+**Cómo se sostienen dos URLs por página**: una carpeta por idioma
+(`app/[lang]/casos/` y `app/[lang]/cases/`) con un fichero de una línea que
+re-exporta una vista compartida en `app/[lang]/_vistas/`. Verificado sobre
+build de producción: las dos rutas responden 200 con su canónica correcta, y
+`/en/casos` hace 301 a `/en/cases` en lugar de servir contenido duplicado.
+
+Todas las URLs salen de **un solo sitio**, `app/lib/routes.mjs`: menú,
+sitemap, hreflang, migas, CTA y el bucle que genera las 28 redirecciones en
+`next.config.mjs`. Va en `.mjs` porque `next.config.mjs` lo carga Node
+directamente y sin `"type": "module"` trataría un `.js` como CommonJS.
+
+**Los tres artículos fijados de la portada** los he elegido por tema, uno por
+situación (`app/data/PinnedPosts.js`):
+
+1. *El Piloto Que Nunca Escala* → IA que no llega a producción
+2. *Código Correcto, Experiencia Rota* → fricción en el flujo de cliente
+3. *Código Barato, Ingeniería Cara* → deuda técnica y software interno
+
+Son mi criterio editorial, cámbialos cuando quieras: se toca solo ese
+fichero. Si un slug fijado desaparece, el hueco se rellena con lo más
+reciente en lugar de romper la portada.
+
+### Textos EN provisionales
+
+Todo el bloque `situaciones` del diccionario inglés: los cuatro titulares de
+página, sus descripciones, los cuatro textos de tarjeta y los ocho campos de
+SEO. Traducidos con criterio, no literalmente, pero **pendientes del copy
+final**. El castellano va literal del Anexo A.
+
+También son míos, y provisionales, los rótulos del menú en inglés («What we
+do», «Cases», «How we work», «Ideas», «Let's talk») y el título del índice
+(«What's your situation?»).
+
+### Cambios de maquetación que el contenido obliga
+
+- **La portada pasa de cuatro artículos a tres**, así que la rejilla pasa de
+  `lg:grid-cols-4` a `lg:grid-cols-3`. Con tres piezas en cuatro columnas
+  quedaba un hueco.
+- **`ServiceCard` admite dos props nuevas opcionales**, `href` y `cta`, que
+  pintan un `PrimaryButton` bajo la descripción. Sin ellas la tarjeta queda
+  exactamente igual, que es como la sigue usando la portada. Lo pedía el
+  índice de «Qué hacemos», cuyas cuatro tarjetas tienen que llevar a algún
+  sitio.
+- **El CTA «Hablemos» del header** usa `PrimaryButton` en rojo, como
+  acordamos. El header no tenía ningún CTA antes.
+
+### Lo que queda para la Fase 3
+
+Las cuatro páginas de situación existen ya con **solo el hero** del Anexo A,
+porque el menú apunta a ellas y un enlace del menú a un 404 no es
+entregable. Les faltan los bloques «Te suena si…», «Qué hacemos», «Lo hemos
+hecho antes», «Lo que no hacemos» y el cierre.
+
+Las **tres páginas de caso no existen todavía** y por eso no están en el
+sitemap: anunciar a Google una URL que da 404 es peor que no anunciarla. Sus
+rutas y sus redirecciones ya están en el mapa, así que crearlas es solo
+añadir la vista.
+
+---
+
 ## Fase 1 · Correcciones técnicas
 
 ### Datos que faltan

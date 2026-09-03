@@ -46,7 +46,7 @@ export function founderSchema() {
     "@id": FOUNDER_ID,
     name: "José Antonio Ces Franjo",
     jobTitle: "Fundador y CEO",
-    url: `${SITE_URL}/es/about`,
+    url: `${SITE_URL}/es/como-trabajamos`,
     sameAs: [LINKEDIN_FOUNDER],
     worksFor: { "@id": ORGANIZATION_ID },
   };
