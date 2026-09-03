@@ -46,7 +46,9 @@ function laEmiteLaPagina(segments) {
   const esPostDeBlog = segments.length === 3 && segments[1] === "blog";
   const esCategoria =
     segments.length === 4 && segments[1] === "blog" && segments[2] === "category";
-  return esPostDeBlog || esCategoria;
+  const esCaso =
+    segments.length === 3 && (segments[1] === "casos" || segments[1] === "cases");
+  return esPostDeBlog || esCategoria || esCaso;
 }
 
 export default function BreadcrumbSchema() {

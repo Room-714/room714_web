@@ -13,6 +13,167 @@
     "careers": "Careers",
     "contact": "Contact"
   },
+  "casos": {
+    "labels": {
+      "contexto": "Context",
+      "parecia": "What it looked like",
+      "era": "What it actually was",
+      "hicimos": "What we did",
+      "donde": "Where we are now",
+      "viene": "What comes next",
+      "llevamos": "What we took away",
+      "cta": "Tell us about your case",
+      "disclaimer": "Real case. Sector and some details altered to protect the client's confidentiality.",
+      "verCaso": "Read case"
+    },
+    "indice": {
+      "title": "This is how it usually starts, and how it usually ends.",
+      "lead": "Three projects that started as an experience problem, uncovered a technology problem, and ended up changing the client's business. Real cases under confidentiality agreements: sector and details altered.",
+      "secondaryTitle": "Other projects",
+      "seoTitle": "Cases · Room 714",
+      "seoDescription": "Three real digital product cases: a regulated B2B SaaS, a B2B2C platform sold through service providers, and an e-commerce with AI. How they started, what we found and what changed."
+    },
+    "saasAutogestion": {
+      "heroTitle": "The SaaS its own support team used instead of its customers",
+      "heroSubtitle": "How investing in the product turned support cost into margin, and why we now run their technology too.",
+      "cifras": [
+        {
+          "valor": "+200 → <20",
+          "etiqueta": "tables in the database"
+        },
+        {
+          "valor": "1 → 0",
+          "etiqueta": "support interventions for routine tasks: customers do it themselves"
+        },
+        {
+          "valor": "×1",
+          "etiqueta": "supplier for product, technology and operations: the board asked us to take on all of their IT"
+        }
+      ],
+      "contexto": "A mid-sized multinational with a regulatory compliance SaaS for companies operating in several countries. The product worked and had loyal customers. It also had two problems the board saw as one: “IT is slow”.",
+      "parecia": "A usability problem. The platform was so hard to use that the customer support team logged into it on behalf of customers to get things done. Every task that should have been one customer click was a phone call, a ticket and a person.",
+      "era": "Two problems feeding each other. The first was product: the platform had been designed around internal operations, not around the customer, so the cost of the bad experience didn't show up in the product but in the support and operations payroll. The second was technology: a small IT team spent all its time keeping alive a monolith that had accumulated patches for years, up to a database of more than two hundred tables nobody dared touch. There was no capacity to improve the product because all the capacity went into holding it up. And the business underneath was paying for it: a low single-digit operating margin in a company that sold software.",
+      "hicimos": [
+        {
+          "title": "The business first.",
+          "body": "A short diagnostic exercise that put a simple calculation in front of the owner: every euro invested in reducing technical debt and improving the customer experience came back multiplied in support and operations cost. That conversation is what made everything else possible."
+        },
+        {
+          "title": "Then the product.",
+          "body": "A new platform designed around the customer's task: get in, do the thing, leave. Support only steps in for incidents, not for normal use."
+        },
+        {
+          "title": "Then the technology.",
+          "body": "Rebuilt on a modern stack (Next.js), with a microservices backend inside a monorepo (Turborepo) and a severe simplification of the data model: from more than two hundred tables to fewer than twenty. That is not a vanity number: it is what lets a small team evolve the product instead of propping it up."
+        },
+        {
+          "title": "And the operation.",
+          "body": "We took on not just development but running the platform: separate environments, continuous integration, end-to-end and regression tests. That is the frame that lets you code with AI as the engine without losing quality, because the guarantee comes from the tests, not from the programmer."
+        }
+      ],
+      "donde": "The new platform is on the market taking in new customers. Existing customers are migrating in waves, as performance settles and new functionality lands. In two years the company has gone from an almost non-existent operating margin to a double-digit one, and the board has asked us to take responsibility for all of their technology, not just the service platform. The first thing we will do is a plan to reduce systems: when a complete system can be built in days with agents, many corporate tools that used to be essential no longer make sense.",
+      "viene": "The product opens up a new business model: not only the company that needs to solve compliance across several countries, but the professionals who complete the service where the administration is not yet digitised. Expanding into other regulatory areas and other geographies is in next year's plan.",
+      "llevamos": "The cost of a bad customer experience almost never shows up in the product. It shows up in the support headcount, which is why nobody sees it. And technical debt is not an IT problem: it is a margin problem.",
+      "cierre": "Does your support team work on behalf of your customers?",
+      "seoTitle": "Case: the SaaS that used its own support instead of its customers · Room 714",
+      "seoDescription": "How we redesigned and rebuilt a regulated B2B SaaS: from over 200 tables to fewer than 20, customers who serve themselves, and a margin that went from almost nothing to double digits. Real anonymised case.",
+      "resumen": "A regulated B2B SaaS whose support team used the platform on behalf of its customers."
+    },
+    "activacionCanonico": {
+      "heroTitle": "Nobody activated a service they were given for free. Underneath were 500 API schemas.",
+      "heroSubtitle": "From an activation problem to a mobile app, an API ten times smaller, and a canonical data model that AI agents work on today.",
+      "cifras": [
+        {
+          "valor": "÷10",
+          "etiqueta": "size of the backend endpoint surface"
+        },
+        {
+          "valor": "0 → 1",
+          "etiqueta": "mobile app: the product had none"
+        },
+        {
+          "valor": "3",
+          "etiqueta": "fronts open today: experience, architecture and data for AI agents"
+        }
+      ],
+      "contexto": "A technology company with a SaaS platform of digital protection and productivity services for end users. It doesn't sell to the user: operators and service providers do, bundling it into their own offerings under their own brand. A classic B2B2C business, with the classic difficulty: whoever pays is not whoever uses.",
+      "parecia": "Few activations. Users got the service for free inside their contract with the provider, didn't know they had it, and when they found out it wasn't always for them. The experience “needed improving”.",
+      "era": "Three stacked problems. One of product: the services were bundled around the provider's commercial logic, not around what a specific user needs, so discovery was nearly impossible. One of brand: the same experience had to live under each provider's brand without breaking. And, once we got to building, one of technology that nobody had put on the table: the backend exposed a sprawling, disorganised API with more than five hundred schemas, which made any change to the experience extremely expensive.",
+      "hicimos": [
+        {
+          "title": "We started with who.",
+          "body": "We reviewed services and bundles and cross-referenced them with the segments the providers were targeting. Out of that came real user personas and a customer journey that put discovery and activation in order."
+        },
+        {
+          "title": "A bundling framework.",
+          "body": "Related services proposed together according to moment and profile, so activating one leads to the next instead of to a list."
+        },
+        {
+          "title": "A multi-brand design system.",
+          "body": "One coherent experience that adapts to each provider's identity without being rebuilt."
+        },
+        {
+          "title": "A mobile app that didn't exist,",
+          "body": "which did two things at once: gave the user the experience we had designed, and forced a one-by-one review of the backend endpoints. The result was an API an order of magnitude smaller."
+        },
+        {
+          "title": "A canonical data model.",
+          "body": "Simplifying the schemas led to a bigger question: why is the same entity (a user, a service, a contract) represented differently in every system in the company? We built a canonical model that ingests data from all systems, with a data warehouse stack (Airflow, Azure Data Lake, dbt, Snowflake) and a governance mechanism, so that any entity exists once and is watched from one place, whoever touches it."
+        }
+      ],
+      "donde": "We are still working on all three fronts: experience, architecture and data. And the third has changed meaning. The canonical model was born for business reporting; with agentic AI it has become essential, because an agent can only work autonomously on a knowledge base that is true and simple. Without that model, agents inherit the contradictions of every system. With it, they fly.",
+      "llevamos": "An activation problem is almost never fixed on the activation screen. And the best AI preparation we have seen wasn't an AI project: it was putting the data in order.",
+      "cierre": "Is whoever pays for your product not the one using it?",
+      "seoTitle": "Case: from an activation problem to a canonical model for AI agents · Room 714",
+      "seoDescription": "A B2B2C platform sold through service providers: personas and journeys, a multi-brand design system, a new mobile app, an API ten times smaller, and a canonical data model for agentic AI. Real anonymised case.",
+      "resumen": "A platform sold through service providers with an activation problem."
+    },
+    "iaEcommerce": {
+      "heroTitle": "AI that sells more fruit without touching the store",
+      "heroSubtitle": "A standalone platform that enriches catalogue and customers with AI and lives alongside the client's e-commerce without them changing a single line.",
+      "cifras": [
+        {
+          "valor": "0",
+          "etiqueta": "changes needed in the client's platforms"
+        },
+        {
+          "valor": "2",
+          "etiqueta": "use cases in production: intelligent repeat purchase and a virtual nutritionist"
+        },
+        {
+          "valor": "1",
+          "etiqueta": "platform valid for any catalogue: we are turning it into a product"
+        }
+      ],
+      "contexto": "An online shop for fresh, seasonal food. Their store runs on a standard e-commerce (WooCommerce) which is itself an extension of the WordPress that holds the website and the company's search work. A common setup, one that works, and one nobody wants to touch because everything depends on it.",
+      "parecia": "“We want to bring AI into our day-to-day to give more value to customers.” The most frequent request of 2026 and the hardest to turn into something useful.",
+      "era": "The real problem of a shop selling perishables: the catalogue changes every day (stock, price, season) and the customer who wants to repeat an order finds that half of what they bought is gone. The store only knew about its products and its customers what the e-commerce itself stored, which is little. And nothing could be done inside the e-commerce without putting the website and its search rankings at risk.",
+      "hicimos": [
+        {
+          "title": "A separate platform.",
+          "body": "It replicates the product and customer databases, strips out everything the AI doesn't need, and works on that copy. The client's e-commerce changed nothing."
+        },
+        {
+          "title": "An enriched catalogue.",
+          "body": "For every product, alternatives when there is a stock-out, a price rise or the end of a season, plus combinations that make sense together for various reasons and are more appealing to the buyer."
+        },
+        {
+          "title": "Customers with context.",
+          "body": "With techniques like RAG and MCP we widen the context of each customer's activity to know which products sit closest to their behaviour and their wishes."
+        },
+        {
+          "title": "Two use cases to prove the value.",
+          "body": "Repeat purchase, which used to fail because of season or stock and now proposes substitutes; and a virtual nutritionist that offers food alternatives according to the user's needs and turns them into baskets bought in the client's store."
+        }
+      ],
+      "donde": "Widening what the vector database knows with tables from other standard client systems, so the embeddings work with more objective data and better context. The platform doesn't depend on the type of goods: it works for any catalogue and any customer base. We are considering turning it into a product.",
+      "llevamos": "Useful AI in a shop is not a chat: it is knowing what to offer when what the customer wanted isn't there. And the fastest way to get AI into production in a small company is not to touch what already works.",
+      "cierre": "Do you want AI in your product without risking what you already have?",
+      "seoTitle": "Case: AI on top of an e-commerce without touching it · Room 714",
+      "seoDescription": "A standalone AI platform for an online grocery: enriched catalogue, substitutes for stock-outs, intelligent repeat purchase and a virtual nutritionist, without changing anything in the client's store. Real anonymised case.",
+      "resumen": "An online grocery that wanted AI without touching its store."
+    }
+  },
   "situaciones": {
     "cta": "Tell us about your case",
     "indice": {

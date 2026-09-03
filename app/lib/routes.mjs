@@ -63,7 +63,7 @@ export const IDIOMAS = ["es", "en"];
 /**
  * Las páginas que van al sitemap. Es una lista explícita y no `TODAS` a
  * propósito: anunciar a Google una URL cuya página todavía no existe es
- * anunciarle un 404. Las de la Fase 3 se añaden aquí al crearlas.
+ * anunciarle un 404, así que una ruta entra aquí cuando su vista existe.
  */
 export const EN_SITEMAP = [
   "home",
@@ -78,6 +78,7 @@ export const EN_SITEMAP = [
   "diagnostico",
   "blog",
   "empleo",
+  ...Object.keys(CASOS),
 ];
 
 /** La ruta completa con idioma: path("casos", "es") → "/es/casos" */

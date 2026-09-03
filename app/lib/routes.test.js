@@ -143,9 +143,9 @@ describe("EN_SITEMAP", () => {
     for (const clave of EN_SITEMAP) expect(TODAS).toHaveProperty(clave);
   });
 
-  it("no anuncia las paginas de caso, que aun no existen", () => {
+  it("anuncia tambien las tres paginas de caso", () => {
     for (const clave of Object.keys(CASOS)) {
-      expect(EN_SITEMAP).not.toContain(clave);
+      expect(EN_SITEMAP).toContain(clave);
     }
   });
 
