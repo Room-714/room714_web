@@ -3,8 +3,9 @@ import Navbar from "@/app/components/Navbar";
 import Image from "next/image";
 import ContactClient from "@/app/components/ContactClient";
 import { getInterests } from "@/app/data/Interests";
+import { SITE_URL, buildAlternates, samePath } from "@/app/lib/seo/urls";
 
-const baseUrl = "https://www.room714.com";
+const baseUrl = SITE_URL;
 
 export async function generateMetadata({ params }) {
   const { lang = "en" } = await params;
@@ -20,14 +21,7 @@ export async function generateMetadata({ params }) {
   return {
     title: titles[lang],
     description: descriptions[lang],
-    alternates: {
-      canonical: `${baseUrl}/${lang}/contact`,
-      languages: {
-        "en-US": `${baseUrl}/en/contact`,
-        "es-ES": `${baseUrl}/es/contact`,
-        "x-default": `${baseUrl}/en/contact`,
-      },
-    },
+    alternates: buildAlternates(lang, samePath("/contact")),
     openGraph: {
       title: titles[lang],
       description: descriptions[lang],

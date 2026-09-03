@@ -11,8 +11,9 @@ import { CATEGORY_LABELS } from "@/app/data/BlogCategories";
 import { getDictionary } from "@/app/dictionaries";
 import Navbar from "@/app/components/Navbar";
 import BlogCard from "@/app/components/BlogCard";
+import { SITE_URL, buildAlternates, langPaths } from "@/app/lib/seo/urls";
 
-const baseUrl = "https://www.room714.com";
+const baseUrl = SITE_URL;
 
 const SEO_DESCRIPTIONS = {
   TECH: {
@@ -50,16 +51,14 @@ export async function generateMetadata({ params }) {
   const pageUrl = `${baseUrl}/${lang}/blog/category/${slug}`;
 
   return {
-    title: titles[lang],
+    // `absolute` porque el título ya nombra la marca: con la plantilla del
+    // layout saldría "Tecnología — Blog Room 714 | Room 714".
+    title: { absolute: titles[lang] },
     description,
-    alternates: {
-      canonical: pageUrl,
-      languages: {
-        "es-ES": `${baseUrl}/es/blog/category/${slugEs}`,
-        "en-US": `${baseUrl}/en/blog/category/${slugEn}`,
-        "x-default": `${baseUrl}/en/blog/category/${slugEn}`,
-      },
-    },
+    alternates: buildAlternates(
+      lang,
+      langPaths(`/es/blog/category/${slugEs}`, `/en/blog/category/${slugEn}`),
+    ),
     openGraph: {
       title: titles[lang],
       description,

@@ -4,8 +4,9 @@ import Image from "next/image";
 import Navbar from "@/app/components/Navbar";
 import BlogClient from "@/app/components/BlogClient";
 import { CATEGORY_IDS } from "@/app/data/BlogCategories";
+import { SITE_URL, buildAlternates, samePath } from "@/app/lib/seo/urls";
 
-const baseUrl = "https://www.room714.com";
+const baseUrl = SITE_URL;
 
 export async function generateMetadata({ params }) {
   const { lang = "en" } = await params;
@@ -21,14 +22,7 @@ export async function generateMetadata({ params }) {
   return {
     title: titles[lang],
     description: descriptions[lang],
-    alternates: {
-      canonical: `${baseUrl}/${lang}/blog`,
-      languages: {
-        "en-US": `${baseUrl}/en/blog`,
-        "es-ES": `${baseUrl}/es/blog`,
-        "x-default": `${baseUrl}/en/blog`,
-      },
-    },
+    alternates: buildAlternates(lang, samePath("/blog")),
     openGraph: {
       title: titles[lang],
       description: descriptions[lang],

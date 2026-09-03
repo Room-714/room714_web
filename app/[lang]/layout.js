@@ -12,6 +12,7 @@ import {
 import { GoogleTagManager } from "@next/third-parties/google";
 import CookieBanner from "@/app/components/CookieBanner";
 import BreadcrumbSchema from "@/app/components/BreadcrumbSchema";
+import { SITE_URL, buildAlternates, samePath } from "@/app/lib/seo/urls";
 import { cookies } from "next/headers";
 
 const fontGantari = Gantari({
@@ -40,7 +41,7 @@ const fontMynerve = Mynerve({
 // --- CONFIGURACIÓN DE METADATOS DINÁMICOS (SEO) ---
 export async function generateMetadata({ params }) {
   const { lang = "en" } = await params;
-  const baseUrl = "https://www.room714.com";
+  const baseUrl = SITE_URL;
 
   const titles = {
     en: "Room 714 | Digital Product Studio",
@@ -59,14 +60,11 @@ export async function generateMetadata({ params }) {
       template: `%s | Room 714`,
     },
     description: descriptions[lang],
-    alternates: {
-      canonical: `${baseUrl}/${lang}`, // Siempre absoluta
-      languages: {
-        "en-US": "/en",
-        "es-ES": "/es",
-        "x-default": "/en", // Muy importante para SEO internacional
-      },
-    },
+    // Canónica y hreflang absolutos y recíprocos. Antes las alternativas
+    // eran rutas relativas ("/en"), que Google admite pero deja al azar de
+    // la resolución, y usaban códigos con región (en-US, es-ES) cuando el
+    // contenido no es específico de un país.
+    alternates: buildAlternates(lang, samePath("")),
     robots: {
       index: true,
       follow: true,

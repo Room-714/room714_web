@@ -1,8 +1,7 @@
 import { getDictionary } from "@/app/dictionaries";
 import Navbar from "@/app/components/Navbar";
 import Image from "next/image";
-
-const baseUrl = "https://www.room714.com";
+import { buildAlternates, samePath } from "@/app/lib/seo/urls";
 
 export async function generateMetadata({ params }) {
   const { lang = "en" } = await params;
@@ -13,14 +12,7 @@ export async function generateMetadata({ params }) {
       : "Room 714 terms and conditions.",
     // Canónica propia por coherencia: sin ella heredaría la de la portada.
     // No cambia su exclusión del índice, que sigue en `robots`.
-    alternates: {
-      canonical: `${baseUrl}/${lang}/terms`,
-      languages: {
-        "en-US": `${baseUrl}/en/terms`,
-        "es-ES": `${baseUrl}/es/terms`,
-        "x-default": `${baseUrl}/en/terms`,
-      },
-    },
+    alternates: buildAlternates(lang, samePath("/terms")),
     robots: { index: false, follow: true },
   };
 }

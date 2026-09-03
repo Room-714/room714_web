@@ -5,8 +5,9 @@ import Navbar from "@/app/components/Navbar";
 import PrimaryButton from "@/app/components/PrimaryButton";
 import ProjectsList from "@/app/components/ProjectList";
 import { getProjectsData } from "@/app/data/Projects";
+import { SITE_URL, buildAlternates, samePath } from "@/app/lib/seo/urls";
 
-const baseUrl = "https://www.room714.com";
+const baseUrl = SITE_URL;
 
 export async function generateMetadata({ params }) {
   const { lang } = await params;
@@ -20,19 +21,14 @@ export async function generateMetadata({ params }) {
   };
 
   return {
-    title: titles[lang],
+    // El layout aplica la plantilla `%s | Room 714`, y este título ya nombra
+    // la marca: sin `absolute` sale "Proyectos | Room 714 | Room 714".
+    title: { absolute: titles[lang] },
     description: descriptions[lang],
     // Sin esto, Next fusiona los metadatos con los del layout y la página
     // hereda `canonical: ${baseUrl}/${lang}`: le declara a Google que es una
     // copia de la portada, y Google deja de indexarla.
-    alternates: {
-      canonical: `${baseUrl}/${lang}/projects`,
-      languages: {
-        "en-US": `${baseUrl}/en/projects`,
-        "es-ES": `${baseUrl}/es/projects`,
-        "x-default": `${baseUrl}/en/projects`,
-      },
-    },
+    alternates: buildAlternates(lang, samePath("/projects")),
   };
 }
 

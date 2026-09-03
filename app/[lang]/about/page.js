@@ -3,8 +3,9 @@ import Image from "next/image";
 import Navbar from "@/app/components/Navbar";
 import RulesSlider from "@/app/components/RulesSlider";
 import { getRules } from "@/app/data/Rules";
+import { SITE_URL, buildAlternates, samePath } from "@/app/lib/seo/urls";
 
-const baseUrl = "https://www.room714.com";
+const baseUrl = SITE_URL;
 
 export async function generateMetadata({ params }) {
   const { lang = "en" } = await params;
@@ -20,14 +21,7 @@ export async function generateMetadata({ params }) {
   return {
     title: titles[lang],
     description: descriptions[lang],
-    alternates: {
-      canonical: `${baseUrl}/${lang}/about`,
-      languages: {
-        "en-US": `${baseUrl}/en/about`,
-        "es-ES": `${baseUrl}/es/about`,
-        "x-default": `${baseUrl}/en/about`,
-      },
-    },
+    alternates: buildAlternates(lang, samePath("/about")),
     openGraph: {
       title: titles[lang],
       description: descriptions[lang],

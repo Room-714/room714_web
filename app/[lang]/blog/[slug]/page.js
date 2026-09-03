@@ -6,7 +6,7 @@ import Navbar from "@/app/components/Navbar";
 import ShareButton from "@/app/components/ShareButton";
 import { getPostBySlug, getAllPosts } from "@/app/lib/blog";
 import { normalizeSlugParam } from "@/app/lib/slug";
-import { blogUrl } from "@/app/lib/seo/urls";
+import { blogUrl, buildAlternates } from "@/app/lib/seo/urls";
 import { prisma } from "@/app/lib/prisma";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
@@ -38,22 +38,20 @@ export async function generateMetadata({ params }) {
   const imageUrl = image.startsWith("http")
     ? image
     : `https://www.room714.com${image.startsWith("/") ? "" : "/"}${image}`;
-  // La canónica se construye con el slug que guarda la base de datos, no con
-  // el param, y percent-encodeada: un slug con caracteres no ASCII produce
-  // una URL inválida si se interpola en crudo.
-  const pageUrl = blogUrl(lang, post.slug);
-
-  // Hay posts sin traducción en un idioma: esas entradas se omiten en lugar
-  // de declarar un hreflang que apunta a una URL inexistente.
-  const urlEs = blogUrl("es", post.alternateSlugs.es);
-  const urlEn = blogUrl("en", post.alternateSlugs.en);
-  const languages = {};
-  if (urlEs) languages.es = urlEs;
-  if (urlEn) languages.en = urlEn;
-  if (urlEn || urlEs) languages["x-default"] = urlEn || urlEs;
+  // Las URLs se construyen con los slugs que guarda la base de datos, no con
+  // el param, y percent-encodeadas: un slug con caracteres no ASCII produce
+  // una URL inválida si se interpola en crudo. Y hay posts sin traducción en
+  // un idioma: buildAlternates omite esa entrada en lugar de anunciar un
+  // hreflang que da 404.
+  const alternates = buildAlternates(lang, {
+    es: blogUrl("es", post.alternateSlugs.es),
+    en: blogUrl("en", post.alternateSlugs.en),
+  });
+  const pageUrl = alternates.canonical;
 
   return {
-    title: `${title} | Room 714`,
+    // Sin sufijo: lo añade la plantilla `%s | Room 714` del layout.
+    title,
     description: description,
     openGraph: {
       title: title,
@@ -70,10 +68,7 @@ export async function generateMetadata({ params }) {
       description: description,
       images: [imageUrl],
     },
-    alternates: {
-      canonical: pageUrl,
-      languages,
-    },
+    alternates,
   };
 }
 

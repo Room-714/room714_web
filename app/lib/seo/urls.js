@@ -14,3 +14,34 @@ export function blogUrl(lang, slug) {
   if (!slug) return null;
   return `${SITE_URL}/${lang}/blog/${encodeURIComponent(slug)}`;
 }
+
+/** Una página cuya ruta es igual en los dos idiomas: "/careers". */
+export const samePath = (path) => ({
+  es: `${SITE_URL}/es${path}`,
+  en: `${SITE_URL}/en${path}`,
+});
+
+/** Una página con ruta distinta en cada idioma: "/es/casos" y "/en/cases". */
+export const langPaths = (pathEs, pathEn) => ({
+  es: `${SITE_URL}${pathEs}`,
+  en: `${SITE_URL}${pathEn}`,
+});
+
+/**
+ * El bloque `alternates` de generateMetadata: canónica más hreflang de es, en
+ * y x-default, siempre absolutos y recíprocos (los dos idiomas declaran el
+ * mismo juego, que es lo que Google comprueba).
+ *
+ * x-default apunta al inglés por ser el idioma de alcance más amplio; si un
+ * idioma no existe se omite en lugar de anunciar una URL que da 404.
+ */
+export function buildAlternates(lang, urls) {
+  const languages = {};
+  if (urls.es) languages.es = urls.es;
+  if (urls.en) languages.en = urls.en;
+
+  const xDefault = urls.en || urls.es;
+  if (xDefault) languages["x-default"] = xDefault;
+
+  return { canonical: urls[lang] || xDefault, languages };
+}
