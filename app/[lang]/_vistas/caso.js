@@ -22,7 +22,7 @@ import { CANAL } from "@/app/lib/layout";
 
 function Seccion({ titulo, children }) {
   return (
-    <section className="mb-12 lg:mb-16">
+    <section className="mb-9 lg:mb-12">
       <h2 className="font-title font-black text-2xl md:text-3xl lg:text-4xl text-black mb-5 leading-tight">
         {titulo}
       </h2>
@@ -99,14 +99,14 @@ export function caso(clave) {
           </Link>
         </div>
 
-        <article className={`${CANAL} pb-20`}>
+        <article className={`${CANAL} pb-16`}>
           <div className="w-full">
             {/* Hero */}
-            <header className="mb-12 lg:mb-16">
+            <header className="mb-9 lg:mb-12">
               <h1 className="font-title font-black text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-black leading-tight mb-6">
                 {t.heroTitle}
               </h1>
-              <p className="font-body text-lg md:text-xl lg:text-2xl text-gray-700 leading-relaxed mb-6">
+              <p className="font-body text-lg md:text-xl lg:text-2xl text-gray-700 leading-normal mb-6">
                 {t.heroSubtitle}
               </p>
               <p className="font-body text-xs md:text-sm text-gray-400">
@@ -143,19 +143,19 @@ export function caso(clave) {
             </div>
 
             <Seccion titulo={labels.contexto}>
-              <p className="font-body text-lg md:text-xl lg:text-2xl text-gray-800 leading-relaxed">
+              <p className="font-body text-lg md:text-xl lg:text-2xl text-gray-800 leading-normal">
                 {t.contexto}
               </p>
             </Seccion>
 
             <Seccion titulo={labels.parecia}>
-              <p className="font-body text-lg md:text-xl lg:text-2xl text-gray-800 leading-relaxed">
+              <p className="font-body text-lg md:text-xl lg:text-2xl text-gray-800 leading-normal">
                 {t.parecia}
               </p>
             </Seccion>
 
             <Seccion titulo={labels.era}>
-              <p className="font-body text-lg md:text-xl lg:text-2xl text-gray-800 leading-relaxed">
+              <p className="font-body text-lg md:text-xl lg:text-2xl text-gray-800 leading-normal">
                 {t.era}
               </p>
             </Seccion>
@@ -167,7 +167,7 @@ export function caso(clave) {
                     <span className="font-hand text-xl md:text-2xl text-red-500 shrink-0 pt-1">
                       {`0${index + 1}`}
                     </span>
-                    <p className="font-body text-lg md:text-xl lg:text-2xl text-gray-800 leading-relaxed">
+                    <p className="font-body text-lg md:text-xl lg:text-2xl text-gray-800 leading-normal">
                       <strong className="font-bold text-black">
                         {paso.title}
                       </strong>{" "}
@@ -179,7 +179,7 @@ export function caso(clave) {
             </Seccion>
 
             <Seccion titulo={labels.donde}>
-              <p className="font-body text-lg md:text-xl lg:text-2xl text-gray-800 leading-relaxed">
+              <p className="font-body text-lg md:text-xl lg:text-2xl text-gray-800 leading-normal">
                 {t.donde}
               </p>
             </Seccion>
@@ -187,14 +187,14 @@ export function caso(clave) {
             {/* Solo el primer caso tiene "Lo que viene" */}
             {t.viene && (
               <Seccion titulo={labels.viene}>
-                <p className="font-body text-lg md:text-xl lg:text-2xl text-gray-800 leading-relaxed">
+                <p className="font-body text-lg md:text-xl lg:text-2xl text-gray-800 leading-normal">
                   {t.viene}
                 </p>
               </Seccion>
             )}
 
             <Seccion titulo={labels.llevamos}>
-              <p className="font-body text-lg md:text-xl lg:text-2xl text-gray-800 leading-relaxed">
+              <p className="font-body text-lg md:text-xl lg:text-2xl text-gray-800 leading-normal">
                 {t.llevamos}
               </p>
             </Seccion>
@@ -202,7 +202,7 @@ export function caso(clave) {
         </article>
 
         {/* Cierre, con el patrón del CTA final de Casos */}
-        <section className="relative z-10 w-full bg-gray-300 rounded-t-[50px] px-6 py-16 lg:px-16 lg:py-20 text-center text-black">
+        <section className="relative z-10 w-full bg-gray-300 rounded-t-[50px] px-6 py-16 lg:px-16 lg:py-16 text-center text-black">
           <h2 className="font-hand text-3xl md:text-5xl lg:text-6xl mb-10 mx-auto leading-[1.45]">
             {t.cierre}
           </h2>

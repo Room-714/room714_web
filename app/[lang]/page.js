@@ -170,16 +170,16 @@ export default async function Home({ params }) {
 
       {/* Vale, pero ¿qué hacéis exactamente? y la prueba. Los dos en blanco,
           donde antes vivía el bloque de clientes. */}
-      <section className={`bg-white rounded-t-[50px] overflow-hidden ${CANAL} py-16 lg:py-20 z-50 relative`}>
+      <section className={`bg-white rounded-t-[50px] overflow-hidden ${CANAL} py-16 lg:py-16 z-50 relative`}>
         <div className="w-full">
           <h2 className="font-title font-bold text-red-500 text-3xl lg:text-5xl mb-8 leading-tight">
             {t.diferencia.title}
           </h2>
-          <p className="font-body text-xl lg:text-3xl leading-relaxed text-black mb-12">
+          <p className="font-body text-xl lg:text-3xl leading-normal text-black mb-12">
             {t.diferencia.lead}
           </p>
 
-          <div className="flex flex-col gap-8 lg:gap-10 mb-20">
+          <div className="flex flex-col gap-6 lg:gap-8 mb-20">
             {diferencia.map((entrada, index) => (
               <div key={entrada.title} className="flex gap-4 lg:gap-8">
                 <span className="font-hand text-xl md:text-2xl lg:text-3xl text-red-500 shrink-0 pt-1">
@@ -189,7 +189,7 @@ export default async function Home({ params }) {
                   <h3 className="font-title font-bold text-xl md:text-2xl lg:text-3xl text-black mb-2 uppercase">
                     {entrada.title}
                   </h3>
-                  <p className="font-body text-lg md:text-xl lg:text-2xl leading-relaxed text-gray-700">
+                  <p className="font-body text-lg md:text-xl lg:text-2xl leading-normal text-gray-700">
                     {entrada.description}
                   </p>
                 </div>
@@ -216,7 +216,7 @@ export default async function Home({ params }) {
                   bg-size-[40px_40px]
                   hover:bg-[#F8F8F8] transition-all duration-500 p-6 lg:p-8"
               >
-                <p className="font-body text-base md:text-lg lg:text-2xl leading-relaxed text-gray-900">
+                <p className="font-body text-base md:text-lg lg:text-2xl leading-normal text-gray-900">
                   {caso.texto}{" "}
                   <span className="font-hand text-red-500 whitespace-nowrap group-hover:underline">
                     → {t.prueba.link}
@@ -241,13 +241,13 @@ export default async function Home({ params }) {
       </section>
 
       {/* Cómo trabajamos: el método en cuatro pasos */}
-      <section className={`bg-black rounded-t-[50px] -mt-10 ${CANAL} py-20 relative z-50`}>
+      <section className={`bg-black rounded-t-[50px] -mt-10 ${CANAL} py-16 relative z-50`}>
         <div className="w-full">
           <h2 className="font-title font-black text-3xl md:text-5xl lg:text-6xl text-white mb-12 leading-tight">
             {t.metodo.title}
           </h2>
 
-          <div className="flex flex-col gap-8 lg:gap-10 mb-12">
+          <div className="flex flex-col gap-6 lg:gap-8 mb-12">
             {metodo.map((paso, index) => (
               <div key={paso.title} className="flex gap-4 lg:gap-8">
                 <span className="font-hand text-xl md:text-2xl lg:text-3xl text-red-500 shrink-0 pt-1">
@@ -257,7 +257,7 @@ export default async function Home({ params }) {
                   <h3 className="font-title font-bold text-xl md:text-2xl lg:text-3xl text-white mb-2 uppercase">
                     {paso.title}
                   </h3>
-                  <p className="font-body text-lg md:text-xl lg:text-2xl leading-relaxed text-gray-300">
+                  <p className="font-body text-lg md:text-xl lg:text-2xl leading-normal text-gray-300">
                     {paso.description}
                   </p>
                 </div>
@@ -280,7 +280,7 @@ export default async function Home({ params }) {
 
       {/* Ideas: tres piezas fijadas a mano */}
       {pinnedPosts.length > 0 && (
-        <section className="bg-gray-300 rounded-t-[50px] -mt-10 px-4 md:px-8 py-20 relative z-50">
+        <section className="bg-gray-300 rounded-t-[50px] -mt-10 px-4 md:px-8 py-16 relative z-50">
           <div>
             <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12">
               <h2 className="font-title font-black text-3xl md:text-5xl lg:text-6xl text-black leading-tight">
@@ -309,11 +309,11 @@ export default async function Home({ params }) {
       )}
 
       {/* Cierre, con el mismo patrón que el CTA final de Casos */}
-      <section className="relative z-50 -mt-10 w-full bg-white rounded-t-[50px] px-6 py-16 lg:px-16 lg:py-20 text-center text-black">
+      <section className="relative z-50 -mt-10 w-full bg-white rounded-t-[50px] px-6 py-16 lg:px-16 lg:py-16 text-center text-black">
         <h2 className="font-title font-black text-3xl md:text-5xl mb-8 mx-auto leading-tight">
           {t.cierre.title}
         </h2>
-        <p className="font-body text-lg md:text-xl lg:text-2xl text-gray-700 mb-10 max-w-3xl mx-auto leading-relaxed">
+        <p className="font-body text-lg md:text-xl lg:text-2xl text-gray-700 mb-10 max-w-3xl mx-auto leading-normal">
           {t.cierre.description}
         </p>
         <div className="flex justify-center">

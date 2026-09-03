@@ -1,7 +1,17 @@
 import Image from "next/image";
 import { ChevronDown } from "lucide-react";
 
-export default function ProjectCard({ project, isOpen, onClick, dict, priority = false }) {
+export default function ProjectCard({
+  project,
+  isOpen,
+  onClick,
+  dict,
+  priority = false,
+  // El número que se PINTA, que ya no es el id del proyecto: en la página de
+  // casos esta lista va detrás de los tres destacados, que ocupan el 01, el
+  // 02 y el 03. Usando el id salían dos veces el 02 y el 03, y faltaba el 08.
+  numero = null,
+}) {
   return (
     <div
       onClick={onClick}
@@ -27,7 +37,7 @@ export default function ProjectCard({ project, isOpen, onClick, dict, priority =
         <div className="flex justify-between items-start gap-3">
           <div className="flex justify-start items-start gap-4 lg:gap-6 min-w-0">
             <span className="font-hand font-black text-red-500 text-2xl md:text-3xl lg:text-4xl shrink-0">
-              {project.id}
+              {numero ?? project.id}
             </span>
             <h3 className="font-title font-bold text-black text-xl md:text-2xl lg:text-4xl leading-tight">
               {project.title}

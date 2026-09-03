@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown, House } from "lucide-react";
 import PrimaryButton from "@/app/components/PrimaryButton";
 import { path } from "@/app/lib/routes.mjs";
 
@@ -35,7 +35,9 @@ export default function Navbar({
   // y siguen accesibles, pero dejan de competir por la atención con las
   // cuatro situaciones, que es por donde entra el cliente.
   const navLinks = [
-    { name: dict.nav.home, href: path("home", lang) },
+    // La portada va con casita. El texto se conserva porque lo necesitan el
+    // lector de pantalla y las migas de pan del blog.
+    { name: dict.nav.home, href: path("home", lang), Icono: House },
     { name: dict.nav.que_hacemos, href: path("queHacemos", lang) },
     { name: dict.nav.casos, href: path("casos", lang) },
     { name: dict.nav.como_trabajamos, href: path("comoTrabajamos", lang) },
@@ -74,11 +76,17 @@ export default function Navbar({
               <Link
                 key={link.name}
                 href={link.href}
+                aria-label={link.Icono ? link.name : undefined}
+                title={link.Icono ? link.name : undefined}
                 className={`font-title text-sm lg:text-base xl:text-xl tracking-tight lg:font-medium transition-all duration-300 ${
                   isActive ? "text-red-600 font-bold" : "hover:text-red-500"
                 }`}
               >
-                {link.name}
+                {link.Icono ? (
+                  <link.Icono size={22} strokeWidth={2.5} aria-hidden="true" />
+                ) : (
+                  link.name
+                )}
               </Link>
             );
           })}
@@ -158,10 +166,16 @@ export default function Navbar({
                 key={link.name}
                 href={link.href}
                 onClick={() => setIsOpen(false)}
-                className={`font-title text-2xl tracking-wider ${
+                className={`font-title text-2xl tracking-wider flex items-center gap-3 ${
                   isActive ? "text-red-600 font-bold" : ""
                 }`}
               >
+                {/* En el desplegable móvil la casita va con su texto al
+                    lado: ahí hay sitio y un icono suelto en una lista de
+                    palabras se lee peor. */}
+                {link.Icono && (
+                  <link.Icono size={24} strokeWidth={2.5} aria-hidden="true" />
+                )}
                 {link.name}
               </Link>
             );

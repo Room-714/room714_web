@@ -83,7 +83,7 @@ export default async function CasosPage({ params }) {
           <h1 className="font-body font-black text-4xl md:text-6xl lg:text-7xl mb-8 leading-tight">
             {t.indice.title}
           </h1>
-          <p className="font-body text-xl lg:text-2xl max-w-3xl text-gray-300 leading-relaxed">
+          <p className="font-body text-xl lg:text-2xl max-w-3xl text-gray-300 leading-normal">
             {t.indice.lead}
           </p>
         </div>
@@ -111,7 +111,7 @@ export default async function CasosPage({ params }) {
                     <h2 className="font-title font-bold text-black text-xl md:text-2xl lg:text-4xl leading-tight mb-4">
                       {caso.heroTitle}
                     </h2>
-                    <p className="font-body text-gray-700 text-base md:text-lg lg:text-2xl leading-relaxed mb-6">
+                    <p className="font-body text-gray-700 text-base md:text-lg lg:text-2xl leading-normal mb-6">
                       {caso.heroSubtitle}
                     </p>
                     <span className="font-hand text-red-500 text-lg md:text-xl lg:text-2xl group-hover:underline">
@@ -135,7 +135,11 @@ export default async function CasosPage({ params }) {
           </p>
         </div>
         <div className={`${CANAL} pb-30`}>
-          <ProjectsList projects={projects} dict={dict} />
+          <ProjectsList
+            projects={projects}
+            dict={dict}
+            desde={destacados.length}
+          />
         </div>
       </main>
 

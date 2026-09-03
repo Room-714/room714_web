@@ -33,7 +33,6 @@ export const ROUTES = {
   hablemos: { es: "/hablemos", en: "/lets-talk" },
 
   // Fuera del menú, enlazadas desde el footer. Conservan su URL.
-  diagnostico: { es: "/diagnostic", en: "/diagnostic" },
   empleo: { es: "/careers", en: "/careers" },
   privacidad: { es: "/privacy", en: "/privacy" },
   terminos: { es: "/terms", en: "/terms" },
@@ -75,7 +74,6 @@ export const EN_SITEMAP = [
   "casos",
   "comoTrabajamos",
   "hablemos",
-  "diagnostico",
   "blog",
   "empleo",
   ...Object.keys(CASOS),
@@ -101,6 +99,11 @@ export const RENOMBRADAS = [
   { de: "/en/about", a: path("comoTrabajamos", "en") },
   { de: "/es/contact", a: path("hablemos", "es") },
   { de: "/en/contact", a: path("hablemos", "en") },
+  // El diagnóstico automático se ha eliminado. Su trabajo era ayudarte a
+  // elegir tu situación, que es exactamente lo que hace el índice de Qué
+  // hacemos, así que ahí va: la URL está indexada y no puede morir.
+  { de: "/es/diagnostic", a: path("queHacemos", "es") },
+  { de: "/en/diagnostic", a: path("queHacemos", "en") },
 ];
 
 /**

@@ -103,7 +103,7 @@ export default function ContactClient({ dict }) {
               <h1 className="font-hand text-4xl md:text-5xl lg:text-7xl mb-8 text-center lg:text-left leading-[1.45]">
                 {t.hero.title}
               </h1>
-              <p className="font-body text-lg md:text-xl lg:text-2xl text-gray-300 mb-12 leading-relaxed">
+              <p className="font-body text-lg md:text-xl lg:text-2xl text-gray-300 mb-12 leading-normal">
                 {t.hero.description}
               </p>
 
@@ -121,7 +121,7 @@ export default function ContactClient({ dict }) {
                       >
                         ·
                       </span>
-                      <p className="font-body text-base md:text-lg text-gray-300 leading-relaxed">
+                      <p className="font-body text-base md:text-lg text-gray-300 leading-normal">
                         {item}
                       </p>
                     </li>
@@ -135,22 +135,11 @@ export default function ContactClient({ dict }) {
                   <h2 className="font-title font-bold text-xl md:text-2xl uppercase mb-4">
                     {bloque.title}
                   </h2>
-                  <p className="font-body text-base md:text-lg text-gray-300 leading-relaxed">
+                  <p className="font-body text-base md:text-lg text-gray-300 leading-normal">
                     {bloque.body}
                   </p>
                 </section>
               ))}
-
-              {/* Paso opcional: el diagnóstico automático */}
-              <p className="font-body text-base md:text-lg text-gray-400 mb-12">
-                {t.diagnostico.pregunta}{" "}
-                <Link
-                  href={path("diagnostico", lang)}
-                  className="font-hand text-red-500 hover:underline whitespace-nowrap"
-                >
-                  {t.diagnostico.enlace}
-                </Link>
-              </p>
 
               {/* El formulario */}
               <h2 className="font-hand text-3xl md:text-4xl lg:text-5xl mb-3 leading-[1.45]">
@@ -162,7 +151,7 @@ export default function ContactClient({ dict }) {
 
               <form
                 onSubmit={handleSubmit}
-                className="w-full flex flex-col gap-8"
+                className="w-full flex flex-col gap-6"
               >
                 {/* 1. Qué producto es */}
                 <div className="flex flex-col gap-4">
@@ -268,7 +257,7 @@ export default function ContactClient({ dict }) {
               </form>
 
               {/* La promesa de respuesta y las otras vías */}
-              <div className="mt-8 font-body text-sm md:text-base text-gray-400 leading-relaxed">
+              <div className="mt-8 font-body text-sm md:text-base text-gray-400 leading-normal">
                 <p>{t.micro.respuesta}</p>
                 <p>
                   {t.micro.linkedin}{" "}

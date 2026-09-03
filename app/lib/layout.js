@@ -19,10 +19,10 @@
 export const CANAL = "px-6 sm:px-8 md:px-10 lg:px-16";
 
 /** Separación vertical entre secciones. */
-export const AIRE = "py-14 md:py-16 lg:py-20";
+export const AIRE = "py-12 md:py-14 lg:py-16";
 
 /** Separación vertical de una sección de cierre o CTA. */
-export const AIRE_CIERRE = "py-16 md:py-20 lg:py-24";
+export const AIRE_CIERRE = "py-14 md:py-16 lg:py-20";
 
 // ─── ANCHOS ────────────────────────────────────────────────────────────────
 // Sin `mx-auto`: el sitio alinea a la izquierda. Centrar la columna la
@@ -57,10 +57,10 @@ export const TITULAR = "text-3xl md:text-4xl lg:text-5xl leading-tight";
 export const SUBTITULAR = "text-xl md:text-2xl lg:text-3xl leading-snug";
 
 /** Cuerpo de texto. */
-export const CUERPO = "text-base md:text-lg lg:text-2xl leading-relaxed";
+export const CUERPO = "text-base md:text-lg lg:text-2xl leading-normal";
 
 /** Avisos, pies, micro-copy. */
-export const MICRO = "text-sm md:text-base leading-relaxed";
+export const MICRO = "text-sm md:text-base leading-normal";
 
 /**
  * `font-hand` (Mynerve) necesita más interlineado que las otras dos familias

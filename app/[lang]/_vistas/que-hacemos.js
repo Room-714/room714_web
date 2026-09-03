@@ -43,7 +43,7 @@ export default async function QueHacemosPage({ params }) {
       <Navbar dict={dict} isDark={true} />
 
       <main className={`${CANAL} pt-8 pb-24`}>
-        <header className={` mb-14 lg:mb-20`}>
+        <header className={` mb-10 lg:mb-14`}>
           <h1 className={`font-title font-black text-white ${TITULAR}`}>
             {dict.situaciones.indice.title}
           </h1>
@@ -71,7 +71,7 @@ export default async function QueHacemosPage({ params }) {
                 <h2 className={`font-title font-bold text-black ${SUBTITULAR} mb-4`}>
                   {situacion.title}
                 </h2>
-                <p className="font-body text-base md:text-lg text-gray-700 leading-relaxed mb-8">
+                <p className="font-body text-base md:text-lg text-gray-700 leading-normal mb-8">
                   {situacion.description}
                 </p>
                 <span className="font-hand text-red-500 text-lg md:text-xl mt-auto group-hover:underline">

@@ -260,13 +260,6 @@ export default async function RootLayout({ children, params }) {
                 legales. */}
             <div className="flex justify-center items-center gap-x-3 md:gap-x-6 text-white text-sm sm:text-base md:text-xl lg:text-2xl font-light">
               <Link
-                href={path("diagnostico", lang)}
-                className="hover:text-red-500 transition-colors duration-300"
-              >
-                {dict.nav.diagnostic}
-              </Link>
-              <span className="w-px h-5 bg-white" aria-hidden="true" />
-              <Link
                 href={path("empleo", lang)}
                 className="hover:text-red-500 transition-colors duration-300"
               >

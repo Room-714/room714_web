@@ -50,12 +50,25 @@ export default async function ComoTrabajamosPage({ params }) {
               derecha, y en la maqueta original señalaba al párrafo, que iba
               desplazado a la derecha. Al centrar yo el párrafo, la flecha se
               quedó apuntando al vacío. */}
-        <section className={`w-full ${CANAL} py-20 bg-white flex flex-col`}>
-          <div className="w-full flex items-start justify-between gap-4">
-            <h1 className="font-body font-extrabold text-3xl md:text-5xl lg:text-7xl leading-tight text-black">
-              {t.hero.title}
-            </h1>
-            <div className="relative w-14 h-20 md:w-20 md:h-30 lg:w-28 lg:h-42 shrink-0 mt-4">
+        <section className={`w-full ${CANAL} py-16 bg-white flex flex-col`}>
+          {/* Una frase por línea. El titular son dos frases cortas y
+              partirlas por donde caiga el ancho las deja a media idea. */}
+          <h1 className="font-body font-extrabold text-3xl md:text-5xl lg:text-7xl leading-tight text-black">
+            {t.hero.title
+              .split(". ")
+              .filter(Boolean)
+              .map((frase, i, todas) => (
+                <span key={frase} className="block">
+                  {i < todas.length - 1 ? `${frase}.` : frase}
+                </span>
+              ))}
+          </h1>
+
+          {/* La flecha arranca debajo del final del titular y baja hacia la
+              izquierda del párrafo, que va desplazado a la derecha. */}
+          <div className="w-full flex mt-2">
+            <div className="hidden md:block md:w-[34%]" />
+            <div className="relative w-14 h-20 md:w-20 md:h-28 lg:w-24 lg:h-36 shrink-0">
               <Image
                 src="/about/curve-arrow.svg"
                 alt=""
@@ -66,24 +79,25 @@ export default async function ComoTrabajamosPage({ params }) {
               />
             </div>
           </div>
-          <p className="font-hand text-lg md:text-2xl lg:text-3xl text-black mt-8 w-full md:w-[60%] md:ml-auto leading-[1.45]">
+
+          <p className="font-hand text-lg md:text-2xl lg:text-3xl text-black w-full md:w-[60%] md:ml-auto leading-[1.45]">
             {t.hero.description}
           </p>
         </section>
 
         {/* El método */}
-        <section className={`w-full bg-white ${CANAL} pb-20`}>
+        <section className={`w-full bg-white ${CANAL} pb-16`}>
           <div className="w-full">
             <h2 className="font-title font-black text-2xl md:text-4xl lg:text-5xl text-black mb-10 leading-tight">
               {t.metodo.title}
             </h2>
-            <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-6">
               {t.metodo.pasos.map((paso, index) => (
                 <div key={paso.title} className="flex gap-4 lg:gap-6">
                   <span className="font-hand text-xl md:text-2xl lg:text-3xl text-red-500 shrink-0 pt-1 leading-[1.45]">
                     {`0${index + 1}`}
                   </span>
-                  <p className="font-body text-lg md:text-xl lg:text-2xl text-gray-700 leading-relaxed">
+                  <p className="font-body text-lg md:text-xl lg:text-2xl text-gray-700 leading-normal">
                     <strong className="font-bold text-black">
                       {paso.title}
                     </strong>{" "}
@@ -96,7 +110,7 @@ export default async function ComoTrabajamosPage({ params }) {
         </section>
 
         {/* Quién está detrás */}
-        <section className={`w-full bg-gray-300 ${CANAL} py-20`}>
+        <section className={`w-full bg-gray-300 ${CANAL} py-16`}>
           <div className="w-full">
             <h2 className="font-title font-black text-2xl md:text-4xl lg:text-5xl text-black mb-10 leading-tight">
               {t.quien.title}
@@ -118,13 +132,13 @@ export default async function ComoTrabajamosPage({ params }) {
                 <p className="font-hand text-lg md:text-xl lg:text-2xl text-red-500 mb-6">
                   {t.quien.cargo}
                 </p>
-                <p className="font-body text-base md:text-lg lg:text-xl text-gray-700 leading-relaxed mb-6">
+                <p className="font-body text-base md:text-lg lg:text-xl text-gray-700 leading-normal mb-6">
                   {t.quien.bio}
                 </p>
                 <p className="font-hand text-xl md:text-2xl lg:text-3xl text-black mb-6 leading-[1.45]">
                   «{t.quien.cita}»
                 </p>
-                <p className="font-body text-base md:text-lg text-gray-700 leading-relaxed mb-6">
+                <p className="font-body text-base md:text-lg text-gray-700 leading-normal mb-6">
                   {t.quien.cierreBio}
                 </p>
                 <a
@@ -142,7 +156,7 @@ export default async function ComoTrabajamosPage({ params }) {
               </div>
             </div>
 
-            <p className="font-body text-base md:text-lg lg:text-xl text-gray-700 leading-relaxed">
+            <p className="font-body text-base md:text-lg lg:text-xl text-gray-700 leading-normal">
               {t.quien.equipo}
             </p>
           </div>
@@ -174,7 +188,7 @@ export default async function ComoTrabajamosPage({ params }) {
         </section>
 
         {/* Lo que no hacemos */}
-        <section className={`w-full bg-black ${CANAL} py-20`}>
+        <section className={`w-full bg-black ${CANAL} py-16`}>
           <div className="w-full">
             <h2 className="font-title font-black text-2xl md:text-4xl lg:text-5xl text-white mb-10 leading-tight">
               {t.noHacemos.title}
@@ -188,7 +202,7 @@ export default async function ComoTrabajamosPage({ params }) {
                   >
                     ·
                   </span>
-                  <p className="font-body text-lg md:text-xl lg:text-2xl text-gray-300 leading-relaxed">
+                  <p className="font-body text-lg md:text-xl lg:text-2xl text-gray-300 leading-normal">
                     {item}
                   </p>
                 </li>
@@ -204,14 +218,14 @@ export default async function ComoTrabajamosPage({ params }) {
           <h2 className="font-title font-bold text-red-500 text-2xl md:text-4xl lg:text-5xl px-6 mb-6 leading-tight">
             {t.sectors.title}
           </h2>
-          <p className="font-body text-base md:text-lg lg:text-xl text-gray-700 px-6 mb-10 leading-relaxed">
+          <p className="font-body text-base md:text-lg lg:text-xl text-gray-700 px-6 mb-10 leading-normal">
             {t.sectoresLista}
           </p>
           <ClientLogos alts={t.sectors.logos} />
         </section>
 
         {/* Cierre */}
-        <section className="w-full bg-white px-6 pb-20 flex justify-center">
+        <section className="w-full bg-white px-6 pb-16 flex justify-center">
           <PrimaryButton
             text={t.cta}
             isRed={true}
