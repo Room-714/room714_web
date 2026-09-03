@@ -18,6 +18,7 @@ import {
   langPaths,
 } from "@/app/lib/seo/urls";
 import { breadcrumbSchema, jsonLdGraph } from "@/app/lib/seo/schema";
+import { CANAL } from "@/app/lib/layout";
 
 const baseUrl = SITE_URL;
 
@@ -139,7 +140,7 @@ export default async function CategoryPage({ params }) {
       />
       <Navbar dict={dict} isDark={false} alternatePaths={alternatePaths} />
 
-      <div className="relative z-10 w-full px-8 sm:px-10 md:px-14 lg:px-22 py-6 flex justify-start">
+      <div className={`relative z-10 w-full ${CANAL} py-6 flex justify-start`}>
         <Link
           href={`/${lang}/blog`}
           className="group inline-flex items-center gap-2 text-gray-400 hover:text-red-500 transition-colors duration-200 font-title text-xs sm:text-sm uppercase tracking-widest"
@@ -153,7 +154,7 @@ export default async function CategoryPage({ params }) {
         </Link>
       </div>
 
-      <header className="w-full px-8 sm:px-10 md:px-14 lg:px-22 py-10 sm:py-14">
+      <header className={`w-full ${CANAL} py-10 sm:py-14`}>
         <p className="text-red-500 font-hand text-2xl mb-2">
           {lang === "es" ? "Categoría" : "Category"}
         </p>
@@ -168,7 +169,7 @@ export default async function CategoryPage({ params }) {
         </p>
       </header>
 
-      <section className="px-8 sm:px-10 md:px-14 lg:px-22 pb-20">
+      <section className={`${CANAL} pb-20`}>
         {posts.length === 0 ? (
           <p className="text-gray-500 italic">
             {lang === "es" ? "No hay artículos publicados en esta categoría todavía." : "No published articles in this category yet."}

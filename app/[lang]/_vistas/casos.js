@@ -9,6 +9,7 @@ import { getProjectsData } from "@/app/data/Projects";
 import { buildAlternates, langPaths } from "@/app/lib/seo/urls";
 import { ORGANIZATION_ID, jsonLdGraph } from "@/app/lib/seo/schema";
 import { CASOS, path, pathsOf } from "@/app/lib/routes.mjs";
+import { CANAL } from "@/app/lib/layout";
 
 export async function generateMetadata({ params }) {
   const { lang } = await params;
@@ -78,8 +79,8 @@ export default async function CasosPage({ params }) {
 
       <main className="min-h-screen bg-black text-white pt-16 mb-20">
         {/* Cabecera de Página */}
-        <div className="px-8 lg:px-24 mb-16">
-          <h1 className="font-body font-black text-4xl md:text-6xl lg:text-7xl mb-8 max-w-5xl leading-tight">
+        <div className={`${CANAL} mb-16`}>
+          <h1 className="font-body font-black text-4xl md:text-6xl lg:text-7xl mb-8 leading-tight">
             {t.indice.title}
           </h1>
           <p className="font-body text-xl lg:text-2xl max-w-3xl text-gray-300 leading-relaxed">
@@ -88,7 +89,7 @@ export default async function CasosPage({ params }) {
         </div>
 
         {/* Los tres casos con página propia */}
-        <div className="px-6 lg:px-20 mb-24 flex flex-col gap-6">
+        <div className={`${CANAL} mb-24 flex flex-col gap-6`}>
           {destacados.map((caso, index) => (
             <Link
               key={caso.clave}
@@ -103,7 +104,7 @@ export default async function CasosPage({ params }) {
               <div className="h-2 w-full bg-red-700" />
               <div className="px-6 py-8 lg:px-10 lg:py-10">
                 <div className="flex items-start gap-4 lg:gap-6">
-                  <span className="font-hand font-black text-red-500 text-2xl md:text-3xl lg:text-4xl shrink-0">
+                  <span className="font-hand font-black text-red-500 text-2xl md:text-3xl lg:text-4xl shrink-0 leading-[1.45]">
                     {`0${index + 1}`}
                   </span>
                   <div>
@@ -125,15 +126,15 @@ export default async function CasosPage({ params }) {
 
         {/* Los proyectos anteriores, como listado secundario y con el mismo
             acordeón que ya tenían */}
-        <div className="px-8 lg:px-24 mb-8">
-          <h2 className="font-hand text-3xl md:text-5xl text-white mb-2">
+        <div className={`${CANAL} mb-8`}>
+          <h2 className="font-hand text-3xl md:text-5xl text-white mb-2 leading-[1.45]">
             {t.indice.secondaryTitle}
           </h2>
           <p className="font-body text-sm md:text-base text-gray-400 max-w-3xl">
             {t.labels.disclaimer}
           </p>
         </div>
-        <div className="px-6 lg:px-20 pb-30">
+        <div className={`${CANAL} pb-30`}>
           <ProjectsList projects={projects} dict={dict} />
         </div>
       </main>
@@ -143,7 +144,7 @@ export default async function CasosPage({ params }) {
         <h2 className="font-title font-black text-3xl md:text-5xl mb-6">
           {dict.projects.footer_cta.line_1}
         </h2>
-        <h2 className="font-hand text-4xl md:text-7xl mb-10">
+        <h2 className="font-hand text-4xl md:text-7xl mb-10 leading-[1.45]">
           {dict.projects.footer_cta.line_2}
         </h2>
         <div className="flex justify-center">

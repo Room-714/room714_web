@@ -238,7 +238,7 @@
       "otros": "activación de paquetes en telco (+45 % completadas, +12 % ARPU), onboarding digital en gestión de patrimonios (de semanas a 48 h).",
       "noHacemos": "Campañas, branding ni «rediseños visuales» sin métrica detrás. Si lo que necesitas es una capa de pintura, hay quien lo hace más barato.",
       "cierre": {
-        "title": "Empieza por 45 minutos",
+        "title": "Empieza por 30 minutos",
         "body": "Cuéntanos qué flujo pierde clientes. Te respondemos en 24 h laborables y salimos de la sesión con una hipótesis de dónde está el problema y qué haríamos primero."
       }
     },
@@ -294,7 +294,7 @@
       "otros": "dashboards de operaciones con IA generativa (−38 % errores críticos), ecosistema fiscal colaborativo (−40 % intercambio documental).",
       "convivido": "Monolitos .NET y Java, frontales Angular y React, MariaDB, SQL Server, Azure y AWS, CRMs como Zoho y Salesforce, ERPs como Sage, plataformas de contact center como Five9, SIEM/SOAR en entornos de seguridad.",
       "cierre": {
-        "title": "Empieza por 45 minutos",
+        "title": "Empieza por 30 minutos",
         "body": "Cuéntanos qué herramienta frena a tu equipo. Salimos con una hipótesis de por dónde empezar sin parar la operación."
       }
     },
@@ -355,7 +355,7 @@
       "otros": "dashboards de operaciones con IA generativa (−38 % errores críticos), inferencia de IA en nube privada para un operador (en curso).",
       "noHacemos": "No vendemos un modelo, una plataforma ni horas de «consultoría de IA». Si tu problema se resuelve sin IA, te lo diremos; será más barato.",
       "cierre": {
-        "title": "Empieza por 45 minutos",
+        "title": "Empieza por 30 minutos",
         "body": "Trae el piloto. Salimos de la sesión sabiendo qué le falta para ser producto."
       }
     },
@@ -404,7 +404,7 @@
       ],
       "otros": "app de seguridad premium con arquitectura Zero-Trust para perfiles de alto patrimonio.",
       "cierre": {
-        "title": "Empieza por 45 minutos",
+        "title": "Empieza por 30 minutos",
         "body": "Trae la idea. Saldrás sabiendo qué habría que validar primero y cuánto costaría llegar a producción."
       }
     },
@@ -422,7 +422,7 @@
     "hero": {
       "title": "Tu producto digital ya existe. Lo que no existe es el resultado.",
       "description": "Mejoramos y construimos el producto que usan tus clientes y el que usa tu equipo. Experiencia de usuario, tecnología y negocio en el mismo equipo, medido en lo que importa: conversión, tiempo, errores y coste.",
-      "micro": "Te responde José Antonio Ces Franjo, fundador, en 24 h laborables · sesión de diagnóstico gratuita de 45 min"
+      "micro": "Te respondemos en 24 h laborables · sesión de diagnóstico gratuita de 30 min"
     },
     "buttons": {
       "tell_us": "Cuéntanos tu caso",
@@ -485,7 +485,7 @@
     },
     "cierre": {
       "title": "¿Cansado de hablar de métricas? Vamos a construirlas.",
-      "description": "Sesión de diagnóstico de 45 minutos con José Antonio Ces Franjo. Nos escribes, te respondemos en 24 h laborables y fijamos hora. Te decimos qué haríamos, en qué orden y qué costaría. Si no somos los adecuados, también te lo decimos."
+      "description": "Sesión de diagnóstico de 30 minutos. Nos escribes, te respondemos en 24 h laborables y fijamos hora. Te decimos qué haríamos, en qué orden y qué costaría. Si no somos los adecuados, también te lo decimos."
     },
     "seo": {
       "title": "Room 714 · Producto digital para tus clientes y para tu equipo",
@@ -527,8 +527,8 @@
       "send": "contactar"
     },
     "hero": {
-      "title": "45 minutos para saber qué le pasa a tu producto",
-      "description": "Una sesión de diagnóstico gratuita con José Antonio Ces Franjo. No es una reunión comercial: es la primera media hora de trabajo. Nos escribes, te respondemos en 24 horas laborables y fijamos la hora."
+      "title": "30 minutos para saber qué le pasa a tu producto",
+      "description": "Una sesión de diagnóstico gratuita. No es una reunión comercial: es la primera media hora de trabajo. Nos escribes, te respondemos en 24 horas laborables y fijamos la hora."
     },
     "sesion": {
       "title": "Qué pasa en la sesión",
@@ -549,7 +549,7 @@
     },
     "formulario": {
       "title": "Cuéntanos tu caso",
-      "lead": "Tres preguntas. Te responde José Antonio, no un formulario:",
+      "lead": "Tres preguntas. Te respondemos nosotros, no un formulario:",
       "q1": "¿Qué producto es?",
       "q1_opciones": [
         "El que usan mis clientes",
@@ -566,7 +566,7 @@
     },
     "micro": {
       "respuesta": "Respuesta en 24 h laborables.",
-      "linkedin": "Si prefieres LinkedIn, escribe directamente a José Antonio Ces Franjo.",
+      "linkedin": "Si prefieres LinkedIn, escríbenos por ahí.",
       "lugar": "Madrid · Sesiones en español o inglés"
     },
     "diagnostico": {
@@ -575,7 +575,7 @@
     },
     "seo": {
       "title": "Sesión de diagnóstico gratuita · Room 714",
-      "description": "45 minutos con José Antonio Ces Franjo para saber qué le pasa a tu producto digital y qué haríamos primero. Gratuita. Escríbenos y te respondemos en 24 h laborables."
+      "description": "30 minutos para saber qué le pasa a tu producto digital y qué haríamos primero. Gratuita. Escríbenos y te respondemos en 24 h laborables."
     }
   },
   "about": {
@@ -649,7 +649,7 @@
       "cargo": "fundador y CEO",
       "bio": "Ingeniero de Telecomunicación por la Politécnica de Madrid y más de treinta años en tecnología, siempre en el mismo sitio: donde el producto se encuentra con el negocio. Empezó programando centrales telefónicas en Ericsson. Pasó dieciséis años en Telefónica creando la oferta para grandes cuentas y, después, dirigiendo el marketing de empresas con la cuenta de resultados de todos los segmentos y un equipo de más de cien personas. En 2016 fundó Room 714 y, en paralelo, cofundó y operó como COO durante siete años The Wise Seeker, un SaaS de gestión del talento. Desde entonces ha dirigido más de treinta proyectos de consultoría y producto para empresas como LaLiga, Ingenico, GMV, Cobas Asset Management, Orange, Sercide, Zelenza o Señalizaciones Villar.",
       "cita": "Hago que la transformación digital deje de ser un PowerPoint.",
-      "cierreBio": "Dirige cada proyecto y es quien te atiende en la sesión de diagnóstico.",
+      "cierreBio": "Dirige cada proyecto.",
       "equipo": "Con él, un equipo estable de personas senior en diseño de producto y UX, ingeniería de software y arquitectura de datos e IA. Sin juniors aprendiendo con tu presupuesto y sin gestores de cuenta entre tú y quien construye."
     },
     "noHacemos": {

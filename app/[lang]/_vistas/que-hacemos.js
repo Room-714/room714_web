@@ -1,14 +1,25 @@
 import Image from "next/image";
+import Link from "next/link";
 import Navbar from "@/app/components/Navbar";
-import ServiceCard from "@/app/components/ServiceCard";
 import { getDictionary } from "@/app/dictionaries";
 import { getSituacionesData } from "@/app/data/Situaciones";
 import { buildAlternates, langPaths } from "@/app/lib/seo/urls";
 import { path, pathsOf } from "@/app/lib/routes.mjs";
+import { CANAL, SUBTITULAR, TARJETA_ENLACE, TITULAR } from "@/app/lib/layout";
 
 // Índice de "Qué hacemos". El nav es una lista plana de enlaces y no soporta
-// submenú, así que en lugar de rediseñarlo, esta página hace de submenú: las
-// cuatro situaciones con la misma tarjeta numerada que la portada.
+// submenú, así que esta página hace de submenú.
+//
+// NO repite el formato de la portada. Allí las cuatro situaciones van en una
+// pila de tarjetas grandes con ilustración, que ocupa cuatro pantallas: es un
+// argumento que se lee de arriba abajo. Aquí la página es un índice, y lo que
+// hace falta es verlas las cuatro de un vistazo y elegir. Así que rejilla de
+// dos por dos, sin tarjeta y sin ilustración: número, título, una línea y el
+// enlace.
+//
+// Los iconos que usa la portada (services_01…04.svg) se dibujaron para los
+// cinco servicios antiguos; asignarlos a las cuatro situaciones era
+// arbitrario, y repetirlos aquí lo era dos veces.
 
 export async function generateMetadata({ params }) {
   const { lang = "en" } = await params;
@@ -31,32 +42,46 @@ export default async function QueHacemosPage({ params }) {
     <div className="flex flex-col bg-black">
       <Navbar dict={dict} isDark={true} />
 
-      <section className="bg-black pt-8 pb-16 lg:pb-20">
-        <div className="md:sticky top-12 mb-16 lg:mb-20 h-12 flex items-center justify-center px-4 md:px-8 lg:px-40">
-          <h1 className="text-white z-30 font-title font-bold text-2xl md:text-4xl lg:text-5xl text-center px-2 md:px-8 lg:px-16 leading-tight">
+      <main className={`${CANAL} pt-8 pb-24`}>
+        <header className={` mb-14 lg:mb-20`}>
+          <h1 className={`font-title font-black text-white ${TITULAR}`}>
             {dict.situaciones.indice.title}
           </h1>
-        </div>
+        </header>
 
-        {situaciones.map((situacion, index) => (
-          <div
-            key={situacion.clave}
-            className="md:sticky w-full"
-            style={{ top: "140px", marginBottom: "40px", zIndex: 40 + index }}
-          >
-            <ServiceCard
-              number={situacion.number}
-              image={situacion.image}
-              title={situacion.title}
-              description={situacion.description}
-              cta={situacion.cta}
+        {/* Superficie de tarjeta clara, la misma que usan las tarjetas de
+            caso en el resto del sitio: en negro a pelo esto quedaba
+            oscurísimo. Y el hover cambia UNA cosa, el fondo, como las demás
+            tarjetas: antes se teñían de rojo el borde, el título y el enlace
+            a la vez. */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+          {situaciones.map((situacion) => (
+            <Link
+              key={situacion.clave}
               href={path(situacion.clave, lang)}
-              track="situacion_click"
-              trackPlacement={`indice_${situacion.clave}`}
-            />
-          </div>
-        ))}
-      </section>
+              data-track="situacion_click"
+              data-track-placement={`indice_${situacion.clave}`}
+              className={`group flex flex-col ${TARJETA_ENLACE}`}
+            >
+              <div className="h-2 w-full bg-red-700" />
+              <div className="px-6 py-8 lg:px-10 lg:py-10 flex flex-col h-full">
+                <span className="font-hand font-black text-red-500 text-2xl md:text-3xl block mb-4">
+                  {situacion.number}
+                </span>
+                <h2 className={`font-title font-bold text-black ${SUBTITULAR} mb-4`}>
+                  {situacion.title}
+                </h2>
+                <p className="font-body text-base md:text-lg text-gray-700 leading-relaxed mb-8">
+                  {situacion.description}
+                </p>
+                <span className="font-hand text-red-500 text-lg md:text-xl mt-auto group-hover:underline">
+                  {situacion.cta}
+                </span>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </main>
 
       <section className="w-full bg-black">
         <div className="w-[60%] ml-auto leading-0 flex">

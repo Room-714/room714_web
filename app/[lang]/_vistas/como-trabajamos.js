@@ -9,6 +9,7 @@ import { getRules } from "@/app/data/Rules";
 import { SITE_URL, buildAlternates, langPaths } from "@/app/lib/seo/urls";
 import { path, pathsOf } from "@/app/lib/routes.mjs";
 import { LINKEDIN_FOUNDER, withUtm } from "@/app/lib/links";
+import { CANAL } from "@/app/lib/layout";
 
 export async function generateMetadata({ params }) {
   const { lang = "en" } = await params;
@@ -36,43 +37,50 @@ export default async function ComoTrabajamosPage({ params }) {
   const rules = getRules(dict);
 
   return (
-    <div className="bg-red-700 flex flex-col">
-      {/* Este fondo "empujará" hasta el footer */}
+    <div className="bg-white flex flex-col">
+      {/* Blanco, no rojo: el rojo asomaba por las esquinas redondeadas de
+          las secciones de abajo y dejaba dos piquitos en cada una. */}
       <Navbar dict={dict} isDark={false} />
       <main className="flex flex-col items-center overflow-x-hidden">
-        {/* Hero. El titular del Anexo A es bastante más largo que el
-            "quiénes somos" que había, así que baja de escala tipográfica
-            para caber sin romper la línea a mitad de palabra. */}
-        <section className="w-full px-6 md:px-10 lg:px-20 py-20 bg-white flex flex-col items-center text-center">
-          <div className="w-full flex items-center justify-center gap-1 pr-4">
-            <h1 className="font-body font-extrabold text-3xl md:text-5xl lg:text-7xl leading-tight text-black max-w-5xl">
+        {/* Hero. Dos cosas heredadas del diseño anterior:
+            - El titular baja de escala. El del Anexo A tiene 48 caracteres y
+              el que había ("quiénes somos") catorce; al tamaño original
+              ocupaba la pantalla entera.
+            - La flecha vuelve a apuntar a algo. Curva hacia abajo y a la
+              derecha, y en la maqueta original señalaba al párrafo, que iba
+              desplazado a la derecha. Al centrar yo el párrafo, la flecha se
+              quedó apuntando al vacío. */}
+        <section className={`w-full ${CANAL} py-20 bg-white flex flex-col`}>
+          <div className="w-full flex items-start justify-between gap-4">
+            <h1 className="font-body font-extrabold text-3xl md:text-5xl lg:text-7xl leading-tight text-black">
               {t.hero.title}
             </h1>
             <div className="relative w-14 h-20 md:w-20 md:h-30 lg:w-28 lg:h-42 shrink-0 mt-4">
               <Image
                 src="/about/curve-arrow.svg"
-                alt="Room 714 arrow"
+                alt=""
+                aria-hidden="true"
                 fill
                 className="object-contain"
                 priority
               />
             </div>
           </div>
-          <p className="font-hand text-center text-lg md:text-2xl lg:text-3xl leading-tight text-black mt-8 max-w-4xl">
+          <p className="font-hand text-lg md:text-2xl lg:text-3xl text-black mt-8 w-full md:w-[60%] md:ml-auto leading-[1.45]">
             {t.hero.description}
           </p>
         </section>
 
         {/* El método */}
-        <section className="w-full bg-white px-6 md:px-10 lg:px-20 pb-20">
-          <div className="mx-auto max-w-5xl">
+        <section className={`w-full bg-white ${CANAL} pb-20`}>
+          <div className="w-full">
             <h2 className="font-title font-black text-2xl md:text-4xl lg:text-5xl text-black mb-10 leading-tight">
               {t.metodo.title}
             </h2>
             <div className="flex flex-col gap-8">
               {t.metodo.pasos.map((paso, index) => (
                 <div key={paso.title} className="flex gap-4 lg:gap-6">
-                  <span className="font-hand text-xl md:text-2xl lg:text-3xl text-red-500 shrink-0 pt-1">
+                  <span className="font-hand text-xl md:text-2xl lg:text-3xl text-red-500 shrink-0 pt-1 leading-[1.45]">
                     {`0${index + 1}`}
                   </span>
                   <p className="font-body text-lg md:text-xl lg:text-2xl text-gray-700 leading-relaxed">
@@ -88,8 +96,8 @@ export default async function ComoTrabajamosPage({ params }) {
         </section>
 
         {/* Quién está detrás */}
-        <section className="w-full bg-gray-300 rounded-t-[50px] px-6 md:px-10 lg:px-20 py-20">
-          <div className="mx-auto max-w-5xl">
+        <section className={`w-full bg-gray-300 ${CANAL} py-20`}>
+          <div className="w-full">
             <h2 className="font-title font-black text-2xl md:text-4xl lg:text-5xl text-black mb-10 leading-tight">
               {t.quien.title}
             </h2>
@@ -113,7 +121,7 @@ export default async function ComoTrabajamosPage({ params }) {
                 <p className="font-body text-base md:text-lg lg:text-xl text-gray-700 leading-relaxed mb-6">
                   {t.quien.bio}
                 </p>
-                <p className="font-hand text-xl md:text-2xl lg:text-3xl text-black mb-6">
+                <p className="font-hand text-xl md:text-2xl lg:text-3xl text-black mb-6 leading-[1.45]">
                   «{t.quien.cita}»
                 </p>
                 <p className="font-body text-base md:text-lg text-gray-700 leading-relaxed mb-6">
@@ -147,7 +155,7 @@ export default async function ComoTrabajamosPage({ params }) {
             {t.rules.title_line1}
           </h2>
           <div className="relative flex mb-4 items-center justify-center">
-            <p className="relative z-20 font-hand text-white text-4xl md:text-5xl text-center px-12">
+            <p className="relative z-20 font-hand text-white text-4xl md:text-5xl text-center px-12 leading-[1.45]">
               {t.rules.title_line2}
             </p>
             <div className="absolute inset-0 z-10 flex items-center justify-center">
@@ -166,8 +174,8 @@ export default async function ComoTrabajamosPage({ params }) {
         </section>
 
         {/* Lo que no hacemos */}
-        <section className="w-full bg-black px-6 md:px-10 lg:px-20 py-20">
-          <div className="mx-auto max-w-5xl">
+        <section className={`w-full bg-black ${CANAL} py-20`}>
+          <div className="w-full">
             <h2 className="font-title font-black text-2xl md:text-4xl lg:text-5xl text-white mb-10 leading-tight">
               {t.noHacemos.title}
             </h2>
@@ -192,11 +200,11 @@ export default async function ComoTrabajamosPage({ params }) {
         {/* Sectores: aquí es donde viven ahora los logos de clientes. En la
             portada su sitio lo ocupa el bloque de prueba con los tres casos,
             que dice bastante más que seis logos sin contexto. */}
-        <section className="w-full bg-white rounded-t-[50px] pt-16 pb-10 flex flex-col items-center text-center">
+        <section className="w-full bg-white pt-16 pb-10 flex flex-col items-center text-center">
           <h2 className="font-title font-bold text-red-500 text-2xl md:text-4xl lg:text-5xl px-6 mb-6 leading-tight">
             {t.sectors.title}
           </h2>
-          <p className="font-body text-base md:text-lg lg:text-xl text-gray-700 max-w-4xl px-6 mb-10 leading-relaxed">
+          <p className="font-body text-base md:text-lg lg:text-xl text-gray-700 px-6 mb-10 leading-relaxed">
             {t.sectoresLista}
           </p>
           <ClientLogos alts={t.sectors.logos} />

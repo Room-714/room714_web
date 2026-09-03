@@ -12,45 +12,33 @@ export default function ProjectCard({ project, isOpen, onClick, dict, priority =
   ${isOpen ? "mb-4 shadow-sm" : "mb-4 hover:bg-[#F8F8F8] hover:bg-size[45px_45px]"}
 `}
     >
-      {/* LÍNEA ROJA DE ACENTO (Superior) */}
-      <div
-        className={`h-2 w-full bg-red-700 transition-opacity duration-500 ${isOpen ? "opacity-100" : "opacity-0"}`}
-      />
+      {/* Línea roja de acento, siempre visible: en las tarjetas de los tres
+          casos destacados también lo está, y aparecer solo al abrirse hacía
+          que las dos mitades del listado no parecieran iguales. */}
+      <div className="h-2 w-full bg-red-700" />
 
-      <div className="py-4 px-6">
-        {/* CABECERA: Título Horizontal */}
-        <div className="flex justify-between items-center gap-3">
-          <div className="flex justify-start items-start gap-4 min-w-0">
-            <span
-              className={`font-black font-hand text-lg md:text-2xl lg:text-4xl ${isOpen ? "text-red-500 pt-2" : "text-gray-400"}`}
-            >
+      <div className="px-6 py-8 lg:px-10 lg:py-10">
+        {/* CABECERA: Título Horizontal.
+            Misma tipografía, mismos tamaños y mismos colores que las
+            tarjetas de los tres casos destacados: número en font-hand rojo,
+            título en font-title negro. Antes iba en font-hand y se ponía en
+            gris al cerrarse, así que las dos mitades del listado no parecían
+            del mismo sitio. */}
+        <div className="flex justify-between items-start gap-3">
+          <div className="flex justify-start items-start gap-4 lg:gap-6 min-w-0">
+            <span className="font-hand font-black text-red-500 text-2xl md:text-3xl lg:text-4xl shrink-0">
               {project.id}
             </span>
-            <h3
-              className={`font-bold font-hand text-lg md:text-2xl lg:text-4xl transition-colors ${isOpen ? "text-black pt-2" : "text-gray-400"}`}
-            >
+            <h3 className="font-title font-bold text-black text-xl md:text-2xl lg:text-4xl leading-tight">
               {project.title}
             </h3>
           </div>
 
           <div className="flex items-center gap-3 flex-none">
-            {project.status === "in_progress" && dict.projects.status?.in_progress && (
-              <span
-                className={`font-hand text-sm md:text-base lg:text-xl px-3 py-0.5 -rotate-2 select-none border-2 border-dashed rounded-md text-red-500 border-red-500 transition-opacity duration-500 ${
-                  isOpen ? "opacity-100" : "opacity-60"
-                }`}
-              >
-                {dict.projects.status.in_progress}
-              </span>
-            )}
-
             <div
               className={`transition-transform duration-500 ${isOpen ? "rotate-180" : "rotate-0"}`}
             >
-              <ChevronDown
-                size={24}
-                className={isOpen ? "text-red-500" : "text-gray-400"}
-              />
+              <ChevronDown size={24} className="text-red-500" />
             </div>
           </div>
         </div>

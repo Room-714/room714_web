@@ -238,7 +238,7 @@
       "otros": "telco bundle activation (+45% completed, +12% ARPU), digital onboarding in wealth management (from weeks to 48 hours).",
       "noHacemos": "Campaigns, branding or “visual redesigns” with no metric behind them. If what you need is a coat of paint, others do it cheaper.",
       "cierre": {
-        "title": "Start with 45 minutes",
+        "title": "Start with 30 minutes",
         "body": "Tell us which flow is losing customers. We reply within 24 working hours and leave the session with a hypothesis of where the problem is and what we would do first."
       }
     },
@@ -294,7 +294,7 @@
       "otros": "operations dashboards with generative AI (−38% critical errors), a collaborative tax ecosystem (−40% document exchange).",
       "convivido": ".NET and Java monoliths, Angular and React front-ends, MariaDB, SQL Server, Azure and AWS, CRMs such as Zoho and Salesforce, ERPs such as Sage, contact centre platforms such as Five9, SIEM/SOAR in security environments.",
       "cierre": {
-        "title": "Start with 45 minutes",
+        "title": "Start with 30 minutes",
         "body": "Tell us which tool is slowing your team down. We leave with a hypothesis of where to start without stopping the operation."
       }
     },
@@ -355,7 +355,7 @@
       "otros": "operations dashboards with generative AI (−38% critical errors), private-cloud AI inference for an operator (in progress).",
       "noHacemos": "We don't sell a model, a platform or hours of “AI consulting”. If your problem can be solved without AI, we will tell you; it will be cheaper.",
       "cierre": {
-        "title": "Start with 45 minutes",
+        "title": "Start with 30 minutes",
         "body": "Bring the pilot. We leave the session knowing what it needs in order to become a product."
       }
     },
@@ -404,7 +404,7 @@
       ],
       "otros": "a premium security app with Zero-Trust architecture for high-net-worth profiles.",
       "cierre": {
-        "title": "Start with 45 minutes",
+        "title": "Start with 30 minutes",
         "body": "Bring the idea. You will leave knowing what would need validating first and what it would cost to reach production."
       }
     },
@@ -422,7 +422,7 @@
     "hero": {
       "title": "Your digital product already exists. The results don't.",
       "description": "We improve and build the product your customers use and the one your team uses. User experience, technology and business in the same team, measured in what matters: conversion, time, errors and cost.",
-      "micro": "José Antonio Ces Franjo, founder, replies within 24 working hours · free 45-minute diagnostic session"
+      "micro": "We reply within 24 working hours · free 30-minute diagnostic session"
     },
     "buttons": {
       "tell_us": "Tell us about your case",
@@ -485,7 +485,7 @@
     },
     "cierre": {
       "title": "Tired of talking about metrics? Let's go build them.",
-      "description": "A 45-minute diagnostic session with José Antonio Ces Franjo. You write to us, we reply within 24 working hours and set a time. We tell you what we would do, in what order and what it would cost. If we are not the right team, we tell you that too."
+      "description": "A 30-minute diagnostic session. You write to us, we reply within 24 working hours and set a time. We tell you what we would do, in what order and what it would cost. If we are not the right team, we tell you that too."
     },
     "seo": {
       "title": "Room 714 · Digital product for your customers and your team",
@@ -527,8 +527,8 @@
       "send": "get in touch"
     },
     "hero": {
-      "title": "45 minutes to find out what's wrong with your product",
-      "description": "A free diagnostic session with José Antonio Ces Franjo. It is not a sales meeting: it is the first half hour of work. You write to us, we reply within 24 working hours and set a time."
+      "title": "30 minutes to find out what's wrong with your product",
+      "description": "A free diagnostic session. It is not a sales meeting: it is the first half hour of work. You write to us, we reply within 24 working hours and set a time."
     },
     "sesion": {
       "title": "What happens in the session",
@@ -549,7 +549,7 @@
     },
     "formulario": {
       "title": "Tell us about your case",
-      "lead": "Three questions. José Antonio answers, not a form:",
+      "lead": "Three questions. We answer, not a form:",
       "q1": "Which product is it?",
       "q1_opciones": [
         "The one my customers use",
@@ -566,7 +566,7 @@
     },
     "micro": {
       "respuesta": "Reply within 24 working hours.",
-      "linkedin": "If you prefer LinkedIn, write directly to José Antonio Ces Franjo.",
+      "linkedin": "If you prefer LinkedIn, write to us there.",
       "lugar": "Madrid · Sessions in Spanish or English"
     },
     "diagnostico": {
@@ -575,7 +575,7 @@
     },
     "seo": {
       "title": "Free diagnostic session · Room 714",
-      "description": "45 minutes with José Antonio Ces Franjo to find out what's wrong with your digital product and what we would do first. Free. Write to us and we reply within 24 working hours."
+      "description": "30 minutes to find out what's wrong with your digital product and what we would do first. Free. Write to us and we reply within 24 working hours."
     }
   },
   "about": {
@@ -649,7 +649,7 @@
       "cargo": "founder and CEO",
       "bio": "Telecommunications engineer from the Polytechnic University of Madrid and more than thirty years in technology, always in the same place: where product meets business. He started programming telephone exchanges at Ericsson. He spent sixteen years at Telefónica building the enterprise offering and then running business marketing, with the P&L for every segment and a team of more than a hundred people. In 2016 he founded Room 714 and, in parallel, co-founded and served as COO for seven years at The Wise Seeker, a talent management SaaS. Since then he has led more than thirty consulting and product projects for companies such as LaLiga, Ingenico, GMV, Cobas Asset Management, Orange, Sercide, Zelenza and Señalizaciones Villar.",
       "cita": "I make digital transformation stop being a PowerPoint.",
-      "cierreBio": "He leads every project and he is the person you meet in the diagnostic session.",
+      "cierreBio": "He leads every project.",
       "equipo": "With him, a stable team of senior people in product design and UX, software engineering, and data and AI architecture. No juniors learning on your budget, and no account managers between you and whoever builds."
     },
     "noHacemos": {

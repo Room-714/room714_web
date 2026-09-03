@@ -12,6 +12,7 @@ import { getAllPosts, ordenarPorSlugs } from "@/app/lib/blog";
 import { PINNED_COUNT, PINNED_SLUGS } from "@/app/data/PinnedPosts";
 import { path } from "@/app/lib/routes.mjs";
 import { buildAlternates, samePath } from "@/app/lib/seo/urls";
+import { CANAL } from "@/app/lib/layout";
 
 export async function generateMetadata({ params }) {
   const { lang = "en" } = await params;
@@ -89,7 +90,7 @@ export default async function Home({ params }) {
         <div className="px-4 md:px-12 flex flex-col justify-center items-center w-full">
           {/* h1 y no p: la portada no tenía ningún encabezado de primer nivel.
               Las clases son las mismas, así que a la vista no cambia nada. */}
-          <h1 className="font-hand font-black text-red-500 text-2xl md:text-3xl lg:text-5xl mb-8 lg:mb-16 md:px-4">
+          <h1 className={`font-hand font-black text-red-500 text-2xl md:text-3xl lg:text-5xl leading-[1.45] mb-8 lg:mb-16 md:px-4`}>
             {t.hero.title}
           </h1>
           <p className="font-body text-base md:text-xl lg:text-2xl mb-8 lg:mb-16 md:px-4">
@@ -169,12 +170,12 @@ export default async function Home({ params }) {
 
       {/* Vale, pero ¿qué hacéis exactamente? y la prueba. Los dos en blanco,
           donde antes vivía el bloque de clientes. */}
-      <section className="bg-white rounded-t-[50px] overflow-hidden px-6 md:px-10 lg:px-20 py-16 lg:py-20 z-50 relative">
-        <div className="mx-auto max-w-6xl">
+      <section className={`bg-white rounded-t-[50px] overflow-hidden ${CANAL} py-16 lg:py-20 z-50 relative`}>
+        <div className="w-full">
           <h2 className="font-title font-bold text-red-500 text-3xl lg:text-5xl mb-8 leading-tight">
             {t.diferencia.title}
           </h2>
-          <p className="font-body text-xl lg:text-3xl leading-relaxed text-black mb-12 max-w-4xl">
+          <p className="font-body text-xl lg:text-3xl leading-relaxed text-black mb-12">
             {t.diferencia.lead}
           </p>
 
@@ -198,7 +199,7 @@ export default async function Home({ params }) {
 
           {/* Prueba: un párrafo por caso. Sustituye al carrusel de logos, que
               se muda a "Cómo trabajamos". */}
-          <h2 className="font-hand font-bold text-red-500 text-3xl lg:text-5xl mb-10 leading-tight">
+          <h2 className={`font-hand font-bold text-red-500 text-3xl lg:text-5xl leading-[1.45] mb-10`}>
             {t.prueba.title}
           </h2>
 
@@ -240,8 +241,8 @@ export default async function Home({ params }) {
       </section>
 
       {/* Cómo trabajamos: el método en cuatro pasos */}
-      <section className="bg-black rounded-t-[50px] -mt-10 px-6 md:px-10 lg:px-20 py-20 relative z-50">
-        <div className="mx-auto max-w-6xl">
+      <section className={`bg-black rounded-t-[50px] -mt-10 ${CANAL} py-20 relative z-50`}>
+        <div className="w-full">
           <h2 className="font-title font-black text-3xl md:text-5xl lg:text-6xl text-white mb-12 leading-tight">
             {t.metodo.title}
           </h2>
@@ -264,7 +265,7 @@ export default async function Home({ params }) {
             ))}
           </div>
 
-          <p className="font-hand text-2xl md:text-3xl lg:text-4xl text-white mb-10">
+          <p className={`font-hand text-2xl md:text-3xl lg:text-4xl text-white leading-[1.45] mb-10`}>
             {t.metodo.closing}
           </p>
 
@@ -280,7 +281,7 @@ export default async function Home({ params }) {
       {/* Ideas: tres piezas fijadas a mano */}
       {pinnedPosts.length > 0 && (
         <section className="bg-gray-300 rounded-t-[50px] -mt-10 px-4 md:px-8 py-20 relative z-50">
-          <div className="mx-auto max-w-7xl">
+          <div>
             <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12">
               <h2 className="font-title font-black text-3xl md:text-5xl lg:text-6xl text-black leading-tight">
                 {t.latest.title}
@@ -309,7 +310,7 @@ export default async function Home({ params }) {
 
       {/* Cierre, con el mismo patrón que el CTA final de Casos */}
       <section className="relative z-50 -mt-10 w-full bg-white rounded-t-[50px] px-6 py-16 lg:px-16 lg:py-20 text-center text-black">
-        <h2 className="font-title font-black text-3xl md:text-5xl mb-8 max-w-4xl mx-auto leading-tight">
+        <h2 className="font-title font-black text-3xl md:text-5xl mb-8 mx-auto leading-tight">
           {t.cierre.title}
         </h2>
         <p className="font-body text-lg md:text-xl lg:text-2xl text-gray-700 mb-10 max-w-3xl mx-auto leading-relaxed">

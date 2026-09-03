@@ -6,6 +6,7 @@ import PrimaryButton from "@/app/components/PrimaryButton";
 import { getDictionary } from "@/app/dictionaries";
 import { SITE_URL, buildAlternates, langPaths } from "@/app/lib/seo/urls";
 import { path, pathsOf } from "@/app/lib/routes.mjs";
+import { CANAL } from "@/app/lib/layout";
 
 // Plantilla única de las cuatro páginas de situación. Cada ruta la instancia
 // con su clave, así que hay una sola maqueta que mantener.
@@ -56,7 +57,7 @@ export function situacion(clave) {
       <div className="flex flex-col bg-black">
         <Navbar dict={dict} isDark={true} />
 
-        <main className="px-8 sm:px-10 md:px-14 lg:px-22 pt-8 pb-20">
+        <main className={`${CANAL} pt-8 pb-20`}>
           {/* Hero */}
           <header className="max-w-4xl mb-16 lg:mb-24">
             <h1 className="font-title font-black text-3xl md:text-5xl lg:text-6xl text-white leading-tight mb-8">
@@ -74,7 +75,7 @@ export function situacion(clave) {
             />
           </header>
 
-          <div className="max-w-4xl">
+          <div className="w-full">
             {/* Te suena si… */}
             <Seccion titulo={labels.teSuena}>
               <ul className="flex flex-col gap-4">
@@ -169,7 +170,7 @@ export function situacion(clave) {
 
         {/* Cierre, con el patrón del CTA final del resto del sitio */}
         <section className="relative z-10 w-full bg-white rounded-t-[50px] px-6 py-16 lg:px-16 lg:py-20 text-center text-black">
-          <h2 className="font-hand text-3xl md:text-5xl lg:text-6xl mb-8 leading-tight">
+          <h2 className="font-hand text-3xl md:text-5xl lg:text-6xl mb-8 leading-[1.45]">
             {t.cierre.title}
           </h2>
           <p className="font-body text-lg md:text-xl lg:text-2xl text-gray-700 mb-10 max-w-3xl mx-auto leading-relaxed">

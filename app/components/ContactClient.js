@@ -9,6 +9,7 @@ import { trackEvent } from "@/app/lib/analytics";
 import { LINKEDIN_FOUNDER, withUtm } from "@/app/lib/links";
 import { path } from "@/app/lib/routes.mjs";
 import { CLAVES_SITUACION } from "@/app/data/Situaciones";
+import { CANAL } from "@/app/lib/layout";
 
 // El formulario de "Hablemos": tres preguntas, sin calendario.
 //
@@ -76,25 +77,13 @@ export default function ContactClient({ dict }) {
 
   return (
     <main className="bg-black text-white relative overflow-hidden flex flex-col">
-      {/* ILUSTRACIÓN DESKTOP (Fondo) */}
-      <div className="hidden lg:block absolute left-0 top-0 w-full h-full pointer-events-none z-0">
-        <Image
-          src="/contact-tablet.svg"
-          alt="Contact illustration desktop"
-          fill
-          className="object-contain object-bottom-left"
-          priority
-        />
-      </div>
+      <div className={`${CANAL} pt-12 lg:pt-20 pb-0 z-10`}>
 
-      <div className="flex flex-col lg:flex-row items-center lg:items-start lg:justify-between pt-12 lg:pt-24 pb-0 px-6 lg:px-24 z-10">
-        <div className="hidden lg:block lg:w-[40%]" />
-
-        <div className="w-full lg:w-[60%]">
+        <div className="w-full">
           {status === "success" ? (
             <div className="flex flex-col jusfity-center items-end animate-in fade-in duration-500 lg:mt-24 lg:mb-36">
               <CheckCircle2 size={60} className="text-red-600 mb-8" />
-              <h1 className="font-hand text-5xl sm:text-6xl md:text-7xl lg:text-8xl mb-4 text-white leading-none">
+              <h1 className="font-hand text-5xl sm:text-6xl md:text-7xl lg:text-8xl mb-4 text-white leading-[1.45]">
                 {t.success.title}
               </h1>
               <p className="font-body text-xl sm:text-2xl md:text-3xl lg:text-4xl text-gray-400 mb-8 max-w-2xl">
@@ -111,7 +100,7 @@ export default function ContactClient({ dict }) {
           ) : (
             <div className="pb-12 lg:pb-24">
               {/* Hero */}
-              <h1 className="font-hand text-4xl md:text-5xl lg:text-7xl mb-8 text-center lg:text-left leading-tight">
+              <h1 className="font-hand text-4xl md:text-5xl lg:text-7xl mb-8 text-center lg:text-left leading-[1.45]">
                 {t.hero.title}
               </h1>
               <p className="font-body text-lg md:text-xl lg:text-2xl text-gray-300 mb-12 leading-relaxed">
@@ -164,7 +153,7 @@ export default function ContactClient({ dict }) {
               </p>
 
               {/* El formulario */}
-              <h2 className="font-hand text-3xl md:text-4xl lg:text-5xl mb-3">
+              <h2 className="font-hand text-3xl md:text-4xl lg:text-5xl mb-3 leading-[1.45]">
                 {f.title}
               </h2>
               <p className="font-body text-base md:text-lg text-gray-400 mb-8">
@@ -304,7 +293,10 @@ export default function ContactClient({ dict }) {
       </div>
 
       {/* 3. ILUSTRACIÓN MÓVIL/TABLET: Siempre presente al final */}
-      <div className="w-full lg:hidden leading-none overflow-hidden">
+      {/* La ilustración cierra la página a todo el ancho. Antes estaba en
+          absoluto detrás del texto, dimensionada para una página corta: con
+          las secciones nuevas cruzaba el contenido en diagonal. */}
+      <div className="w-full leading-none overflow-hidden">
         <Image
           src="/contact-tablet.svg"
           alt="Contact illustration"

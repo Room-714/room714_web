@@ -11,6 +11,7 @@ import {
   jsonLdGraph,
 } from "@/app/lib/seo/schema";
 import { path, pathsOf } from "@/app/lib/routes.mjs";
+import { CANAL } from "@/app/lib/layout";
 
 // Plantilla única de las tres páginas de caso. Cada ruta la instancia con su
 // clave, así que la maqueta se mantiene en un solo sitio.
@@ -84,7 +85,7 @@ export function caso(clave) {
         <Navbar dict={dict} isDark={false} />
 
         {/* Volver, con el mismo patrón que el artículo del blog */}
-        <div className="relative z-10 w-full px-8 sm:px-10 md:px-14 lg:px-22 py-6 flex justify-start">
+        <div className={`relative z-10 w-full ${CANAL} py-6 flex justify-start`}>
           <Link
             href={path("casos", lang)}
             className="group inline-flex items-center gap-2 text-gray-400 hover:text-red-500 transition-colors duration-200 font-title text-xs sm:text-sm uppercase tracking-widest"
@@ -98,8 +99,8 @@ export function caso(clave) {
           </Link>
         </div>
 
-        <article className="px-8 sm:px-10 md:px-14 lg:px-22 pb-20">
-          <div className="max-w-4xl">
+        <article className={`${CANAL} pb-20`}>
+          <div className="w-full">
             {/* Hero */}
             <header className="mb-12 lg:mb-16">
               <h1 className="font-title font-black text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-black leading-tight mb-6">
@@ -125,11 +126,15 @@ export function caso(clave) {
                     bg-size-[40px_40px]"
                 >
                   <div className="h-2 w-full bg-red-700" />
-                  <div className="px-6 py-8">
-                    <p className="font-hand font-black text-red-500 text-3xl md:text-4xl lg:text-5xl mb-4 leading-none">
+                  {/* h-full y justify-between: las tres etiquetas apoyan en
+                      la misma línea de base aunque las cifras midan distinto.
+                      Y la cifra no se parte: "+200 → <20" se rompía en dos
+                      líneas y empujaba su etiqueta hacia abajo. */}
+                  <div className="px-6 py-8 flex flex-col h-full">
+                    <p className="font-hand font-black text-red-500 text-2xl md:text-3xl lg:text-4xl whitespace-nowrap mb-6">
                       {cifra.valor}
                     </p>
-                    <p className="font-body text-sm md:text-base text-gray-700 leading-snug">
+                    <p className="font-body text-sm md:text-base text-gray-700 leading-snug mt-auto">
                       {cifra.etiqueta}
                     </p>
                   </div>
@@ -198,7 +203,7 @@ export function caso(clave) {
 
         {/* Cierre, con el patrón del CTA final de Casos */}
         <section className="relative z-10 w-full bg-gray-300 rounded-t-[50px] px-6 py-16 lg:px-16 lg:py-20 text-center text-black">
-          <h2 className="font-hand text-3xl md:text-5xl lg:text-6xl mb-10 max-w-4xl mx-auto leading-tight">
+          <h2 className="font-hand text-3xl md:text-5xl lg:text-6xl mb-10 mx-auto leading-[1.45]">
             {t.cierre}
           </h2>
           <div className="flex justify-center">

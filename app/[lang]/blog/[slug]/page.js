@@ -16,6 +16,7 @@ import { LINKEDIN_FOUNDER, withUtm } from "@/app/lib/links";
 import { prisma } from "@/app/lib/prisma";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { CANAL } from "@/app/lib/layout";
 
 async function maybeRedirect(rawSlug, lang) {
   // Igual que en getPostBySlug: el param llega percent-encoded.
@@ -160,7 +161,7 @@ export default async function PostPage({ params }) {
       <Navbar dict={dict} isDark={false} alternatePaths={alternatePaths} />
 
       {/* Botón de volver con corrección de capa */}
-      <div className="relative z-10 w-full px-8 sm:px-10 md:px-14 lg:px-22 py-6 flex justify-start">
+      <div className={`relative z-10 w-full ${CANAL} py-6 flex justify-start`}>
         <Link
           href={`/${lang}/blog`}
           className="group inline-flex items-center gap-2 text-gray-400 hover:text-red-500 transition-colors duration-200 font-title text-xs sm:text-sm uppercase tracking-widest cursor-pointer"
@@ -280,7 +281,7 @@ export default async function PostPage({ params }) {
       </article>
 
       {/* Footer de artículos recientes con Diccionario */}
-      <section className="mt-20 bg-gray-300 px-6 sm:px-8 md:px-10 lg:px-16 py-10 sm:py-14 md:py-16 lg:py-18 rounded-t-[50px]">
+      <section className={`mt-20 bg-gray-300 ${CANAL} py-10 sm:py-14 md:py-16 lg:py-18 rounded-t-[50px]`}>
         <div>
           <h2 className="font-title font-black px-4 sm:px-6 md:px-8 lg:px-10 text-xl sm:text-2xl md:text-3xl lg:text-4xl pb-6 md:pb-10 text-black">
             {dict.blog.related_articles}
