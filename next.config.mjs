@@ -24,7 +24,7 @@ const nextConfig = {
             value: "room714.es",
           },
         ],
-        destination: "https://www.room714.com/en/:path*",
+        destination: "https://www.room714.com/es/:path*",
         statusCode: 301, // `permanent: true` emite 308, no 301
       },
       {
@@ -35,7 +35,7 @@ const nextConfig = {
             value: "www.room714.es",
           },
         ],
-        destination: "https://www.room714.com/en/:path*",
+        destination: "https://www.room714.com/es/:path*",
         statusCode: 301,
       },
       {

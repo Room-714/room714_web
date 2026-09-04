@@ -10,8 +10,10 @@ export async function proxy(request) {
   // 1. REDIRECCIÓN DE DOMINIO (.es -> .com) CON STATUS 301
   // Forzamos el 301 para que Google valide el cambio de dirección
   if (hostname.includes("room714.es")) {
-    // Si podemos, lo mandamos directo a /en para evitar múltiples saltos
-    const destination = `https://www.room714.com/en${pathname}${request.nextUrl.search}`;
+    // Directo a /es y no a /en: es el dominio español, y mandarlo al inglés
+    // contradecía el idioma por defecto de abajo. Se elige el idioma aquí para
+    // evitar el segundo salto.
+    const destination = `https://www.room714.com/es${pathname}${request.nextUrl.search}`;
     return NextResponse.redirect(destination, { status: 301 });
   }
 
@@ -56,7 +58,9 @@ export async function proxy(request) {
     .sort((a, b) => b.q - a.q)
     .find((item) => locales.includes(item.lang));
 
-  const locale = preferred?.lang || "en";
+  // Español por defecto: el mercado es España, así que quien llega sin una
+  // preferencia clara en el navegador debe ver el sitio en español.
+  const locale = preferred?.lang || "es";
   const url = request.nextUrl.clone();
   url.pathname = `/${locale}${pathname}`;
 

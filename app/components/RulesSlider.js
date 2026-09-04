@@ -31,8 +31,12 @@ export default function RulesSlider({ rules }) {
     }
   };
 
+  // min-h y no h: la tarjeta activa se expande con su descripción y su
+  // ilustración, y con altura fija se salía del contenedor y la sección
+  // siguiente se la comía por abajo. El mínimo mantiene la altura estable
+  // mientras no hay ninguna abierta, que es para lo que estaba puesta.
   return (
-    <div className="w-full h-180">
+    <div className="w-full min-h-180">
       <div
         ref={scrollRef}
         onScroll={handleScroll}
