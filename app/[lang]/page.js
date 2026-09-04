@@ -1,6 +1,5 @@
 // app/page.js
 import { getDictionary } from "@/app/dictionaries";
-import Image from "next/image";
 import Link from "next/link";
 import { Phone } from "lucide-react";
 import ServiceCard from "@/app/components/ServiceCard";
@@ -74,7 +73,7 @@ export default async function Home({ params }) {
         <div className="flex pb-4 md:pb-10 justify-center w-full">
           <div
             className="relative transition-all duration-300
-                 w-[74%] sm:w-[80%] md:w-[85%] lg:w-[90%]
+                 w-[74%] sm:w-[80%] md:w-[70%] lg:w-[90%]
                  max-w-200
                  aspect-square
                  overflow-hidden"
@@ -123,24 +122,21 @@ export default async function Home({ params }) {
         </div>
       </section>
 
-      {/* La flecha de bajada. Lo que se veía como una "rayita" entre
-          secciones era ella: el Image llevaba `w-full` dentro de un div que
-          se encoge a su contenido, así que colapsaba a una astilla vertical
-          de unos píxeles. Ahora lleva un ancho de verdad.
+      {/* Aquí iba /arrow.svg, y ES la raya que se veía entre los botones y
+          el bloque siguiente. No es un problema de tamaño: el metadato de
+          filtro del propio SVG declara que su tinta mide 13,4 × 212,3 dentro
+          de un lienzo de 375 × 293, situada al 48% del ancho. Es un trazo
+          vertical de ratio 1:16, no una flecha, así que a cualquier tamaño
+          se lee como una raya (a lg:w-56 eran 8 px de ancho por 127 de alto).
 
-          (Y `priority` estaba escrito como clase de CSS en lugar de como
-          prop, así que no hacía nada. Va como prop.) */}
-      <section className="py-12 bg-white text-center flex flex-col items-center z-10 w-full">
-        <Image
-          src="/arrow.svg"
-          alt=""
-          aria-hidden="true"
-          width={375}
-          height={293}
-          priority
-          className="h-auto w-32 md:w-44 lg:w-56 animate-bounce"
-        />
-      </section>
+          La sección se queda, vacía y blanca: son los 96 px de alto que el
+          bloque negro de abajo necesita para morder con su -mt-10 y que sus
+          esquinas redondeadas se lean contra el blanco. Quitar la sección
+          entera es lo que la vez anterior dejó el bloque negro tapando los
+          botones.
+
+          Para poner una flecha de verdad hace falta otro asset. */}
+      <section className="py-12 bg-white w-full" aria-hidden="true" />
 
       {/* ¿Cuál es tu caso? Sustituye al bloque de cinco servicios con la misma
           tarjeta numerada; ahora las cuatro llevan a su página.
@@ -213,7 +209,7 @@ export default async function Home({ params }) {
           </div>
 
           {/* Rótulo a mano que separa la lista numerada de las tarjetas */}
-          <p className={`font-hand font-bold text-red-500 ${TITULAR} leading-[1.45] mb-8`}>
+          <p className={`font-hand text-red-500 ${TITULAR} leading-[1.45] mb-8`}>
             {t.prueba.rotulo}
           </p>
 
