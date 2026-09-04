@@ -97,7 +97,12 @@ export default function ContactClient({ dict }) {
               </Link>
             </div>
           ) : (
-            <div className="pb-12 lg:pb-24">
+            <div className="pb-12 lg:pb-0">
+              {/* Sin relleno inferior en escritorio: ahí el dibujo es el fondo
+                  del último bloque y cierra la página pegado al skyline, así
+                  que los 96px de lg:pb-24 se veían como una franja negra entre
+                  el haz de luz y el skyline. Hasta lg el dibujo va aparte,
+                  debajo de este main, y ahí el pb-12 sí hace falta. */}
               {/* Hero, con el mismo par que el índice de Casos: titular en
                   la tipografía del sitio y el rótulo a mano en rojo debajo. */}
               <h1 className="font-body font-black text-4xl md:text-6xl lg:text-7xl mb-4 leading-tight text-left">
