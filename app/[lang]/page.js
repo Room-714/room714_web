@@ -1,5 +1,6 @@
 // app/page.js
 import { getDictionary } from "@/app/dictionaries";
+import Image from "next/image";
 import Link from "next/link";
 import { Phone } from "lucide-react";
 import ServiceCard from "@/app/components/ServiceCard";
@@ -14,7 +15,7 @@ import { buildAlternates, samePath } from "@/app/lib/seo/urls";
 import {
   AIRE_TRAS_BOTON,
   CANAL,
-  TARJETA,
+  TARJETA_ROJA,
   TITULAR,
 } from "@/app/lib/layout";
 
@@ -122,19 +123,32 @@ export default async function Home({ params }) {
         </div>
       </section>
 
-      {/* Aquí vivía la flecha de bajada, y es la "rayita" que se veía entre
-          secciones: el Image llevaba `w-full` dentro de un div que se encoge
-          a su contenido, así que colapsaba a una astilla vertical de unos
-          pocos píxeles. (De paso, `priority` estaba escrito como clase de
-          CSS en lugar de como prop, así que no hacía nada.)
+      {/* La flecha de bajada. Lo que se veía como una "rayita" entre
+          secciones era ella: el Image llevaba `w-full` dentro de un div que
+          se encoge a su contenido, así que colapsaba a una astilla vertical
+          de unos píxeles. Ahora lleva un ancho de verdad.
 
-          Al quitarla hay que quitar tambien el -mt-10 del bloque siguiente:
-          ese solape se comia la seccion de la flecha, y sin ella se subia 40
-          px encima del hero y tapaba los botones. */}
+          (Y `priority` estaba escrito como clase de CSS en lugar de como
+          prop, así que no hacía nada. Va como prop.) */}
+      <section className="py-12 bg-white text-center flex flex-col items-center z-10 w-full">
+        <Image
+          src="/arrow.svg"
+          alt=""
+          aria-hidden="true"
+          width={120}
+          height={150}
+          priority
+          className="h-auto w-14 md:w-20 lg:w-28 animate-bounce"
+        />
+      </section>
 
       {/* ¿Cuál es tu caso? Sustituye al bloque de cinco servicios con la misma
-          tarjeta numerada; ahora las cuatro llevan a su página. */}
-      <section className="bg-black rounded-t-[50px] pt-20 pb-8 mb-4 z-20 relative">
+          tarjeta numerada; ahora las cuatro llevan a su página.
+
+          El -mt-10 sube el bloque 40 px sobre la sección de la flecha: es lo
+          que hace que sus esquinas redondeadas se lean contra el blanco de
+          arriba. */}
+      <section className="bg-black rounded-t-[50px] -mt-10 pt-20 pb-8 mb-4 z-20 relative">
         <div className="block w-full mx-auto">
           <div className="md:sticky top-12 mb-16 lg:mb-20 h-12 flex items-center justify-center px-4 md:px-8 lg:px-40">
             <h2 className="text-white z-30 font-title font-bold text-2xl md:text-4xl lg:text-5xl text-center px-2 md:px-8 lg:px-16 leading-tight">
@@ -203,13 +217,13 @@ export default async function Home({ params }) {
               formato texto no está en el sistema de diseño; para ir a los
               casos está el botón de abajo.
 
-              Tres columnas en tablet y escritorio, que es donde caben: las
-              cajas quedan verticales. En móvil bajan a una sola columna y se
-              vuelven horizontales, que es lo único posible ahí. Y sin filete
-              rojo arriba. */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 items-stretch">
+              Tres columnas solo en escritorio, que es donde caben verticales.
+              En tablet y en móvil van horizontales, a una columna. Sin filete
+              rojo, y con la tarjeta de fondo rojo muy claro y cuadrícula
+              gris. */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10 items-stretch">
             {casosDePrueba.map((caso) => (
-              <div key={caso.clave} className={TARJETA}>
+              <div key={caso.clave} className={TARJETA_ROJA}>
                 <div className="p-6 lg:p-10">
                   <p className="font-hand text-lg md:text-xl lg:text-2xl leading-[1.45] text-gray-900">
                     {caso.texto}

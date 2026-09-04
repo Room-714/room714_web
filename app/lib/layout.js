@@ -119,6 +119,16 @@ export const TARJETA =
 /** La misma tarjeta cuando es un enlace. Cambia UNA cosa al pasar el ratón. */
 export const TARJETA_ENLACE = `${TARJETA} hover:bg-[#F8F8F8] transition-colors duration-500`;
 
+/**
+ * Variante de la tarjeta: fondo rojo muy claro con la cuadrícula en gris
+ * claro, en lugar del gris con cuadrícula casi negra. `red-50` no es un color
+ * nuevo: la web original ya lo usaba.
+ */
+export const TARJETA_ROJA =
+  "rounded-4xl overflow-hidden bg-red-50 " +
+  "bg-[linear-gradient(to_right,#E5E7EB_1px,transparent_1px),linear-gradient(to_bottom,#E5E7EB_1px,transparent_1px)] " +
+  "bg-size-[40px_40px]";
+
 /** El filete rojo superior de la tarjeta. */
 export const FILETE = "h-2 w-full bg-red-700";
 
