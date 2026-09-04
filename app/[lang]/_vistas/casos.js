@@ -9,7 +9,7 @@ import { getProjectsData } from "@/app/data/Projects";
 import { buildAlternates, langPaths } from "@/app/lib/seo/urls";
 import { ORGANIZATION_ID, jsonLdGraph } from "@/app/lib/seo/schema";
 import { CASOS, path, pathsOf } from "@/app/lib/routes.mjs";
-import { CANAL } from "@/app/lib/layout";
+import { AIRE_TRAS_BOTON, CANAL } from "@/app/lib/layout";
 
 export async function generateMetadata({ params }) {
   const { lang } = await params;
@@ -151,7 +151,7 @@ export default async function CasosPage({ params }) {
         <h2 className="font-hand text-4xl md:text-7xl mb-10 leading-[1.45]">
           {dict.projects.footer_cta.line_2}
         </h2>
-        <div className="flex justify-center">
+        <div className={`flex justify-center ${AIRE_TRAS_BOTON}`}>
           <PrimaryButton
             text={t.labels.cta}
             isRed={true}

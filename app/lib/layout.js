@@ -21,6 +21,13 @@ export const CANAL = "px-6 sm:px-8 md:px-10 lg:px-16";
 /** Separación vertical entre secciones. */
 export const AIRE = "py-12 md:py-14 lg:py-16";
 
+/**
+ * Aire entre un botón que cierra una sección y la sección siguiente. Sin
+ * esto el botón queda pegado al borde y parece que pertenece al bloque de
+ * abajo.
+ */
+export const AIRE_TRAS_BOTON = "pb-16 md:pb-20 lg:pb-24";
+
 /** Separación vertical de una sección de cierre o CTA. */
 export const AIRE_CIERRE = "py-14 md:py-16 lg:py-20";
 

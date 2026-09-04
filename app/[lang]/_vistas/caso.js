@@ -11,7 +11,7 @@ import {
   jsonLdGraph,
 } from "@/app/lib/seo/schema";
 import { path, pathsOf } from "@/app/lib/routes.mjs";
-import { CANAL } from "@/app/lib/layout";
+import { AIRE_TRAS_BOTON, CANAL } from "@/app/lib/layout";
 
 // Plantilla única de las tres páginas de caso. Cada ruta la instancia con su
 // clave, así que la maqueta se mantiene en un solo sitio.
@@ -206,7 +206,7 @@ export function caso(clave) {
           <h2 className="font-hand text-3xl md:text-5xl lg:text-6xl mb-10 mx-auto leading-[1.45]">
             {t.cierre}
           </h2>
-          <div className="flex justify-center">
+          <div className={`flex justify-center ${AIRE_TRAS_BOTON}`}>
             <PrimaryButton
               text={labels.cta}
               isRed={true}

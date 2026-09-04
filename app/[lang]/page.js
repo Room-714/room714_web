@@ -1,6 +1,5 @@
 // app/page.js
 import { getDictionary } from "@/app/dictionaries";
-import Image from "next/image";
 import Link from "next/link";
 import { Phone } from "lucide-react";
 import ServiceCard from "@/app/components/ServiceCard";
@@ -12,7 +11,12 @@ import { getAllPosts, ordenarPorSlugs } from "@/app/lib/blog";
 import { PINNED_COUNT, PINNED_SLUGS } from "@/app/data/PinnedPosts";
 import { path } from "@/app/lib/routes.mjs";
 import { buildAlternates, samePath } from "@/app/lib/seo/urls";
-import { CANAL, FILETE, TARJETA, TITULAR } from "@/app/lib/layout";
+import {
+  AIRE_TRAS_BOTON,
+  CANAL,
+  TARJETA,
+  TITULAR,
+} from "@/app/lib/layout";
 
 export async function generateMetadata({ params }) {
   const { lang = "en" } = await params;
@@ -69,7 +73,7 @@ export default async function Home({ params }) {
         <div className="flex pb-4 md:pb-10 justify-center w-full">
           <div
             className="relative transition-all duration-300
-                 w-[62%] sm:w-[75%] md:w-[85%] lg:w-[90%]
+                 w-[74%] sm:w-[80%] md:w-[85%] lg:w-[90%]
                  max-w-200
                  aspect-square
                  overflow-hidden"
@@ -91,7 +95,7 @@ export default async function Home({ params }) {
             los dos botones entren en la primera pantalla en cualquier
             dispositivo: eran 8 y 16 de margen entre bloques, más el
             interlineado del titular a mano, y no cabían. */}
-        <div className="px-4 md:px-12 flex flex-col justify-center items-center w-full">
+        <div className={`px-4 md:px-12 flex flex-col justify-center items-center w-full ${AIRE_TRAS_BOTON}`}>
           <h1 className="font-hand font-black text-red-500 text-2xl md:text-3xl lg:text-5xl leading-[1.35] md:leading-[1.45] mb-5 md:mb-8 lg:mb-12 md:px-4">
             {t.hero.title}
           </h1>
@@ -118,22 +122,19 @@ export default async function Home({ params }) {
         </div>
       </section>
 
-      {/* Contenedor de la flecha con tamaño basado en Tailwind */}
-      <section className="py-12 bg-white text-center flex flex-col items-center z-10 w-full">
-        <div className="transition-all duration-300">
-          <Image
-            src="/arrow.svg"
-            alt="Arrow pointing down"
-            width={120} // El ancho base del SVG
-            height={150} // El alto base del SVG
-            className="h-auto w-full priority animate-bounce"
-          />
-        </div>
-      </section>
+      {/* Aquí vivía la flecha de bajada, y es la "rayita" que se veía entre
+          secciones: el Image llevaba `w-full` dentro de un div que se encoge
+          a su contenido, así que colapsaba a una astilla vertical de unos
+          pocos píxeles. (De paso, `priority` estaba escrito como clase de
+          CSS en lugar de como prop, así que no hacía nada.)
+
+          Al quitarla hay que quitar tambien el -mt-10 del bloque siguiente:
+          ese solape se comia la seccion de la flecha, y sin ella se subia 40
+          px encima del hero y tapaba los botones. */}
 
       {/* ¿Cuál es tu caso? Sustituye al bloque de cinco servicios con la misma
           tarjeta numerada; ahora las cuatro llevan a su página. */}
-      <section className="bg-black rounded-t-[50px] -mt-10 pt-20 pb-8 mb-4 z-20 relative">
+      <section className="bg-black rounded-t-[50px] pt-20 pb-8 mb-4 z-20 relative">
         <div className="block w-full mx-auto">
           <div className="md:sticky top-12 mb-16 lg:mb-20 h-12 flex items-center justify-center px-4 md:px-8 lg:px-40">
             <h2 className="text-white z-30 font-title font-bold text-2xl md:text-4xl lg:text-5xl text-center px-2 md:px-8 lg:px-16 leading-tight">
@@ -200,13 +201,17 @@ export default async function Home({ params }) {
           {/* La prueba: un párrafo por caso, sin titular propio, sin el
               aviso de confidencialidad y sin enlace por caso. El enlace en
               formato texto no está en el sistema de diseño; para ir a los
-              casos está el botón de abajo. */}
-          <div className="flex flex-col gap-6 mb-10">
+              casos está el botón de abajo.
+
+              Tres columnas en tablet y escritorio, que es donde caben: las
+              cajas quedan verticales. En móvil bajan a una sola columna y se
+              vuelven horizontales, que es lo único posible ahí. Y sin filete
+              rojo arriba. */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 items-stretch">
             {casosDePrueba.map((caso) => (
               <div key={caso.clave} className={TARJETA}>
-                <div className={FILETE} />
                 <div className="p-6 lg:p-10">
-                  <p className="font-body text-base md:text-lg lg:text-2xl leading-normal text-gray-900">
+                  <p className="font-hand text-lg md:text-xl lg:text-2xl leading-[1.45] text-gray-900">
                     {caso.texto}
                   </p>
                 </div>
@@ -214,13 +219,15 @@ export default async function Home({ params }) {
             ))}
           </div>
 
-          <PrimaryButton
-            text={t.buttons.all_cases}
-            isRed={true}
-            href={path("casos", lang)}
-            track="cta_click"
-            trackPlacement="home_prueba"
-          />
+          <div className={AIRE_TRAS_BOTON}>
+            <PrimaryButton
+              text={t.buttons.all_cases}
+              isRed={true}
+              href={path("casos", lang)}
+              track="cta_click"
+              trackPlacement="home_prueba"
+            />
+          </div>
         </div>
       </section>
 
@@ -257,8 +264,7 @@ export default async function Home({ params }) {
             ))}
           </div>
 
-          {/* Más aire bajo el botón: pegaba con el borde de la sección */}
-          <div className="pb-10 lg:pb-14">
+          <div className={AIRE_TRAS_BOTON}>
             <PrimaryButton
               text={t.buttons.how_we_work}
               href={path("comoTrabajamos", lang)}

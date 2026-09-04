@@ -9,7 +9,7 @@ import { getRules } from "@/app/data/Rules";
 import { SITE_URL, buildAlternates, langPaths } from "@/app/lib/seo/urls";
 import { path, pathsOf } from "@/app/lib/routes.mjs";
 import { LINKEDIN_FOUNDER, withUtm } from "@/app/lib/links";
-import { CANAL } from "@/app/lib/layout";
+import { AIRE_TRAS_BOTON, CANAL } from "@/app/lib/layout";
 
 export async function generateMetadata({ params }) {
   const { lang = "en" } = await params;
@@ -225,7 +225,7 @@ export default async function ComoTrabajamosPage({ params }) {
         </section>
 
         {/* Cierre */}
-        <section className="w-full bg-white px-6 pb-16 flex justify-center">
+        <section className={`w-full bg-white px-6 flex justify-center ${AIRE_TRAS_BOTON}`}>
           <PrimaryButton
             text={t.cta}
             isRed={true}

@@ -6,7 +6,7 @@ import PrimaryButton from "@/app/components/PrimaryButton";
 import { getDictionary } from "@/app/dictionaries";
 import { SITE_URL, buildAlternates, langPaths } from "@/app/lib/seo/urls";
 import { path, pathsOf } from "@/app/lib/routes.mjs";
-import { CANAL } from "@/app/lib/layout";
+import { AIRE_TRAS_BOTON, CANAL } from "@/app/lib/layout";
 
 // Plantilla única de las cuatro páginas de situación. Cada ruta la instancia
 // con su clave, así que hay una sola maqueta que mantener.
@@ -176,7 +176,7 @@ export function situacion(clave) {
           <p className="font-body text-lg md:text-xl lg:text-2xl text-gray-700 mb-10 max-w-3xl mx-auto leading-normal">
             {t.cierre.body}
           </p>
-          <div className="flex justify-center">
+          <div className={`flex justify-center ${AIRE_TRAS_BOTON}`}>
             <PrimaryButton
               text={dict.situaciones.cta}
               isRed={true}
