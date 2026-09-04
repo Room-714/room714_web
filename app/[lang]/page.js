@@ -1,5 +1,6 @@
 // app/page.js
 import { getDictionary } from "@/app/dictionaries";
+import Image from "next/image";
 import Link from "next/link";
 import { Phone } from "lucide-react";
 import ServiceCard from "@/app/components/ServiceCard";
@@ -73,7 +74,7 @@ export default async function Home({ params }) {
         <div className="flex pb-4 md:pb-10 justify-center w-full">
           <div
             className="relative transition-all duration-300
-                 w-[74%] sm:w-[80%] md:w-[70%] lg:w-[90%]
+                 w-[74%] sm:w-[80%] md:w-[70%] lg:w-[80%] xl:w-[68%]
                  max-w-200
                  aspect-square
                  overflow-hidden"
@@ -122,21 +123,24 @@ export default async function Home({ params }) {
         </div>
       </section>
 
-      {/* Aquí iba /arrow.svg, y ES la raya que se veía entre los botones y
-          el bloque siguiente. No es un problema de tamaño: el metadato de
-          filtro del propio SVG declara que su tinta mide 13,4 × 212,3 dentro
-          de un lienzo de 375 × 293, situada al 48% del ancho. Es un trazo
-          vertical de ratio 1:16, no una flecha, así que a cualquier tamaño
-          se lee como una raya (a lg:w-56 eran 8 px de ancho por 127 de alto).
-
-          La sección se queda, vacía y blanca: son los 96 px de alto que el
-          bloque negro de abajo necesita para morder con su -mt-10 y que sus
-          esquinas redondeadas se lean contra el blanco. Quitar la sección
-          entera es lo que la vez anterior dejó el bloque negro tapando los
-          botones.
-
-          Para poner una flecha de verdad hace falta otro asset. */}
-      <section className="py-12 bg-white w-full" aria-hidden="true" />
+      {/* La flecha de bajada.
+          La raya que se veía aquí NO era el tamaño ni el CSS: era el asset,
+          mal exportado de Figma. Su <filter> de grano declaraba una región
+          de 13,4 × 212,3 cuando el trazo mide ~208 × 211, y un filtro
+          recorta todo lo que cae fuera de su región. De la flecha solo se
+          pintaba una tira vertical de 13 px. Corregida la región a los
+          375 × 293 del lienzo, en public/arrow.svg. */}
+      <section className="py-12 bg-white text-center flex flex-col items-center z-10 w-full">
+        <Image
+          src="/arrow.svg"
+          alt=""
+          aria-hidden="true"
+          width={375}
+          height={293}
+          priority
+          className="h-auto w-24 md:w-32 lg:w-40 animate-bounce"
+        />
+      </section>
 
       {/* ¿Cuál es tu caso? Sustituye al bloque de cinco servicios con la misma
           tarjeta numerada; ahora las cuatro llevan a su página.
