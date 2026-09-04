@@ -425,14 +425,14 @@
     "buttons": {
       "tell_us": "Cuéntanos tu caso",
       "see_cases": "Ver casos",
-      "all_cases": "Ver los tres casos completos →",
+      "all_cases": "Ver casos",
       "how_we_work": "Quienes somos"
     },
     "situaciones": {
       "title": "¿Cuál es tu caso?"
     },
     "diferencia": {
-      "title": "Vale, pero ¿qué hacéis exactamente?",
+      "title": "¿Qué hacéis?",
       "lead": "Lo que una agencia de diseño no hace y una factoría de software tampoco: las tres cosas a la vez, con el mismo equipo y la misma cuenta de resultados delante.",
       "num_1": {
         "title": "Experiencia",
@@ -448,6 +448,7 @@
       }
     },
     "prueba": {
+      "rotulo": "Cosas que hacemos",
       "casos": {
         "saasAutogestion": "Un producto B2B regulado cuyo equipo de soporte usaba la plataforma por sus clientes. Hoy los clientes se autogestionan. El monolito con cientos de tablas es hoy una estructura de microservicios flexible y ligera. Y el margen de la empresa pasó de ser casi nulo a casi un 20% en año y medio. Ahora llevamos toda su tecnología.",
         "activacionCanonico": "Una plataforma que demandaba una mejor experiencia de uso. Debajo, tecnología obsoleta y estructuras endiabladas. La simplificación de las API ha permitido generar una app móvil y exponer sus capacidades para que sus clientes se integren. Hoy creamos un modelo canónico de datos para los agentes de IA.",

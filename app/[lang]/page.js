@@ -135,10 +135,10 @@ export default async function Home({ params }) {
           src="/arrow.svg"
           alt=""
           aria-hidden="true"
-          width={120}
-          height={150}
+          width={375}
+          height={293}
           priority
-          className="h-auto w-14 md:w-20 lg:w-28 animate-bounce"
+          className="h-auto w-32 md:w-44 lg:w-56 animate-bounce"
         />
       </section>
 
@@ -211,6 +211,11 @@ export default async function Home({ params }) {
               </div>
             ))}
           </div>
+
+          {/* Rótulo a mano que separa la lista numerada de las tarjetas */}
+          <p className={`font-hand font-bold text-red-500 ${TITULAR} leading-[1.45] mb-8`}>
+            {t.prueba.rotulo}
+          </p>
 
           {/* La prueba: un párrafo por caso, sin titular propio, sin el
               aviso de confidencialidad y sin enlace por caso. El enlace en

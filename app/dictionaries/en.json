@@ -425,14 +425,14 @@
     "buttons": {
       "tell_us": "Tell us about your case",
       "see_cases": "See cases",
-      "all_cases": "Read all three cases →",
+      "all_cases": "See cases",
       "how_we_work": "Who we are"
     },
     "situaciones": {
       "title": "What's your situation?"
     },
     "diferencia": {
-      "title": "Fine, but what exactly do you do?",
+      "title": "What do you do?",
       "lead": "What a design agency doesn't do and a software factory doesn't either: all three at once, with the same team and the same P&L in front of us.",
       "num_1": {
         "title": "Experience",
@@ -448,6 +448,7 @@
       }
     },
     "prueba": {
+      "rotulo": "Things we do",
       "casos": {
         "saasAutogestion": "A regulated B2B product whose support team was using the platform on behalf of its customers. Today customers do it themselves. The monolith with hundreds of tables is now a light, flexible microservices structure. And the company margin went from almost nothing to nearly 20% in a year and a half. We now run all of their technology.",
         "activacionCanonico": "A platform that needed a better experience. Underneath, obsolete technology and devilish structures. Simplifying the APIs made room for a mobile app and for exposing its capabilities so its clients could integrate. Today we are building a canonical data model for AI agents.",
