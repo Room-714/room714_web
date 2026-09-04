@@ -22,18 +22,28 @@
       "viene": "What comes next",
       "llevamos": "What we took away",
       "cta": "Tell us about your case",
-      "disclaimer": "Real case. Sector and some details altered to protect the client's confidentiality.",
       "verCaso": "Read case"
     },
+    "logos": [
+      "Samsung — consumer electronics",
+      "Grupo Fractalia — technology services",
+      "Telefónica — telecommunications",
+      "hellotax — tax compliance software",
+      "Orange — telecommunications",
+      "ComeFruta — online grocery",
+      "Grupo Villar — road signage and safety"
+    ],
     "indice": {
-      "title": "This is how it usually starts, and how it usually ends.",
-      "lead": "Three projects that started as an experience problem, uncovered a technology problem, and ended up changing the client's business. Real cases under confidentiality agreements: sector and details altered.",
+      "title": "This is how we usually start our work…",
+      "subtitle": "…and this is how well we usually finish",
+      "lead": "Most projects that start with a customer experience problem uncover a technology problem, and are already hurting the client's business.",
+      "lead2": "Our integral method, combining design, technology and business, lets us cover the whole product and deliver end-to-end solutions that satisfy our clients.",
       "secondaryTitle": "Other projects",
       "seoTitle": "Cases · Room 714",
       "seoDescription": "Three real digital product cases: a regulated B2B SaaS, a B2B2C platform sold through service providers, and an e-commerce with AI. How they started, what we found and what changed."
     },
     "saasAutogestion": {
-      "heroTitle": "The SaaS its own support team used instead of its customers",
+      "heroTitle": "The SaaS that did not care about its customers",
       "heroSubtitle": "How investing in the product turned support cost into margin, and why we now run their technology too.",
       "cifras": [
         {
@@ -41,12 +51,12 @@
           "etiqueta": "tables in the database"
         },
         {
-          "valor": "1 → 0",
-          "etiqueta": "support interventions for routine tasks: customers do it themselves"
+          "valor": "10 → 1",
+          "etiqueta": "support interventions"
         },
         {
-          "valor": "×1",
-          "etiqueta": "supplier for product, technology and operations: the board asked us to take on all of their IT"
+          "valor": "much+",
+          "etiqueta": "supplier for product, technology and operations"
         }
       ],
       "contexto": "A mid-sized multinational with a regulatory compliance SaaS for companies operating in several countries. The product worked and had loyal customers. It also had two problems the board saw as one: “IT is slow”.",
@@ -79,20 +89,20 @@
       "resumen": "A regulated B2B SaaS whose support team used the platform on behalf of its customers."
     },
     "activacionCanonico": {
-      "heroTitle": "Nobody activated a service they were given for free. Underneath were 500 API schemas.",
-      "heroSubtitle": "From an activation problem to a mobile app, an API ten times smaller, and a canonical data model that AI agents work on today.",
+      "heroTitle": "Nobody activated a service they were given for free",
+      "heroSubtitle": "From nobody using it to simplifying the code to build a mobile app that improves take-up: the definition of a virtuous circle.",
       "cifras": [
         {
           "valor": "÷10",
           "etiqueta": "size of the backend endpoint surface"
         },
         {
-          "valor": "0 → 1",
-          "etiqueta": "mobile app: the product had none"
+          "valor": ">50%",
+          "etiqueta": "increase in platform usage"
         },
         {
-          "valor": "3",
-          "etiqueta": "fronts open today: experience, architecture and data for AI agents"
+          "valor": "×2.3",
+          "etiqueta": "service activations"
         }
       ],
       "contexto": "A technology company with a SaaS platform of digital protection and productivity services for end users. It doesn't sell to the user: operators and service providers do, bundling it into their own offerings under their own brand. A classic B2B2C business, with the classic difficulty: whoever pays is not whoever uses.",
@@ -128,20 +138,20 @@
       "resumen": "A platform sold through service providers with an activation problem."
     },
     "iaEcommerce": {
-      "heroTitle": "AI that sells more fruit without touching the store",
-      "heroSubtitle": "A standalone platform that enriches catalogue and customers with AI and lives alongside the client's e-commerce without them changing a single line.",
+      "heroTitle": "An AI that helps sell more and build loyalty",
+      "heroSubtitle": "An independent platform that, with the help of AI, enriches the catalogue and the customers of an e-commerce without having touched its systems architecture.",
       "cifras": [
         {
           "valor": "0",
-          "etiqueta": "changes needed in the client's platforms"
+          "etiqueta": "changes needed in their architecture"
         },
         {
           "valor": "2",
-          "etiqueta": "use cases in production: intelligent repeat purchase and a virtual nutritionist"
+          "etiqueta": "use cases in production"
         },
         {
-          "valor": "1",
-          "etiqueta": "platform valid for any catalogue: we are turning it into a product"
+          "valor": "much+",
+          "etiqueta": "we are turning it into a product"
         }
       ],
       "contexto": "An online shop for fresh, seasonal food. Their store runs on a standard e-commerce (WooCommerce) which is itself an extension of the WordPress that holds the website and the company's search work. A common setup, one that works, and one nobody wants to touch because everything depends on it.",
@@ -459,7 +469,7 @@
       "title": "How we work",
       "closing": "The person you talk to is the person who does the work. No sales layer in between.",
       "num_1": {
-        "title": "Diagnosis (2–3 weeks)",
+        "title": "Diagnosis",
         "description": "Product, technology and business on the table. You leave with a prioritised plan even if you don't continue with us."
       },
       "num_2": {
@@ -524,7 +534,8 @@
       "send": "get in touch"
     },
     "hero": {
-      "title": "30 minutes to find out what's wrong with your product",
+      "title": "What is bugging you?",
+      "subtitle": "In 30 minutes I give you a diagnosis",
       "description": "A free diagnostic session. It is not a sales meeting: it is the first half hour of work. You write to us, we reply within 24 working hours and set a time."
     },
     "sesion": {
@@ -561,11 +572,6 @@
       "q3_email": "How do we reach you?",
       "enviar": "Send"
     },
-    "micro": {
-      "respuesta": "Reply within 24 working hours.",
-      "linkedin": "If you prefer LinkedIn, write to us there.",
-      "lugar": "Madrid · Sessions in Spanish or English"
-    },
     "diagnostico": {
       "pregunta": "Not sure where to start?",
       "enlace": "Answer 4 questions →"
@@ -576,17 +582,6 @@
     }
   },
   "about": {
-    "sectors": {
-      "logos": [
-        "Samsung — consumer electronics",
-        "Grupo Fractalia — technology services",
-        "Telefónica — telecommunications",
-        "hellotax — tax compliance software",
-        "Orange — telecommunications",
-        "ComeFruta — online grocery"
-      ],
-      "title": "Sectors we have worked in"
-    },
     "title": "who we are",
     "hero_text": "We aren't your average agency. We’re a team of product, design, usability and engineering specialists — obsessed with delivering digital products that hit the bottom line, not just the aesthetic.",
     "quotes_line1": "Turning strategic goals into",
@@ -616,15 +611,15 @@
       }
     },
     "hero": {
-      "title": "We are not your usual agency. Nor a consultancy.",
-      "description": "We are a small team of product, design, usability and engineering people, measured by what changes in your P&L, not by what we hand over. The person you talk to is the person who does the work."
+      "title": "We are not your usual agency, nor a consultancy",
+      "description": "We are a team of engineers focused on the product: on its design, its usability and its architecture. We concentrate on what can change your P&L."
     },
     "metodo": {
       "title": "The method",
       "pasos": [
         {
-          "title": "Diagnosis (2–3 weeks).",
-          "body": "We look at all three at once: how your customers or your team use the product, what technology sits underneath, and what business sits behind it. We deliver a prioritised plan with estimates. It's yours even if you don't continue with us."
+          "title": "Diagnosis.",
+          "body": "We look at all three at once: how your customers or your team use the product, what technology sits underneath, and what business sits behind it. We deliver a prioritised plan with estimates."
         },
         {
           "title": "Design and architecture, together.",
@@ -643,11 +638,9 @@
     "quien": {
       "title": "Who is behind this",
       "nombre": "José Antonio Ces Franjo",
-      "cargo": "founder and CEO",
-      "bio": "Telecommunications engineer from the Polytechnic University of Madrid and more than thirty years in technology, always in the same place: where product meets business. He started programming telephone exchanges at Ericsson. He spent sixteen years at Telefónica building the enterprise offering and then running business marketing, with the P&L for every segment and a team of more than a hundred people. In 2016 he founded Room 714 and, in parallel, co-founded and served as COO for seven years at The Wise Seeker, a talent management SaaS. Since then he has led more than thirty consulting and product projects for companies such as LaLiga, Ingenico, GMV, Cobas Asset Management, Orange, Sercide, Zelenza and Señalizaciones Villar.",
-      "cita": "I make digital transformation stop being a PowerPoint.",
-      "cierreBio": "He leads every project.",
-      "equipo": "With him, a stable team of senior people in product design and UX, software engineering, and data and AI architecture. No juniors learning on your budget, and no account managers between you and whoever builds."
+      "cargo": "Founder and CEO",
+      "bio": "Telecommunications engineer from the Polytechnic University of Madrid with more than thirty years of experience in B2B product. From his start at Ericsson as a programmer he moved into product management and business development, first at Telefónica and later as an independent professional, founding Room 714 in 2016. In parallel he founded The Wise Seeker, a talent management SaaS, serving as COO until 2024. He has worked as a senior digital transformation consultant for companies such as LaLiga, Ingenico, GMV, Cobas Asset Management, Sercide, Zelenza, Teldat, MasOrange and Señalizaciones Villar.",
+      "cita": "With me, the promise of digital transformation stops being a PowerPoint and becomes a fact"
     },
     "noHacemos": {
       "title": "What we don't do",
@@ -658,7 +651,6 @@
         "Saying yes to everything. If the problem isn't a product problem, we'll tell you in the first session."
       ]
     },
-    "sectoresLista": "Telecommunications, financial services and wealth management, cybersecurity, retail, technology and IT, sport and entertainment.",
     "cta": "Tell us about your case",
     "seo": {
       "title": "How we work · Room 714",
@@ -677,55 +669,55 @@
       "in_progress": "In progress"
     },
     "case_study_01": {
-      "title": "Telecoms: Frictionless Activation Flow",
+      "title": "Frictionless Activation Flow",
       "challenge": "Technical complexity in activating service bundles was creating an insurmountable barrier for customers. The process was so convoluted that most abandoned midway, flooding the support centre with technical queries.",
       "idea": "We completely redesigned the purchase and activation experience (CX) by stripping away unnecessary steps. We mapped the user journey based on deep customer insights, allowing users to complete the process without external help.",
       "outcome": "We achieved a 45% increase in successful activations and a 12% uplift in ARPU by making it easier to add extra services during the flow."
     },
     "case_study_02": {
-      "title": "Wealth Management: Trusted Digital Onboarding",
+      "title": "Trusted Digital Onboarding",
       "challenge": "A fund manager was stuck with analogue paper-based systems and physical signatures. This dragged out new client onboarding for weeks, causing high churn rates among high-net-worth profiles looking for agility.",
       "idea": "We executed a full digital transformation of the onboarding process. By integrating biometrics (e-KYC) and advanced digital signatures, we created a 100% online, secure, and legally robust flow that allows clients to open accounts in minutes.",
       "outcome": "We slashed account activation time by 95% (from weeks to under 48 hours) and saw a 41% increase in digital onboarding completion rates."
     },
     "case_study_03": {
-      "title": "B2B Operations: AI vs. Data Overload",
+      "title": "AI vs. Data Overload",
       "challenge": "System administrators were drowning in data-heavy dashboards that were impossible to interpret. This cognitive overload led to critical service management errors and slow response times during major incidents.",
       "idea": "We redesigned the UX/UI and implemented a Generative AI layer. Instead of showing raw data, the system now summarises complex metrics into natural language, providing actionable insights and simplified commands to resolve issues instantly.",
       "outcome": "We achieved a 38% reduction in critical operational errors and saved the internal teams 25% of the time previously spent on Tier-1 support issues."
     },
     "case_study_04": {
-      "title": "Fintech: Collaborative Tax Ecosystem",
+      "title": "Collaborative Tax Ecosystem",
       "challenge": "Communication between firms and tax advisors was a mess of emails, phone calls, and lost documents. This fragmentation caused constant filing delays and massive operational overhead for both parties.",
       "idea": "We built an app to support a digital ecosystem with a dual interface (business vs. accountant). It features a 'single source of truth' that automates invoice ingestion and syncs tax status in real-time, ensuring everyone works from the same data.",
       "outcome": "We reduced unnecessary document back-and-forth by 40% and improved tax filing efficiency by 30%."
     },
     "case_study_05": {
-      "title": "Cybersecurity: 360° Shield for VIPs",
+      "title": "Cybersecurity for VIP profiles",
       "challenge": "High-net-worth individuals (HNWIs) had their digital identities and assets scattered across multiple vulnerable platforms. They lacked a unified system to monitor their personal security and sensitive documents in real-time.",
       "idea": "We developed a premium mobile security app built on a Zero-Trust architecture. The system acts as a 'digital concierge', constantly supervising devices, network connections, and document integrity, proactively alerting the user to any threat.",
       "outcome": "We achieved 100% visibility of the user's digital footprint and a 60% faster response time to unauthorised access attempts."
     },
     "case_study_06": {
-      "title": "B2B: Critical Infrastructure Security",
+      "title": "Critical Infrastructure Security",
       "challenge": "Large corporations and government bodies required a superior security posture that could leverage the operator's network. Standard off-the-shelf solutions weren't enough to protect their mission-critical infrastructure.",
       "idea": "We designed a holistic security framework that integrates carrier-grade network intelligence with an elite third-party defence suite. We created a unified command centre to manage perimeter security and sovereign compliance at scale.",
       "outcome": "We reduced incident mitigation time by 55% and ensured full compliance with national security standards for large-scale organisations."
     },
     "case_study_07": {
-      "title": "Telecoms: A Semantic Layer for Reliable AI",
+      "title": "A Semantic Layer for Reliable AI",
       "challenge": "The operator's internal systems were scattered across silos, each speaking its own language. Any attempt to leverage AI hit the same wall: models answered based on partial or contradictory data, producing hallucinations that were hard to spot and answers nobody could trust to automate anything.",
       "idea": "We built a set of canonical data underpinning a semantic layer that insulates the AI from the quirks of the existing systems. The layer exposes business concepts with single definitions, sources of truth and permissions, so the model always operates on the same dictionary — leaving the business free to evolve its underlying systems without breaking what already works.",
       "outcome": "We expect to drastically reduce hallucinations from the internal assistant and have the bulk of AI queries resolved against canonical data, leaving operations ready to evolve existing systems without slowing down what's already in production."
     },
     "case_study_08": {
-      "title": "Food Retail: A Shopping Cart That Thinks for Itself",
+      "title": "A Shopping Cart That Thinks for Itself",
       "challenge": "In a fruit and veg e-commerce, the catalogue shifts daily: stock outages, price adjustments, products coming in and out of season. Keeping the cart in sync forced the team to constantly intervene, and customers still ran into unavailable items or stale prices at checkout.",
       "idea": "We designed a smart cart that hands the day-to-day operational calls over to an AI agent. The agent reads context in real time — stock, prices, seasonal calendar — and applies adjustments on its own when conditions justify it. Only the exceptional gets escalated to humans; the routine handles itself.",
       "outcome": "The goal is for the cart to autonomously handle most daily catalogue adjustments and to noticeably reduce abandoned carts caused by unavailable items or stale prices, freeing the team from the routine grind."
     },
     "case_study_09": {
-      "title": "Telecoms B2B: AI Inference Out of the SaaS",
+      "title": "AI Inference Out of the SaaS",
       "challenge": "AI inference costs in SaaS mode are climbing at a pace that already squeezes the unit economics of many initiatives. The operator's B2B customers were looking for a private, predictable and sovereign alternative — but no provider yet packaged network, compute capacity and models together.",
       "idea": "We mapped out the strategic plan for the operator to evolve its private cloud into an AI inference service aimed at B2B customers: compute sizing, migration phases, TCO model versus hyperscaler SaaS, integration with the existing carrier-grade network, and an adoption roadmap by customer segment.",
       "outcome": "The plan targets a TCO substantially lower than hyperscaler SaaS at the operator's target volume and an adoption roadmap that gets the offering operational before the expected jump in B2B demand."

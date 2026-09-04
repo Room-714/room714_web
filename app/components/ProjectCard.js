@@ -22,11 +22,9 @@ export default function ProjectCard({
   ${isOpen ? "mb-4 shadow-sm" : "mb-4 hover:bg-[#F8F8F8] hover:bg-size[45px_45px]"}
 `}
     >
-      {/* Línea roja de acento, siempre visible: en las tarjetas de los tres
-          casos destacados también lo está, y aparecer solo al abrirse hacía
-          que las dos mitades del listado no parecieran iguales. */}
-      <div className="h-2 w-full bg-red-700" />
-
+      {/* Sin filete rojo arriba: se quitó también de las tarjetas de los
+          tres casos destacados, así que las dos mitades del listado siguen
+          pareciendo iguales. */}
       <div className="px-6 py-8 lg:px-10 lg:py-10">
         {/* CABECERA: Título Horizontal.
             Misma tipografía, mismos tamaños y mismos colores que las

@@ -22,18 +22,28 @@
       "viene": "Lo que viene",
       "llevamos": "Lo que nos llevamos",
       "cta": "Cuéntanos tu caso",
-      "disclaimer": "Caso real. Sector y algunos detalles alterados para preservar la confidencialidad del cliente.",
       "verCaso": "Ver caso"
     },
+    "logos": [
+      "Samsung — electrónica de consumo",
+      "Grupo Fractalia — servicios tecnológicos",
+      "Telefónica — telecomunicaciones",
+      "hellotax — software de cumplimiento fiscal",
+      "Orange — telecomunicaciones",
+      "ComeFruta — comercio online de alimentación",
+      "Grupo Villar — señalización y seguridad viaria"
+    ],
     "indice": {
-      "title": "Así suele empezar, y así suele acabar.",
-      "lead": "Tres proyectos que arrancaron con un problema de experiencia, destaparon un problema de tecnología y acabaron cambiando el negocio del cliente. Casos reales bajo acuerdos de confidencialidad: sector y detalles alterados.",
+      "title": "Así solemos empezar nuestro trabajo…",
+      "subtitle": "…y así de bien solemos terminar",
+      "lead": "La mayoría de proyectos que arrancan con un problema de experiencia de cliente, destapan un problema de tecnología y están afectando al negocio del cliente.",
+      "lead2": "Nuestro método integral que combina diseño, tecnología y negocio nos permite abarcar todo el producto y proporcionar soluciones end-to-end que satisfacen a nuestros clientes.",
       "secondaryTitle": "Otros proyectos",
       "seoTitle": "Casos · Room 714",
       "seoDescription": "Tres casos reales de producto digital: un SaaS B2B regulado, una plataforma B2B2C vendida vía service providers y un e-commerce con IA. Cómo empezaron, qué encontramos y qué cambió."
     },
     "saasAutogestion": {
-      "heroTitle": "El SaaS que usaba su propio equipo de soporte en lugar de sus clientes",
+      "heroTitle": "El SaaS al que no le importaban sus clientes",
       "heroSubtitle": "Cómo una inversión en producto convirtió el coste de soporte en margen, y por qué ahora también llevamos su tecnología.",
       "cifras": [
         {
@@ -41,12 +51,12 @@
           "etiqueta": "tablas en la base de datos"
         },
         {
-          "valor": "1 → 0",
-          "etiqueta": "intervenciones de soporte por gestión rutinaria: el cliente se autogestiona"
+          "valor": "10 → 1",
+          "etiqueta": "intervenciones de soporte"
         },
         {
-          "valor": "×1",
-          "etiqueta": "proveedor para producto, tecnología y operación: la dirección nos ha pedido asumir todo su IT"
+          "valor": "mucho+",
+          "etiqueta": "proveedor de producto, tecnología y operación"
         }
       ],
       "contexto": "Una empresa multinacional de tamaño medio con un SaaS de cumplimiento regulatorio para compañías que operan en varios países. El producto funcionaba y tenía clientes fieles. También tenía dos problemas que la dirección veía como uno solo, «IT va lento».",
@@ -79,20 +89,20 @@
       "resumen": "Un SaaS B2B regulado cuyo equipo de soporte usaba la plataforma por sus clientes."
     },
     "activacionCanonico": {
-      "heroTitle": "Nadie activaba un servicio que le regalaban. Debajo había 500 esquemas de API.",
-      "heroSubtitle": "De un problema de activación a una app móvil, una API diez veces más pequeña y un modelo canónico de datos sobre el que hoy trabajan agentes de IA.",
+      "heroTitle": "Nadie activaba un servicio que le regalaban",
+      "heroSubtitle": "De un problema de falta de uso a la simplificación del código para crear una app móvil que mejora la penetración: la definición de círculo virtuoso.",
       "cifras": [
         {
           "valor": "÷10",
           "etiqueta": "tamaño del conjunto de endpoints del backend"
         },
         {
-          "valor": "0 → 1",
-          "etiqueta": "app móvil: el producto no tenía"
+          "valor": ">50%",
+          "etiqueta": "incremento de uso de la plataforma"
         },
         {
-          "valor": "3",
-          "etiqueta": "planos abiertos hoy: experiencia, arquitectura y datos para agentes de IA"
+          "valor": "×2'3",
+          "etiqueta": "activaciones del servicio"
         }
       ],
       "contexto": "Una empresa tecnológica con una plataforma SaaS de servicios de protección y productividad digital para el usuario final. No la vende al usuario: la venden operadores y proveedores de servicios, que la incluyen en sus ofertas bajo su propia marca. Un negocio B2B2C clásico, con la dificultad clásica: el que paga no es el que usa.",
@@ -128,20 +138,20 @@
       "resumen": "Una plataforma vendida a través de service providers con un problema de activación."
     },
     "iaEcommerce": {
-      "heroTitle": "IA que vende más fruta sin tocar la tienda",
-      "heroSubtitle": "Una plataforma autónoma que enriquece catálogo y clientes con IA y convive con el e-commerce del cliente sin que este cambie una línea.",
+      "heroTitle": "Una IA que ayuda a vender más y a fidelizar",
+      "heroSubtitle": "Una plataforma independiente que, con ayuda de la IA, enriquece el catálogo y los clientes de un e-commerce, sin haber tocado su arquitectura de sistemas.",
       "cifras": [
         {
           "valor": "0",
-          "etiqueta": "cambios necesarios en las plataformas del cliente"
+          "etiqueta": "cambios necesarios en su arquitectura"
         },
         {
           "valor": "2",
-          "etiqueta": "casos de uso en producción: recompra inteligente y nutricionista virtual"
+          "etiqueta": "casos de uso en producción"
         },
         {
-          "valor": "1",
-          "etiqueta": "plataforma válida para cualquier catálogo: la estamos convirtiendo en producto"
+          "valor": "mucho+",
+          "etiqueta": "lo estamos convirtiendo en producto"
         }
       ],
       "contexto": "Un comercio online de alimentación fresca y de temporada. Su tienda funciona sobre un e-commerce estándar (WooCommerce) que a su vez es una extensión del WordPress que sostiene la web y el trabajo de posicionamiento de la empresa. Un montaje habitual, que funciona, y que nadie quiere tocar porque de él depende todo.",
@@ -459,7 +469,7 @@
       "title": "Cómo trabajamos",
       "closing": "Quien te atiende es quien hace el trabajo. Sin capas comerciales entre medias.",
       "num_1": {
-        "title": "Diagnóstico (2–3 semanas)",
+        "title": "Diagnóstico",
         "description": "Producto, tecnología y negocio sobre la mesa. Sales con un plan priorizado aunque no sigas con nosotros."
       },
       "num_2": {
@@ -524,7 +534,8 @@
       "send": "contactar"
     },
     "hero": {
-      "title": "30 minutos para saber qué le pasa a tu producto",
+      "title": "¿Qué te pica?",
+      "subtitle": "En 30 minutos te hago un diagnóstico",
       "description": "Una sesión de diagnóstico gratuita. No es una reunión comercial: es la primera media hora de trabajo. Nos escribes, te respondemos en 24 horas laborables y fijamos la hora."
     },
     "sesion": {
@@ -538,7 +549,7 @@
     },
     "llevas": {
       "title": "Qué te llevas",
-      "body": "Un correo en 48 horas con la hipótesis de diagnóstico, los primeros pasos que recomendamos y una estimación orientativa. Es tuyo, lo hagas con nosotros o no."
+      "body": "Un diagnóstico preliminar, los primeros pasos que recomendamos y una estimación orientativa de tiempos y pasta. Es tuyo, lo hagas con nosotros o no."
     },
     "paraQuien": {
       "title": "Para quién es",
@@ -561,11 +572,6 @@
       "q3_email": "¿Cómo te contactamos?",
       "enviar": "Enviar"
     },
-    "micro": {
-      "respuesta": "Respuesta en 24 h laborables.",
-      "linkedin": "Si prefieres LinkedIn, escríbenos por ahí.",
-      "lugar": "Madrid · Sesiones en español o inglés"
-    },
     "diagnostico": {
       "pregunta": "¿No sabes por dónde empezar?",
       "enlace": "Responde 4 preguntas →"
@@ -576,17 +582,6 @@
     }
   },
   "about": {
-    "sectors": {
-      "logos": [
-        "Samsung — electrónica de consumo",
-        "Grupo Fractalia — servicios tecnológicos",
-        "Telefónica — telecomunicaciones",
-        "hellotax — software de cumplimiento fiscal",
-        "Orange — telecomunicaciones",
-        "ComeFruta — comercio online de alimentación"
-      ],
-      "title": "Sectores en los que hemos trabajado"
-    },
     "title": "quiénes somos",
     "hero_text": "No somos una agencia al uso. Somos un equipo de especialistas en producto, diseño, usabilidad y tecnología — obsesionados con entregar productos digitales que impactan en la cuenta de resultados, no solo en la estética.",
     "quotes_line1": "Convertimos objetivos estratégicos en",
@@ -616,15 +611,15 @@
       }
     },
     "hero": {
-      "title": "No somos una agencia al uso. Tampoco una consultora.",
-      "description": "Somos un equipo pequeño de producto, diseño, usabilidad e ingeniería que se mide por lo que cambia en tu cuenta de resultados, no por lo que entrega. Quien te atiende es quien hace el trabajo."
+      "title": "No somos una agencia al uso ni una consultora",
+      "description": "Somos un equipo de ingenieros con foco en el producto: en su diseño, en su usabilidad y en su arquitectura. Nos centramos en lo que puede cambiar tu cuenta de resultados."
     },
     "metodo": {
       "title": "El método",
       "pasos": [
         {
-          "title": "Diagnóstico (2–3 semanas).",
-          "body": "Miramos las tres cosas a la vez: cómo usan el producto tus clientes o tu equipo, qué tecnología hay debajo y qué negocio hay detrás. Entregamos un plan priorizado con estimación. Es tuyo aunque no sigas con nosotros."
+          "title": "Diagnóstico.",
+          "body": "Miramos las tres cosas a la vez: cómo usan el producto tus clientes o tu equipo, qué tecnología hay debajo y qué negocio hay detrás. Entregamos un plan priorizado con estimación."
         },
         {
           "title": "Diseño y arquitectura, juntos.",
@@ -643,11 +638,9 @@
     "quien": {
       "title": "Quién está detrás",
       "nombre": "José Antonio Ces Franjo",
-      "cargo": "fundador y CEO",
-      "bio": "Ingeniero de Telecomunicación por la Politécnica de Madrid y más de treinta años en tecnología, siempre en el mismo sitio: donde el producto se encuentra con el negocio. Empezó programando centrales telefónicas en Ericsson. Pasó dieciséis años en Telefónica creando la oferta para grandes cuentas y, después, dirigiendo el marketing de empresas con la cuenta de resultados de todos los segmentos y un equipo de más de cien personas. En 2016 fundó Room 714 y, en paralelo, cofundó y operó como COO durante siete años The Wise Seeker, un SaaS de gestión del talento. Desde entonces ha dirigido más de treinta proyectos de consultoría y producto para empresas como LaLiga, Ingenico, GMV, Cobas Asset Management, Orange, Sercide, Zelenza o Señalizaciones Villar.",
-      "cita": "Hago que la transformación digital deje de ser un PowerPoint.",
-      "cierreBio": "Dirige cada proyecto.",
-      "equipo": "Con él, un equipo estable de personas senior en diseño de producto y UX, ingeniería de software y arquitectura de datos e IA. Sin juniors aprendiendo con tu presupuesto y sin gestores de cuenta entre tú y quien construye."
+      "cargo": "Fundador y CEO",
+      "bio": "Ingeniero de Telecomunicación por la Politécnica de Madrid con más de treinta años de experiencia en producto B2B. Desde sus inicios en Ericsson como programador se ha desarrollado en product management y desarrollo de negocio, primero en Telefónica y luego como profesional independiente creando Room 714 en el año 2016. En paralelo fundó The Wise Seeker, un SaaS de gestión del talento, ejerciendo como COO hasta 2024. Ha trabajado como consultor senior de transformación digital para empresas como LaLiga, Ingenico, GMV, Cobas Asset Management, Sercide, Zelenza, Teldat, MasOrange o Señalizaciones Villar.",
+      "cita": "Conmigo la promesa de la transformación digital deja de ser un Power Point para convertirse en un hecho"
     },
     "noHacemos": {
       "title": "Lo que no hacemos",
@@ -658,7 +651,6 @@
         "Decir que sí a todo. Si el problema no es de producto, te lo diremos en la primera sesión."
       ]
     },
-    "sectoresLista": "Telecomunicaciones, servicios financieros y gestión de patrimonios, ciberseguridad, retail, tecnología e IT, deporte y entretenimiento.",
     "cta": "Cuéntanos tu caso",
     "seo": {
       "title": "Cómo trabajamos · Room 714",
@@ -677,55 +669,55 @@
       "in_progress": "En progreso"
     },
     "case_study_01": {
-      "title": "Telecoms: Optimización del Flujo de Activación",
+      "title": "Optimización del Flujo de Activación",
       "challenge": "La complejidad técnica en la activación de paquetes de soluciones creaba una barrera insalvable para los clientes. El proceso era tan confuso que la mayoría abandonaba a mitad del registro, saturando el centro de atención al cliente con llamadas de soporte técnico.",
       "idea": "Rediseñamos la experiencia de compra y activación (CX) eliminando pasos innecesarios. Rediseñamos el user journey a partir de un conocimiento detallado del tipo de cliente, anticipando cómo el usuario podría completar el proceso de registro sin ayuda externa.",
       "outcome": "Logramos un incremento del 45% en las activaciones completadas con éxito y un aumento del 12% en el ARPU (ingresos medios por usuario) al facilitar la contratación de servicios adicionales."
     },
     "case_study_02": {
-      "title": "Wealth Management: Onboarding Digital de Confianza",
+      "title": "Onboarding Digital de Confianza",
       "challenge": "Una gestora de fondos de inversión operaba mediante procesos analógicos basados en papel y firmas físicas. Esto dilataba el alta de nuevos clientes durante semanas, provocando una alta tasa de abandono en perfiles de alto valor que buscaban agilidad.",
       "idea": "Ejecutamos una transformación digital integral del proceso de onboarding y contratación. Integramos biometría (e-KYC) y sistemas de firma digital avanzada para crear un flujo 100% online, seguro y legalmente robusto que permite abrir una cuenta en cuestión de minutos.",
       "outcome": "Redujimos el tiempo de activación de cuentas en un 95% (pasando de semanas a menos de 48h) y aumentamos en un 41% la tasa de finalización del proceso de onboarding."
     },
     "case_study_03": {
-      "title": "Operaciones B2B: IA vs. Sobrecarga de Datos",
+      "title": "IA vs. Sobrecarga de Datos",
       "challenge": "Los administradores de sistemas de esta empresa se enfrentaban a dashboards saturados de información difícil de interpretar. Esta sobrecarga cognitiva provocaba errores críticos en la gestión de servicios y una respuesta lenta ante incidentes graves.",
       "idea": "Rediseñamos la interfaz UX/UI e implementamos una capa de IA Generativa. En lugar de mostrar datos brutos, el sistema ahora resume métricas complejas en lenguaje natural, proporcionando 'insights' accionables y comandos simplificados para resolver problemas al instante.",
       "outcome": "Disminuimos en un 38% los errores operativos críticos y ahorramos un 25% del tiempo que los equipos internos dedicaban a resolver incidencias de nivel 1."
     },
     "case_study_04": {
-      "title": "Fintech: Ecosistema Fiscal Colaborativo",
+      "title": "Ecosistema Fiscal Colaborativo",
       "challenge": "La comunicación entre empresas y asesores fiscales era un caos de emails, llamadas y documentos perdidos. Esta fragmentación generaba retrasos en las presentaciones de impuestos y un coste operativo altísimo para ambas partes.",
       "idea": "Creamos una app para soportar un ecosistema digital con una interfaz dual (empresa-contable), y con una 'fuente única de verdad' que automatiza la ingesta de facturas y sincroniza los estados fiscales en tiempo real, garantizando que todos trabajen sobre la misma información.",
       "outcome": "Redujimos el intercambio de documentos innecesarios en un 40% y mejoramos la eficiencia en los tiempos de presentación fiscal en un 30%."
     },
     "case_study_05": {
-      "title": "Cybersecuridad: Protección 360° para Perfiles VIP",
+      "title": "Ciberseguridad para perfiles VIP",
       "challenge": "Clientes de alto standing (HNWI) tenían su identidad y activos digitales dispersos en múltiples plataformas vulnerables. Carecían de un sistema unificado que les permitiera monitorizar su seguridad personal y la de sus documentos sensibles en tiempo real.",
       "idea": "Desarrollamos una app móvil premium de seguridad bajo una arquitectura 'Zero-Trust'. El sistema funciona como un 'conserje digital' que supervisa constantemente dispositivos, conexiones de red y la integridad de documentos, alertando proactivamente ante cualquier amenaza.",
       "outcome": "Conseguimos una visibilidad total de la huella digital del usuario y una velocidad de respuesta ante intentos de acceso no autorizados un 60% más rápida."
     },
     "case_study_06": {
-      "title": "B2B: Seguridad para Infraestructuras Críticas",
+      "title": "Seguridad para Infraestructuras Críticas",
       "challenge": "Grandes corporaciones y organismos públicos necesitaban una capa de seguridad superior que aprovechara la capacidad de la red del operador. Las soluciones estándar de mercado no eran suficientes para proteger sus infraestructuras críticas.",
       "idea": "Diseñamos un framework de seguridad holístico que integra la inteligencia de red (carrier-grade) con una suite de servicios de defensa de un tercero. Creamos un panel de control unificado para gestionar la seguridad perimetral y el cumplimiento normativo a gran escala.",
       "outcome": "Redujimos el tiempo de mitigación de incidentes en un 55% y aseguramos el cumplimiento total de los estándares de seguridad soberana para grandes organizaciones."
     },
     "case_study_07": {
-      "title": "Telco: Capa Semántica para una IA Fiable",
+      "title": "Capa Semántica para una IA Fiable",
       "challenge": "Sistemas internos del operador repartidos en silos, cada uno con su lenguaje. Cualquier intento de aprovechar la IA chocaba con la misma realidad: los modelos respondían sobre datos parciales o contradictorios, generando alucinaciones difíciles de detectar y respuestas en las que no se podía confiar para automatizar nada.",
       "idea": "Construimos un conjunto de datos canónicos sobre los que se apoya una capa semántica que aísla la IA de las particularidades de los sistemas actuales. La capa expone los conceptos del negocio con definiciones únicas, fuentes de verdad y permisos, de modo que el modelo siempre opera sobre un mismo diccionario — y la empresa puede ir evolucionando sus sistemas por debajo sin romper lo que ya funciona.",
       "outcome": "Esperamos reducir drásticamente las alucinaciones del asistente interno y que el grueso de las consultas IA se resuelvan contra dato canónico, dejando la operación lista para evolucionar los sistemas existentes sin frenar lo que ya está en producción."
     },
     "case_study_08": {
-      "title": "Retail Alimentación: Un Carrito que Decide por Sí Solo",
+      "title": "Un Carrito que Decide por Sí Solo",
       "challenge": "En un e-commerce de fruta y verdura el catálogo cambia a diario: roturas de stock, ajustes de precio, productos que entran y salen de temporada. Mantener el carrito sincronizado obligaba al equipo a meter mano constantemente, y aun así los clientes se topaban con productos no disponibles o precios desfasados al pagar.",
       "idea": "Diseñamos un carrito inteligente que delega en un agente IA las decisiones operativas del día a día. El agente lee el contexto en tiempo real — stock, precios, calendario de temporada — y aplica ajustes por su cuenta cuando aparece una condición que lo justifica. Sólo escala al equipo lo excepcional; lo rutinario se gestiona solo.",
       "outcome": "El objetivo es que el carrito gestione de forma autónoma la mayor parte de los ajustes diarios de catálogo y reducir notablemente los abandonos por productos no disponibles o precios desfasados, liberando al equipo de la operativa rutinaria."
     },
     "case_study_09": {
-      "title": "Telecoms B2B: Inferencia IA Fuera del SaaS",
+      "title": "Inferencia IA Fuera del SaaS",
       "challenge": "El coste de la inferencia IA en SaaS sube a un ritmo que ya compromete la rentabilidad de muchas iniciativas. Los clientes B2B del operador buscaban una alternativa privada, predecible y soberana — pero ningún proveedor combinaba hoy red, capacidad de cómputo y modelos en un mismo paquete.",
       "idea": "Especificamos el plan estratégico para que el operador evolucione su nube privada hacia un servicio de inferencia IA dirigido a clientes B2B: dimensionamiento de cómputo, fases de migración, modelo de TCO frente al SaaS de hyperscalers, integración con la red carrier-grade existente y roadmap de adopción por segmentos de cliente.",
       "outcome": "El plan apunta a un TCO sustancialmente inferior al SaaS de hyperscaler al volumen objetivo del operador y a un roadmap de adopción que ponga la oferta operativa antes del salto previsto en la demanda B2B."

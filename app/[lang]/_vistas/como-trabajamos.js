@@ -4,7 +4,6 @@ import { Phone } from "lucide-react";
 import Navbar from "@/app/components/Navbar";
 import PrimaryButton from "@/app/components/PrimaryButton";
 import RulesSlider from "@/app/components/RulesSlider";
-import ClientLogos from "@/app/components/ClientLogos";
 import { getRules } from "@/app/data/Rules";
 import { SITE_URL, buildAlternates, langPaths } from "@/app/lib/seo/urls";
 import { path, pathsOf } from "@/app/lib/routes.mjs";
@@ -42,18 +41,17 @@ export default async function ComoTrabajamosPage({ params }) {
           las secciones de abajo y dejaba dos piquitos en cada una. */}
       <Navbar dict={dict} isDark={false} />
       <main className="flex flex-col items-center overflow-x-hidden">
-        {/* Hero. Dos cosas heredadas del diseño anterior:
-            - El titular baja de escala. El del Anexo A tiene 48 caracteres y
-              el que había ("quiénes somos") catorce; al tamaño original
-              ocupaba la pantalla entera.
-            - La flecha vuelve a apuntar a algo. Curva hacia abajo y a la
-              derecha, y en la maqueta original señalaba al párrafo, que iba
-              desplazado a la derecha. Al centrar yo el párrafo, la flecha se
-              quedó apuntando al vacío. */}
+        {/* Hero. El titular baja de escala respecto al diseño anterior: el
+            del Anexo A tiene 48 caracteres y el que había ("quiénes somos")
+            catorce; al tamaño original ocupaba la pantalla entera.
+
+            La flecha que iba entre titular y entradilla ya no está: no
+            señalaba a nada en ninguna anchura. El gesto lo dan ahora las dos
+            alineaciones, titular a la izquierda y entradilla a la derecha. */}
         <section className={`w-full ${CANAL} py-16 bg-white flex flex-col`}>
           {/* Una frase por línea. El titular son dos frases cortas y
               partirlas por donde caiga el ancho las deja a media idea. */}
-          <h1 className="font-body font-extrabold text-3xl md:text-5xl lg:text-7xl leading-tight text-black">
+          <h1 className="font-body font-extrabold text-3xl md:text-5xl lg:text-7xl leading-tight text-black text-left mb-8">
             {t.hero.title
               .split(". ")
               .filter(Boolean)
@@ -64,23 +62,7 @@ export default async function ComoTrabajamosPage({ params }) {
               ))}
           </h1>
 
-          {/* La flecha arranca debajo del final del titular y baja hacia la
-              izquierda del párrafo, que va desplazado a la derecha. */}
-          <div className="w-full flex mt-2">
-            <div className="hidden md:block md:w-[34%]" />
-            <div className="relative w-14 h-20 md:w-20 md:h-28 lg:w-24 lg:h-36 shrink-0">
-              <Image
-                src="/about/curve-arrow.svg"
-                alt=""
-                aria-hidden="true"
-                fill
-                className="object-contain"
-                priority
-              />
-            </div>
-          </div>
-
-          <p className="font-hand text-lg md:text-2xl lg:text-3xl text-black w-full md:w-[60%] md:ml-auto leading-[1.45]">
+          <p className="font-hand text-xl md:text-3xl lg:text-4xl text-red-500 text-right w-full md:w-[60%] md:ml-auto leading-[1.45]">
             {t.hero.description}
           </p>
         </section>
@@ -110,20 +92,21 @@ export default async function ComoTrabajamosPage({ params }) {
         </section>
 
         {/* Quién está detrás */}
-        <section className={`w-full bg-gray-300 ${CANAL} py-16`}>
+        <section
+          className={`w-full bg-gray-300 rounded-t-[50px] -mt-10 relative ${CANAL} pt-16 pb-16`}
+        >
           <div className="w-full">
             <h2 className="font-title font-black text-2xl md:text-4xl lg:text-5xl text-black mb-10 leading-tight">
               {t.quien.title}
             </h2>
 
-            <div className="flex flex-col md:flex-row gap-8 lg:gap-12 mb-10">
-              {/* Foto: placeholder hasta que haya una de verdad */}
+            <div className="flex flex-col md:flex-row gap-8 lg:gap-12">
               <Image
-                src="/author-placeholder.svg"
+                src="/about/jose-antonio-ces.jpg"
                 alt={t.quien.nombre}
-                width={160}
-                height={160}
-                className="rounded-full shrink-0 w-32 h-32 lg:w-40 lg:h-40"
+                width={320}
+                height={320}
+                className="rounded-full shrink-0 w-32 h-32 lg:w-40 lg:h-40 object-cover"
               />
               <div>
                 <p className="font-title font-bold text-xl md:text-2xl lg:text-3xl text-black mb-1">
@@ -132,15 +115,14 @@ export default async function ComoTrabajamosPage({ params }) {
                 <p className="font-hand text-lg md:text-xl lg:text-2xl text-red-500 mb-6">
                   {t.quien.cargo}
                 </p>
-                <p className="font-body text-base md:text-lg lg:text-xl text-gray-700 leading-normal mb-6">
-                  {t.quien.bio}
-                </p>
                 <p className="font-hand text-xl md:text-2xl lg:text-3xl text-black mb-6 leading-[1.45]">
                   «{t.quien.cita}»
                 </p>
-                <p className="font-body text-base md:text-lg text-gray-700 leading-normal mb-6">
-                  {t.quien.cierreBio}
+                <p className="font-body text-base md:text-lg lg:text-xl text-gray-700 leading-normal mb-6">
+                  {t.quien.bio}
                 </p>
+                {/* El mismo botón redondo del footer, aquí a la cuenta
+                    personal del fundador y no a la de la empresa. */}
                 <a
                   href={withUtm(LINKEDIN_FOUNDER, {
                     campaign: "web",
@@ -149,31 +131,32 @@ export default async function ComoTrabajamosPage({ params }) {
                   target="_blank"
                   rel="noopener noreferrer"
                   data-track-placement="como-trabajamos"
-                  className="font-hand text-lg md:text-xl text-red-500 hover:underline"
+                  className="inline-block p-2 bg-white rounded-full hover:opacity-70 transition-opacity"
                 >
-                  LinkedIn →
+                  <Image
+                    src="/linkedin.svg"
+                    alt="LinkedIn"
+                    width={30}
+                    height={30}
+                  />
                 </a>
               </div>
             </div>
-
-            <p className="font-body text-base md:text-lg lg:text-xl text-gray-700 leading-normal">
-              {t.quien.equipo}
-            </p>
           </div>
         </section>
 
         {/* En qué creemos: los cuatro valores que ya existían, con su
             slider */}
-        <section className="w-full bg-red-700 py-16 flex flex-col items-center gap-2">
-          <h2 className="font-body text-white font-black text-2xl md:text-4xl text-center px-6">
+        <section className="w-full bg-red-700 rounded-t-[50px] -mt-10 relative z-10 pt-16 pb-20 flex flex-col items-center gap-2">
+          <h2 className="font-body text-white font-black text-3xl md:text-5xl text-center px-6">
             {t.rules.title_line1}
           </h2>
           <div className="relative flex mb-4 items-center justify-center">
-            <p className="relative z-20 font-hand text-white text-4xl md:text-5xl text-center px-12 leading-[1.45]">
+            <p className="relative z-20 font-hand text-white text-5xl md:text-6xl text-center px-12 leading-[1.45]">
               {t.rules.title_line2}
             </p>
             <div className="absolute inset-0 z-10 flex items-center justify-center">
-              <div className="relative w-[80%] md:max-w-100 h-20 md:h-32">
+              <div className="relative w-[80%] md:max-w-100 h-24 md:h-36">
                 <Image
                   src="/about/circle.svg"
                   alt="line decoration"
@@ -187,53 +170,42 @@ export default async function ComoTrabajamosPage({ params }) {
           <RulesSlider rules={rules} />
         </section>
 
-        {/* Lo que no hacemos */}
-        <section className={`w-full bg-black ${CANAL} py-16`}>
+        {/* Lo que no hacemos. En blanco y redondeada arriba, como la roja:
+            las dos son tarjetas apiladas. Cierra la página, así que el botón
+            va dentro y ya no hace falta una sección aparte para él. */}
+        <section
+          className={`w-full bg-white rounded-t-[50px] -mt-10 relative z-20 ${CANAL} pt-16`}
+        >
           <div className="w-full">
-            <h2 className="font-title font-black text-2xl md:text-4xl lg:text-5xl text-white mb-10 leading-tight">
+            <h2 className="font-title font-black text-2xl md:text-4xl lg:text-5xl text-black mb-10 leading-tight">
               {t.noHacemos.title}
             </h2>
-            <ul className="flex flex-col gap-4">
+            <ul className="flex flex-col gap-5 mb-12">
               {t.noHacemos.items.map((item) => (
                 <li key={item} className="flex gap-4">
                   <span
-                    className="font-hand text-red-500 text-xl md:text-2xl shrink-0"
+                    className="font-hand text-red-500 text-2xl md:text-3xl shrink-0"
                     aria-hidden="true"
                   >
                     ·
                   </span>
-                  <p className="font-body text-lg md:text-xl lg:text-2xl text-gray-300 leading-normal">
+                  <p className="font-body text-xl md:text-2xl lg:text-3xl text-gray-700 leading-normal">
                     {item}
                   </p>
                 </li>
               ))}
             </ul>
+            <div className={`flex justify-center ${AIRE_TRAS_BOTON}`}>
+              <PrimaryButton
+                text={t.cta}
+                isRed={true}
+                icon={Phone}
+                href={path("hablemos", lang)}
+                track="cta_click"
+                trackPlacement="como_trabajamos_cierre"
+              />
+            </div>
           </div>
-        </section>
-
-        {/* Sectores: aquí es donde viven ahora los logos de clientes. En la
-            portada su sitio lo ocupa el bloque de prueba con los tres casos,
-            que dice bastante más que seis logos sin contexto. */}
-        <section className="w-full bg-white pt-16 pb-10 flex flex-col items-center text-center">
-          <h2 className="font-title font-bold text-red-500 text-2xl md:text-4xl lg:text-5xl px-6 mb-6 leading-tight">
-            {t.sectors.title}
-          </h2>
-          <p className="font-body text-base md:text-lg lg:text-xl text-gray-700 px-6 mb-10 leading-normal">
-            {t.sectoresLista}
-          </p>
-          <ClientLogos alts={t.sectors.logos} />
-        </section>
-
-        {/* Cierre */}
-        <section className={`w-full bg-white px-6 flex justify-center ${AIRE_TRAS_BOTON}`}>
-          <PrimaryButton
-            text={t.cta}
-            isRed={true}
-            icon={Phone}
-            href={path("hablemos", lang)}
-            track="cta_click"
-            trackPlacement="como_trabajamos_cierre"
-          />
         </section>
       </main>
 

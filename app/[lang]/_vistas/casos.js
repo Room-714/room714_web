@@ -1,15 +1,15 @@
 import { getDictionary } from "@/app/dictionaries";
 import Image from "next/image";
-import Link from "next/link";
 import { Phone } from "lucide-react";
 import Navbar from "@/app/components/Navbar";
 import PrimaryButton from "@/app/components/PrimaryButton";
 import ProjectsList from "@/app/components/ProjectList";
+import ClientLogos from "@/app/components/ClientLogos";
 import { getProjectsData } from "@/app/data/Projects";
 import { buildAlternates, langPaths } from "@/app/lib/seo/urls";
 import { ORGANIZATION_ID, jsonLdGraph } from "@/app/lib/seo/schema";
 import { CASOS, path, pathsOf } from "@/app/lib/routes.mjs";
-import { AIRE_TRAS_BOTON, CANAL } from "@/app/lib/layout";
+import { AIRE_TRAS_BOTON, CANAL, TARJETA, TITULAR } from "@/app/lib/layout";
 
 export async function generateMetadata({ params }) {
   const { lang } = await params;
@@ -78,30 +78,32 @@ export default async function CasosPage({ params }) {
       <Navbar dict={dict} isDark={true} />
 
       <main className="min-h-screen bg-black text-white pt-16 mb-20">
-        {/* Cabecera de Página */}
+        {/* Cabecera de Página. El titular va partido en dos: la primera
+            mitad en tipografía de titular y la segunda a mano y en rojo, como
+            el cierre de la portada. */}
         <div className={`${CANAL} mb-16`}>
-          <h1 className="font-body font-black text-4xl md:text-6xl lg:text-7xl mb-8 leading-tight">
+          <h1 className="font-body font-black text-4xl md:text-6xl lg:text-7xl mb-4 leading-tight">
             {t.indice.title}
           </h1>
-          <p className="font-body text-xl lg:text-2xl max-w-3xl text-gray-300 leading-normal">
+          <p className="font-hand text-red-500 text-3xl md:text-4xl lg:text-5xl mb-8 leading-[1.45]">
+            {t.indice.subtitle}
+          </p>
+          <p className="font-body text-xl lg:text-2xl max-w-3xl text-gray-300 leading-normal mb-6">
             {t.indice.lead}
+          </p>
+          <p className="font-body text-xl lg:text-2xl max-w-3xl text-gray-300 leading-normal">
+            {t.indice.lead2}
           </p>
         </div>
 
-        {/* Los tres casos con página propia */}
+        {/* Los tres casos con página propia.
+
+            La tarjeta ya no es un enlace: lleva dentro el botón primario, y
+            un <a> dentro de otro <a> no es HTML válido. La analítica se va con
+            el botón, que ya sabe emitirla. */}
         <div className={`${CANAL} mb-24 flex flex-col gap-6`}>
           {destacados.map((caso, index) => (
-            <Link
-              key={caso.clave}
-              href={path(caso.clave, lang)}
-              data-track="caso_click"
-              data-track-placement={`indice_${caso.clave}`}
-              className="group block rounded-4xl overflow-hidden bg-[#F2F2F2]
-                bg-[linear-gradient(to_right,rgba(0,0,0,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.05)_1px,transparent_1px)]
-                bg-size-[40px_40px]
-                hover:bg-[#F8F8F8] transition-all duration-500"
-            >
-              <div className="h-2 w-full bg-red-700" />
+            <div key={caso.clave} className={TARJETA}>
               <div className="px-6 py-8 lg:px-10 lg:py-10">
                 <div className="flex items-start gap-4 lg:gap-6">
                   <span className="font-hand font-black text-red-500 text-2xl md:text-3xl lg:text-4xl shrink-0 leading-[1.45]">
@@ -114,25 +116,26 @@ export default async function CasosPage({ params }) {
                     <p className="font-body text-gray-700 text-base md:text-lg lg:text-2xl leading-normal mb-6">
                       {caso.heroSubtitle}
                     </p>
-                    <span className="font-hand text-red-500 text-lg md:text-xl lg:text-2xl group-hover:underline">
-                      {t.labels.verCaso} →
-                    </span>
+                    <PrimaryButton
+                      text={t.labels.verCaso}
+                      isRed={true}
+                      href={path(caso.clave, lang)}
+                      track="caso_click"
+                      trackPlacement={`indice_${caso.clave}`}
+                    />
                   </div>
                 </div>
               </div>
-            </Link>
+            </div>
           ))}
         </div>
 
         {/* Los proyectos anteriores, como listado secundario y con el mismo
             acordeón que ya tenían */}
         <div className={`${CANAL} mb-8`}>
-          <h2 className="font-hand text-3xl md:text-5xl text-white mb-2 leading-[1.45]">
+          <h2 className="font-hand text-3xl md:text-5xl text-white leading-[1.45]">
             {t.indice.secondaryTitle}
           </h2>
-          <p className="font-body text-sm md:text-base text-gray-400 max-w-3xl">
-            {t.labels.disclaimer}
-          </p>
         </div>
         <div className={`${CANAL} pb-30`}>
           <ProjectsList
@@ -143,14 +146,15 @@ export default async function CasosPage({ params }) {
         </div>
       </main>
 
-      {/* Footer / CTA Final estilo "Tired of talking about metrics?" */}
-      <section className="relative z-10 -mt-30 w-full bg-white rounded-t-[50px] p-10 lg:p-16 text-center text-black">
-        <h2 className="font-title font-black text-3xl md:text-5xl mb-6">
+      {/* Cierre, con el mismo bloque que cierra la portada: titular, rótulo
+          a mano en rojo y botón. */}
+      <section className="relative z-10 -mt-30 w-full bg-white rounded-t-[50px] px-6 py-16 lg:px-16 lg:py-16 text-center text-black">
+        <h2 className={`font-title font-black ${TITULAR} mb-4`}>
           {dict.projects.footer_cta.line_1}
         </h2>
-        <h2 className="font-hand text-4xl md:text-7xl mb-10 leading-[1.45]">
+        <p className="font-hand text-red-500 text-3xl md:text-4xl lg:text-5xl mb-8 leading-[1.45]">
           {dict.projects.footer_cta.line_2}
-        </h2>
+        </p>
         <div className={`flex justify-center ${AIRE_TRAS_BOTON}`}>
           <PrimaryButton
             text={t.labels.cta}
@@ -161,6 +165,13 @@ export default async function CasosPage({ params }) {
             trackPlacement="casos_cierre"
           />
         </div>
+      </section>
+
+      {/* Los logos de clientes, que vivían en Nosotros. Su sitio es este:
+          después de los casos, quién los encargó. Los degradados de los
+          laterales del carrusel van a blanco, así que la sección lo es. */}
+      <section className="w-full bg-white flex flex-col items-center">
+        <ClientLogos alts={t.logos} />
       </section>
 
       {/* 1. Contenedor del Skyline: Proporcional y siempre visible */}

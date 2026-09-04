@@ -6,7 +6,6 @@ import { useParams, useSearchParams } from "next/navigation";
 import { Send, CheckCircle2, Loader2 } from "lucide-react";
 import PrimaryButton from "@/app/components/PrimaryButton";
 import { trackEvent } from "@/app/lib/analytics";
-import { LINKEDIN_FOUNDER, withUtm } from "@/app/lib/links";
 import { path } from "@/app/lib/routes.mjs";
 import { CLAVES_SITUACION } from "@/app/data/Situaciones";
 import { CANAL } from "@/app/lib/layout";
@@ -99,11 +98,15 @@ export default function ContactClient({ dict }) {
             </div>
           ) : (
             <div className="pb-12 lg:pb-24">
-              {/* Hero */}
-              <h1 className="font-hand text-4xl md:text-5xl lg:text-7xl mb-8 text-center lg:text-left leading-[1.45]">
+              {/* Hero, con el mismo par que el índice de Casos: titular en
+                  la tipografía del sitio y el rótulo a mano en rojo debajo. */}
+              <h1 className="font-body font-black text-4xl md:text-6xl lg:text-7xl mb-4 leading-tight text-left">
                 {t.hero.title}
               </h1>
-              <p className="font-body text-lg md:text-xl lg:text-2xl text-gray-300 mb-12 leading-normal">
+              <p className="font-hand text-red-500 text-3xl md:text-4xl lg:text-5xl mb-8 leading-[1.45] text-right">
+                {t.hero.subtitle}
+              </p>
+              <p className="font-body text-lg md:text-xl lg:text-2xl text-gray-300 mb-12 leading-normal text-right">
                 {t.hero.description}
               </p>
 
@@ -141,151 +144,145 @@ export default function ContactClient({ dict }) {
                 </section>
               ))}
 
-              {/* El formulario */}
-              <h2 className="font-hand text-3xl md:text-4xl lg:text-5xl mb-3 leading-[1.45]">
-                {f.title}
-              </h2>
-              <p className="font-body text-base md:text-lg text-gray-400 mb-8">
-                {f.lead}
-              </p>
+              {/* El formulario. En escritorio va a la derecha y encima de la
+                  figura: el muñeco vive pegado al borde izquierdo del dibujo,
+                  así que el formulario no lo tapa.
 
-              <form
-                onSubmit={handleSubmit}
-                className="w-full flex flex-col gap-6"
-              >
-                {/* 1. Qué producto es */}
-                <div className="flex flex-col gap-4">
-                  <p className="font-body font-bold text-sm sm:text-base md:text-lg lg:text-xl uppercase">
-                    {f.q1}
+                  La figura entra aquí como fondo y no como <img> para que el
+                  alto del bloque lo mande el formulario, que en pantallas
+                  medianas es más alto que el dibujo. El min-h es el alto del
+                  propio dibujo a todo el ancho (1668 × 840), así que nunca se
+                  encoge ni se descoloca; y el margen negativo deshace el canal
+                  para que llegue a los bordes, como llegaba cuando cerraba la
+                  página. */}
+              <div className="lg:-mx-16 lg:min-h-[51vw] lg:bg-[url('/contact-tablet.svg')] lg:bg-contain lg:bg-bottom lg:bg-no-repeat">
+                {/* El pb deja el formulario por encima del haz de luz del
+                    dibujo: el blanco cruza justo por donde caían los dos
+                    últimos campos y no se leían. */}
+                <div className="lg:w-[52%] lg:ml-auto lg:mr-16 lg:pt-10 lg:pb-40">
+                  <h2 className="font-hand text-3xl md:text-4xl lg:text-5xl mb-3 leading-[1.45]">
+                    {f.title}
+                  </h2>
+                  <p className="font-body text-base md:text-lg text-gray-400 mb-8">
+                    {f.lead}
                   </p>
-                  <div className="flex flex-wrap gap-3">
-                    {f.q1_opciones.map((item) => (
-                      <button
-                        key={item}
-                        type="button"
-                        aria-pressed={producto === item}
-                        onClick={() => setProducto(item)}
-                        className={`px-6 py-1 border rounded-full text-xs sm:text-sm md:text-base lg:text-lg font-bold transition-all ${
-                          producto === item
-                            ? "bg-white text-black border-white"
-                            : "border-white hover:bg-white/10"
-                        }`}
+
+                  <form
+                    onSubmit={handleSubmit}
+                    className="w-full flex flex-col gap-6"
+                  >
+                    {/* 1. Qué producto es */}
+                    <div className="flex flex-col gap-4">
+                      <p className="font-body font-bold text-sm sm:text-base md:text-lg lg:text-xl uppercase">
+                        {f.q1}
+                      </p>
+                      <div className="flex flex-wrap gap-3">
+                        {f.q1_opciones.map((item) => (
+                          <button
+                            key={item}
+                            type="button"
+                            aria-pressed={producto === item}
+                            onClick={() => setProducto(item)}
+                            className={`px-6 py-1 border rounded-full text-xs sm:text-sm md:text-base lg:text-lg font-bold transition-all ${
+                              producto === item
+                                ? "bg-white text-black border-white"
+                                : "border-white hover:bg-white/10"
+                            }`}
+                          >
+                            {item}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* 2. Qué no está funcionando */}
+                    <div className="flex flex-col gap-3">
+                      <label
+                        htmlFor="message"
+                        className="font-body font-bold text-sm sm:text-base md:text-lg lg:text-xl uppercase"
                       >
-                        {item}
-                      </button>
-                    ))}
-                  </div>
-                </div>
+                        {f.q2}
+                      </label>
+                      <textarea
+                        id="message"
+                        name="message"
+                        required
+                        rows={4}
+                        placeholder={f.q2_ayuda}
+                        className="w-full bg-[#E5E5E5] text-gray-700 font-bold rounded-3xl px-6 py-4 outline-none placeholder:font-normal placeholder:text-gray-500"
+                      />
+                    </div>
 
-                {/* 2. Qué no está funcionando */}
-                <div className="flex flex-col gap-3">
-                  <label
-                    htmlFor="message"
-                    className="font-body font-bold text-sm sm:text-base md:text-lg lg:text-xl uppercase"
-                  >
-                    {f.q2}
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    required
-                    rows={4}
-                    placeholder={f.q2_ayuda}
-                    className="w-full bg-[#E5E5E5] text-gray-700 font-bold rounded-3xl px-6 py-4 outline-none placeholder:font-normal placeholder:text-gray-500"
-                  />
-                </div>
+                    {/* 3. Quién eres y cómo te contactamos */}
+                    <div className="flex flex-col gap-3">
+                      <label
+                        htmlFor="name"
+                        className="font-body font-bold text-sm sm:text-base md:text-lg lg:text-xl uppercase"
+                      >
+                        {f.q3_nombre}
+                      </label>
+                      <input
+                        id="name"
+                        name="name"
+                        required
+                        type="text"
+                        className="w-full bg-[#E5E5E5] text-gray-700 font-bold rounded-full px-6 py-3 outline-none"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-3">
+                      <label
+                        htmlFor="company"
+                        className="font-body font-bold text-sm sm:text-base md:text-lg lg:text-xl uppercase"
+                      >
+                        {f.q3_empresa}
+                      </label>
+                      <input
+                        id="company"
+                        name="company"
+                        type="text"
+                        className="w-full bg-[#E5E5E5] text-gray-700 font-bold rounded-full px-6 py-3 outline-none"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-3">
+                      <label
+                        htmlFor="email"
+                        className="font-body font-bold text-sm sm:text-base md:text-lg lg:text-xl uppercase"
+                      >
+                        {f.q3_email}
+                      </label>
+                      <input
+                        id="email"
+                        name="email"
+                        required
+                        type="email"
+                        className="w-full bg-[#E5E5E5] text-gray-700 font-bold rounded-full px-6 py-3 outline-none"
+                      />
+                    </div>
 
-                {/* 3. Quién eres y cómo te contactamos */}
-                <div className="flex flex-col gap-3">
-                  <label
-                    htmlFor="name"
-                    className="font-body font-bold text-sm sm:text-base md:text-lg lg:text-xl uppercase"
-                  >
-                    {f.q3_nombre}
-                  </label>
-                  <input
-                    id="name"
-                    name="name"
-                    required
-                    type="text"
-                    className="w-full bg-[#E5E5E5] text-gray-700 font-bold rounded-full px-6 py-3 outline-none"
-                  />
+                    <div className="flex justify-center lg:justify-end mt-4">
+                      <PrimaryButton
+                        text={
+                          status === "loading" ? t.buttons.sending : f.enviar
+                        }
+                        isRed={true}
+                        icon={status === "loading" ? Loader2 : Send}
+                        type="submit"
+                        className={
+                          status === "loading" ? "opacity-70 pointer-events-none" : ""
+                        }
+                      />
+                    </div>
+                  </form>
                 </div>
-                <div className="flex flex-col gap-3">
-                  <label
-                    htmlFor="company"
-                    className="font-body font-bold text-sm sm:text-base md:text-lg lg:text-xl uppercase"
-                  >
-                    {f.q3_empresa}
-                  </label>
-                  <input
-                    id="company"
-                    name="company"
-                    type="text"
-                    className="w-full bg-[#E5E5E5] text-gray-700 font-bold rounded-full px-6 py-3 outline-none"
-                  />
-                </div>
-                <div className="flex flex-col gap-3">
-                  <label
-                    htmlFor="email"
-                    className="font-body font-bold text-sm sm:text-base md:text-lg lg:text-xl uppercase"
-                  >
-                    {f.q3_email}
-                  </label>
-                  <input
-                    id="email"
-                    name="email"
-                    required
-                    type="email"
-                    className="w-full bg-[#E5E5E5] text-gray-700 font-bold rounded-full px-6 py-3 outline-none"
-                  />
-                </div>
-
-                <div className="flex justify-center lg:justify-end mt-4">
-                  <PrimaryButton
-                    text={
-                      status === "loading" ? t.buttons.sending : f.enviar
-                    }
-                    isRed={true}
-                    icon={status === "loading" ? Loader2 : Send}
-                    type="submit"
-                    className={
-                      status === "loading" ? "opacity-70 pointer-events-none" : ""
-                    }
-                  />
-                </div>
-              </form>
-
-              {/* La promesa de respuesta y las otras vías */}
-              <div className="mt-8 font-body text-sm md:text-base text-gray-400 leading-normal">
-                <p>{t.micro.respuesta}</p>
-                <p>
-                  {t.micro.linkedin}{" "}
-                  <Link
-                    href={withUtm(LINKEDIN_FOUNDER, {
-                      campaign: "web",
-                      content: "hablemos",
-                    })}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    data-track-placement="hablemos"
-                    className="font-hand text-red-500 hover:underline"
-                  >
-                    LinkedIn →
-                  </Link>
-                </p>
-                <p className="mt-2">{t.micro.lugar}</p>
               </div>
             </div>
           )}
         </div>
       </div>
 
-      {/* 3. ILUSTRACIÓN MÓVIL/TABLET: Siempre presente al final */}
-      {/* La ilustración cierra la página a todo el ancho. Antes estaba en
-          absoluto detrás del texto, dimensionada para una página corta: con
-          las secciones nuevas cruzaba el contenido en diagonal. */}
-      <div className="w-full leading-none overflow-hidden">
+      {/* La ilustración cierra la página a todo el ancho hasta lg. En
+          escritorio no se repite aquí: va de fondo detrás del formulario. */}
+      <div className="w-full leading-none overflow-hidden lg:hidden">
         <Image
           src="/contact-tablet.svg"
           alt="Contact illustration"

@@ -106,11 +106,8 @@ export function caso(clave) {
               <h1 className="font-title font-black text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-black leading-tight mb-6">
                 {t.heroTitle}
               </h1>
-              <p className="font-body text-lg md:text-xl lg:text-2xl text-gray-700 leading-normal mb-6">
+              <p className="font-body text-lg md:text-xl lg:text-2xl text-gray-700 leading-normal">
                 {t.heroSubtitle}
-              </p>
-              <p className="font-body text-xs md:text-sm text-gray-400">
-                {labels.disclaimer}
               </p>
             </header>
 
@@ -202,8 +199,8 @@ export function caso(clave) {
         </article>
 
         {/* Cierre, con el patrón del CTA final de Casos */}
-        <section className="relative z-10 w-full bg-gray-300 rounded-t-[50px] px-6 py-16 lg:px-16 lg:py-16 text-center text-black">
-          <h2 className="font-hand text-3xl md:text-5xl lg:text-6xl mb-10 mx-auto leading-[1.45]">
+        <section className="relative z-10 w-full bg-gray-300 rounded-t-[50px] px-8 py-20 md:px-20 md:py-28 text-center text-black">
+          <h2 className="font-hand text-3xl md:text-4xl lg:text-5xl mb-10 mx-auto max-w-4xl leading-[1.45]">
             {t.cierre}
           </h2>
           <div className={`flex justify-center ${AIRE_TRAS_BOTON}`}>
