@@ -14,6 +14,7 @@ import {
 } from "@/app/lib/sources/unsplash";
 import { generateLinkedInTakes, generatePostDraft } from "./generator";
 import { backlinkOldPosts } from "./backlinker";
+import { slugify } from "@/app/lib/slug";
 import { computeOutboundLinksForPost } from "./internalLinker";
 import { sendDraftReadyEmail } from "@/app/lib/notifications/draftReady";
 import {
@@ -34,19 +35,6 @@ import {
 // a 08:30 y las tomas de LinkedIn se generan a las 08:30, en un cron aparte.
 const PUBLISH_HOUR_MADRID = 7;
 const PUBLISH_MINUTE_MADRID = 30;
-
-function slugifyFallback(text) {
-  return text
-    .toString()
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/[^\w-]+/g, "")
-    .replace(/--+/g, "-")
-    .replace(/^-|-$/g, "")
-    .slice(0, 70);
-}
 
 async function ensureUniqueSlug(slug, lang) {
   let candidate = slug;
@@ -102,11 +90,11 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
   });
 
   const slugEs = await ensureUniqueSlug(
-    draft.slug_es || slugifyFallback(draft.title_es),
+    slugify(draft.slug_es || draft.title_es),
     "es",
   );
   const slugEn = await ensureUniqueSlug(
-    draft.slug_en || slugifyFallback(draft.title_en),
+    slugify(draft.slug_en || draft.title_en),
     "en",
   );
 

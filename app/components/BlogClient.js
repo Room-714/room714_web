@@ -1,6 +1,8 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import { ChevronDown } from "lucide-react";
+import PrimaryButton from "@/app/components/PrimaryButton";
 import { CATEGORY_IDS, CATEGORY_LABELS } from "@/app/data/BlogCategories";
 import { getSlugFromCategory } from "@/app/lib/categoryRoutes";
 import BlogCard from "@/app/components/BlogCard";
@@ -87,12 +89,12 @@ export default function BlogClient({ posts, dict, lang }) {
 
       {visibleCount < filteredPosts.length && (
         <div className="w-full flex justify-center mt-20">
-          <button
+          <PrimaryButton
+            text={dict.load_more || "Cargar más"}
+            isRed={true}
+            icon={ChevronDown}
             onClick={() => setVisibleCount((prev) => prev + POSTS_PER_PAGE)}
-            className="px-10 py-4 bg-black text-white rounded-full font-hand text-lg hover:bg-red-600 transition-all hover:scale-105 shadow-xl"
-          >
-            {dict.load_more || "Cargar más"}
-          </button>
+          />
         </div>
       )}
     </div>

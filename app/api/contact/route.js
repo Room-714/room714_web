@@ -21,7 +21,7 @@ export async function POST(req) {
 
   try {
     const body = await req.json();
-    const { name, email, message, interests } = body;
+    const { name, email, company, message, interests } = body;
 
     // Formateamos los intereses para evitar errores si el array está vacío
     const formattedInterests =
@@ -42,7 +42,8 @@ export async function POST(req) {
           <h2 style="border-bottom: 1px solid #eee; padding-bottom: 10px;">New Contact Form Submission</h2>
           <p><strong>Name:</strong> ${name}</p>
           <p><strong>Email:</strong> ${email}</p>
-          <p><strong>Interests:</strong> ${formattedInterests}</p>
+          <p><strong>Company:</strong> ${company || "—"}</p>
+          <p><strong>Situation:</strong> ${formattedInterests}</p>
           <p style="margin-top: 20px;"><strong>Message:</strong></p>
           <div style="background: #f9f9f9; padding: 20px; border-radius: 12px; border: 1px solid #eee; line-height: 1.6;">
             ${message}

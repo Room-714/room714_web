@@ -11,8 +11,16 @@ import { CATEGORY_LABELS } from "@/app/data/BlogCategories";
 import { getDictionary } from "@/app/dictionaries";
 import Navbar from "@/app/components/Navbar";
 import BlogCard from "@/app/components/BlogCard";
+import {
+  SITE_URL,
+  blogUrl,
+  buildAlternates,
+  langPaths,
+} from "@/app/lib/seo/urls";
+import { breadcrumbSchema, jsonLdGraph } from "@/app/lib/seo/schema";
+import { CANAL } from "@/app/lib/layout";
 
-const baseUrl = "https://www.room714.com";
+const baseUrl = SITE_URL;
 
 const SEO_DESCRIPTIONS = {
   TECH: {
@@ -50,16 +58,14 @@ export async function generateMetadata({ params }) {
   const pageUrl = `${baseUrl}/${lang}/blog/category/${slug}`;
 
   return {
-    title: titles[lang],
+    // `absolute` porque el título ya nombra la marca: con la plantilla del
+    // layout saldría "Tecnología — Blog Room 714 | Room 714".
+    title: { absolute: titles[lang] },
     description,
-    alternates: {
-      canonical: pageUrl,
-      languages: {
-        "es-ES": `${baseUrl}/es/blog/category/${slugEs}`,
-        "en-US": `${baseUrl}/en/blog/category/${slugEn}`,
-        "x-default": `${baseUrl}/en/blog/category/${slugEn}`,
-      },
-    },
+    alternates: buildAlternates(
+      lang,
+      langPaths(`/es/blog/category/${slugEs}`, `/en/blog/category/${slugEn}`),
+    ),
     openGraph: {
       title: titles[lang],
       description,
@@ -94,33 +100,32 @@ export default async function CategoryPage({ params }) {
   const slugEs = getSlugFromCategory("es", category);
   const slugEn = getSlugFromCategory("en", category);
 
-  const collectionJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    name: label,
-    description,
-    url: `${baseUrl}/${lang}/blog/category/${slug}`,
-    inLanguage: lang === "es" ? "es-ES" : "en-US",
-    isPartOf: {
-      "@type": "WebSite",
-      name: "Room 714",
-      url: baseUrl,
+  const pageUrl = `${baseUrl}/${lang}/blog/category/${slug}`;
+
+  // La miga arrancaba en "Blog", sin la portada. Ahora es la cadena completa
+  // y con URL en cada eslabón, que es lo que valida Google.
+  const collectionJsonLd = jsonLdGraph(
+    {
+      "@type": "CollectionPage",
+      name: label,
+      description,
+      url: pageUrl,
+      inLanguage: lang === "es" ? "es-ES" : "en-US",
+      isPartOf: { "@type": "WebSite", name: "Room 714", url: baseUrl },
+      hasPart: posts.map((p) => ({
+        "@type": "BlogPosting",
+        headline: p.title,
+        url: blogUrl(lang, p.slug),
+        datePublished: p.date,
+        image: p.image,
+      })),
     },
-    breadcrumb: {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Blog", item: `${baseUrl}/${lang}/blog` },
-        { "@type": "ListItem", position: 2, name: label },
-      ],
-    },
-    hasPart: posts.map((p) => ({
-      "@type": "BlogPosting",
-      headline: p.title,
-      url: `${baseUrl}/${lang}/blog/${p.slug}`,
-      datePublished: p.date,
-      image: p.image,
-    })),
-  };
+    breadcrumbSchema([
+      { name: dict.nav.home, url: `${baseUrl}/${lang}` },
+      { name: dict.nav.ideas, url: `${baseUrl}/${lang}/blog` },
+      { name: label, url: pageUrl },
+    ]),
+  );
 
   const alternatePaths = {
     es: `/es/blog/category/${slugEs}`,
@@ -135,7 +140,7 @@ export default async function CategoryPage({ params }) {
       />
       <Navbar dict={dict} isDark={false} alternatePaths={alternatePaths} />
 
-      <div className="relative z-10 w-full px-8 sm:px-10 md:px-14 lg:px-22 py-6 flex justify-start">
+      <div className={`relative z-10 w-full ${CANAL} py-6 flex justify-start`}>
         <Link
           href={`/${lang}/blog`}
           className="group inline-flex items-center gap-2 text-gray-400 hover:text-red-500 transition-colors duration-200 font-title text-xs sm:text-sm uppercase tracking-widest"
@@ -149,7 +154,7 @@ export default async function CategoryPage({ params }) {
         </Link>
       </div>
 
-      <header className="w-full px-8 sm:px-10 md:px-14 lg:px-22 py-10 sm:py-14">
+      <header className={`w-full ${CANAL} py-10 sm:py-14`}>
         <p className="text-red-500 font-hand text-2xl mb-2">
           {lang === "es" ? "Categoría" : "Category"}
         </p>
@@ -164,7 +169,7 @@ export default async function CategoryPage({ params }) {
         </p>
       </header>
 
-      <section className="px-8 sm:px-10 md:px-14 lg:px-22 pb-20">
+      <section className={`${CANAL} pb-20`}>
         {posts.length === 0 ? (
           <p className="text-gray-500 italic">
             {lang === "es" ? "No hay artículos publicados en esta categoría todavía." : "No published articles in this category yet."}

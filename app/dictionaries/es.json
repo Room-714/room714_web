@@ -1,6 +1,10 @@
 {
   "nav": {
-    "home": "Home",
+    "home": "Inicio",
+    "casos": "Casos",
+    "nosotros": "Nosotros",
+    "ideas": "Ideas",
+    "hablemos": "Hablemos",
     "projects": "Proyectos",
     "about": "Nosotros",
     "blog": "Blog",
@@ -8,48 +12,491 @@
     "careers": "Empleo",
     "contact": "Contacto"
   },
-  "home": {
-    "hero": {
-      "title": "Diseñamos y construimos productos digitales que funcionan",
-      "description": "Sin palabras vacías: experiencia y ejecución técnica para construir productos que aguantan el mundo real — clientes exigentes, procesos cambiantes y agentes IA que ya están operando dentro de las empresas."
+  "casos": {
+    "labels": {
+      "contexto": "Contexto",
+      "parecia": "Lo que parecía",
+      "era": "Lo que era",
+      "hicimos": "Qué hicimos",
+      "donde": "Dónde estamos",
+      "viene": "Lo que viene",
+      "llevamos": "Lo que nos llevamos",
+      "cta": "Cuéntanos tu caso",
+      "verCaso": "Ver caso"
     },
-    "services": {
-      "title": "Vale, pero... ¿qué c*** hacéis vosotros exactamente?",
-      "num_1": {
-        "title": "Diseño UX & UI",
-        "description": "Matamos la complejidad. Creamos interfaces tan intuitivas que tus usuarios no necesitarán manual de instrucciones, sólo ganas de usar tu producto."
-      },
-      "num_2": {
-        "title": "Product Management",
-        "description": "Priorizamos lo que importa. Alineamos tu estrategia con objetivos reales, gestionando el producto desde la idea hasta que está en manos del cliente."
-      },
-      "num_3": {
-        "title": "CX Research & Auditoría",
-        "description": "Encontramos dónde estás perdiendo dinero. Analizamos el comportamiento de tus clientes para eliminar fricciones y abrir nuevas oportunidades de impacto."
-      },
-      "num_4": {
-        "title": "Transformación Digital",
-        "description": "Modernizamos tu empresa de arriba a abajo. Desde sistemas antiguos hasta la cultura interna y la estructura de información, preparamos tu organización para un mundo digital donde la IA ya forma parte del paisaje."
-      },
-      "num_5": {
-        "title": "Software Development",
-        "description": "Código limpio y escalable. Construimos soluciones robustas — back, front e integraciones con agentes o modelos cuando el caso lo pide — que no se rompen cuando tu negocio empieza a crecer rápido."
+    "logos": [
+      "Samsung — electrónica de consumo",
+      "Grupo Fractalia — servicios tecnológicos",
+      "Telefónica — telecomunicaciones",
+      "hellotax — software de cumplimiento fiscal",
+      "Orange — telecomunicaciones",
+      "ComeFruta — comercio online de alimentación",
+      "Grupo Villar — señalización y seguridad viaria"
+    ],
+    "indice": {
+      "title": "Así solemos empezar nuestro trabajo…",
+      "subtitle": "…y así de bien solemos terminar",
+      "lead": "La mayoría de proyectos que arrancan con un problema de experiencia de cliente, destapan un problema de tecnología y están afectando al negocio del cliente.",
+      "lead2": "Nuestro método integral que combina diseño, tecnología y negocio nos permite abarcar todo el producto y proporcionar soluciones end-to-end que satisfacen a nuestros clientes.",
+      "secondaryTitle": "Otros proyectos",
+      "seoTitle": "Casos · Room 714",
+      "seoDescription": "Tres casos reales de producto digital: un SaaS B2B regulado, una plataforma B2B2C vendida vía service providers y un e-commerce con IA. Cómo empezaron, qué encontramos y qué cambió."
+    },
+    "saasAutogestion": {
+      "heroTitle": "El SaaS al que no le importaban sus clientes",
+      "heroSubtitle": "Cómo una inversión en producto convirtió el coste de soporte en margen, y por qué ahora también llevamos su tecnología.",
+      "cifras": [
+        {
+          "valor": "+200 → <20",
+          "etiqueta": "tablas en la base de datos"
+        },
+        {
+          "valor": "10 → 1",
+          "etiqueta": "intervenciones de soporte"
+        },
+        {
+          "valor": "mucho+",
+          "etiqueta": "proveedor de producto, tecnología y operación"
+        }
+      ],
+      "contexto": "Una empresa multinacional de tamaño medio con un SaaS de cumplimiento regulatorio para compañías que operan en varios países. El producto funcionaba y tenía clientes fieles. También tenía dos problemas que la dirección veía como uno solo, «IT va lento».",
+      "parecia": "Un problema de usabilidad. La plataforma era tan difícil de usar que el equipo de atención al cliente entraba en ella en nombre de los clientes para hacer las gestiones. Cada gestión que debería haber sido un clic del cliente era una llamada, un ticket y una persona.",
+      "era": "Dos problemas que se alimentaban entre sí. El primero, de producto: la plataforma se había diseñado desde la operativa interna, no desde el cliente, así que el coste de la mala experiencia no aparecía en el producto sino en la nómina de soporte y operaciones. El segundo, de tecnología: un equipo de IT pequeño dedicaba todo su tiempo a mantener con vida un monolito que había ido acumulando parches durante años hasta llegar a una base de datos de más de doscientas tablas que nadie se atrevía a tocar. No había capacidad para mejorar el producto porque toda la capacidad se iba en sostenerlo. Y el negocio detrás lo estaba pagando: un margen operativo de un solo dígito bajo en una empresa que vendía software.",
+      "hicimos": [
+        {
+          "title": "Primero, el negocio.",
+          "body": "Un trabajo corto de diagnóstico que puso delante del propietario una cuenta sencilla: cada euro invertido en reducir deuda técnica y mejorar la experiencia del cliente volvía multiplicado en coste de soporte y operaciones. Esa conversación es la que hizo posible todo lo demás."
+        },
+        {
+          "title": "Después, el producto.",
+          "body": "Una plataforma nueva diseñada desde la tarea del cliente: que entre, haga su gestión y se vaya. El soporte interviene solo en incidencias, no en el uso normal."
+        },
+        {
+          "title": "Después, la tecnología.",
+          "body": "Reconstruida sobre un stack moderno (Next.js), con un backend en microservicios dentro de un monorepo (Turborepo) y una simplificación severa del modelo de datos: de más de doscientas tablas a menos de veinte. No es un dato de vanidad: es lo que permite que un equipo pequeño evolucione el producto en lugar de sostenerlo."
+        },
+        {
+          "title": "Y la operación.",
+          "body": "Nos hicimos cargo no solo del desarrollo sino de operar la plataforma: entornos separados, integración continua, pruebas end-to-end y de regresión. Es el marco que permite programar con IA como motor de codificación sin perder calidad, porque la garantía la dan las pruebas, no el programador."
+        }
+      ],
+      "donde": "La nueva plataforma está en el mercado recibiendo a los nuevos clientes. Los clientes existentes migran por oleadas, a medida que el rendimiento se asienta y llega funcionalidad nueva. La empresa ha pasado en dos años de un margen operativo casi nulo a uno de dos dígitos, y la dirección nos ha pedido asumir la responsabilidad de toda su tecnología, no solo de la plataforma de servicio. Lo primero que haremos es un plan para reducir sistemas: en un contexto en el que un sistema completo se construye en días con agentes, muchas herramientas corporativas que antes eran imprescindibles han dejado de tener sentido.",
+      "viene": "El producto abre un modelo de negocio nuevo: no solo la empresa que necesita resolver su cumplimiento en varios países, sino los profesionales que completan el servicio allí donde la administración aún no está digitalizada. Ampliar a otros ámbitos regulatorios y a otras geografías está en el plan del año próximo.",
+      "llevamos": "El coste de una mala experiencia de cliente casi nunca aparece en el producto. Aparece en la plantilla de soporte, y por eso nadie lo ve. Y la deuda técnica no es un problema de IT: es un problema de margen.",
+      "cierre": "¿Tu equipo de soporte trabaja por tus clientes?",
+      "seoTitle": "Caso: el SaaS que usaba su propio soporte en lugar de sus clientes · Room 714",
+      "seoDescription": "Cómo rediseñamos y reconstruimos un SaaS B2B regulado: de más de 200 tablas a menos de 20, clientes que se autogestionan y un margen que pasó de casi nulo a dos dígitos. Caso real anonimizado.",
+      "resumen": "Un SaaS B2B regulado cuyo equipo de soporte usaba la plataforma por sus clientes."
+    },
+    "activacionCanonico": {
+      "heroTitle": "Nadie activaba un servicio que le regalaban",
+      "heroSubtitle": "De un problema de falta de uso a la simplificación del código para crear una app móvil que mejora la penetración: la definición de círculo virtuoso.",
+      "cifras": [
+        {
+          "valor": "÷10",
+          "etiqueta": "tamaño del conjunto de endpoints del backend"
+        },
+        {
+          "valor": ">50%",
+          "etiqueta": "incremento de uso de la plataforma"
+        },
+        {
+          "valor": "×2'3",
+          "etiqueta": "activaciones del servicio"
+        }
+      ],
+      "contexto": "Una empresa tecnológica con una plataforma SaaS de servicios de protección y productividad digital para el usuario final. No la vende al usuario: la venden operadores y proveedores de servicios, que la incluyen en sus ofertas bajo su propia marca. Un negocio B2B2C clásico, con la dificultad clásica: el que paga no es el que usa.",
+      "parecia": "Pocas activaciones. Los usuarios recibían el servicio gratis dentro de su contrato con el proveedor, no sabían que lo tenían, y cuando lo descubrían no siempre era para ellos. Había que «mejorar la experiencia».",
+      "era": "Tres problemas apilados. Uno de producto: los servicios estaban empaquetados por lógica comercial del proveedor, no por lo que un usuario concreto necesita, así que el descubrimiento era casi imposible. Uno de marca: la misma experiencia tenía que vivir bajo las marcas de cada proveedor sin romperse. Y, cuando llegamos a construir, uno de tecnología que nadie había puesto sobre la mesa: el backend exponía una API desordenada e ingente, con más de quinientos esquemas, que hacía carísimo cualquier cambio en la experiencia.",
+      "hicimos": [
+        {
+          "title": "Empezamos por quién.",
+          "body": "Revisamos servicios y paquetes y los cruzamos con los segmentos a los que se dirigían los proveedores. De ahí salieron user personas reales y un customer journey que ordenaba descubrimiento y activación."
+        },
+        {
+          "title": "Un marco de combinación.",
+          "body": "Servicios relacionados que se proponen juntos según el momento y el perfil, para que activar uno lleve al siguiente en lugar de a una lista."
+        },
+        {
+          "title": "Un sistema de diseño multimarca.",
+          "body": "Una sola experiencia coherente que se adapta a la identidad de cada proveedor sin reconstruirse."
+        },
+        {
+          "title": "Una app móvil que no existía,",
+          "body": "y que sirvió para dos cosas a la vez: dar al usuario la experiencia diseñada y obligar a revisar uno a uno los endpoints del backend. El resultado fue una API un orden de magnitud más pequeña."
+        },
+        {
+          "title": "Un modelo canónico de datos.",
+          "body": "La simplificación de esquemas llevó a una pregunta mayor: ¿por qué la misma entidad (un usuario, un servicio, un contrato) está representada de forma distinta en cada sistema de la empresa? Construimos un modelo canónico que ingesta datos de todos los sistemas, con un stack de data warehouse (Airflow, Azure Data Lake, dbt, Snowflake) y un mecanismo de gobernanza, de modo que cualquier entidad exista una sola vez y se vigile desde un solo sitio, la toque quien la toque."
+        }
+      ],
+      "donde": "Seguimos trabajando en los tres planos: experiencia, arquitectura y datos. Y el tercero ha cambiado de sentido. El modelo canónico nació para el seguimiento del negocio; con la llegada de la IA agéntica se ha vuelto imprescindible, porque un agente solo puede trabajar de forma autónoma sobre una base de conocimiento cierta y simple. Sin ese modelo, los agentes heredan las contradicciones de cada sistema. Con él, vuelan.",
+      "llevamos": "Un problema de activación casi nunca se arregla en la pantalla de activación. Y la mejor preparación para la IA que hemos visto no fue un proyecto de IA: fue poner orden en los datos.",
+      "cierre": "¿El que paga tu producto no es el que lo usa?",
+      "seoTitle": "Caso: de un problema de activación a un modelo canónico para agentes de IA · Room 714",
+      "seoDescription": "Plataforma B2B2C vendida vía service providers: personas y journeys, sistema de diseño multimarca, app móvil nueva, API diez veces más pequeña y modelo canónico de datos para IA agéntica. Caso real anonimizado.",
+      "resumen": "Una plataforma vendida a través de service providers con un problema de activación."
+    },
+    "iaEcommerce": {
+      "heroTitle": "Una IA que ayuda a vender más y a fidelizar",
+      "heroSubtitle": "Una plataforma independiente que, con ayuda de la IA, enriquece el catálogo y los clientes de un e-commerce, sin haber tocado su arquitectura de sistemas.",
+      "cifras": [
+        {
+          "valor": "0",
+          "etiqueta": "cambios necesarios en su arquitectura"
+        },
+        {
+          "valor": "2",
+          "etiqueta": "casos de uso en producción"
+        },
+        {
+          "valor": "mucho+",
+          "etiqueta": "lo estamos convirtiendo en producto"
+        }
+      ],
+      "contexto": "Un comercio online de alimentación fresca y de temporada. Su tienda funciona sobre un e-commerce estándar (WooCommerce) que a su vez es una extensión del WordPress que sostiene la web y el trabajo de posicionamiento de la empresa. Un montaje habitual, que funciona, y que nadie quiere tocar porque de él depende todo.",
+      "parecia": "«Queremos incorporar IA a nuestro día a día para dar más valor a los clientes.» La petición más frecuente de 2026 y la más difícil de convertir en algo útil.",
+      "era": "El problema real de un comercio de producto perecedero: el catálogo cambia cada día (stock, precio, temporada) y el cliente que quiere repetir su compra se encuentra con que la mitad de lo que compró ya no está. La tienda solo sabía de sus productos y de sus clientes lo que el propio e-commerce guardaba, que es poco. Y no se podía hacer nada dentro del e-commerce sin poner en riesgo la web y el SEO.",
+      "hicimos": [
+        {
+          "title": "Una plataforma aparte.",
+          "body": "Replica las bases de datos de productos y clientes, las limpia de todo lo que la IA no necesita y trabaja sobre esa copia. El e-commerce del cliente no cambió nada."
+        },
+        {
+          "title": "Catálogo enriquecido.",
+          "body": "Para cada producto, alternativas cuando hay rotura de stock, subida de precio o fin de temporada, y combinaciones que por distintos motivos tienen sentido juntas y resultan más atractivas para el comprador."
+        },
+        {
+          "title": "Clientes con contexto.",
+          "body": "Con técnicas como RAG y MCP ampliamos el contexto de la actividad de cada cliente para saber qué productos están más cerca de su comportamiento y sus deseos."
+        },
+        {
+          "title": "Dos casos de uso para demostrar valor.",
+          "body": "La recompra, que antes fallaba por temporada o stock y ahora propone sustitutos; y un nutricionista virtual que da alternativas de alimentación según la necesidad del usuario y las convierte en cestas que se compran en la tienda del cliente."
+        }
+      ],
+      "donde": "Ampliando lo que sabe la base de datos vectorial con tablas de otros sistemas estándar del cliente, para que los embeddings trabajen con más datos objetivos y mejor contexto. La plataforma no depende del tipo de mercancía: funciona para cualquier catálogo y cualquier parque de clientes. Estamos pensando en convertirla en producto.",
+      "llevamos": "La IA útil en un comercio no es un chat: es saber qué ofrecer cuando lo que el cliente quería no está. Y la manera más rápida de llevar IA a producción en una empresa pequeña es no tocar lo que ya funciona.",
+      "cierre": "¿Quieres IA en tu producto sin poner en riesgo lo que ya tienes?",
+      "seoTitle": "Caso: IA sobre un e-commerce sin tocar el e-commerce · Room 714",
+      "seoDescription": "Plataforma autónoma de IA para un comercio online de alimentación: catálogo enriquecido, sustitutos ante roturas de stock, recompra inteligente y nutricionista virtual, sin cambiar nada en la tienda del cliente. Caso real anonimizado.",
+      "resumen": "Un comercio online de alimentación que quería IA sin tocar su tienda."
+    }
+  },
+  "situaciones": {
+    "cta": "Cuéntanos tu caso",
+    "indice": {
+      "title": "¿Cuál es tu caso?",
+      "seoTitle": "Qué hacemos · Room 714",
+      "seoDescription": "Cuatro situaciones: el producto que usan tus clientes pierde gente, la herramienta de tu equipo frena la operación, tienes IA en piloto que no llega a producción, o empiezas de cero."
+    },
+    "productoClientes": {
+      "cardTitle": "El producto que usan tus clientes pierde gente",
+      "cardDescription": "Contratación, alta, onboarding, área de cliente, app. Cada paso que sobra es un cliente que se va. Rediseñamos el flujo, lo construimos y lo medimos en conversión, ARPU y coste de atención.",
+      "cardCta": "Para tu cliente",
+      "heroTitle": "Cada paso que sobra en tu producto es un cliente que se va",
+      "heroDescription": "Rediseñamos y construimos los flujos que tus clientes usan para contratar, darse de alta, operar y volver: onboarding, activación, área de cliente, app. Y lo medimos donde se nota: conversión, abandono, ARPU y coste de atención.",
+      "seoTitle": "Rediseño de onboarding, contratación y área de cliente · Room 714",
+      "seoDescription": "Rediseñamos y construimos los flujos digitales que tus clientes usan para contratar, darse de alta y operar. Medido en conversión, abandono y ARPU.",
+      "teSuenaSi": [
+        "La contratación o la activación se abandona a mitad y nadie sabe exactamente en qué paso ni por qué.",
+        "El alta de un cliente exige papel, llamadas o días de espera, y la competencia lo hace en minutos.",
+        "El área de cliente genera más llamadas al call center de las que evita.",
+        "Tienes datos de todo, pero cada equipo cuenta una historia distinta sobre qué falla.",
+        "Has hecho un rediseño «bonito» y los números no se han movido."
+      ],
+      "queHacemos": [
+        {
+          "title": "Diagnóstico del flujo real.",
+          "body": "Analítica, sesiones, atención al cliente y proceso interno. Buscamos dónde se pierde el dinero, no dónde se ve feo."
+        },
+        {
+          "title": "Rediseño orientado a la métrica.",
+          "body": "Quitamos pasos, decisiones y campos. Diseñamos para que el cliente sepa qué hacer en la primera pantalla."
+        },
+        {
+          "title": "Construcción sobre lo que tienes.",
+          "body": "Front, back e integraciones con tus sistemas actuales (CRM, facturación, identidad, firma, KYC). Sin «rehacer todo» como condición."
+        },
+        {
+          "title": "Revisión del negocio detrás.",
+          "body": "Si el proceso comercial, el pricing o la operativa hacen imposible un buen flujo, te lo decimos antes de dibujar nada."
+        },
+        {
+          "title": "Medición y evolución.",
+          "body": "Definimos la métrica objetivo al principio y la seguimos después del lanzamiento."
+        }
+      ],
+      "hechoAntes": [
+        {
+          "clave": "activacionCanonico",
+          "title": "Plataforma B2B2C vía service providers · activación.",
+          "body": "Personas, journey de descubrimiento, sistema de diseño multimarca y una app móvil nueva."
+        },
+        {
+          "clave": "saasAutogestion",
+          "title": "SaaS B2B regulado · autogestión del cliente.",
+          "body": "De un soporte que operaba por los clientes a clientes que operan solos."
+        },
+        {
+          "clave": "iaEcommerce",
+          "title": "E-commerce de alimentación · recompra inteligente.",
+          "body": "Sustitutos ante roturas de stock y cestas propuestas por IA."
+        }
+      ],
+      "otros": "activación de paquetes en telco (+45 % completadas, +12 % ARPU), onboarding digital en gestión de patrimonios (de semanas a 48 h).",
+      "noHacemos": "Campañas, branding ni «rediseños visuales» sin métrica detrás. Si lo que necesitas es una capa de pintura, hay quien lo hace más barato.",
+      "cierre": {
+        "title": "Empieza por 30 minutos",
+        "body": "Cuéntanos qué flujo pierde clientes. Te respondemos en 24 h laborables y salimos de la sesión con una hipótesis de dónde está el problema y qué haríamos primero."
       }
     },
-    "customers": {
-      "title": {
-        "line1": "Pero...",
-        "line2": "¿os contrata alguien?"
-      },
-      "description": "Aunque llevamos muy poco tiempo, ya tenemos algún cliente. Trabajamos con líderes en Telco e IT. Pero no renunciamos a nada, porque la verdad es que nadie está libre de pecado cuando hablamos de experiencia de cliente. Si tienes un problema digital — desde un flujo que pierde usuarios hasta un asistente que necesita contexto para no alucinar — somos tu equipo."
+    "productoEquipo": {
+      "cardTitle": "El producto que usa tu equipo frena la operación",
+      "cardDescription": "Back-office, dashboards, herramientas internas, sistemas que nadie quiere tocar. Lo modernizamos sin parar el negocio, y si toca meter IA, la metemos con el contexto que necesita para no inventarse nada.",
+      "cardCta": "Para tu equipo",
+      "heroTitle": "El software que usa tu equipo también es un producto. Y se nota cuando no lo tratas como tal.",
+      "heroDescription": "Modernizamos y construimos las herramientas con las que tu empresa opera: back-office, dashboards, gestión de incidencias, plataformas de datos, sistemas heredados. Sin parar la operación y medido en errores, tiempo y coste.",
+      "seoTitle": "Modernizar software interno, back-office y dashboards · Room 714",
+      "seoDescription": "Modernizamos y construimos las herramientas con las que opera tu empresa: back-office, dashboards, sistemas heredados. Sin parar la operación, con IA donde aporta, medido en errores y tiempo.",
+      "teSuenaSi": [
+        "Tu equipo trabaja con tres pantallas, un Excel y la memoria de la persona que lleva más años.",
+        "Los dashboards tienen todos los datos y nadie ve nada. Los errores se detectan cuando ya han costado dinero.",
+        "Hay un sistema «que funciona» que nadie se atreve a tocar, y cada nueva funcionalidad tarda meses.",
+        "Los clientes tienen una app impecable y los empleados, una intranet de 2011.",
+        "Quieres meter IA en la operación pero tus datos viven en cinco sistemas que no hablan el mismo idioma."
+      ],
+      "queHacemos": [
+        {
+          "title": "Diagnóstico de la operación.",
+          "body": "Cómo trabaja de verdad la gente, qué sistemas hay detrás y dónde se pierde el tiempo y se generan los errores."
+        },
+        {
+          "title": "Rediseño de la herramienta desde la tarea.",
+          "body": "Menos pantallas, información en el orden en que se decide, alertas que significan algo."
+        },
+        {
+          "title": "Modernización por capas.",
+          "body": "Convivimos con el legacy mientras lo sustituimos: APIs, modelo de datos común, nuevos frontales sobre sistemas antiguos. Nada de «big bang»."
+        },
+        {
+          "title": "IA donde aporta.",
+          "body": "Resúmenes en lenguaje natural sobre datos operativos, asistentes con el contexto correcto, automatización de lo repetitivo. Con guardarraíles."
+        },
+        {
+          "title": "Revisión del proceso.",
+          "body": "A veces la herramienta es mala porque el proceso lo es. Lo decimos y lo trabajamos contigo."
+        }
+      ],
+      "hechoAntes": [
+        {
+          "clave": "saasAutogestion",
+          "title": "SaaS B2B regulado · reconstrucción del monolito.",
+          "body": "De más de 200 tablas a menos de 20, microservicios en monorepo, integración continua con pruebas end-to-end. Hoy operamos la plataforma y asumimos toda su tecnología."
+        },
+        {
+          "clave": "activacionCanonico",
+          "title": "Plataforma B2B2C · modelo canónico de datos.",
+          "body": "Una sola representación de cada entidad de la empresa, ingestada desde todos los sistemas, gobernada desde un solo sitio."
+        }
+      ],
+      "otros": "dashboards de operaciones con IA generativa (−38 % errores críticos), ecosistema fiscal colaborativo (−40 % intercambio documental).",
+      "convivido": "Monolitos .NET y Java, frontales Angular y React, MariaDB, SQL Server, Azure y AWS, CRMs como Zoho y Salesforce, ERPs como Sage, plataformas de contact center como Five9, SIEM/SOAR en entornos de seguridad.",
+      "cierre": {
+        "title": "Empieza por 30 minutos",
+        "body": "Cuéntanos qué herramienta frena a tu equipo. Salimos con una hipótesis de por dónde empezar sin parar la operación."
+      }
+    },
+    "iaProducto": {
+      "cardTitle": "Tienes IA en piloto y no llega a producción",
+      "cardDescription": "La demo funcionó. Seis meses después sigue siendo una demo. Trabajamos la capa que falta entre el modelo y tus sistemas: datos, contexto, interfaz y coste.",
+      "cardCta": "Con la IA",
+      "heroTitle": "La demo funcionó. ¿Por qué sigue siendo una demo?",
+      "heroDescription": "Llevamos la IA de piloto a producción dentro de tu producto: la capa de datos y contexto que evita que invente, la interfaz que la hace usable y el coste que la hace viable. Sin vender un modelo ni una plataforma.",
+      "seoTitle": "IA de piloto a producción dentro de tu producto · Room 714",
+      "seoDescription": "Llevamos la IA de piloto a producción: capa semántica y modelo canónico para que no alucine, arquitectura que aplica al caso, interfaz usable y coste viable.",
+      "teSuenaSi": [
+        "El asistente responde bien en la demo y se inventa cosas con datos reales.",
+        "Cada sistema llama de forma distinta a la misma cosa y la IA hereda el caos.",
+        "La factura de inferencia crece más rápido que el valor que genera.",
+        "Habéis puesto un chat encima de todo y los usuarios no lo usan.",
+        "Hay cinco pilotos de IA en la empresa y ninguno tiene dueño, métrica ni camino a producción."
+      ],
+      "queHacemos": [
+        {
+          "title": "Diagnóstico del piloto.",
+          "body": "Qué tarea resuelve, para quién, con qué datos, a qué coste. Si la respuesta es «no lo sabemos», empezamos ahí."
+        },
+        {
+          "title": "Capa semántica y modelo canónico.",
+          "body": "Un lenguaje común sobre tus sistemas para que la IA trabaje con contexto fiable y no con la peculiaridad de cada base de datos."
+        },
+        {
+          "title": "Arquitectura que aplica al caso.",
+          "body": "RAG, agentes, fine-tuning, inferencia privada: elegimos según la tarea y el coste, no según la tendencia."
+        },
+        {
+          "title": "Interfaz para IA.",
+          "body": "El chat no es la respuesta a todo. Diseñamos cómo el usuario ve, corrige y confía en lo que la IA propone."
+        },
+        {
+          "title": "Producción y operación.",
+          "body": "Evaluación, observabilidad, guardarraíles y coste bajo control. Lo que separa el piloto del producto."
+        }
+      ],
+      "hechoAntes": [
+        {
+          "clave": "iaEcommerce",
+          "title": "E-commerce de alimentación · IA sin tocar la tienda.",
+          "body": "Plataforma aparte con RAG y MCP: sustitutos, combinaciones, recompra inteligente y nutricionista virtual."
+        },
+        {
+          "clave": "activacionCanonico",
+          "title": "Plataforma B2B2C · modelo canónico para agentes.",
+          "body": "Airflow, Azure Data Lake, dbt y Snowflake con gobernanza: la base de conocimiento cierta y simple que un agente necesita para trabajar solo."
+        },
+        {
+          "clave": "saasAutogestion",
+          "title": "SaaS B2B regulado · IA como motor de codificación.",
+          "body": "Integración continua con pruebas end-to-end y de regresión como garantía de calidad del código generado."
+        }
+      ],
+      "otros": "dashboards de operaciones con IA generativa (−38 % errores críticos), inferencia de IA en nube privada para un operador (en curso).",
+      "noHacemos": "No vendemos un modelo, una plataforma ni horas de «consultoría de IA». Si tu problema se resuelve sin IA, te lo diremos; será más barato.",
+      "cierre": {
+        "title": "Empieza por 30 minutos",
+        "body": "Trae el piloto. Salimos de la sesión sabiendo qué le falta para ser producto."
+      }
+    },
+    "empezarDeCero": {
+      "cardTitle": "No tienes ni idea de por dónde empezar",
+      "cardDescription": "Una idea, una nueva línea de negocio o un producto que hay que rehacer entero. Revisamos el negocio antes de la primera pantalla y lo llevamos a producción.",
+      "cardCta": "Desde cero",
+      "heroTitle": "Antes de la primera pantalla, la primera pregunta: ¿esto es un negocio?",
+      "heroDescription": "Llevamos ideas y nuevas líneas de negocio a producto en producción. Revisamos el modelo antes de diseñar, diseñamos antes de construir y construimos para que aguante cuando funcione.",
+      "seoTitle": "De idea a producto digital en producción · Room 714",
+      "seoDescription": "Llevamos ideas y nuevas líneas de negocio a producto en producción. Revisamos el negocio antes de diseñar, diseñamos antes de construir y construimos sin lock-in.",
+      "teSuenaSi": [
+        "Tienes una idea o un mandato de dirección y necesitas convertirlo en algo que un cliente pueda usar y pagar.",
+        "Tu producto actual no se puede evolucionar y hay que rehacerlo sin perder a los clientes que ya lo usan.",
+        "Has tenido un equipo externo que entregó pantallas y una factura, pero no un producto."
+      ],
+      "queHacemos": [
+        {
+          "title": "Revisión del negocio.",
+          "body": "Cliente, problema, propuesta de valor, modelo de ingresos, operativa. Roadmap, JTBD y métricas sobre la mesa antes de dibujar. Si la idea no aguanta esa conversación, el resto da igual."
+        },
+        {
+          "title": "Producto mínimo que se pueda querer.",
+          "body": "Diseñamos lo imprescindible, bien. Construimos con un stack moderno y estable que cualquier equipo pueda mantener."
+        },
+        {
+          "title": "En producción pronto y por fases.",
+          "body": "El mercado te dirá más que cualquier especificación."
+        },
+        {
+          "title": "Sin lock-in.",
+          "body": "El código es tuyo. Si el día de mañana lo lleva otro equipo, lo podrá hacer."
+        }
+      ],
+      "hechoAntes": [
+        {
+          "clave": "saasAutogestion",
+          "title": "SaaS B2B regulado · plataforma nueva desde cero",
+          "body": "para sustituir a la antigua sin parar el negocio: en el mercado con clientes nuevos mientras los existentes migran por oleadas."
+        },
+        {
+          "clave": "iaEcommerce",
+          "title": "E-commerce de alimentación · una plataforma de IA",
+          "body": "que ya pensamos como producto, válida para cualquier catálogo."
+        }
+      ],
+      "otros": "app de seguridad premium con arquitectura Zero-Trust para perfiles de alto patrimonio.",
+      "cierre": {
+        "title": "Empieza por 30 minutos",
+        "body": "Trae la idea. Saldrás sabiendo qué habría que validar primero y cuánto costaría llegar a producción."
+      }
+    },
+    "labels": {
+      "teSuena": "Te suena si…",
+      "queHacemos": "Qué hacemos",
+      "hechoAntes": "Lo hemos hecho antes",
+      "convivido": "Con qué hemos convivido",
+      "noHacemos": "Lo que no hacemos",
+      "otros": "Otros:",
+      "verCaso": "Ver caso"
+    }
+  },
+  "home": {
+    "hero": {
+      "title": "¿Tu producto digital te da resultados o te da trabajo?",
+      "description": "Mejoramos el producto que usan tus clientes y el que usa tu equipo. Y si no lo tienes lo creamos. Experiencia de usuario, tecnología y negocio en el mismo proyecto con foco en lo que importa."
     },
     "buttons": {
-      "discover": "descubrir más",
-      "clients": "contactar"
+      "tell_us": "Cuéntanos tu caso",
+      "see_cases": "Ver casos",
+      "all_cases": "Ver casos",
+      "how_we_work": "Quienes somos"
+    },
+    "situaciones": {
+      "title": "¿Cuál es tu caso?"
+    },
+    "diferencia": {
+      "title": "¿Qué hacéis?",
+      "lead": "Lo que una agencia de diseño no hace y una factoría de software tampoco: las tres cosas a la vez, con el mismo equipo y la misma cuenta de resultados delante.",
+      "num_1": {
+        "title": "Experiencia",
+        "description": "Si hay que explicar cómo se usa, lo hemos hecho mal. Cada pantalla existe para mover una métrica."
+      },
+      "num_2": {
+        "title": "Tecnología",
+        "description": "La moderna que aplica a tu caso, no la de moda. Convive con lo que ya tienes y no se rompe cuando creces."
+      },
+      "num_3": {
+        "title": "Negocio",
+        "description": "Miramos el modelo, los procesos y los números que hay debajo del producto. Un producto perfecto sobre un negocio mal planteado no arregla nada, y te lo diremos."
+      }
+    },
+    "prueba": {
+      "rotulo": "Cosas que hacemos",
+      "casos": {
+        "saasAutogestion": "Un producto B2B regulado cuyo equipo de soporte usaba la plataforma por sus clientes. Hoy los clientes se autogestionan. El monolito con cientos de tablas es hoy una estructura de microservicios flexible y ligera. Y el margen de la empresa pasó de ser casi nulo a casi un 20% en año y medio. Ahora llevamos toda su tecnología.",
+        "activacionCanonico": "Una plataforma que demandaba una mejor experiencia de uso. Debajo, tecnología obsoleta y estructuras endiabladas. La simplificación de las API ha permitido generar una app móvil y exponer sus capacidades para que sus clientes se integren. Hoy creamos un modelo canónico de datos para los agentes de IA.",
+        "iaEcommerce": "Un comercio online que quería incorporar los beneficios de la IA sin modificar ni su tienda ni sus procesos. Creamos una plataforma aparte que propone sustitutos, combina productos y proporciona valor sin intervención humana. Cero cambios en sus sistemas."
+      }
+    },
+    "metodo": {
+      "title": "Cómo trabajamos",
+      "closing": "Quien te atiende es quien hace el trabajo. Sin capas comerciales entre medias.",
+      "num_1": {
+        "title": "Diagnóstico",
+        "description": "Producto, tecnología y negocio sobre la mesa. Sales con un plan priorizado aunque no sigas con nosotros."
+      },
+      "num_2": {
+        "title": "Diseño y arquitectura",
+        "description": "Flujos, pantallas y decisiones técnicas a la vez, porque una cosa sin la otra es un dibujo."
+      },
+      "num_3": {
+        "title": "Construcción por entregas",
+        "description": "En producción desde las primeras semanas, conviviendo con tus sistemas actuales."
+      },
+      "num_4": {
+        "title": "Medición y evolución",
+        "description": "El software vivo no termina, empieza. Medimos lo que prometimos y seguimos mientras aporte."
+      }
     },
     "latest": {
-      "title": "Lo último del blog",
+      "title": "¿Cómo pensamos?",
       "viewAll": "Ver todo el blog →"
+    },
+    "cierre": {
+      "title": "¿Cansado de hablar de métricas?",
+      "subtitle": "Vamos a construirlas.",
+      "description": "Sesión de diagnóstico de 30 minutos. Nos escribes, te respondemos en 24 h laborables y fijamos hora. Te decimos qué haríamos, en qué orden y qué costaría. Si no somos los adecuados, también te lo decimos."
+    },
+    "seo": {
+      "title": "Room 714 · Producto digital para tus clientes y para tu equipo",
+      "description": "Mejoramos y construimos el producto digital que usan tus clientes y el que usa tu equipo. Experiencia, tecnología y negocio en el mismo equipo, medido en resultados. Madrid."
     }
   },
   "contact": {
@@ -85,6 +532,53 @@
     },
     "buttons": {
       "send": "contactar"
+    },
+    "hero": {
+      "title": "¿Qué te pica?",
+      "subtitle": "En 30 minutos te hago un diagnóstico",
+      "description": "Una sesión de diagnóstico gratuita. No es una reunión comercial: es la primera media hora de trabajo. Nos escribes, te respondemos en 24 horas laborables y fijamos la hora."
+    },
+    "sesion": {
+      "title": "Qué pasa en la sesión",
+      "items": [
+        "Nos cuentas qué producto tienes, qué no rinde y qué has intentado.",
+        "Hacemos las preguntas incómodas sobre producto, tecnología y negocio.",
+        "Te decimos qué creemos que pasa, qué haríamos primero y qué rango de inversión tendría.",
+        "Si no somos los adecuados para tu caso, te lo decimos y, si podemos, te decimos quién sí."
+      ]
+    },
+    "llevas": {
+      "title": "Qué te llevas",
+      "body": "Un diagnóstico preliminar, los primeros pasos que recomendamos y una estimación orientativa de tiempos y pasta. Es tuyo, lo hagas con nosotros o no."
+    },
+    "paraQuien": {
+      "title": "Para quién es",
+      "body": "Para quien es responsable de un producto digital que ya existe (el que usan clientes o el que usa el equipo) o de una nueva línea que hay que construir. Si lo que buscas es una cotización por horas o un rediseño visual, probablemente no somos tu equipo."
+    },
+    "formulario": {
+      "title": "Cuéntanos tu caso",
+      "lead": "Tres preguntas. Te respondemos nosotros, no un formulario:",
+      "q1": "¿Qué producto es?",
+      "q1_opciones": [
+        "El que usan mis clientes",
+        "El que usa mi equipo",
+        "IA en piloto",
+        "Empezar de cero"
+      ],
+      "q2": "¿Qué no está funcionando?",
+      "q2_ayuda": "Dos líneas bastan.",
+      "q3_nombre": "¿Cómo te llamas?",
+      "q3_empresa": "¿En qué empresa?",
+      "q3_email": "¿Cómo te contactamos?",
+      "enviar": "Enviar"
+    },
+    "diagnostico": {
+      "pregunta": "¿No sabes por dónde empezar?",
+      "enlace": "Responde 4 preguntas →"
+    },
+    "seo": {
+      "title": "Sesión de diagnóstico gratuita · Room 714",
+      "description": "30 minutos para saber qué le pasa a tu producto digital y qué haríamos primero. Gratuita. Escríbenos y te respondemos en 24 h laborables."
     }
   },
   "about": {
@@ -115,6 +609,52 @@
         "description_line1": "Código limpio, arquitectura sólida y sentido común técnico.",
         "description_line2": "Construimos pensando en cómo va a escalar y cómo va a convivir con lo que ya tienes — incluida la IA que ya está empezando a operar dentro de los procesos."
       }
+    },
+    "hero": {
+      "title": "No somos una agencia al uso ni una consultora",
+      "description": "Somos un equipo de ingenieros con foco en el producto: en su diseño, en su usabilidad y en su arquitectura. Nos centramos en lo que puede cambiar tu cuenta de resultados."
+    },
+    "metodo": {
+      "title": "El método",
+      "pasos": [
+        {
+          "title": "Diagnóstico.",
+          "body": "Miramos las tres cosas a la vez: cómo usan el producto tus clientes o tu equipo, qué tecnología hay debajo y qué negocio hay detrás. Entregamos un plan priorizado con estimación."
+        },
+        {
+          "title": "Diseño y arquitectura, juntos.",
+          "body": "Flujos y pantallas se deciden con las decisiones técnicas delante. Un diseño que la tecnología no puede sostener es un dibujo; una arquitectura sin uso es un gasto."
+        },
+        {
+          "title": "Construcción por entregas.",
+          "body": "En producción desde las primeras semanas, conviviendo con tus sistemas actuales. Cada entrega mueve la métrica que acordamos o explica por qué no."
+        },
+        {
+          "title": "Medición y evolución.",
+          "body": "El software vivo no termina, empieza. Seguimos mientras aportemos; si deja de tener sentido, lo decimos nosotros."
+        }
+      ]
+    },
+    "quien": {
+      "title": "Quién está detrás",
+      "nombre": "José Antonio Ces Franjo",
+      "cargo": "Fundador y CEO",
+      "bio": "Ingeniero de Telecomunicación por la Politécnica de Madrid con más de treinta años de experiencia en producto B2B. Desde sus inicios en Ericsson como programador se ha desarrollado en product management y desarrollo de negocio, primero en Telefónica y luego como profesional independiente creando Room 714 en el año 2016. En paralelo fundó The Wise Seeker, un SaaS de gestión del talento, ejerciendo como COO hasta 2024. Ha trabajado como consultor senior de transformación digital para empresas como LaLiga, Ingenico, GMV, Cobas Asset Management, Sercide, Zelenza, Teldat, MasOrange o Señalizaciones Villar.",
+      "cita": "Conmigo la promesa de la transformación digital deja de ser un Power Point para convertirse en un hecho"
+    },
+    "noHacemos": {
+      "title": "Lo que no hacemos",
+      "items": [
+        "Branding, campañas ni contenidos de marketing.",
+        "Body-shopping: no alquilamos personas por horas para que las dirija otro.",
+        "Vender un modelo, una plataforma o una nube. Elegimos la que aplica a tu caso.",
+        "Decir que sí a todo. Si el problema no es de producto, te lo diremos en la primera sesión."
+      ]
+    },
+    "cta": "Cuéntanos tu caso",
+    "seo": {
+      "title": "Cómo trabajamos · Room 714",
+      "description": "Diagnóstico, diseño y arquitectura juntos, construcción por entregas y medición. Un equipo senior de producto, diseño e ingeniería dirigido por José Antonio Ces Franjo. Sin agencia, sin consultora."
     }
   },
   "projects": {
@@ -129,55 +669,55 @@
       "in_progress": "En progreso"
     },
     "case_study_01": {
-      "title": "Telecoms: Optimización del Flujo de Activación",
+      "title": "Optimización del Flujo de Activación",
       "challenge": "La complejidad técnica en la activación de paquetes de soluciones creaba una barrera insalvable para los clientes. El proceso era tan confuso que la mayoría abandonaba a mitad del registro, saturando el centro de atención al cliente con llamadas de soporte técnico.",
       "idea": "Rediseñamos la experiencia de compra y activación (CX) eliminando pasos innecesarios. Rediseñamos el user journey a partir de un conocimiento detallado del tipo de cliente, anticipando cómo el usuario podría completar el proceso de registro sin ayuda externa.",
       "outcome": "Logramos un incremento del 45% en las activaciones completadas con éxito y un aumento del 12% en el ARPU (ingresos medios por usuario) al facilitar la contratación de servicios adicionales."
     },
     "case_study_02": {
-      "title": "Wealth Management: Onboarding Digital de Confianza",
+      "title": "Onboarding Digital de Confianza",
       "challenge": "Una gestora de fondos de inversión operaba mediante procesos analógicos basados en papel y firmas físicas. Esto dilataba el alta de nuevos clientes durante semanas, provocando una alta tasa de abandono en perfiles de alto valor que buscaban agilidad.",
       "idea": "Ejecutamos una transformación digital integral del proceso de onboarding y contratación. Integramos biometría (e-KYC) y sistemas de firma digital avanzada para crear un flujo 100% online, seguro y legalmente robusto que permite abrir una cuenta en cuestión de minutos.",
       "outcome": "Redujimos el tiempo de activación de cuentas en un 95% (pasando de semanas a menos de 48h) y aumentamos en un 41% la tasa de finalización del proceso de onboarding."
     },
     "case_study_03": {
-      "title": "Operaciones B2B: IA vs. Sobrecarga de Datos",
+      "title": "IA vs. Sobrecarga de Datos",
       "challenge": "Los administradores de sistemas de esta empresa se enfrentaban a dashboards saturados de información difícil de interpretar. Esta sobrecarga cognitiva provocaba errores críticos en la gestión de servicios y una respuesta lenta ante incidentes graves.",
       "idea": "Rediseñamos la interfaz UX/UI e implementamos una capa de IA Generativa. En lugar de mostrar datos brutos, el sistema ahora resume métricas complejas en lenguaje natural, proporcionando 'insights' accionables y comandos simplificados para resolver problemas al instante.",
       "outcome": "Disminuimos en un 38% los errores operativos críticos y ahorramos un 25% del tiempo que los equipos internos dedicaban a resolver incidencias de nivel 1."
     },
     "case_study_04": {
-      "title": "Fintech: Ecosistema Fiscal Colaborativo",
+      "title": "Ecosistema Fiscal Colaborativo",
       "challenge": "La comunicación entre empresas y asesores fiscales era un caos de emails, llamadas y documentos perdidos. Esta fragmentación generaba retrasos en las presentaciones de impuestos y un coste operativo altísimo para ambas partes.",
       "idea": "Creamos una app para soportar un ecosistema digital con una interfaz dual (empresa-contable), y con una 'fuente única de verdad' que automatiza la ingesta de facturas y sincroniza los estados fiscales en tiempo real, garantizando que todos trabajen sobre la misma información.",
       "outcome": "Redujimos el intercambio de documentos innecesarios en un 40% y mejoramos la eficiencia en los tiempos de presentación fiscal en un 30%."
     },
     "case_study_05": {
-      "title": "Cybersecuridad: Protección 360° para Perfiles VIP",
+      "title": "Ciberseguridad para perfiles VIP",
       "challenge": "Clientes de alto standing (HNWI) tenían su identidad y activos digitales dispersos en múltiples plataformas vulnerables. Carecían de un sistema unificado que les permitiera monitorizar su seguridad personal y la de sus documentos sensibles en tiempo real.",
       "idea": "Desarrollamos una app móvil premium de seguridad bajo una arquitectura 'Zero-Trust'. El sistema funciona como un 'conserje digital' que supervisa constantemente dispositivos, conexiones de red y la integridad de documentos, alertando proactivamente ante cualquier amenaza.",
       "outcome": "Conseguimos una visibilidad total de la huella digital del usuario y una velocidad de respuesta ante intentos de acceso no autorizados un 60% más rápida."
     },
     "case_study_06": {
-      "title": "B2B: Seguridad para Infraestructuras Críticas",
+      "title": "Seguridad para Infraestructuras Críticas",
       "challenge": "Grandes corporaciones y organismos públicos necesitaban una capa de seguridad superior que aprovechara la capacidad de la red del operador. Las soluciones estándar de mercado no eran suficientes para proteger sus infraestructuras críticas.",
       "idea": "Diseñamos un framework de seguridad holístico que integra la inteligencia de red (carrier-grade) con una suite de servicios de defensa de un tercero. Creamos un panel de control unificado para gestionar la seguridad perimetral y el cumplimiento normativo a gran escala.",
       "outcome": "Redujimos el tiempo de mitigación de incidentes en un 55% y aseguramos el cumplimiento total de los estándares de seguridad soberana para grandes organizaciones."
     },
     "case_study_07": {
-      "title": "Telco: Capa Semántica para una IA Fiable",
+      "title": "Capa Semántica para una IA Fiable",
       "challenge": "Sistemas internos del operador repartidos en silos, cada uno con su lenguaje. Cualquier intento de aprovechar la IA chocaba con la misma realidad: los modelos respondían sobre datos parciales o contradictorios, generando alucinaciones difíciles de detectar y respuestas en las que no se podía confiar para automatizar nada.",
       "idea": "Construimos un conjunto de datos canónicos sobre los que se apoya una capa semántica que aísla la IA de las particularidades de los sistemas actuales. La capa expone los conceptos del negocio con definiciones únicas, fuentes de verdad y permisos, de modo que el modelo siempre opera sobre un mismo diccionario — y la empresa puede ir evolucionando sus sistemas por debajo sin romper lo que ya funciona.",
       "outcome": "Esperamos reducir drásticamente las alucinaciones del asistente interno y que el grueso de las consultas IA se resuelvan contra dato canónico, dejando la operación lista para evolucionar los sistemas existentes sin frenar lo que ya está en producción."
     },
     "case_study_08": {
-      "title": "Retail Alimentación: Un Carrito que Decide por Sí Solo",
+      "title": "Un Carrito que Decide por Sí Solo",
       "challenge": "En un e-commerce de fruta y verdura el catálogo cambia a diario: roturas de stock, ajustes de precio, productos que entran y salen de temporada. Mantener el carrito sincronizado obligaba al equipo a meter mano constantemente, y aun así los clientes se topaban con productos no disponibles o precios desfasados al pagar.",
       "idea": "Diseñamos un carrito inteligente que delega en un agente IA las decisiones operativas del día a día. El agente lee el contexto en tiempo real — stock, precios, calendario de temporada — y aplica ajustes por su cuenta cuando aparece una condición que lo justifica. Sólo escala al equipo lo excepcional; lo rutinario se gestiona solo.",
       "outcome": "El objetivo es que el carrito gestione de forma autónoma la mayor parte de los ajustes diarios de catálogo y reducir notablemente los abandonos por productos no disponibles o precios desfasados, liberando al equipo de la operativa rutinaria."
     },
     "case_study_09": {
-      "title": "Telecoms B2B: Inferencia IA Fuera del SaaS",
+      "title": "Inferencia IA Fuera del SaaS",
       "challenge": "El coste de la inferencia IA en SaaS sube a un ritmo que ya compromete la rentabilidad de muchas iniciativas. Los clientes B2B del operador buscaban una alternativa privada, predecible y soberana — pero ningún proveedor combinaba hoy red, capacidad de cómputo y modelos en un mismo paquete.",
       "idea": "Especificamos el plan estratégico para que el operador evolucione su nube privada hacia un servicio de inferencia IA dirigido a clientes B2B: dimensionamiento de cómputo, fases de migración, modelo de TCO frente al SaaS de hyperscalers, integración con la red carrier-grade existente y roadmap de adopción por segmentos de cliente.",
       "outcome": "El plan apunta a un TCO sustancialmente inferior al SaaS de hyperscaler al volumen objetivo del operador y a un roadmap de adopción que ponga la oferta operativa antes del salto previsto en la demanda B2B."
@@ -332,10 +872,10 @@
     "analyzing_sub": "Preparando tu diagnóstico personalizado",
 
     "q1": "¿Qué situación describe mejor tu caso?",
-    "q1_a": "Tengo una idea pero no sé cómo materializarla",
-    "q1_b": "Tengo un producto pero los usuarios no lo usan como espero",
-    "q1_c": "Mi producto funciona pero no transmite profesionalidad",
-    "q1_d": "Necesito construir o escalar algo técnico",
+    "q1_a": "El producto que usan mis clientes pierde gente",
+    "q1_b": "La herramienta de mi equipo frena la operación",
+    "q1_c": "Tengo IA en piloto y no llega a producción",
+    "q1_d": "Empiezo de cero",
 
     "q2_product": "¿Qué es lo que más te preocupa ahora mismo?",
     "q2_product_a": "No tengo claro si mi idea tiene mercado",
@@ -616,6 +1156,12 @@
     }
   },
   "blog": {
+    "author": {
+      "by": "Por",
+      "name": "José Antonio Ces Franjo",
+      "role": "Fundador de Room 714",
+      "linkedin": "Ver perfil en LinkedIn"
+    },
     "our": "nuestro",
     "your": "vuestro",
     "blog": "blog",

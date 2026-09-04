@@ -5,13 +5,23 @@ import { getDictionary } from "@/app/dictionaries";
 import Navbar from "@/app/components/Navbar";
 import ShareButton from "@/app/components/ShareButton";
 import { getPostBySlug, getAllPosts } from "@/app/lib/blog";
+import { normalizeSlugParam } from "@/app/lib/slug";
+import { SITE_URL, blogUrl, buildAlternates } from "@/app/lib/seo/urls";
+import {
+  articleSchema,
+  breadcrumbSchema,
+  jsonLdGraph,
+} from "@/app/lib/seo/schema";
+import { LINKEDIN_FOUNDER, withUtm } from "@/app/lib/links";
 import { prisma } from "@/app/lib/prisma";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { CANAL } from "@/app/lib/layout";
 
-async function maybeRedirect(slug, lang) {
+async function maybeRedirect(rawSlug, lang) {
+  // Igual que en getPostBySlug: el param llega percent-encoded.
   const r = await prisma.postRedirect.findUnique({
-    where: { fromSlug_lang: { fromSlug: slug, lang } },
+    where: { fromSlug_lang: { fromSlug: normalizeSlugParam(rawSlug), lang } },
   });
   if (!r) return null;
   if (r.toSlug) {
@@ -35,10 +45,20 @@ export async function generateMetadata({ params }) {
   const imageUrl = image.startsWith("http")
     ? image
     : `https://www.room714.com${image.startsWith("/") ? "" : "/"}${image}`;
-  const pageUrl = `https://www.room714.com/${lang}/blog/${slug}`;
+  // Las URLs se construyen con los slugs que guarda la base de datos, no con
+  // el param, y percent-encodeadas: un slug con caracteres no ASCII produce
+  // una URL inválida si se interpola en crudo. Y hay posts sin traducción en
+  // un idioma: buildAlternates omite esa entrada en lugar de anunciar un
+  // hreflang que da 404.
+  const alternates = buildAlternates(lang, {
+    es: blogUrl("es", post.alternateSlugs.es),
+    en: blogUrl("en", post.alternateSlugs.en),
+  });
+  const pageUrl = alternates.canonical;
 
   return {
-    title: `${title} | Room 714`,
+    // Sin sufijo: lo añade la plantilla `%s | Room 714` del layout.
+    title,
     description: description,
     openGraph: {
       title: title,
@@ -55,14 +75,7 @@ export async function generateMetadata({ params }) {
       description: description,
       images: [imageUrl],
     },
-    alternates: {
-      canonical: pageUrl,
-      languages: {
-        "es-ES": `https://www.room714.com/es/blog/${post.alternateSlugs.es}`,
-        "en-US": `https://www.room714.com/en/blog/${post.alternateSlugs.en}`,
-        "x-default": `https://www.room714.com/en/blog/${post.alternateSlugs.en}`,
-      },
-    },
+    alternates,
   };
 }
 
@@ -95,40 +108,31 @@ export default async function PostPage({ params }) {
     en: `/en/blog/${alternateSlugs.en}`,
   };
 
-  // JSON-LD structured data for blog post
+  // JSON-LD: el artículo y su miga de pan. La organización y la Person del
+  // autor ya las declara el layout, así que aquí se referencian por @id.
   const plainText = content?.replace(/<[^>]*>/g, "").slice(0, 500) || "";
   const imageUrl = image?.startsWith("http")
     ? image
-    : `https://www.room714.com${image?.startsWith("/") ? "" : "/"}${image}`;
+    : `${SITE_URL}${image?.startsWith("/") ? "" : "/"}${image}`;
+  const pageUrl = blogUrl(lang, post.slug);
 
-  const blogJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    headline: title,
-    description: metaDescription || plainText.slice(0, 160),
-    image: imageUrl,
-    datePublished: date,
-    dateModified: date,
-    author: {
-      "@type": "Organization",
-      name: "Room 714",
-      url: "https://www.room714.com",
-    },
-    publisher: {
-      "@type": "Organization",
-      name: "Room 714",
-      logo: {
-        "@type": "ImageObject",
-        url: "https://www.room714.com/og-image.png",
-      },
-    },
-    mainEntityOfPage: {
-      "@type": "WebPage",
-      "@id": `https://www.room714.com/${lang}/blog/${slug}`,
-    },
-    articleBody: plainText,
-    inLanguage: lang === "es" ? "es-ES" : "en-US",
-  };
+  const blogJsonLd = jsonLdGraph(
+    articleSchema({
+      lang,
+      url: pageUrl,
+      headline: title,
+      description: metaDescription || plainText.slice(0, 160),
+      imageUrl,
+      datePublished: post.datePublished,
+      dateModified: post.dateModified,
+      articleBody: plainText,
+    }),
+    breadcrumbSchema([
+      { name: dict.nav.home, url: `${SITE_URL}/${lang}` },
+      { name: dict.nav.ideas, url: `${SITE_URL}/${lang}/blog` },
+      { name: title, url: pageUrl },
+    ]),
+  );
 
   // 3. Artículos relacionados: misma categoría primero, fallback cronológico
   const RELATED_LIMIT = 6;
@@ -157,7 +161,7 @@ export default async function PostPage({ params }) {
       <Navbar dict={dict} isDark={false} alternatePaths={alternatePaths} />
 
       {/* Botón de volver con corrección de capa */}
-      <div className="relative z-10 w-full px-8 sm:px-10 md:px-14 lg:px-22 py-6 flex justify-start">
+      <div className={`relative z-10 w-full ${CANAL} py-6 flex justify-start`}>
         <Link
           href={`/${lang}/blog`}
           className="group inline-flex items-center gap-2 text-gray-400 hover:text-red-500 transition-colors duration-200 font-title text-xs sm:text-sm uppercase tracking-widest cursor-pointer"
@@ -202,6 +206,35 @@ export default async function PostPage({ params }) {
             <span className="text-gray-400 text-sm sm:text-base md:text-lg lg:text-xl font-medium">
               {post.date}
             </span>
+            {/* Firma del autor. Mismos tamaños y colores que la categoría y
+                la fecha de arriba: el artículo no cambia de aspecto, solo
+                dice quién lo escribe. La foto es un placeholder. */}
+            <div className="flex items-center gap-3 mt-6">
+              <Image
+                src="/author-placeholder.svg"
+                alt={dict.blog.author.name}
+                width={48}
+                height={48}
+                className="rounded-full shrink-0"
+              />
+              <div className="flex flex-col">
+                <span className="text-red-500 text-base sm:text-lg md:text-xl font-hand">
+                  {dict.blog.author.by} {dict.blog.author.name}
+                </span>
+                <Link
+                  href={withUtm(LINKEDIN_FOUNDER, {
+                    campaign: "blog",
+                    content: "firma-articulo",
+                  })}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-track-placement="firma-articulo"
+                  className="text-gray-400 hover:text-red-500 transition-colors text-sm sm:text-base font-medium"
+                >
+                  {dict.blog.author.role} · {dict.blog.author.linkedin}
+                </Link>
+              </div>
+            </div>
           </div>
 
           {/* Grupo Inferior: Tags - Se alinearán con el fondo de la imagen gracias al justify-between */}
@@ -248,7 +281,7 @@ export default async function PostPage({ params }) {
       </article>
 
       {/* Footer de artículos recientes con Diccionario */}
-      <section className="mt-20 bg-gray-300 px-6 sm:px-8 md:px-10 lg:px-16 py-10 sm:py-14 md:py-16 lg:py-18 rounded-t-[50px]">
+      <section className={`mt-20 bg-gray-300 ${CANAL} py-10 sm:py-14 md:py-16 lg:py-18 rounded-t-[50px]`}>
         <div>
           <h2 className="font-title font-black px-4 sm:px-6 md:px-8 lg:px-10 text-xl sm:text-2xl md:text-3xl lg:text-4xl pb-6 md:pb-10 text-black">
             {dict.blog.related_articles}

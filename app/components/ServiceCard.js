@@ -1,6 +1,19 @@
 import Image from "next/image";
+import PrimaryButton from "@/app/components/PrimaryButton";
 
-export default function ServiceCard({ number, title, description, image }) {
+export default function ServiceCard({
+  number,
+  title,
+  description,
+  image,
+  // Opcionales: cuando la tarjeta lleva a una página propia, pinta el CTA
+  // debajo de la descripción. Sin ellos la tarjeta queda exactamente como
+  // estaba, que es como la usa la lista de servicios de la portada.
+  href = null,
+  cta = null,
+  track = null,
+  trackPlacement = null,
+}) {
   return (
     <div className="bg-white rounded-[40px] md:p-12 flex flex-col items-center justify-center md:flex-row md:gap-16 mx-auto transition-all duration-300 shadow-[0_-10px_20px_rgba(0,0,0,0.1)]">
       {/* Contenedor de Imagen: Ajusta el tamaño según dispositivo */}
@@ -23,7 +36,7 @@ export default function ServiceCard({ number, title, description, image }) {
       </div>
 
       {/* Contenedor de Texto */}
-      <div className="w-full flex flex-col justify-center text-black px-4 pb-8 md:px-0 md:pb-0 mt-4 md:mt-0">
+      <div className="w-full flex flex-col justify-center text-black px-6 pb-8 md:pl-0 md:pr-10 lg:pr-16 md:pb-0 mt-4 md:mt-0">
         {/* Número con estilo sutil */}
         <span className="font-hand text-base sm:text-xl md:text-2xl lg:text-3xl block tracking-widest">
           {number}
@@ -35,9 +48,20 @@ export default function ServiceCard({ number, title, description, image }) {
         </h3>
 
         {/* Descripción: Ajuste de lectura */}
-        <p className="font-body text-lg leading-5 sm:text-2xl sm:leading-7 md:text-2xl md:leading-8 lg:text-3xl lg:leading-9 lg:pr-20">
+        <p className="font-body text-lg leading-5 sm:text-2xl sm:leading-7 md:text-2xl md:leading-8 lg:text-3xl lg:leading-9 ">
           {description}
         </p>
+
+        {href && cta && (
+          <div className="mt-6 lg:mt-8">
+            <PrimaryButton
+              text={cta}
+              href={href}
+              track={track}
+              trackPlacement={trackPlacement}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

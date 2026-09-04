@@ -9,6 +9,12 @@ export default function PrimaryButton({
   isRed = false,
   href = null, // Valor por defecto null para que sea opcional
   type = "button", // Útil para formularios
+  // Analítica: el nombre del evento y en qué parte de la web está el botón.
+  // Van como atributos data- porque el clic lo recoge un único oyente
+  // (AnalyticsEvents); así este componente sigue siendo de servidor y puede
+  // seguir recibiendo su icono como prop.
+  track = null,
+  trackPlacement = null,
 }) {
   // Estilos base compartidos
   const sharedClasses = `
@@ -35,17 +41,26 @@ export default function PrimaryButton({
     </>
   );
 
+  const datosDeAnalitica = track
+    ? { "data-track": track, "data-track-placement": trackPlacement }
+    : {};
+
   // LÓGICA: Si hay href, renderiza un Link. Si no, un botón con onClick.
   if (href) {
     return (
-      <Link href={href} className={sharedClasses}>
+      <Link href={href} className={sharedClasses} {...datosDeAnalitica}>
         {ButtonInner}
       </Link>
     );
   }
 
   return (
-    <button type={type} onClick={onClick} className={sharedClasses}>
+    <button
+      type={type}
+      onClick={onClick}
+      className={sharedClasses}
+      {...datosDeAnalitica}
+    >
       {ButtonInner}
     </button>
   );

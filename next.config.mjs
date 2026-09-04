@@ -1,8 +1,20 @@
+import { RENOMBRADAS, guardasDeIdioma } from "./app/lib/routes.mjs";
+
+// Las redirecciones del rediseño no se escriben a mano: salen del mapa de
+// rutas, así que añadir una página añade sus guardas sola y no hay forma de
+// que el menú apunte a una URL y la redirección a otra.
+const desdeElMapa = [...RENOMBRADAS, ...guardasDeIdioma()].map(({ de, a }) => ({
+  source: de,
+  destination: a,
+  statusCode: 301,
+}));
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // 1. Redirecciones de Dominio (SEO Force 301)
   async redirects() {
     return [
+      ...desdeElMapa,
       {
         // Redirige cualquier ruta de room714.es (con o sin www) al .com
         source: "/:path*",
@@ -13,7 +25,7 @@ const nextConfig = {
           },
         ],
         destination: "https://www.room714.com/en/:path*",
-        permanent: true, // Esto genera el código 301 que Google exige
+        statusCode: 301, // `permanent: true` emite 308, no 301
       },
       {
         source: "/:path*",
@@ -24,7 +36,7 @@ const nextConfig = {
           },
         ],
         destination: "https://www.room714.com/en/:path*",
-        permanent: true,
+        statusCode: 301,
       },
       {
         // URL legacy '/legal' que Google sigue recordando. El i18n
@@ -32,17 +44,17 @@ const nextConfig = {
         // eso cubrimos también las variantes con locale.
         source: "/legal",
         destination: "/en/privacy",
-        permanent: true,
+        statusCode: 301,
       },
       {
         source: "/en/legal",
         destination: "/en/privacy",
-        permanent: true,
+        statusCode: 301,
       },
       {
         source: "/es/legal",
         destination: "/es/privacy",
-        permanent: true,
+        statusCode: 301,
       },
     ];
   },

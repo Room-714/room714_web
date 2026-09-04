@@ -4,20 +4,48 @@ import { usePathname } from "next/navigation";
 
 const PAGE_NAMES = {
   en: {
-    about: "About Us",
-    projects: "Projects",
-    contact: "Contact",
-    diagnostic: "Diagnostic",
-    blog: "Blog",
+    home: "Home",
+    "product-for-your-customers": "Product for your customers",
+    "product-for-your-team": "Product for your team",
+    "ai-in-the-product": "AI inside the product",
+    "starting-from-scratch": "Starting from scratch",
+    cases: "Cases",
+    "how-we-work": "About us",
+    "lets-talk": "Let's talk",
+    blog: "Ideas",
+    careers: "Careers",
+    privacy: "Privacy Policy",
+    terms: "Terms",
+    cookies: "Cookie Policy",
   },
   es: {
-    about: "Nosotros",
-    projects: "Proyectos",
-    contact: "Contacto",
-    diagnostic: "Diagnóstico",
-    blog: "Blog",
+    home: "Inicio",
+    "producto-para-tus-clientes": "Producto para tus clientes",
+    "producto-para-tu-equipo": "Producto para tu equipo",
+    "ia-en-el-producto": "IA dentro del producto",
+    "empezar-de-cero": "Empezar de cero",
+    casos: "Casos",
+    "como-trabajamos": "Nosotros",
+    hablemos: "Hablemos",
+    blog: "Ideas",
+    careers: "Empleo",
+    privacy: "Política de Privacidad",
+    terms: "Términos",
+    cookies: "Política de Cookies",
   },
 };
+
+// Rutas cuyo último segmento es un slug: el nombre legible no se puede
+// deducir del pathname, así que la miga la emite la propia página, que sí
+// tiene el título. Aquí nos apartamos para no duplicar el BreadcrumbList.
+function laEmiteLaPagina(segments) {
+  const esPostDeBlog = segments.length === 3 && segments[1] === "blog";
+  const esCategoria =
+    segments.length === 4 && segments[1] === "blog" && segments[2] === "category";
+  const esCaso =
+    segments.length === 3 && (segments[1] === "casos" || segments[1] === "cases");
+  return esPostDeBlog || esCategoria || esCaso;
+}
 
 export default function BreadcrumbSchema() {
   const pathname = usePathname();
@@ -25,6 +53,7 @@ export default function BreadcrumbSchema() {
 
   const segments = pathname.split("/").filter(Boolean);
   if (segments.length < 2) return null;
+  if (laEmiteLaPagina(segments)) return null;
 
   const lang = segments[0];
   const names = PAGE_NAMES[lang] || PAGE_NAMES.en;
@@ -33,7 +62,7 @@ export default function BreadcrumbSchema() {
     {
       "@type": "ListItem",
       position: 1,
-      name: "Home",
+      name: names.home,
       item: `${baseUrl}/${lang}`,
     },
   ];

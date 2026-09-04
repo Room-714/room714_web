@@ -8,21 +8,9 @@ import {
   fallbackQueryForCategory,
 } from "@/app/lib/sources/unsplash";
 import { isAuthorizedAdmin } from "@/app/lib/auth";
+import { slugify } from "@/app/lib/slug";
 
 export const maxDuration = 300;
-
-function slugifyFallback(text) {
-  return text
-    .toString()
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/[^\w-]+/g, "")
-    .replace(/--+/g, "-")
-    .replace(/^-|-$/g, "")
-    .slice(0, 70);
-}
 
 async function ensureUniqueSlug(slug, excludePostId) {
   let candidate = slug;
@@ -94,14 +82,14 @@ export async function POST(request) {
       post.published && existingEs?.slug
         ? existingEs.slug
         : await ensureUniqueSlug(
-            draft.slug_es || slugifyFallback(draft.title_es),
+            slugify(draft.slug_es || draft.title_es),
             postId,
           );
     const slugEn =
       post.published && existingEn?.slug
         ? existingEn.slug
         : await ensureUniqueSlug(
-            draft.slug_en || slugifyFallback(draft.title_en),
+            slugify(draft.slug_en || draft.title_en),
             postId,
           );
 

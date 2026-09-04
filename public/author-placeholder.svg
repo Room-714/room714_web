@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" width="96" height="96" role="img" aria-hidden="true">
+  <!-- Placeholder de la foto del autor. Sustituir por la foto real. -->
+  <circle cx="48" cy="48" r="48" fill="#F2F2F2" />
+  <circle cx="48" cy="38" r="15" fill="#C9C9C9" />
+  <path d="M48 57c-15.5 0-28 10.3-28 23v16h56V80c0-12.7-12.5-23-28-23Z" fill="#C9C9C9" />
+</svg>

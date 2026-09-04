@@ -1,5 +1,7 @@
 import { getAllPosts } from "@/app/lib/blog";
 import { listAllCategoryRoutes } from "@/app/lib/categoryRoutes";
+import { SITE_URL, blogUrl } from "@/app/lib/seo/urls";
+import { EN_SITEMAP, IDIOMAS, pathsOf } from "@/app/lib/routes.mjs";
 
 // Regenera el sitemap cada hora aunque no haya deploy, para que los posts
 // generados por cron (lunes/miércoles) aparezcan sin esperar a un despliegue.
@@ -12,11 +14,13 @@ export const revalidate = 3600;
 const priorityFor = (base, lang) => (lang === "en" ? base / 2 : base);
 
 export default async function sitemap() {
-  const baseUrl = "https://www.room714.com";
-  const languages = ["en", "es"];
-  const pages = ["", "/about", "/projects", "/contact", "/diagnostic", "/blog", "/careers"];
+  const baseUrl = SITE_URL;
+  const languages = IDIOMAS;
+  // Las rutas salen del mapa: cada idioma tiene la suya, que desde la Fase 2
+  // ya no coinciden (/es/casos y /en/cases).
+  const pages = EN_SITEMAP;
   // Páginas que reflejan el contenido más reciente (llevan lastmod real).
-  const dynamicPages = new Set(["", "/blog"]);
+  const dynamicPages = new Set(["home", "blog"]);
 
   // Traemos los posts primero: sirven para las rutas de blog y para calcular
   // el lastmod real del contenido (evita poner new Date() en cada build, que
@@ -49,22 +53,23 @@ export default async function sitemap() {
   // (about, contact, etc.) NO lleva lastmod (es más honesto que inventar una
   // fecha que cambia en cada build).
   const routes = languages.flatMap((lang) =>
-    pages.map((page) => {
+    pages.map((clave) => {
+      const rutas = pathsOf(clave);
       const entry = {
-        url: `${baseUrl}/${lang}${page}`,
+        url: `${baseUrl}${rutas[lang]}`,
         alternates: {
           languages: {
-            en: `${baseUrl}/en${page}`,
-            es: `${baseUrl}/es${page}`,
+            en: `${baseUrl}${rutas.en}`,
+            es: `${baseUrl}${rutas.es}`,
           },
         },
-        changeFrequency: page === "" || page === "/blog" ? "daily" : "monthly",
+        changeFrequency: dynamicPages.has(clave) ? "daily" : "monthly",
         priority: priorityFor(
-          page === "" ? 1 : page === "/blog" ? 0.9 : 0.8,
+          clave === "home" ? 1 : clave === "blog" ? 0.9 : 0.8,
           lang,
         ),
       };
-      if (dynamicPages.has(page) && latestModIso) {
+      if (dynamicPages.has(clave) && latestModIso) {
         entry.lastModified = latestModIso;
       }
       return entry;
@@ -84,10 +89,13 @@ export default async function sitemap() {
   });
 
   // 2. Blog posts: su fecha real (updatedAt o date).
+  // El slug va percent-encodeado: uno con caracteres no ASCII interpolado en
+  // crudo produce una URL que el servidor rechaza antes de enrutar (500), y
+  // aquí la estaríamos anunciando a Google.
   const toRoute = (post, lang) => {
     const mod = postMod(post);
     return {
-      url: `${baseUrl}/${lang}/blog/${post.slug}`,
+      url: blogUrl(lang, post.slug),
       ...(mod ? { lastModified: mod.toISOString() } : {}),
       changeFrequency: "weekly",
       priority: priorityFor(0.6, lang),

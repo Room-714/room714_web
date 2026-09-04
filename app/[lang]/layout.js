@@ -12,6 +12,16 @@ import {
 import { GoogleTagManager } from "@next/third-parties/google";
 import CookieBanner from "@/app/components/CookieBanner";
 import BreadcrumbSchema from "@/app/components/BreadcrumbSchema";
+import { SITE_URL, buildAlternates, samePath } from "@/app/lib/seo/urls";
+import {
+  founderSchema,
+  jsonLdGraph,
+  organizationSchema,
+} from "@/app/lib/seo/schema";
+import { LINKEDIN_COMPANY, withUtm } from "@/app/lib/links";
+import { path } from "@/app/lib/routes.mjs";
+import AnalyticsEvents from "@/app/components/AnalyticsEvents";
+import { Analytics } from "@vercel/analytics/next";
 import { cookies } from "next/headers";
 
 const fontGantari = Gantari({
@@ -40,7 +50,7 @@ const fontMynerve = Mynerve({
 // --- CONFIGURACIÓN DE METADATOS DINÁMICOS (SEO) ---
 export async function generateMetadata({ params }) {
   const { lang = "en" } = await params;
-  const baseUrl = "https://www.room714.com";
+  const baseUrl = SITE_URL;
 
   const titles = {
     en: "Room 714 | Digital Product Studio",
@@ -59,14 +69,11 @@ export async function generateMetadata({ params }) {
       template: `%s | Room 714`,
     },
     description: descriptions[lang],
-    alternates: {
-      canonical: `${baseUrl}/${lang}`, // Siempre absoluta
-      languages: {
-        "en-US": "/en",
-        "es-ES": "/es",
-        "x-default": "/en", // Muy importante para SEO internacional
-      },
-    },
+    // Canónica y hreflang absolutos y recíprocos. Antes las alternativas
+    // eran rutas relativas ("/en"), que Google admite pero deja al azar de
+    // la resolución, y usaban códigos con región (en-US, es-ES) cuando el
+    // contenido no es específico de un país.
+    alternates: buildAlternates(lang, samePath("")),
     robots: {
       index: true,
       follow: true,
@@ -112,29 +119,10 @@ export default async function RootLayout({ children, params }) {
   const cookieStore = await cookies();
   const hasConsent = cookieStore.get("cookie_consent")?.value === "true";
 
-  // --- DATOS ESTRUCTURADOS MEJORADOS ---
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "ProfessionalService",
-    "@id": "https://www.room714.com/#organization",
-    name: "Room 714",
-    image: "https://www.room714.com/og-image.png",
-    url: "https://www.room714.com",
-    priceRange: "$$$", // Ayuda a segmentar en búsquedas
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: "Madrid",
-      addressCountry: "ES",
-    },
-    sameAs: [
-      "https://www.linkedin.com/company/room714",
-      "https://www.instagram.com/room714",
-    ],
-    description:
-      lang === "es"
-        ? "Estudio de producto digital especializado en UX/UI, investigación CX y desarrollo a medida."
-        : "Digital product studio specializing in UX/UI, CX research, and custom development.",
-  };
+  // La organización y su fundador van en TODAS las páginas, con @id estables:
+  // los artículos y las páginas de caso los referencian por @id en lugar de
+  // volver a describirlos.
+  const jsonLd = jsonLdGraph(organizationSchema(lang), founderSchema());
 
   return (
     <html
@@ -166,7 +154,10 @@ export default async function RootLayout({ children, params }) {
       )}
 
       <body
-        className="font-body antialiased bg-[#1A1A1A] min-h-screen relative"
+        // `overflow-x-clip` y no `hidden`: clip corta el desborde horizontal
+        // sin romper los `position: sticky` de las tarjetas de la portada,
+        // que un ancestro con overflow:hidden desactivaría.
+        className="font-body antialiased bg-[#1A1A1A] min-h-screen relative overflow-x-clip"
         suppressHydrationWarning={true}
       >
         {/* CAPA 1: EL VÍDEO (FIJO AL FONDO DE TODO) */}
@@ -231,9 +222,13 @@ export default async function RootLayout({ children, params }) {
                   <div className="flex items-center justify-end gap-4">
                     {/* LinkedIn */}
                     <Link
-                      href="https://www.linkedin.com/company/room-714"
+                      href={withUtm(LINKEDIN_COMPANY, {
+                        campaign: "web",
+                        content: "footer",
+                      })}
                       target="_blank"
                       rel="noopener noreferrer"
+                      data-track-placement="footer"
                       className="p-2 bg-white rounded-full hover:opacity-70 transition-opacity"
                     >
                       <Image
@@ -246,7 +241,7 @@ export default async function RootLayout({ children, params }) {
                     </Link>
                     {/* Blog */}
                     <Link
-                      href="/blog"
+                      href={path("blog", lang)}
                       className="p-2 bg-white rounded-full hover:opacity-70 transition-opacity"
                     >
                       <Image
@@ -263,23 +258,33 @@ export default async function RootLayout({ children, params }) {
             </div>
 
             {/* LINKS PRIVACY, COOKIES AND TERMS */}
+            {/* Diagnóstico y Empleo bajan aquí desde el menú: conservan su
+                URL y siguen accesibles, con el mismo estilo que los
+                legales. */}
             <div className="flex justify-center items-center gap-x-3 md:gap-x-6 text-white text-sm sm:text-base md:text-xl lg:text-2xl font-light">
               <Link
-                href={`/${lang}/privacy`}
+                href={path("empleo", lang)}
+                className="hover:text-red-500 transition-colors duration-300"
+              >
+                {dict.nav.careers}
+              </Link>
+              <span className="w-px h-5 bg-white" aria-hidden="true" />
+              <Link
+                href={path("privacidad", lang)}
                 className="hover:text-red-500 transition-colors duration-300"
               >
                 {dict.footer.privacy}
               </Link>
               <span className="w-px h-5 bg-white" aria-hidden="true" />
               <Link
-                href={`/${lang}/terms`}
+                href={path("terminos", lang)}
                 className="hover:text-red-500 transition-colors duration-300"
               >
                 {dict.footer.terms}
               </Link>
               <span className="w-px h-5 bg-white" aria-hidden="true" />
               <Link
-                href={`/${lang}/cookies`}
+                href={path("cookies", lang)}
                 className="hover:text-red-500 transition-colors duration-300"
               >
                 {dict.footer.cookies}
@@ -293,6 +298,12 @@ export default async function RootLayout({ children, params }) {
           </footer>
         </div>
         <CookieBanner dict={dict} lang={lang} />
+
+        {/* Vercel Analytics no usa cookies ni datos personales, así que no va
+            detrás del banner; GTM y Clarity sí siguen esperando el
+            consentimiento. AnalyticsEvents es el oyente único de clics. */}
+        <Analytics />
+        <AnalyticsEvents />
       </body>
     </html>
   );

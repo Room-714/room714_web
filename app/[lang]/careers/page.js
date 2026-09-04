@@ -2,8 +2,9 @@ import { getDictionary } from "@/app/dictionaries";
 import Navbar from "@/app/components/Navbar";
 import CareersWizard from "@/app/components/CareersWizard";
 import Image from "next/image";
+import { SITE_URL, buildAlternates, samePath } from "@/app/lib/seo/urls";
 
-const baseUrl = "https://www.room714.com";
+const baseUrl = SITE_URL;
 
 export async function generateMetadata({ params }) {
   const { lang = "en" } = await params;
@@ -17,16 +18,10 @@ export async function generateMetadata({ params }) {
   };
 
   return {
-    title: titles[lang],
+    // Ya nombra la marca: `absolute` evita el sufijo repetido del layout.
+    title: { absolute: titles[lang] },
     description: descriptions[lang],
-    alternates: {
-      canonical: `${baseUrl}/${lang}/careers`,
-      languages: {
-        "en-US": `${baseUrl}/en/careers`,
-        "es-ES": `${baseUrl}/es/careers`,
-        "x-default": `${baseUrl}/en/careers`,
-      },
-    },
+    alternates: buildAlternates(lang, samePath("/careers")),
     openGraph: {
       title: titles[lang],
       description: descriptions[lang],
