@@ -294,9 +294,14 @@ export default async function Home({ params }) {
         </div>
       </section>
 
-      {/* Ideas: tres piezas fijadas a mano */}
+      {/* Ideas: cuatro piezas fijadas a mano.
+          Con bastante aire debajo de las tarjetas, y mayor que el token
+          general (AIRE_TRAS_BOTON): la sección siguiente se sube 40 px con su
+          -mt-10, así que se los come del padding de abajo. */}
       {pinnedPosts.length > 0 && (
-        <section className="bg-gray-300 rounded-t-[50px] -mt-10 px-4 md:px-8 py-16 relative z-50">
+        <section
+          className="bg-gray-300 rounded-t-[50px] -mt-10 px-4 md:px-8 pt-16 pb-28 md:pb-36 lg:pb-44 relative z-50"
+        >
           <div>
             <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12">
               <h2 className={`font-title font-bold text-black ${TITULAR}`}>
