@@ -154,7 +154,10 @@ export default async function RootLayout({ children, params }) {
       )}
 
       <body
-        className="font-body antialiased bg-[#1A1A1A] min-h-screen relative"
+        // `overflow-x-clip` y no `hidden`: clip corta el desborde horizontal
+        // sin romper los `position: sticky` de las tarjetas de la portada,
+        // que un ancestro con overflow:hidden desactivaría.
+        className="font-body antialiased bg-[#1A1A1A] min-h-screen relative overflow-x-clip"
         suppressHydrationWarning={true}
       >
         {/* CAPA 1: EL VÍDEO (FIJO AL FONDO DE TODO) */}

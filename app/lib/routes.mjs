@@ -14,8 +14,7 @@
 export const ROUTES = {
   home: { es: "", en: "" },
 
-  // Qué hacemos: índice más las cuatro situaciones
-  queHacemos: { es: "/que-hacemos", en: "/what-we-do" },
+  // Las cuatro situaciones. No hay página índice: la explicaba la home.
   productoClientes: {
     es: "/producto-para-tus-clientes",
     en: "/product-for-your-customers",
@@ -66,7 +65,6 @@ export const IDIOMAS = ["es", "en"];
  */
 export const EN_SITEMAP = [
   "home",
-  "queHacemos",
   "productoClientes",
   "productoEquipo",
   "iaProducto",
@@ -99,11 +97,11 @@ export const RENOMBRADAS = [
   { de: "/en/about", a: path("comoTrabajamos", "en") },
   { de: "/es/contact", a: path("hablemos", "es") },
   { de: "/en/contact", a: path("hablemos", "en") },
-  // El diagnóstico automático se ha eliminado. Su trabajo era ayudarte a
-  // elegir tu situación, que es exactamente lo que hace el índice de Qué
-  // hacemos, así que ahí va: la URL está indexada y no puede morir.
-  { de: "/es/diagnostic", a: path("queHacemos", "es") },
-  { de: "/en/diagnostic", a: path("queHacemos", "en") },
+  // El diagnóstico automático se ha eliminado. Su URL está indexada y no
+  // puede morir, así que va a la portada, donde el bloque "¿Cuál es tu
+  // caso?" hace ahora ese trabajo.
+  { de: "/es/diagnostic", a: path("home", "es") },
+  { de: "/en/diagnostic", a: path("home", "en") },
 ];
 
 /**

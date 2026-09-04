@@ -11,6 +11,10 @@
 //   1. IA que no llega a producción  → "IA dentro del producto"
 //   2. Fricción en el flujo de cliente → "Producto para tus clientes"
 //   3. Deuda técnica y software interno → "Producto para tu equipo"
+//   4. Negocio antes de diseñar → "Empezar de cero"
+//
+// Son cuatro y no tres porque en tablet la rejilla va a dos columnas: con
+// tres piezas quedaba un hueco.
 //
 // Un slug que no exista o que esté despublicado se ignora sin romper nada, y
 // el hueco se rellena con lo más reciente.
@@ -19,12 +23,14 @@ export const PINNED_SLUGS = {
     "piloto-ia-empresarial-que-nunca-escala-demo-a-produccion",
     "codigo-correcto-experiencia-rota-el-fallo-que-el-ticket-no-describe",
     "codigo-barato-ingenieria-cara-ia-deuda-tecnica",
+    "objetivos-no-herramientas-el-error-de-diseno-que-arruina-productos-digitales",
   ],
   en: [
     "enterprise-ai-pilot-that-never-scales-demo-to-production",
     "technically-correct-experientially-broken-the-bug-no-ticket-captures",
     "cheap-code-expensive-engineering-ai-technical-debt",
+    "goals-over-tools-the-design-mistake-that-sinks-digital-products",
   ],
 };
 
-export const PINNED_COUNT = 3;
+export const PINNED_COUNT = 4;

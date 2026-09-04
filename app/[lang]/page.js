@@ -12,7 +12,7 @@ import { getAllPosts, ordenarPorSlugs } from "@/app/lib/blog";
 import { PINNED_COUNT, PINNED_SLUGS } from "@/app/data/PinnedPosts";
 import { path } from "@/app/lib/routes.mjs";
 import { buildAlternates, samePath } from "@/app/lib/seo/urls";
-import { CANAL } from "@/app/lib/layout";
+import { CANAL, FILETE, TARJETA, TITULAR } from "@/app/lib/layout";
 
 export async function generateMetadata({ params }) {
   const { lang = "en" } = await params;
@@ -60,16 +60,16 @@ export default async function Home({ params }) {
   ];
 
   return (
-    <div className="flex flex-col bg-black">
+    <div className="flex flex-col bg-black overflow-x-clip">
       {/* Navbar con modo light */}
       <Navbar dict={dict} isDark={false} />
 
       {/* Hero Section */}
       <section className="bg-white text-center flex flex-col lg:flex-row items-center z-10">
-        <div className="flex pb-10 justify-center w-full">
+        <div className="flex pb-4 md:pb-10 justify-center w-full">
           <div
             className="relative transition-all duration-300
-                 w-[90%]
+                 w-[62%] sm:w-[75%] md:w-[85%] lg:w-[90%]
                  max-w-200
                  aspect-square
                  overflow-hidden"
@@ -87,17 +87,20 @@ export default async function Home({ params }) {
           </div>
         </div>
 
+        {/* En móvil el aire se recorta y el interlineado se aprieta para que
+            los dos botones entren en la primera pantalla en cualquier
+            dispositivo: eran 8 y 16 de margen entre bloques, más el
+            interlineado del titular a mano, y no cabían. */}
         <div className="px-4 md:px-12 flex flex-col justify-center items-center w-full">
-          {/* h1 y no p: la portada no tenía ningún encabezado de primer nivel.
-              Las clases son las mismas, así que a la vista no cambia nada. */}
-          <h1 className={`font-hand font-black text-red-500 text-2xl md:text-3xl lg:text-5xl leading-[1.45] mb-8 lg:mb-16 md:px-4`}>
+          <h1 className="font-hand font-black text-red-500 text-2xl md:text-3xl lg:text-5xl leading-[1.35] md:leading-[1.45] mb-5 md:mb-8 lg:mb-12 md:px-4">
             {t.hero.title}
           </h1>
-          <p className="font-body text-base md:text-xl lg:text-2xl mb-8 lg:mb-16 md:px-4">
+          <p className="font-body text-sm md:text-xl lg:text-2xl leading-normal mb-6 md:mb-8 lg:mb-12 md:px-4">
             {t.hero.description}
           </p>
-          {/* Dos botones: el primario y el secundario que ya existían */}
-          <div className="flex flex-col sm:flex-row items-center gap-4">
+          {/* Los dos botones del sistema: primario y secundario. En móvil van
+              en fila, que es lo que hace que quepan. */}
+          <div className="flex flex-row items-center justify-center gap-3 sm:gap-4 flex-wrap">
             <PrimaryButton
               text={t.buttons.tell_us}
               isRed={true}
@@ -112,9 +115,6 @@ export default async function Home({ params }) {
               trackPlacement="home_hero_casos"
             />
           </div>
-          <p className="font-body text-xs md:text-sm text-gray-500 mt-6 max-w-xl md:px-4">
-            {t.hero.micro}
-          </p>
         </div>
       </section>
 
@@ -172,7 +172,7 @@ export default async function Home({ params }) {
           donde antes vivía el bloque de clientes. */}
       <section className={`bg-white rounded-t-[50px] overflow-hidden ${CANAL} py-16 lg:py-16 z-50 relative`}>
         <div className="w-full">
-          <h2 className="font-title font-bold text-red-500 text-3xl lg:text-5xl mb-8 leading-tight">
+          <h2 className={`font-title font-bold text-red-500 ${TITULAR} mb-8`}>
             {t.diferencia.title}
           </h2>
           <p className="font-body text-xl lg:text-3xl leading-normal text-black mb-12">
@@ -197,38 +197,22 @@ export default async function Home({ params }) {
             ))}
           </div>
 
-          {/* Prueba: un párrafo por caso. Sustituye al carrusel de logos, que
-              se muda a "Cómo trabajamos". */}
-          <h2 className={`font-hand font-bold text-red-500 text-3xl lg:text-5xl leading-[1.45] mb-10`}>
-            {t.prueba.title}
-          </h2>
-
+          {/* La prueba: un párrafo por caso, sin titular propio, sin el
+              aviso de confidencialidad y sin enlace por caso. El enlace en
+              formato texto no está en el sistema de diseño; para ir a los
+              casos está el botón de abajo. */}
           <div className="flex flex-col gap-6 mb-10">
             {casosDePrueba.map((caso) => (
-              <Link
-                key={caso.clave}
-                href={path(caso.clave, lang)}
-                data-track="caso_click"
-                data-track-placement={`home_prueba_${caso.clave}`}
-                className="group block rounded-4xl overflow-hidden
-                  bg-[#F2F2F2]
-                  bg-[linear-gradient(to_right,rgba(0,0,0,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.05)_1px,transparent_1px)]
-                  bg-size-[40px_40px]
-                  hover:bg-[#F8F8F8] transition-all duration-500 p-6 lg:p-8"
-              >
-                <p className="font-body text-base md:text-lg lg:text-2xl leading-normal text-gray-900">
-                  {caso.texto}{" "}
-                  <span className="font-hand text-red-500 whitespace-nowrap group-hover:underline">
-                    → {t.prueba.link}
-                  </span>
-                </p>
-              </Link>
+              <div key={caso.clave} className={TARJETA}>
+                <div className={FILETE} />
+                <div className="p-6 lg:p-10">
+                  <p className="font-body text-base md:text-lg lg:text-2xl leading-normal text-gray-900">
+                    {caso.texto}
+                  </p>
+                </div>
+              </div>
             ))}
           </div>
-
-          <p className="font-body text-sm md:text-base text-gray-500 mb-10 max-w-3xl">
-            {t.prueba.disclaimer}
-          </p>
 
           <PrimaryButton
             text={t.buttons.all_cases}
@@ -243,9 +227,17 @@ export default async function Home({ params }) {
       {/* Cómo trabajamos: el método en cuatro pasos */}
       <section className={`bg-black rounded-t-[50px] -mt-10 ${CANAL} py-16 relative z-50`}>
         <div className="w-full">
-          <h2 className="font-title font-black text-3xl md:text-5xl lg:text-6xl text-white mb-12 leading-tight">
+          {/* Mismo tamaño de titular que el bloque anterior: este iba a
+              text-6xl y el de "¿qué hacéis?" a text-5xl, y se notaba. */}
+          <h2 className={`font-title font-bold text-white ${TITULAR} mb-8`}>
             {t.metodo.title}
           </h2>
+
+          {/* "Quien te atiende es quien hace el trabajo" va ENCIMA de la
+              lista, no debajo: es la premisa, no la conclusión. */}
+          <p className="font-hand text-2xl md:text-3xl lg:text-4xl text-white leading-[1.45] mb-10">
+            {t.metodo.closing}
+          </p>
 
           <div className="flex flex-col gap-6 lg:gap-8 mb-12">
             {metodo.map((paso, index) => (
@@ -265,16 +257,15 @@ export default async function Home({ params }) {
             ))}
           </div>
 
-          <p className={`font-hand text-2xl md:text-3xl lg:text-4xl text-white leading-[1.45] mb-10`}>
-            {t.metodo.closing}
-          </p>
-
-          <PrimaryButton
-            text={t.buttons.how_we_work}
-            href={path("comoTrabajamos", lang)}
-            track="cta_click"
-            trackPlacement="home_metodo"
-          />
+          {/* Más aire bajo el botón: pegaba con el borde de la sección */}
+          <div className="pb-10 lg:pb-14">
+            <PrimaryButton
+              text={t.buttons.how_we_work}
+              href={path("comoTrabajamos", lang)}
+              track="cta_click"
+              trackPlacement="home_metodo"
+            />
+          </div>
         </div>
       </section>
 
@@ -283,7 +274,7 @@ export default async function Home({ params }) {
         <section className="bg-gray-300 rounded-t-[50px] -mt-10 px-4 md:px-8 py-16 relative z-50">
           <div>
             <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12">
-              <h2 className="font-title font-black text-3xl md:text-5xl lg:text-6xl text-black leading-tight">
+              <h2 className={`font-title font-bold text-black ${TITULAR}`}>
                 {t.latest.title}
               </h2>
               <Link
@@ -294,7 +285,7 @@ export default async function Home({ params }) {
               </Link>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
               {pinnedPosts.map((post) => (
                 <BlogCard
                   key={post.id}
@@ -310,9 +301,12 @@ export default async function Home({ params }) {
 
       {/* Cierre, con el mismo patrón que el CTA final de Casos */}
       <section className="relative z-50 -mt-10 w-full bg-white rounded-t-[50px] px-6 py-16 lg:px-16 lg:py-16 text-center text-black">
-        <h2 className="font-title font-black text-3xl md:text-5xl mb-8 mx-auto leading-tight">
+        <h2 className={`font-title font-black ${TITULAR} mb-4`}>
           {t.cierre.title}
         </h2>
+        <p className="font-hand text-red-500 text-3xl md:text-4xl lg:text-5xl mb-8 leading-[1.45]">
+          {t.cierre.subtitle}
+        </p>
         <p className="font-body text-lg md:text-xl lg:text-2xl text-gray-700 mb-10 max-w-3xl mx-auto leading-normal">
           {t.cierre.description}
         </p>
@@ -328,19 +322,6 @@ export default async function Home({ params }) {
         </div>
       </section>
 
-      {/* 1. Contenedor del Skyline: Proporcional y siempre visible */}
-      <section className="w-full bg-white overflow-hidden">
-        <div className="w-[60%] ml-auto leading-0 flex">
-          <Image
-            src="/skyline.svg"
-            alt="City Skyline"
-            width={1920}
-            height={400}
-            className="w-full h-auto block"
-            priority
-          />
-        </div>
-      </section>
     </div>
   );
 }

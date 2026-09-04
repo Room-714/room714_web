@@ -1,9 +1,8 @@
 {
   "nav": {
     "home": "Inicio",
-    "que_hacemos": "Qué hacemos",
     "casos": "Casos",
-    "como_trabajamos": "Cómo trabajamos",
+    "nosotros": "Nosotros",
     "ideas": "Ideas",
     "hablemos": "Hablemos",
     "projects": "Proyectos",
@@ -184,7 +183,7 @@
     "productoClientes": {
       "cardTitle": "El producto que usan tus clientes pierde gente",
       "cardDescription": "Contratación, alta, onboarding, área de cliente, app. Cada paso que sobra es un cliente que se va. Rediseñamos el flujo, lo construimos y lo medimos en conversión, ARPU y coste de atención.",
-      "cardCta": "Producto para tus clientes →",
+      "cardCta": "Para tu cliente",
       "heroTitle": "Cada paso que sobra en tu producto es un cliente que se va",
       "heroDescription": "Rediseñamos y construimos los flujos que tus clientes usan para contratar, darse de alta, operar y volver: onboarding, activación, área de cliente, app. Y lo medimos donde se nota: conversión, abandono, ARPU y coste de atención.",
       "seoTitle": "Rediseño de onboarding, contratación y área de cliente · Room 714",
@@ -245,7 +244,7 @@
     "productoEquipo": {
       "cardTitle": "El producto que usa tu equipo frena la operación",
       "cardDescription": "Back-office, dashboards, herramientas internas, sistemas que nadie quiere tocar. Lo modernizamos sin parar el negocio, y si toca meter IA, la metemos con el contexto que necesita para no inventarse nada.",
-      "cardCta": "Producto para tu equipo →",
+      "cardCta": "Para tu equipo",
       "heroTitle": "El software que usa tu equipo también es un producto. Y se nota cuando no lo tratas como tal.",
       "heroDescription": "Modernizamos y construimos las herramientas con las que tu empresa opera: back-office, dashboards, gestión de incidencias, plataformas de datos, sistemas heredados. Sin parar la operación y medido en errores, tiempo y coste.",
       "seoTitle": "Modernizar software interno, back-office y dashboards · Room 714",
@@ -301,7 +300,7 @@
     "iaProducto": {
       "cardTitle": "Tienes IA en piloto y no llega a producción",
       "cardDescription": "La demo funcionó. Seis meses después sigue siendo una demo. Trabajamos la capa que falta entre el modelo y tus sistemas: datos, contexto, interfaz y coste.",
-      "cardCta": "IA dentro del producto →",
+      "cardCta": "Con la IA",
       "heroTitle": "La demo funcionó. ¿Por qué sigue siendo una demo?",
       "heroDescription": "Llevamos la IA de piloto a producción dentro de tu producto: la capa de datos y contexto que evita que invente, la interfaz que la hace usable y el coste que la hace viable. Sin vender un modelo ni una plataforma.",
       "seoTitle": "IA de piloto a producción dentro de tu producto · Room 714",
@@ -360,9 +359,9 @@
       }
     },
     "empezarDeCero": {
-      "cardTitle": "Empiezas de cero",
+      "cardTitle": "No tienes ni idea de por dónde empezar",
       "cardDescription": "Una idea, una nueva línea de negocio o un producto que hay que rehacer entero. Revisamos el negocio antes de la primera pantalla y lo llevamos a producción.",
-      "cardCta": "Empezar de cero →",
+      "cardCta": "Desde cero",
       "heroTitle": "Antes de la primera pantalla, la primera pregunta: ¿esto es un negocio?",
       "heroDescription": "Llevamos ideas y nuevas líneas de negocio a producto en producción. Revisamos el modelo antes de diseñar, diseñamos antes de construir y construimos para que aguante cuando funcione.",
       "seoTitle": "De idea a producto digital en producción · Room 714",
@@ -420,15 +419,14 @@
   },
   "home": {
     "hero": {
-      "title": "Tu producto digital ya existe. Lo que no existe es el resultado.",
-      "description": "Mejoramos y construimos el producto que usan tus clientes y el que usa tu equipo. Experiencia de usuario, tecnología y negocio en el mismo equipo, medido en lo que importa: conversión, tiempo, errores y coste.",
-      "micro": "Te respondemos en 24 h laborables · sesión de diagnóstico gratuita de 30 min"
+      "title": "¿Tu producto digital te da resultados o te da trabajo?",
+      "description": "Mejoramos el producto que usan tus clientes y el que usa tu equipo. Y si no lo tienes lo creamos. Experiencia de usuario, tecnología y negocio en el mismo proyecto con foco en lo que importa."
     },
     "buttons": {
       "tell_us": "Cuéntanos tu caso",
       "see_cases": "Ver casos",
       "all_cases": "Ver los tres casos completos →",
-      "how_we_work": "Cómo trabajamos y quiénes somos →"
+      "how_we_work": "Quienes somos"
     },
     "situaciones": {
       "title": "¿Cuál es tu caso?"
@@ -450,13 +448,10 @@
       }
     },
     "prueba": {
-      "title": "Resultados con nombre de sector, no de cliente",
-      "disclaimer": "Casos reales bajo acuerdos de confidencialidad: sector y detalles alterados. Los nombres te los contamos en la primera reunión.",
-      "link": "Caso",
       "casos": {
-        "saasAutogestion": "Un SaaS B2B regulado cuyo equipo de soporte usaba la plataforma por sus clientes. Hoy los clientes se autogestionan, la base de datos pasó de más de 200 tablas a menos de 20 y el margen, de casi nulo a dos dígitos. Ahora llevamos toda su tecnología.",
-        "activacionCanonico": "Una plataforma vendida a través de service providers con un problema de activación. Debajo, 500 esquemas de API. Salieron una app móvil, una API diez veces más pequeña y un modelo canónico de datos sobre el que hoy trabajan agentes de IA.",
-        "iaEcommerce": "Un comercio online de alimentación que quería IA sin tocar su tienda. Una plataforma aparte que propone sustitutos, combina productos y actúa de nutricionista virtual. Cero cambios en sus sistemas."
+        "saasAutogestion": "Un producto B2B regulado cuyo equipo de soporte usaba la plataforma por sus clientes. Hoy los clientes se autogestionan. El monolito con cientos de tablas es hoy una estructura de microservicios flexible y ligera. Y el margen de la empresa pasó de ser casi nulo a casi un 20% en año y medio. Ahora llevamos toda su tecnología.",
+        "activacionCanonico": "Una plataforma que demandaba una mejor experiencia de uso. Debajo, tecnología obsoleta y estructuras endiabladas. La simplificación de las API ha permitido generar una app móvil y exponer sus capacidades para que sus clientes se integren. Hoy creamos un modelo canónico de datos para los agentes de IA.",
+        "iaEcommerce": "Un comercio online que quería incorporar los beneficios de la IA sin modificar ni su tienda ni sus procesos. Creamos una plataforma aparte que propone sustitutos, combina productos y proporciona valor sin intervención humana. Cero cambios en sus sistemas."
       }
     },
     "metodo": {
@@ -480,11 +475,12 @@
       }
     },
     "latest": {
-      "title": "Lo que pensamos, por si te sirve antes de llamarnos",
+      "title": "¿Cómo pensamos?",
       "viewAll": "Ver todo el blog →"
     },
     "cierre": {
-      "title": "¿Cansado de hablar de métricas? Vamos a construirlas.",
+      "title": "¿Cansado de hablar de métricas?",
+      "subtitle": "Vamos a construirlas.",
       "description": "Sesión de diagnóstico de 30 minutos. Nos escribes, te respondemos en 24 h laborables y fijamos hora. Te decimos qué haríamos, en qué orden y qué costaría. Si no somos los adecuados, también te lo decimos."
     },
     "seo": {

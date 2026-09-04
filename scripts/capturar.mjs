@@ -37,8 +37,10 @@ const SOLO = arg("solo", null);
 // Escritorio al ancho del contenedor central (max-w-400 = 1600px) más los
 // laterales, para ver el marco como lo ve un portátil grande.
 const MEDIDAS = {
-  escritorio: { w: 1728, h: 1200 },
-  movil: { w: 390, h: 1400 },
+  movil: { w: 428, h: 926 },      // iPhone 14 Plus
+  tablet: { w: 820, h: 1180 },    // iPad A16
+  escritorio: { w: 1366, h: 768 },// el que usas para revisar
+  ancho: { w: 1920, h: 1080 },
 };
 
 async function capturar(chrome, ruta, nombre, medida) {
@@ -50,7 +52,7 @@ async function capturar(chrome, ruta, nombre, medida) {
     "--hide-scrollbars",
     `--window-size=${w},${h}`,
     "--screenshot=" + destino,
-    "--virtual-time-budget=4000",
+    "--virtual-time-budget=2500",
     `${BASE}${ruta}`,
   ]);
   return destino;

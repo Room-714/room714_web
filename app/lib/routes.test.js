@@ -75,9 +75,12 @@ describe("pathsOf", () => {
 });
 
 describe("RENOMBRADAS", () => {
-  it("cubre las seis URLs antiguas del menú viejo", () => {
-    expect(RENOMBRADAS).toHaveLength(6);
+  it("cubre las URLs antiguas: las seis del menú viejo y el diagnóstico", () => {
+    expect(RENOMBRADAS).toHaveLength(8);
     const origenes = RENOMBRADAS.map((r) => r.de);
+    // El diagnóstico automático se eliminó, pero su URL está indexada.
+    expect(origenes).toContain("/es/diagnostic");
+    expect(origenes).toContain("/en/diagnostic");
     for (const vieja of [
       "/es/projects",
       "/en/projects",
@@ -156,7 +159,6 @@ describe("EN_SITEMAP", () => {
   it("incluye la portada y las cuatro situaciones", () => {
     for (const clave of [
       "home",
-      "queHacemos",
       "productoClientes",
       "productoEquipo",
       "iaProducto",

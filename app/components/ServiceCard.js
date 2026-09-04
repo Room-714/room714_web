@@ -36,7 +36,7 @@ export default function ServiceCard({
       </div>
 
       {/* Contenedor de Texto */}
-      <div className="w-full flex flex-col justify-center text-black px-4 pb-8 md:px-0 md:pb-0 mt-4 md:mt-0">
+      <div className="w-full flex flex-col justify-center text-black px-6 pb-8 md:pl-0 md:pr-10 lg:pr-16 md:pb-0 mt-4 md:mt-0">
         {/* Número con estilo sutil */}
         <span className="font-hand text-base sm:text-xl md:text-2xl lg:text-3xl block tracking-widest">
           {number}
@@ -48,7 +48,7 @@ export default function ServiceCard({
         </h3>
 
         {/* Descripción: Ajuste de lectura */}
-        <p className="font-body text-lg leading-5 sm:text-2xl sm:leading-7 md:text-2xl md:leading-8 lg:text-3xl lg:leading-9 lg:pr-20">
+        <p className="font-body text-lg leading-5 sm:text-2xl sm:leading-7 md:text-2xl md:leading-8 lg:text-3xl lg:leading-9 ">
           {description}
         </p>
 

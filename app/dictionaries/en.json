@@ -1,9 +1,8 @@
 {
   "nav": {
     "home": "Home",
-    "que_hacemos": "What we do",
     "casos": "Cases",
-    "como_trabajamos": "How we work",
+    "nosotros": "About us",
     "ideas": "Ideas",
     "hablemos": "Let's talk",
     "projects": "Projects",
@@ -184,7 +183,7 @@
     "productoClientes": {
       "cardTitle": "The product your customers use is losing them",
       "cardDescription": "Sign-up, onboarding, activation, customer area, app. Every unnecessary step is a customer walking away. We redesign the flow, build it, and measure it in conversion, ARPU and support cost.",
-      "cardCta": "Product for your customers →",
+      "cardCta": "For your customers",
       "heroTitle": "Every unnecessary step in your product is a customer walking away",
       "heroDescription": "We redesign and build the flows your customers use to sign up, get started, operate and come back: onboarding, activation, customer area, app. And we measure it where it shows: conversion, drop-off, ARPU and support cost.",
       "seoTitle": "Onboarding, sign-up and customer area redesign · Room 714",
@@ -245,7 +244,7 @@
     "productoEquipo": {
       "cardTitle": "The product your team uses is slowing the operation down",
       "cardDescription": "Back-office, dashboards, internal tools, systems nobody wants to touch. We modernise them without stopping the business, and where AI belongs, we give it the context it needs so it doesn't make things up.",
-      "cardCta": "Product for your team →",
+      "cardCta": "For your team",
       "heroTitle": "The software your team uses is a product too. And it shows when you don't treat it like one.",
       "heroDescription": "We modernise and build the tools your company runs on: back-office, dashboards, incident management, data platforms, legacy systems. Without stopping the operation, measured in errors, time and cost.",
       "seoTitle": "Modernising internal software, back-office and dashboards · Room 714",
@@ -301,7 +300,7 @@
     "iaProducto": {
       "cardTitle": "Your AI pilot never reaches production",
       "cardDescription": "The demo worked. Six months later it is still a demo. We build the missing layer between the model and your systems: data, context, interface and cost.",
-      "cardCta": "AI inside the product →",
+      "cardCta": "With AI",
       "heroTitle": "The demo worked. So why is it still a demo?",
       "heroDescription": "We take AI from pilot to production inside your product: the data and context layer that stops it making things up, the interface that makes it usable, and the cost that makes it viable. We are not selling you a model or a platform.",
       "seoTitle": "AI from pilot to production inside your product · Room 714",
@@ -360,9 +359,9 @@
       }
     },
     "empezarDeCero": {
-      "cardTitle": "You are starting from scratch",
+      "cardTitle": "You have no idea where to start",
       "cardDescription": "An idea, a new line of business, or a product that needs rebuilding from the ground up. We look at the business before the first screen, and take it to production.",
-      "cardCta": "Starting from scratch →",
+      "cardCta": "From scratch",
       "heroTitle": "Before the first screen, the first question: is this a business?",
       "heroDescription": "We take ideas and new lines of business to a product in production. We review the model before designing, design before building, and build so it holds up when it works.",
       "seoTitle": "From idea to a digital product in production · Room 714",
@@ -420,15 +419,14 @@
   },
   "home": {
     "hero": {
-      "title": "Your digital product already exists. The results don't.",
-      "description": "We improve and build the product your customers use and the one your team uses. User experience, technology and business in the same team, measured in what matters: conversion, time, errors and cost.",
-      "micro": "We reply within 24 working hours · free 30-minute diagnostic session"
+      "title": "Does your digital product give you results, or give you work?",
+      "description": "We improve the product your customers use and the one your team uses. And if you don't have one, we build it. User experience, technology and business in the same project, focused on what matters."
     },
     "buttons": {
       "tell_us": "Tell us about your case",
       "see_cases": "See cases",
       "all_cases": "Read all three cases →",
-      "how_we_work": "How we work and who we are →"
+      "how_we_work": "Who we are"
     },
     "situaciones": {
       "title": "What's your situation?"
@@ -450,13 +448,10 @@
       }
     },
     "prueba": {
-      "title": "Results named by sector, not by client",
-      "disclaimer": "Real cases under confidentiality agreements: sector and details altered. We'll tell you the names in the first meeting.",
-      "link": "Case",
       "casos": {
-        "saasAutogestion": "A regulated B2B SaaS whose support team was using the platform on behalf of its customers. Today customers do it themselves, the database went from over 200 tables to fewer than 20, and the margin from almost nothing to double digits. We now run all of their technology.",
-        "activacionCanonico": "A platform sold through service providers with an activation problem. Underneath it, 500 API schemas. Out came a mobile app, an API ten times smaller, and a canonical data model that AI agents work on today.",
-        "iaEcommerce": "An online grocery that wanted AI without touching its store. A separate platform that suggests substitutes, combines products and acts as a virtual nutritionist. Zero changes to their systems."
+        "saasAutogestion": "A regulated B2B product whose support team was using the platform on behalf of its customers. Today customers do it themselves. The monolith with hundreds of tables is now a light, flexible microservices structure. And the company margin went from almost nothing to nearly 20% in a year and a half. We now run all of their technology.",
+        "activacionCanonico": "A platform that needed a better experience. Underneath, obsolete technology and devilish structures. Simplifying the APIs made room for a mobile app and for exposing its capabilities so its clients could integrate. Today we are building a canonical data model for AI agents.",
+        "iaEcommerce": "An online shop that wanted the benefits of AI without changing its store or its processes. We built a separate platform that suggests substitutes, combines products and delivers value with no human in the loop. Zero changes to their systems."
       }
     },
     "metodo": {
@@ -480,11 +475,12 @@
       }
     },
     "latest": {
-      "title": "What we think, in case it helps before you call us",
+      "title": "How do we think?",
       "viewAll": "See the whole blog →"
     },
     "cierre": {
-      "title": "Tired of talking about metrics? Let's go build them.",
+      "title": "Tired of talking about metrics?",
+      "subtitle": "Let's go build them.",
       "description": "A 30-minute diagnostic session. You write to us, we reply within 24 working hours and set a time. We tell you what we would do, in what order and what it would cost. If we are not the right team, we tell you that too."
     },
     "seo": {

@@ -31,16 +31,15 @@ export default function Navbar({
     return pathname.replace(`/${lang}`, `/${targetLang}`);
   };
 
-  // Diagnóstico y Empleo salen del menú y pasan al footer: conservan su URL
-  // y siguen accesibles, pero dejan de competir por la atención con las
-  // cuatro situaciones, que es por donde entra el cliente.
+  // Empleo baja al footer: conserva su URL y sigue accesible, pero deja de
+  // competir por la atención. Y "Qué hacemos" desaparece: su página repetía
+  // el tercer bloque de la portada, así que se eliminó.
   const navLinks = [
     // La portada va con casita. El texto se conserva porque lo necesitan el
     // lector de pantalla y las migas de pan del blog.
     { name: dict.nav.home, href: path("home", lang), Icono: House },
-    { name: dict.nav.que_hacemos, href: path("queHacemos", lang) },
     { name: dict.nav.casos, href: path("casos", lang) },
-    { name: dict.nav.como_trabajamos, href: path("comoTrabajamos", lang) },
+    { name: dict.nav.nosotros, href: path("comoTrabajamos", lang) },
     { name: dict.nav.ideas, href: path("blog", lang) },
   ];
 
@@ -68,7 +67,7 @@ export default function Navbar({
       </Link>
 
       {/* MENÚ DESKTOP + SELECTOR IDIOMA */}
-      <div className="hidden md:flex items-center gap-4 lg:gap-6 xl:gap-10">
+      <div className="hidden lg:flex items-center gap-4 lg:gap-6 xl:gap-10">
         <nav className="flex items-center gap-3 lg:gap-5 xl:gap-8">
           {navLinks.map((link) => {
             const isActive = pathname === link.href;
@@ -148,14 +147,14 @@ export default function Navbar({
       </div>
 
       {/* MENÚ MÓVIL: Icono */}
-      <button className="md:hidden p-1" onClick={() => setIsOpen(!isOpen)}>
+      <button className="lg:hidden p-1" onClick={() => setIsOpen(!isOpen)}>
         {isOpen ? <X size={32} /> : <Menu size={32} strokeWidth={2.5} />}
       </button>
 
       {/* MENÚ MÓVIL: Desplegable */}
       {isOpen && (
         <div
-          className={`absolute top-full left-0 w-full border-b flex flex-col p-6 gap-6 md:hidden animate-in slide-in-from-top duration-300 z-50 ${
+          className={`absolute top-full left-0 w-full border-b flex flex-col p-6 gap-6 lg:hidden animate-in slide-in-from-top duration-300 z-50 ${
             isDark ? "bg-black border-gray-800" : "bg-white border-gray-200"
           }`}
         >
