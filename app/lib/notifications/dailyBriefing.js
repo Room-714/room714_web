@@ -121,18 +121,6 @@ export function renderTaskHtml(task) {
         ${button(task.articleUrl, "Ver artículo")}${button(task.adminUrl, "Editar en el admin")}
       `);
 
-    // La prospección del día es una sola decisión: revisar la cola que trae
-    // Apollo y decir sí o no a cada candidato. Sustituye a las dos tareas
-    // antiguas (comentar un post, buscar referencias), que en meses no
-    // produjeron ni un solo engagement registrado.
-    case "prospect_queue":
-      return block(`
-        ${eyebrow(timing(task))}
-        ${heading(task.title)}
-        ${note("Candidatos que ha traído Apollo desde la última revisión. Para cada uno: sí, no, o pendiente.")}
-        ${button(task.adminUrl, "Revisar cola")}
-      `);
-
     case "not_published":
       return block(`
         ${eyebrow(`Ayer a las ${task.time}`)}

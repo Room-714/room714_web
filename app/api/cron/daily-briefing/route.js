@@ -48,7 +48,7 @@ export async function GET(request) {
   const yesterdayStart = new Date(start.getTime() - DAY_MS);
 
   try {
-    const [todayVariants, yesterdayUnsent, todaysPosts, pendientes] =
+    const [todayVariants, yesterdayUnsent, todaysPosts] =
       await Promise.all([
       prisma.linkedInVariant.findMany({
         where: { scheduledFor: { gte: start, lte: end } },
@@ -71,7 +71,6 @@ export async function GET(request) {
         include: { translations: true, linkedinVariants: true },
         orderBy: { date: "desc" },
       }),
-      prisma.prospectDiscovery.count({ where: { decision: "pending" } }),
     ]);
 
     // De los posts de hoy, prioriza el AUTO: es el que lleva tomas de
@@ -93,21 +92,6 @@ export async function GET(request) {
       // hueco de la semana se descubre cuando no llegan las publicaciones.
       expectsArticle: PLANNED_WEEKDAYS.includes(getMadridWeekday(now)),
     });
-
-    // Toda la prospección del día cabe en una tarea: revisar la cola. Antes
-    // había dos —comentar el post de alguien y buscar referencias— que en meses
-    // no produjeron ni un solo engagement registrado.
-    if (pendientes > 0) {
-      tasks.push({
-        id: "prospect-queue",
-        kind: "prospect_queue",
-        when: "after",
-        time: "09:00",
-        channel: null,
-        title: `Revisa la cola de prospectos (${pendientes} pendientes)`,
-        adminUrl: `${siteUrl}/admin/prospects`,
-      });
-    }
 
     const dateLabel = formatMadridDateLabel(now);
 

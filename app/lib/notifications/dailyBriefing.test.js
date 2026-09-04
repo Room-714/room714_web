@@ -157,29 +157,6 @@ describe("renderBriefingHtml", () => {
     expect(html).not.toContain("Se publica solo a las");
   });
 
-  // La prospección del día es una sola tarea: revisar la cola de Apollo. Antes
-  // había dos (comentar un post, buscar referencias) que en meses no
-  // produjeron ni un solo engagement registrado.
-  it("prospect_queue lleva el número de pendientes y el enlace al admin", () => {
-    const html = renderBriefingHtml({
-      tasks: [
-        {
-          id: "prospect-queue",
-          kind: "prospect_queue",
-          when: "after",
-          time: "09:00",
-          channel: null,
-          title: "Revisa la cola de prospectos (5 pendientes)",
-          adminUrl: "https://www.room714.com/admin/prospects",
-        },
-      ],
-      incidents: [],
-      dateLabel: "lunes 27",
-    });
-    expect(html).toContain("Revisa la cola de prospectos (5 pendientes)");
-    expect(html).toContain("https://www.room714.com/admin/prospects");
-  });
-
   it("lista las incidencias de ayer", () => {
     const html = renderBriefingHtml({
       tasks: [],
