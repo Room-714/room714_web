@@ -489,12 +489,21 @@ const TAKES_TOOL = {
                 "Texto sugerido para la ACCIÓN CRUZADA de esta toma (te la indico en el prompt). Máximo 2 frases. Si no tiene acción cruzada, cadena vacía.",
             },
           },
-          required: ["angle", "text", "hashtags", "image_query"],
+          required: ["angle", "text", "hashtags", "image_query", "cross_note"],
+          additionalProperties: false,
         },
       },
     },
     required: ["takes"],
+    additionalProperties: false,
   },
+  // Sin strict, la API no valida el input del tool contra input_schema: el
+  // 23/09/2026 el modelo devolvió takes como cadena JSON en los dos intentos y
+  // el artículo se quedó sin tomas. Con strict la API garantiza el esquema.
+  // Exige additionalProperties: false en cada objeto; y cross_note pasa a
+  // required para que llegue siempre (vacía si no hay acción cruzada, como ya
+  // pedía el prompt).
+  strict: true,
 };
 
 // Exportada para poder probarla; el flujo normal entra por generateLinkedInTakes.
@@ -547,6 +556,18 @@ Llama al tool create_linkedin_takes con las ${count} tomas.${crossBlock}`;
 
 // Exportada para poder probarla.
 export function validateTakes(data, count) {
+  // El 23/09/2026 el modelo devolvió el array serializado dentro de un string
+  // (JSON dentro de JSON). Si la cadena contiene el array, se acepta: tirar
+  // una generación entera por eso deja la semana sin publicaciones. Si no es
+  // JSON, cae en la comprobación de abajo con su mensaje de siempre.
+  if (typeof data?.takes === "string") {
+    try {
+      data = { ...data, takes: JSON.parse(data.takes) };
+    } catch {
+      // no era JSON
+    }
+  }
+
   if (!Array.isArray(data?.takes)) {
     throw new Error(
       `takes debe ser un array con exactamente ${count} tomas (llegó ${typeof data?.takes})`,
@@ -663,8 +684,10 @@ export async function generateLinkedInTakes({
       };
     } catch (err) {
       lastError = err;
+      // El principio del payload va al log: sin él, "llegó string" no dice si
+      // el modelo devolvió JSON serializado, prosa o un truncado.
       console.error(
-        `generateLinkedInTakes intento ${attempt}/${MAX_GENERATION_ATTEMPTS} — validación falló: ${err.message}`,
+        `generateLinkedInTakes intento ${attempt}/${MAX_GENERATION_ATTEMPTS} — validación falló: ${err.message}. Input recibido: ${JSON.stringify(toolUse.input).slice(0, 400)}`,
       );
     }
   }

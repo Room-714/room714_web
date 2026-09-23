@@ -166,6 +166,14 @@ describe("validateTakes", () => {
     expect(validateTakes(data, 2).takes).toHaveLength(2);
   });
 
+  // El 23/09/2026 el modelo devolvió takes como cadena JSON (el array
+  // serializado dentro de un string) en los dos intentos, y el artículo se
+  // quedó sin tomas. Si la cadena contiene el array, se acepta.
+  it("acepta takes serializado como cadena JSON", () => {
+    const data = { takes: JSON.stringify([take, take]) };
+    expect(validateTakes(data, 2).takes).toEqual([take, take]);
+  });
+
   it("rechaza si vienen de menos", () => {
     expect(() => validateTakes({ takes: [take] }, 3)).toThrow(
       /exactamente 3 tomas/,
@@ -259,5 +267,54 @@ describe("generateLinkedInTakes", () => {
       }),
     ).rejects.toThrow(/tras 2 intentos/);
     expect(create).toHaveBeenCalledTimes(2);
+  });
+
+  // Sin strict, la API no valida el input del tool y el modelo puede devolver
+  // takes como cadena (pasó el 23/09/2026). Con strict lo garantiza la API.
+  it("declara el tool en modo estricto para que la API garantice el esquema", async () => {
+    const create = vi.fn().mockResolvedValue(mockResponse([take, take]));
+    getAnthropicClient.mockReturnValue({ messages: { create } });
+
+    await generateLinkedInTakes({
+      articleTitle: "Título",
+      articleContentEs: "<p>Contenido</p>",
+      articleUrl: "https://www.room714.com/es/blog/x",
+      count: 2,
+      crossActions: [null, null],
+    });
+
+    const [params] = create.mock.calls[0];
+    const tool = params.tools.find((t) => t.name === "create_linkedin_takes");
+    expect(tool.strict).toBe(true);
+    expect(tool.input_schema.additionalProperties).toBe(false);
+    expect(tool.input_schema.properties.takes.items.additionalProperties).toBe(
+      false,
+    );
+  });
+
+  // El log de Vercel del 23/09/2026 decía "llegó string" y nada más: sin ver
+  // qué devolvió el modelo no se puede saber si era JSON serializado, prosa o
+  // un truncado. Si la validación falla, tiene que quedar el principio del
+  // payload en el log.
+  it("si la validación falla, deja en el log el principio de lo que devolvió el modelo", async () => {
+    const error = vi.spyOn(console, "error").mockImplementation(() => {});
+    const create = vi
+      .fn()
+      .mockResolvedValue(mockResponse("prosa en vez de un array de tomas"));
+    getAnthropicClient.mockReturnValue({ messages: { create } });
+
+    await expect(
+      generateLinkedInTakes({
+        articleTitle: "Título",
+        articleContentEs: "<p>Contenido</p>",
+        articleUrl: "https://www.room714.com/es/blog/x",
+        count: 2,
+        crossActions: [null, null],
+      }),
+    ).rejects.toThrow(/tras 2 intentos/);
+
+    const logged = error.mock.calls.map((c) => c.join(" ")).join(" | ");
+    expect(logged).toContain("prosa en vez de un array de tomas");
+    error.mockRestore();
   });
 });
