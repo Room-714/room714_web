@@ -150,6 +150,14 @@ describe("buildTakesPrompt", () => {
     expect(prompt).toContain("Toma 2:");
     expect(prompt).not.toContain("Toma 3:");
   });
+
+  // El 23/09/2026 el modelo escribió comillas dobles sin escapar dentro de
+  // text y la API reparó el JSON como pudo: el texto se cortó en la comilla y
+  // el resto del post acabó troceado en hashtags. Cuanto menos tiente al
+  // modelo con citas entrecomilladas, menos veces pasa.
+  it("prohíbe las comillas dobles rectas dentro de los textos", () => {
+    expect(buildTakesPrompt(base)).toMatch(/comillas dobles/i);
+  });
 });
 
 describe("validateTakes", () => {
@@ -196,6 +204,35 @@ describe("validateTakes", () => {
     const rota = { ...take, hashtags: "#IA" };
     expect(() => validateTakes({ takes: [rota] }, 1)).toThrow(
       /takes\[0\] incompleto/,
+    );
+  });
+  // Lo que llegó el 23/09/2026 en hashtags de la toma 1, tal cual: el resto
+  // del post troceado más los tokens del JSON. Cumple el esquema (array de
+  // strings), así que strict no lo para; esto sí, y el bucle reintenta.
+  it("rechaza hashtags que no son hashtags (el post troceado del 23/09/2026)", () => {
+    const rota = {
+      ...take,
+      hashtags: [
+        "mejora el onboarding",
+        " y el equipo fue directamente a diseñar. Con buena voluntad.",
+        "hashtags",
+        " [",
+        " #ProductoDigital",
+        "#UX",
+      ],
+    };
+    expect(() => validateTakes({ takes: [rota] }, 1)).toThrow(
+      "takes[0] hashtags mal formados",
+    );
+  });
+
+  it("acepta hashtags con o sin almohadilla, con letras, números y guion bajo", () => {
+    const ok = {
+      ...take,
+      hashtags: ["#JTBD", "ProductoDigital", "#UX_2026", "#DiseñoDeProducto"],
+    };
+    expect(validateTakes({ takes: [ok] }, 1).takes[0].hashtags).toEqual(
+      ok.hashtags,
     );
   });
 });
@@ -290,6 +327,25 @@ describe("generateLinkedInTakes", () => {
     expect(tool.input_schema.properties.takes.items.additionalProperties).toBe(
       false,
     );
+  });
+
+  it("la descripción del campo text del tool también prohíbe las comillas dobles", async () => {
+    const create = vi.fn().mockResolvedValue(mockResponse([take, take]));
+    getAnthropicClient.mockReturnValue({ messages: { create } });
+
+    await generateLinkedInTakes({
+      articleTitle: "Título",
+      articleContentEs: "<p>Contenido</p>",
+      articleUrl: "https://www.room714.com/es/blog/x",
+      count: 2,
+      crossActions: [null, null],
+    });
+
+    const [params] = create.mock.calls[0];
+    const tool = params.tools.find((t) => t.name === "create_linkedin_takes");
+    expect(
+      tool.input_schema.properties.takes.items.properties.text.description,
+    ).toMatch(/comillas dobles/i);
   });
 
   // El log de Vercel del 23/09/2026 decía "llegó string" y nada más: sin ver

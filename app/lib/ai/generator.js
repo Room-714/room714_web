@@ -470,7 +470,7 @@ const TAKES_TOOL = {
             text: {
               type: "string",
               description:
-                "Post nativo de LinkedIn en español (1000-1800 chars). Empieza con un HOOK punzante en la primera línea (lo que se ve antes del 'ver más'). Tono coloquial-profesional. 3-5 párrafos cortos separados por doble salto de línea. SIN enlaces. SIN hashtags al final (van en otro campo). Termina con una pregunta o invitación a comentar. El hook debe ser ÚNICO en cada toma.",
+                "Post nativo de LinkedIn en español (1000-1800 chars). Empieza con un HOOK punzante en la primera línea (lo que se ve antes del 'ver más'). Tono coloquial-profesional. 3-5 párrafos cortos separados por doble salto de línea. SIN enlaces. SIN hashtags al final (van en otro campo). Termina con una pregunta o invitación a comentar. El hook debe ser ÚNICO en cada toma. SIN comillas dobles rectas dentro del texto: para citar, comillas simples o «latinas».",
             },
             hashtags: {
               type: "array",
@@ -550,9 +550,14 @@ ${articleContentEs}
 3. Cada toma tiene que sostenerse sola: quien lea solo esa debe llevarse una idea completa, no un anzuelo vacío.
 4. Los hooks de las ${count} tomas tienen que ser claramente distintos entre sí. Se publican en días diferentes de la misma semana y las lee la misma gente.
 5. NO metas la URL en el texto: el enlace va aparte.
+6. Dentro de text, cross_note e image_query NO uses comillas dobles rectas ("). Si citas algo, usa comillas simples o «latinas»: una comilla doble rompe el JSON del tool y la toma se pierde.
 
 Llama al tool create_linkedin_takes con las ${count} tomas.${crossBlock}`;
 }
+
+// Un hashtag es una sola palabra: letras, números o guion bajo, con o sin
+// almohadilla (el cron de publicación la añade si falta).
+const HASHTAG_RE = /^#?[\p{L}\p{N}_]+$/u;
 
 // Exportada para poder probarla.
 export function validateTakes(data, count) {
@@ -595,6 +600,17 @@ export function validateTakes(data, count) {
   for (const [i, t] of data.takes.entries()) {
     if (!t.text || !t.angle || !t.image_query || !Array.isArray(t.hashtags)) {
       throw new Error(`takes[${i}] incompleto`);
+    }
+
+    // El 23/09/2026 llegó aquí el resto del post troceado dentro de hashtags:
+    // el modelo escribió comillas dobles sin escapar dentro de text y la API
+    // reparó el JSON como pudo (text cortado en la comilla, y la frase citada,
+    // el resto del post y los tokens "hashtags" y " [" como hashtags). Cumple
+    // el esquema, así que strict no lo para. Esto sí, y el bucle reintenta.
+    if (!t.hashtags.every((h) => typeof h === "string" && HASHTAG_RE.test(h))) {
+      throw new Error(
+        `takes[${i}] hashtags mal formados: ${JSON.stringify(t.hashtags).slice(0, 200)}`,
+      );
     }
   }
   return data;
