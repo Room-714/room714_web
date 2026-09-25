@@ -1,0 +1,1767 @@
+{
+  "generatedAt": "2026-09-25",
+  "clusters": {
+    "C1": {
+      "name": "1 · Ideación y discovery",
+      "es": "/es/empezar-de-cero",
+      "en": "/en/starting-from-scratch"
+    },
+    "C2": {
+      "name": "2 · Diseño y experiencia de cliente",
+      "es": "/es/producto-para-tus-clientes",
+      "en": "/en/product-for-your-customers"
+    },
+    "C3": {
+      "name": "3 · Desarrollo de software",
+      "es": "/es/producto-para-tu-equipo",
+      "en": "/en/product-for-your-team"
+    },
+    "IA": {
+      "name": "IA (transversal)",
+      "es": "/es/ia-en-el-producto",
+      "en": "/en/ai-in-the-product"
+    }
+  },
+  "posts": [
+    {
+      "n": 1,
+      "postId": 153,
+      "category": "UX",
+      "cluster": "C1",
+      "translations": [
+        {
+          "translationId": 639,
+          "lang": "es",
+          "slug": "el-problema-antes-del-problema-diagnostico-es-el-diseno",
+          "title": "El Problema antes del Problema: Por qué el Diagnóstico es el Diseño",
+          "metaTitle": "Diagnóstico de producto antes del brief",
+          "metaDescription": "Rediseñar sin diagnosticar resuelve el síntoma equivocado. Cómo separar síntoma y causa antes del brief, con JTBD y herramientas que funcionan.",
+          "currentMetaDescription": "La mayoría de proyectos de UX fracasan antes de que alguien abra Figma. El error no está en la solución: está en haber saltado a ella sin entender el problema real.",
+          "sentenceHtml": "Es la misma pregunta con la que abrimos cualquier proyecto nuevo: <a href=\"/es/empezar-de-cero\">primero el negocio y el problema, después las pantallas</a>.",
+          "lastParagraphText": "En Room 714, cuando trabajamos con equipos en auditorías de producto, el primer entregable no es un rediseño ni un roadmap: es un mapa del problema real. A veces ese mapa confirma el brief inicial. Más a menudo, lo transforma por completo. La diferencia entre ambos escenarios puede ser la diferencia entre seis meses de trabajo que mueve métricas y seis meses de trabajo que genera una presentación bonita. Si llevas tiempo sospechando que tu equipo está resolviendo el problema equivocado con mucha eficiencia, es una buena señal de que toca parar y diagnosticar antes de seguir diseñando."
+        },
+        {
+          "translationId": 640,
+          "lang": "en",
+          "slug": "the-problem-before-the-problem-diagnosis-is-the-real-design-work",
+          "title": "The Problem Before the Problem: Why Diagnosis Is the Real Design Work",
+          "metaTitle": "Product diagnosis: the problem before the brief",
+          "metaDescription": "Redesigning without a diagnosis fixes the wrong symptom. How to separate symptom from cause before the brief, with JTBD and tools that work.",
+          "currentMetaDescription": "Most UX projects fail before anyone opens Figma. The mistake isn't in the solution—it's in jumping to one before understanding the actual problem.",
+          "sentenceHtml": "It is the same question we open every new project with: <a href=\"/en/starting-from-scratch\">the business and the problem first, the screens after</a>.",
+          "lastParagraphText": "At Room 714, when we work with teams on product audits, the first deliverable isn't a redesign or a roadmap: it's a map of the real problem. Sometimes that map confirms the initial brief. More often, it transforms it entirely. The difference between those two scenarios can be the difference between six months of work that moves metrics and six months of work that produces a beautiful presentation. If you've been suspecting that your team is solving the wrong problem very efficiently, that's a good signal it's time to stop and diagnose before you design anything else."
+        }
+      ]
+    },
+    {
+      "n": 3,
+      "postId": 151,
+      "category": "UX",
+      "cluster": "C2",
+      "translations": [
+        {
+          "translationId": 631,
+          "lang": "es",
+          "slug": "interfaces-sin-botones-mejor-ux-es-no-ver-nada",
+          "title": "Interfaces sin Botones: Cuando la \"Mejor UX\" es No Ver Nada (y Por Qué Eso nos Preocupa)",
+          "metaTitle": "UX invisible: cuándo quitar botones empeora la UX",
+          "metaDescription": "La interfaz invisible promete menos fricción y a menudo quita control al usuario. Cómo decidir qué ocultar y cuándo devolver el volante.",
+          "currentMetaDescription": "La promesa de \"cero interfaz\" suena bien hasta que el usuario no sabe qué está pasando. Te explicamos cuándo la invisibilidad es virtud y cuándo es dejación de diseño.",
+          "sentenceHtml": "Es el tipo de decisión que tomamos cuando <a href=\"/es/producto-para-tus-clientes\">rediseñamos el producto que usan tus clientes</a>: menos pasos, pero nunca menos control.",
+          "lastParagraphText": "Si estás en medio de una integración de IA en tu producto y la conversación interna se ha centrado en cuántos pasos eliminar, puede ser el momento de hacer una pausa. No para frenar la automatización, sino para asegurarse de que lo que estás quitando no era carga para el usuario sino orientación. En Room 714 hacemos exactamente ese tipo de auditoría: revisar los flujos actuales, identificar qué fricción es ruido y qué fricción es señal, y diseñar el control progresivo que permite que el producto sea autónomo sin ser opaco. Si esa conversación te resulta familiar, tiene sentido hablar."
+        },
+        {
+          "translationId": 632,
+          "lang": "en",
+          "slug": "no-interface-illusion-invisible-ux-not-same-as-good-ux",
+          "title": "The No-Interface Illusion: Why Invisible UX Is Not the Same as Good UX",
+          "metaTitle": "Invisible UX: when removing buttons hurts",
+          "metaDescription": "The invisible interface promises less friction and often takes control away from users. How to decide what to hide and when to hand back the wheel.",
+          "currentMetaDescription": "Zero-interface sounds like UX nirvana—until users lose control and trust disappears. Here's when invisible design is a virtue and when it's a design failure in disguise.",
+          "sentenceHtml": "It is the kind of call we make when <a href=\"/en/product-for-your-customers\">we redesign the product your customers use</a>: fewer steps, never less control.",
+          "lastParagraphText": "If you're in the middle of an AI integration and the internal conversation has focused on how many steps to eliminate, it may be time to pause. Not to slow down the automation, but to make sure what you're removing wasn't user burden—it was user orientation. At Room 714 we do exactly this kind of audit: reviewing current flows, identifying which friction is noise and which is signal, and designing the progressive control layer that lets a product be autonomous without being opaque. If that conversation sounds familiar, it's worth having."
+        }
+      ]
+    },
+    {
+      "n": 4,
+      "postId": 150,
+      "category": "TECH",
+      "cluster": "IA",
+      "translations": [
+        {
+          "translationId": 627,
+          "lang": "es",
+          "slug": "agentes-en-produccion-suite-de-tests-pasa-usuarios-sufren",
+          "title": "Agentes en Producción: Por qué tu Suite de Tests Pasa y tus Usuarios Sufren",
+          "metaTitle": "Testing de agentes de IA en producción",
+          "metaDescription": "Tu suite de tests de agentes pasa y los usuarios siguen sufriendo. Los puntos ciegos entre staging y producción y cómo medir lo que importa.",
+          "currentMetaDescription": "Tu agente de IA supera todos los tests locales y falla en producción. El problema no es el prompt: es lo que tu estrategia de testing nunca midió.",
+          "sentenceHtml": "Cerrar esa distancia es buena parte del trabajo de <a href=\"/es/ia-en-el-producto\">llevar un piloto de IA a producción</a>.",
+          "lastParagraphText": "Si tu agente pasa todos los tests y sigue fallando a tus usuarios, el problema no es tu agente. Es el marco en el que lo estás evaluando. En Room 714 trabajamos con equipos para construir ese marco desde cero o para auditar el que ya tienen: qué cubre, qué ignora, y cuánto está costando esa ignorancia en producción real. La conversación suele ser más corta de lo que los equipos esperan. Las consecuencias de no tenerla, no."
+        },
+        {
+          "translationId": 628,
+          "lang": "en",
+          "slug": "ai-agents-production-test-suite-passes-users-suffer",
+          "title": "Agent Testing Theater: Why Your Test Suite Passes and Your Users Still Suffer",
+          "metaTitle": "Testing AI agents in production",
+          "metaDescription": "Your agent test suite passes and users still suffer. The blind spots between staging and production, and how to measure what matters.",
+          "currentMetaDescription": "Your AI agent passes every local test and breaks in production. The problem isn't the prompt — it's what your testing strategy never actually measured.",
+          "sentenceHtml": "Closing that gap is a large part of <a href=\"/en/ai-in-the-product\">taking an AI pilot to production</a>.",
+          "lastParagraphText": "If your agent passes every test and still fails your users, the problem isn't your agent. It's the framework you're using to evaluate it. At Room 714 we work with teams to build that framework from scratch or audit the one they already have: what it covers, what it ignores, and how much that ignorance is costing them in real production. The conversation is usually shorter than teams expect. The consequences of not having it are not."
+        }
+      ]
+    },
+    {
+      "n": 5,
+      "postId": 149,
+      "category": "UX",
+      "cluster": "C3",
+      "translations": [
+        {
+          "translationId": 623,
+          "lang": "es",
+          "slug": "dashboards-que-deciden-visualizacion-de-datos-ux",
+          "title": "Dashboards que Deciden: Por qué el 90% de las Visualizaciones de Datos No Sirven para Nada",
+          "metaTitle": "Dashboards que ayudan a decidir, no a decorar",
+          "metaDescription": "La mayoría de dashboards muestran datos sin jerarquía de decisión. Cómo diseñar paneles internos que respondan a la pregunta que tu equipo tiene.",
+          "currentMetaDescription": "Un dashboard lleno de gráficas no es un dashboard útil. Por qué la mayoría de visualizaciones de datos decoran sin informar, y cómo diseñar desde la decisión real.",
+          "sentenceHtml": "Es el criterio con el que <a href=\"/es/producto-para-tu-equipo\">modernizamos los dashboards y el back-office de un equipo</a>.",
+          "lastParagraphText": "Si tu empresa tiene dashboards que nadie abre, o los abre pero nadie actúa en consecuencia, el problema no está en los datos ni en la herramienta. Está en el proceso de diseño que los produjo. En Room 714 hacemos auditorías de dashboards desde la perspectiva de la decisión: mapeamos qué trabajos reales tiene que resolver cada panel, redefinimos la jerarquía de métricas y diseñamos la capa de presentación para que la información correcta sea imposible de ignorar. Si quieres saber cuánto valor estás dejando sobre la mesa con los dashboards que tienes ahora, podemos empezar con una conversación de una hora."
+        },
+        {
+          "translationId": 624,
+          "lang": "en",
+          "slug": "dashboards-that-decide-data-visualization-ux",
+          "title": "Dashboards That Actually Decide: Why Most Data Visualizations Are Just Expensive Wallpaper",
+          "metaTitle": "Dashboards that help decisions, not decor",
+          "metaDescription": "Most dashboards show data with no decision hierarchy. How to design internal dashboards that answer the question your team actually has.",
+          "currentMetaDescription": "Most dashboards look impressive and drive zero decisions. Here's why data visualization fails when built from data up instead of from decisions down — and how to fix it.",
+          "sentenceHtml": "It is the criterion we use when <a href=\"/en/product-for-your-team\">we modernise a team's dashboards and back-office</a>.",
+          "lastParagraphText": "If your company has dashboards that nobody opens — or ones that get opened but never acted upon — the problem isn't in the data or the tool. It's in the design process that produced them. At Room 714 we audit dashboards from the decision perspective: we map what real jobs each panel is supposed to resolve, redefine the metric hierarchy, and design the presentation layer so the right information is impossible to ignore. If you want to know how much value you're leaving on the table with your current dashboards, we can start with a one-hour conversation."
+        }
+      ]
+    },
+    {
+      "n": 6,
+      "postId": 148,
+      "category": "TECH",
+      "cluster": "IA",
+      "translations": [
+        {
+          "translationId": 619,
+          "lang": "es",
+          "slug": "observabilidad-agentes-ia-lo-que-los-logs-no-te-cuentan",
+          "title": "Observabilidad de Agentes: Lo que los Logs No Te Cuentan (y Dónde Sí Está la Respuesta)",
+          "metaTitle": "Observabilidad de agentes de IA: más que logs",
+          "metaDescription": "Un agente puede devolver el JSON perfecto y fallar en el fondo. Qué instrumentar, qué medir y cómo fijar una línea base operativa.",
+          "currentMetaDescription": "Tus logs registran qué dijo el agente. No por qué se equivocó. La observabilidad real en sistemas de IA exige vigilar el camino, no solo el destino.",
+          "sentenceHtml": "Sin esa capa, <a href=\"/es/ia-en-el-producto\">una IA que funcionó en la demo</a> no se sostiene delante de usuarios reales.",
+          "lastParagraphText": "Si estás construyendo o escalando un sistema de agentes y todavía no tienes una estrategia de trazabilidad de pasos intermedios, es el momento de incorporarla antes de que el primer incidente en producción te demuestre por qué era necesaria. En Room 714 hacemos auditorías de arquitecturas de agentes precisamente para eso: para encontrar los puntos ciegos antes de que los encuentre el sistema por ti. Si quieres una conversación concreta sobre tu stack, es el mejor momento para tenerla."
+        },
+        {
+          "translationId": 620,
+          "lang": "en",
+          "slug": "agent-observability-what-logs-dont-tell-you",
+          "title": "Agent Observability: What Logs Don't Tell You (and Where the Real Answer Lives)",
+          "metaTitle": "AI agent observability beyond logs",
+          "metaDescription": "An agent can return perfect JSON and still get the substance wrong. What to instrument, what to measure and how to set an operational baseline.",
+          "currentMetaDescription": "Your logs record what the agent said. Not why it went wrong. Real observability in AI systems means watching the path, not just the final output.",
+          "sentenceHtml": "Without that layer, <a href=\"/en/ai-in-the-product\">an AI that worked in the demo</a> does not hold up in front of real users.",
+          "lastParagraphText": "If you're building or scaling an agent system and still don't have a strategy for tracing intermediate steps, now is the time to incorporate it — before the first production incident demonstrates why it was necessary. We do agent architecture audits at Room 714 precisely for this: to find the blind spots before the system finds them for you. If you want a concrete conversation about your stack, this is the right moment to have it."
+        }
+      ]
+    },
+    {
+      "n": 7,
+      "postId": 147,
+      "category": "UX",
+      "cluster": "C2",
+      "translations": [
+        {
+          "translationId": 615,
+          "lang": "es",
+          "slug": "presupuesto-de-novedad-interfaces-que-innovan-demasiado-rapido-pierden-al-usuario",
+          "title": "El Presupuesto de Novedad: Por qué las Interfaces que Innovan Demasiado Rápido Pierden al Usuario",
+          "metaTitle": "Presupuesto de novedad en el diseño de interfaces",
+          "metaDescription": "Cada convención que rompes cuesta atención al usuario. Cómo repartir el presupuesto de novedad de una interfaz y dónde concentrarlo.",
+          "currentMetaDescription": "Innovar en interfaz tiene un coste cognitivo real. Te explicamos qué es el presupuesto de novedad y cómo decidir cuándo romper convenciones sin perder al usuario en el proceso",
+          "sentenceHtml": "Lo aplicamos cada vez que <a href=\"/es/producto-para-tus-clientes\">rediseñamos el alta, la contratación o el área de cliente</a> de un producto que ya tiene usuarios.",
+          "lastParagraphText": "Si tu equipo está en un ciclo de rediseño, antes de aprobar el siguiente patrón novedoso, pregúntate honestamente cuánto presupuesto de novedad queda. En Room 714 hacemos ese diagnóstico como parte de nuestras auditorías de producto: identificamos dónde la interfaz exige más aprendizaje del que aporta valor, y dónde queda espacio real para innovar con impacto. Si la conversación tiene sentido para tu producto, ya sabes dónde encontrarnos."
+        },
+        {
+          "translationId": 616,
+          "lang": "en",
+          "slug": "novelty-budget-interfaces-that-innovate-too-fast-lose-the-user",
+          "title": "The Novelty Budget: Why Interfaces That Innovate Too Fast Lose the User",
+          "metaTitle": "Novelty budget: innovate without losing users",
+          "metaDescription": "Every convention you break costs user attention. How to spend an interface's novelty budget and where to concentrate it.",
+          "currentMetaDescription": "Interface innovation has a real cognitive cost. Learn what the novelty budget is and how to decide when breaking conventions is worth it — and when it quietly destroys your product.",
+          "sentenceHtml": "We apply it every time <a href=\"/en/product-for-your-customers\">we redesign sign-up, onboarding or the customer area</a> of a product that already has users.",
+          "lastParagraphText": "If your team is in a redesign cycle, before approving the next novel pattern, ask honestly how much novelty budget remains. At Room 714 we run that diagnostic as part of our product audits: we identify where the interface demands more learning than it delivers in value, and where there's real space to innovate with impact. If that conversation makes sense for your product, you know where to find us."
+        }
+      ]
+    },
+    {
+      "n": 8,
+      "postId": 146,
+      "category": "TECH",
+      "cluster": "IA",
+      "translations": [
+        {
+          "translationId": 611,
+          "lang": "es",
+          "slug": "fiabilidad-sin-garantias-el-problema-de-consistencia-en-sistemas-ia",
+          "title": "Fiabilidad sin Garantías: El Problema que los Equipos de IA Ignoran hasta que el Sistema los Ignora a Ellos",
+          "metaTitle": "Fiabilidad en IA: deriva y verificación",
+          "metaDescription": "Un sistema de IA puede funcionar y aun así no ser fiable. Deriva, alertas que se ignoran y el coste de verificar que nadie presupuesta.",
+          "currentMetaDescription": "Los sistemas de IA no fallan como el software clásico: fallan sin romperse. Te explicamos por qué la consistencia es el nuevo criterio de calidad que tu arquitectura no está midiendo.",
+          "sentenceHtml": "Por eso la fiabilidad se diseña desde el principio cuando <a href=\"/es/ia-en-el-producto\">llevamos la IA de piloto a producción</a>.",
+          "lastParagraphText": "En Room 714 trabajamos con equipos que ya tienen IA en producción y quieren pasar de \"parece que funciona\" a \"sabemos que funciona\". Si tu sistema de IA lleva meses en producción y todavía no puedes responder estas cuatro preguntas, es el momento de hacer la revisión antes de que el sistema te la haga a ti. Hablamos."
+        },
+        {
+          "translationId": 612,
+          "lang": "en",
+          "slug": "reliability-without-guarantees-ai-consistency-problem-teams-ignore",
+          "title": "Reliability Without Guarantees: The AI Consistency Problem Teams Ignore Until It Bites Back",
+          "metaTitle": "AI system reliability: drift and verification",
+          "metaDescription": "An AI system can work and still not be trustworthy. Drift, ignored alerts and the verification cost nobody budgets for.",
+          "currentMetaDescription": "AI systems don't fail like classic software — they drift. Here's why consistency is the new quality criterion your architecture isn't measuring, and what to do about it.",
+          "sentenceHtml": "That is why reliability is designed in from the start when <a href=\"/en/ai-in-the-product\">we take AI from pilot to production</a>.",
+          "lastParagraphText": "At Room 714, we work with teams that already have AI in production and want to move from \"seems to work\" to \"we know it works.\" If your AI system has been running for months and you still can't answer these four questions, now is the time to run the audit before the system runs it for you. Let's talk."
+        }
+      ]
+    },
+    {
+      "n": 9,
+      "postId": 145,
+      "category": "UX",
+      "cluster": "C2",
+      "translations": [
+        {
+          "translationId": 607,
+          "lang": "es",
+          "slug": "reversibilidad-criterio-diseno-que-nadie-pone-en-el-brief",
+          "title": "Reversibilidad: El Criterio de Diseño que Nadie Pone en el Brief (y que la IA Hace Urgente)",
+          "metaTitle": "Reversibilidad en UX: deshacer como contrato",
+          "metaDescription": "Poder deshacer es parte de la confianza del usuario, y la IA lo vuelve urgente. Patrones para diseñar acciones reversibles sin frenar el flujo.",
+          "currentMetaDescription": "Diseñar acciones irreversibles sin decirlo es una traición al usuario. Te explicamos por qué la reversibilidad es el criterio UX más ignorado y más urgente en la era de la IA.",
+          "sentenceHtml": "Es de las primeras cosas que revisamos al <a href=\"/es/producto-para-tus-clientes\">rediseñar los flujos que usan tus clientes</a>.",
+          "lastParagraphText": "Si estás construyendo o rediseñando un producto digital — especialmente uno que incorpora IA con capacidad de acción — merece la pena hacer ese ejercicio antes de que el primer usuario descubra la respuesta por las malas. Podemos ayudarte a estructurarlo."
+        },
+        {
+          "translationId": 608,
+          "lang": "en",
+          "slug": "reversibility-design-criterion-nobody-briefs-ai-makes-urgent",
+          "title": "Reversibility: The Design Criterion Nobody Briefs (and That AI Makes Urgent)",
+          "metaTitle": "Reversibility in UX: undo as a contract",
+          "metaDescription": "Being able to undo is part of user trust, and AI makes it urgent. Patterns to design reversible actions without slowing the flow.",
+          "currentMetaDescription": "Designing irreversible actions without signaling it is a betrayal of the user. Why reversibility is the most overlooked UX criterion — and the most urgent one in the age of AI agents.",
+          "sentenceHtml": "It is one of the first things we check when <a href=\"/en/product-for-your-customers\">redesigning the flows your customers use</a>.",
+          "lastParagraphText": "If you are building or redesigning a digital product — especially one that incorporates AI with action capabilities — it's worth doing that exercise before the first user discovers the answer the hard way. We can help you structure it."
+        }
+      ]
+    },
+    {
+      "n": 10,
+      "postId": 144,
+      "category": "TECH",
+      "cluster": "C3",
+      "translations": [
+        {
+          "translationId": 603,
+          "lang": "es",
+          "slug": "post-lanzamiento-software-vivo-no-termina-empieza",
+          "title": "Post-Lanzamiento: El Software Vivo no Termina, Empieza",
+          "metaTitle": "Mantenimiento de software tras el lanzamiento",
+          "metaDescription": "El lanzamiento no termina el software: empieza su vida. Los tres tipos de mantenimiento que nadie planifica y cómo observar lo que está en producción.",
+          "currentMetaDescription": "El día del lanzamiento es el más peligroso del ciclo de vida de un producto. Por qué la mayoría de equipos construyen para el deploy y no para lo que viene después.",
+          "sentenceHtml": "Es lo que más pesa cuando <a href=\"/es/producto-para-tu-equipo\">modernizamos software que ya está en uso</a> sin parar la operación.",
+          "lastParagraphText": "Si estás en ese punto —un producto en producción que has construido para llegar, no para mantenerse— la auditoría técnica es el primer paso. No para juzgar lo que se hizo, sino para entender exactamente qué deuda existe, qué riesgo representa y qué orden de prioridad tiene. Ese mapa es lo que permite tomar decisiones reales, en lugar de sobrevivir de sprint en sprint. Es el trabajo que hacemos en Room 714."
+        },
+        {
+          "translationId": 604,
+          "lang": "en",
+          "slug": "post-launch-live-software-does-not-end-it-begins",
+          "title": "Post-Launch: Live Software Doesn't End, It Begins",
+          "metaTitle": "Software maintenance after launch",
+          "metaDescription": "Launch does not finish software: it starts its life. The three kinds of maintenance nobody plans and how to observe what runs in production.",
+          "currentMetaDescription": "Launch day is the riskiest moment in a product's lifecycle. Why most teams build for the deploy and forget everything that comes after it.",
+          "sentenceHtml": "It is what weighs most when <a href=\"/en/product-for-your-team\">we modernise software already in use</a> without stopping the operation.",
+          "lastParagraphText": "If you're at that point — a product in production built to launch, not to last — a technical audit is the first step. Not to judge what was done, but to map exactly what debt exists, what risk it represents, and what order of priority it demands. That map is what enables real decisions, instead of surviving sprint to sprint. That's the work we do at Room 714."
+        }
+      ]
+    },
+    {
+      "n": 11,
+      "postId": 143,
+      "category": "UX",
+      "cluster": "C2",
+      "translations": [
+        {
+          "translationId": 597,
+          "lang": "es",
+          "slug": "sistemas-de-notificaciones-diseno-que-grita-cuando-deberia-susurrar",
+          "title": "Sistemas de Notificaciones: El Diseño que Grita cuando Debería Susurrar",
+          "metaTitle": "Diseño de notificaciones: señal frente a ruido",
+          "metaDescription": "Las notificaciones gastan la atención que el dashboard de engagement no mide. Cómo diseñar una taxonomía de señales, el momento y el contenido.",
+          "currentMetaDescription": "Las notificaciones son el diseño que más daño hace cuando se hace mal. Te explicamos por qué la mayoría de sistemas de alertas están diseñados para el producto, no para el usuario.",
+          "sentenceHtml": "Forma parte de lo que revisamos al <a href=\"/es/producto-para-tus-clientes\">rediseñar la experiencia del producto que usan tus clientes</a>.",
+          "lastParagraphText": "Si tu producto tiene un sistema de notificaciones que ha crecido de forma orgánica —una alerta aquí, una campaña de reactivación allá, unas cuantas reglas de negocio documentadas en ningún sitio—, probablemente sea el momento de auditarlo desde el principio. No para añadir más sofisticación técnica, sino para aplicar el criterio que debería haber estado desde el día uno. Es el tipo de trabajo que no aparece en el roadmap y que determina, más que cualquier feature nueva, si los usuarios siguen ahí dentro de seis meses."
+        },
+        {
+          "translationId": 598,
+          "lang": "en",
+          "slug": "notification-systems-design-that-shouts-when-it-should-whisper",
+          "title": "Notification Systems: When Design Shouts Instead of Whispering",
+          "metaTitle": "Notification design: signal versus noise",
+          "metaDescription": "Notifications spend attention your engagement dashboard never records. How to design a signal taxonomy, the timing and the content.",
+          "currentMetaDescription": "Most notification systems are designed for the product's metrics, not the user's attention. Here's why that distinction matters and how to fix it.",
+          "sentenceHtml": "It is part of what we review when <a href=\"/en/product-for-your-customers\">redesigning the experience of the product your customers use</a>.",
+          "lastParagraphText": "If your product has a notification system that has grown organically — one alert here, a reactivation campaign there, a handful of business rules documented nowhere — it's probably time to audit it from scratch. Not to add more technical sophistication, but to apply the judgment that should have been there from day one. It's the kind of work that never makes the roadmap and that determines, more than any new feature, whether users are still there in six months."
+        }
+      ]
+    },
+    {
+      "n": 12,
+      "postId": 142,
+      "category": "TECH",
+      "cluster": "C3",
+      "translations": [
+        {
+          "translationId": 593,
+          "lang": "es",
+          "slug": "arquitectura-sin-proposito-escalar-antes-de-entender-error-caro",
+          "title": "Arquitectura sin Propósito: Por qué Escalar antes de Entender es el Error más Caro del Software",
+          "metaTitle": "Escalar antes de entender: error de arquitectura",
+          "metaDescription": "Escalar una arquitectura antes de entender el problema es el error más caro del software. Cuándo escalar, y qué pregunta hacerse antes.",
+          "currentMetaDescription": "Escalar antes de entender el problema que resuelves es el error de arquitectura más caro del software. Por qué la mayoría de decisiones técnicas grandes llegan demasiado pronto y cómo evitarlo.",
+          "sentenceHtml": "Es la pregunta que hacemos antes de tocar una línea cuando <a href=\"/es/producto-para-tu-equipo\">modernizamos el software de un equipo</a>.",
+          "lastParagraphText": "Si tu equipo está llegando a ese punto de inflexión —donde la arquitectura empieza a costar más de lo que aporta— es el momento de hacer esa pregunta antes de que el coste de no hacerla se vuelva permanente. Y si ya llevas acumulando deuda técnica mientras el ritmo de generación de código se acelera, el problema se agrava más rápido de lo que parece desde dentro."
+        },
+        {
+          "translationId": 594,
+          "lang": "en",
+          "slug": "architecture-without-purpose-scaling-before-understanding-costly-mistake",
+          "title": "Architecture Without Purpose: Why Scaling Before Understanding Is Software's Most Expensive Mistake",
+          "metaTitle": "Scaling too early: a costly architecture error",
+          "metaDescription": "Scaling an architecture before understanding the problem is software's most expensive mistake. When to scale, and the question to ask first.",
+          "currentMetaDescription": "Scaling before understanding the problem you're solving is software's most expensive architectural mistake. Why most big technical decisions come too early—and how to avoid paying for them.",
+          "sentenceHtml": "It is the question we ask before touching a line when <a href=\"/en/product-for-your-team\">we modernise a team's software</a>.",
+          "lastParagraphText": "At Room 714 we regularly work with teams that arrive with an architecture that seemed right at the time and has now become the main brake on product velocity. The work isn't always migration—sometimes it's understanding which parts of the system deserve the complexity they carry and which accumulated it through inertia. That distinction, made with judgement and without technical dogma, is the difference between a useful audit and a rewrite that generates the same problem in five years. If you're already accumulating technical debt while the pace of code generation accelerates, the problem compounds faster than it looks from the inside."
+        }
+      ]
+    },
+    {
+      "n": 13,
+      "postId": 141,
+      "category": "UX",
+      "cluster": "C2",
+      "translations": [
+        {
+          "translationId": 589,
+          "lang": "es",
+          "slug": "accesibilidad-como-deuda-lo-que-tu-sistema-de-diseno-no-ve",
+          "title": "Accesibilidad como Deuda: Lo que tu Sistema de Diseño No Ve (y el Usuario Sí Siente)",
+          "metaTitle": "Accesibilidad en el sistema de diseño: la deuda",
+          "metaDescription": "La accesibilidad que no está en el sistema de diseño se acumula como deuda. Cuatro capas para integrarla y por qué es un argumento económico.",
+          "currentMetaDescription": "La accesibilidad parcheada capa a capa es deuda técnica disfrazada de buena intención. Por qué los sistemas de diseño fallan aquí y cómo cortarlo de raíz.",
+          "sentenceHtml": "La integramos desde el sistema de diseño cuando <a href=\"/es/producto-para-tus-clientes\">rediseñamos el producto que usan tus clientes</a>.",
+          "lastParagraphText": "Si quieres entender en qué capa está tu mayor deuda de accesibilidad — y qué cambiaría en tu sistema de diseño para resolverla estructuralmente —, es el tipo de conversación que nos gusta tener. El diagnóstico suele ser más rápido de lo que se espera. El ahorro, también."
+        },
+        {
+          "translationId": 590,
+          "lang": "en",
+          "slug": "accessibility-as-debt-what-your-design-system-misses",
+          "title": "Accessibility as Debt: What Your Design System Misses and Your Users Notice",
+          "metaTitle": "Accessibility in your design system: the debt",
+          "metaDescription": "Accessibility that is not in the design system builds up as debt. Four layers to integrate it, and why it is an economic argument.",
+          "currentMetaDescription": "Accessibility bolted on layer by layer is technical debt in disguise. Why design systems fail here and how to fix it at the source, not the symptom.",
+          "sentenceHtml": "We build it in from the design system when <a href=\"/en/product-for-your-customers\">we redesign the product your customers use</a>.",
+          "lastParagraphText": "If you want to understand which layer holds your biggest accessibility debt — and what would change in your design system to resolve it structurally — that's exactly the kind of conversation we like having. The diagnosis is usually faster than expected. So is the savings."
+        }
+      ]
+    },
+    {
+      "n": 14,
+      "postId": 140,
+      "category": "TECH",
+      "cluster": "C3",
+      "translations": [
+        {
+          "translationId": 585,
+          "lang": "es",
+          "slug": "codigo-barato-ingenieria-cara-ia-deuda-tecnica",
+          "title": "Código Barato, Ingeniería Cara: Lo que la IA le Está Haciendo a la Deuda Técnica",
+          "metaTitle": "Deuda técnica con IA: el código barato sale caro",
+          "metaDescription": "La IA abarata escribir código y encarece mantenerlo. Cómo medir la comprensibilidad y qué sí puede hacer la IA en el pipeline sin crear deuda.",
+          "currentMetaDescription": "La IA ha abaratado escribir código, pero no pensar en él. Exploramos por qué la deuda técnica se está acumulando más rápido que nunca y qué hacer antes de que colapse tu producto",
+          "sentenceHtml": "Es el tipo de deuda que encontramos, y que hay que pagar, cuando <a href=\"/es/producto-para-tu-equipo\">modernizamos sistemas heredados</a>.",
+          "lastParagraphText": "Si tu equipo está usando IA de forma intensiva en el desarrollo y no tiene un modelo explícito para gestionar la deuda que genera, es el momento de hacer esa auditoría antes de que el sistema te la haga él solo. En Room 714 trabajamos con equipos de producto para diagnosticar exactamente eso: no si la IA está siendo útil, sino si el proceso de integración tiene los controles necesarios para que la velocidad no se vuelva en contra."
+        },
+        {
+          "translationId": 586,
+          "lang": "en",
+          "slug": "cheap-code-expensive-engineering-ai-technical-debt",
+          "title": "Cheap Code, Expensive Engineering: What AI Is Really Doing to Technical Debt",
+          "metaTitle": "AI and technical debt: cheap code isn't cheap",
+          "metaDescription": "AI makes code cheap to write and expensive to maintain. How to measure understandability and what AI can do in the pipeline without adding debt.",
+          "currentMetaDescription": "AI made code cheap to produce but not to maintain. We break down why technical debt is accelerating and what engineering discipline actually looks like in an AI-assisted world",
+          "sentenceHtml": "It is the kind of debt we find, and have to pay down, when <a href=\"/en/product-for-your-team\">we modernise legacy systems</a>.",
+          "lastParagraphText": "If your team is using AI intensively in development and doesn't have an explicit model for managing the debt it generates, now is the time for that audit — before the system runs it for you. At Room 714 we work with product teams to diagnose exactly that: not whether AI is being useful, but whether the integration process has the controls needed to keep velocity from becoming a liability."
+        }
+      ]
+    },
+    {
+      "n": 15,
+      "postId": 139,
+      "category": "UX",
+      "cluster": "C2",
+      "translations": [
+        {
+          "translationId": 581,
+          "lang": "es",
+          "slug": "friccion-intencionada-diseno-que-dice-no-para-que-el-usuario-gane",
+          "title": "Fricción Intencionada: El Diseño que Dice No para Que el Usuario Gane",
+          "metaTitle": "Fricción intencionada: cuándo frenar al usuario",
+          "metaDescription": "No todo debe ser fácil: la fricción bien puesta protege al usuario de sus errores. Dónde tiene sentido, cómo diseñarla y dónde sobra.",
+          "currentMetaDescription": "Eliminar fricción no siempre es buen diseño. Exploramos cuándo la resistencia intencionada protege al usuario de sí mismo y cómo diseñarla sin perder conversión",
+          "sentenceHtml": "Saber qué fricción sobra y cuál protege es la mitad del trabajo al <a href=\"/es/producto-para-tus-clientes\">rediseñar alta, contratación y área de cliente</a>.",
+          "lastParagraphText": "Si tienes un producto donde existe esa tensión entre objetivos y aún no la has mapeado, es una conversación que merece media jornada de taller antes de la próxima iteración de diseño. En Room 714 lo hacemos con frecuencia como punto de partida de auditorías de experiencia: no para añadir fricción por principio, sino para encontrar los dos o tres momentos donde el diseño actual está literalmente trabajando en contra del usuario que dice querer servir."
+        },
+        {
+          "translationId": 582,
+          "lang": "en",
+          "slug": "intentional-friction-designing-resistance-as-a-feature-not-a-bug",
+          "title": "Intentional Friction: Designing Resistance as a Feature, Not a Bug",
+          "metaTitle": "Intentional friction: when to slow users down",
+          "metaDescription": "Not everything should be easy: well-placed friction protects users from their own mistakes. Where it makes sense, how to design it, where it doesn't.",
+          "currentMetaDescription": "Removing friction isn't always good design. We explore when intentional resistance protects users from themselves — and how to build it without killing conversion",
+          "sentenceHtml": "Knowing which friction to cut and which protects is half the work when <a href=\"/en/product-for-your-customers\">redesigning sign-up, onboarding and the customer area</a>.",
+          "lastParagraphText": "If your product has that tension between goals and you haven't mapped it yet, it's a conversation worth half a day of workshop before the next design iteration. At Room 714 we run it regularly as the starting point for experience audits: not to add friction as a principle, but to find the two or three moments where your current design is actively working against the very user it claims to serve."
+        }
+      ]
+    },
+    {
+      "n": 17,
+      "postId": 137,
+      "category": "UX",
+      "cluster": "C2",
+      "translations": [
+        {
+          "translationId": 571,
+          "lang": "es",
+          "slug": "codigo-correcto-experiencia-rota-el-fallo-que-el-ticket-no-describe",
+          "title": "Código Correcto, Experiencia Rota: El Fallo que el Ticket no Puede Describir",
+          "metaTitle": "Código correcto, experiencia de usuario rota",
+          "metaDescription": "El ticket mide lo que puede, no lo que importa. Tres lugares donde la experiencia se rompe sin que el código falle, y cómo detectarlos.",
+          "currentMetaDescription": "El código pasa los tests, el diseño cumple las especificaciones, y el usuario igual borra la app. El problema de calidad que ningún ticket logra capturar.",
+          "sentenceHtml": "Son justo los fallos que buscamos al <a href=\"/es/producto-para-tus-clientes\">revisar el producto que usan tus clientes</a>.",
+          "lastParagraphText": "Si en tu equipo los tickets se cierran como \"Done\" y el churn sigue siendo un misterio, probablemente estás midiendo la mitad de lo que importa. En Room 714 hacemos auditorías de producto que empiezan exactamente aquí: no en si el código funciona, sino en si la experiencia está construida para generar confianza o para erosionarla. La conversación, si te interesa, es corta."
+        },
+        {
+          "translationId": 572,
+          "lang": "en",
+          "slug": "technically-correct-experientially-broken-the-bug-no-ticket-captures",
+          "title": "Technically Correct, Experientially Broken: The Bug No Ticket Can Capture",
+          "metaTitle": "Correct code, broken user experience",
+          "metaDescription": "The ticket measures what it can, not what matters. Three places where the experience breaks while the code works, and how to spot them.",
+          "currentMetaDescription": "The code passes every test, the design matches the spec, and the user still churns. The quality problem no ticket system was built to capture.",
+          "sentenceHtml": "They are exactly the failures we look for when <a href=\"/en/product-for-your-customers\">reviewing the product your customers use</a>.",
+          "lastParagraphText": "If your team closes tickets as \"Done\" and churn remains a mystery, you're probably measuring half of what matters. At Room 714 we run product audits that start exactly here — not with whether the code works, but with whether the experience is built to generate trust or quietly destroy it. If that sounds familiar, the conversation is a short one."
+        }
+      ]
+    },
+    {
+      "n": 18,
+      "postId": 136,
+      "category": "TECH",
+      "cluster": "IA",
+      "translations": [
+        {
+          "translationId": 567,
+          "lang": "es",
+          "slug": "seguridad-arquitecturas-ia-el-agujero-que-nadie-audita",
+          "title": "Seguridad en Arquitecturas de IA: El Agujero que Nadie Audita hasta que es Demasiado Tarde",
+          "metaTitle": "Seguridad en arquitecturas de IA",
+          "metaDescription": "Se audita el modelo y se olvida el sistema. Vectores de ataque reales en arquitecturas de IA y principios para diseñarlas seguras.",
+          "currentMetaDescription": "Los equipos auditan el modelo pero no la arquitectura que lo rodea. Así es como los agentes de IA abren vectores de ataque que nadie está mirando, y qué hacer al respecto.",
+          "sentenceHtml": "Es una revisión obligatoria antes de <a href=\"/es/ia-en-el-producto\">llevar un piloto de IA a producción</a>.",
+          "lastParagraphText": "En Room 714 hacemos ese tipo de revisiones con equipos de producto que ya tienen sistemas de IA en marcha y quieren saber, antes de que alguien más lo descubra, qué es lo que están asumiendo sin haberlo decidido. Si tu equipo está en ese punto, es una conversación que merece la pena tener pronto."
+        },
+        {
+          "translationId": 568,
+          "lang": "en",
+          "slug": "ai-architecture-security-the-gap-nobody-audits",
+          "title": "AI Architecture Security: The Gap Nobody Audits Until It's Too Late",
+          "metaTitle": "AI architecture security: what goes unaudited",
+          "metaDescription": "Teams audit the model and forget the system. Real attack vectors in AI architectures, and principles to design them securely.",
+          "currentMetaDescription": "Teams audit the model but not the architecture around it. Here's how AI agents open attack vectors nobody is watching — and what to do before it's too late.",
+          "sentenceHtml": "It is a mandatory review before <a href=\"/en/ai-in-the-product\">taking an AI pilot to production</a>.",
+          "lastParagraphText": "At Room 714 we do this type of review with product teams that already have AI systems running and want to know — before someone else finds out — what they're assuming without having consciously decided it. If your team is at that point, it's a conversation worth having soon."
+        }
+      ]
+    },
+    {
+      "n": 19,
+      "postId": 135,
+      "category": "UX",
+      "cluster": "IA",
+      "translations": [
+        {
+          "translationId": 563,
+          "lang": "es",
+          "slug": "la-ia-que-nadie-pidio-cuando-añadir-inteligencia-es-ruido",
+          "title": "La IA que Nadie Pidió: Cuando Añadir Inteligencia al Producto es Solo Ruido con Buena Prensa",
+          "metaTitle": "IA en el producto: cuándo sobra la feature de IA",
+          "metaDescription": "Añadir IA sin un trabajo del usuario que resolver es ruido con buena prensa. Tres preguntas de diagnóstico antes de cualquier feature de IA.",
+          "currentMetaDescription": "La mayoría de funciones de IA que se añaden a productos digitales no las pidió nadie. Cómo distinguir integración real de ruido bien empaquetado, con JTBD como brújula.",
+          "sentenceHtml": "Son las preguntas con las que empezamos antes de <a href=\"/es/ia-en-el-producto\">meter IA dentro de un producto</a>.",
+          "lastParagraphText": "Si tu equipo está evaluando dónde y cómo integrar capacidades de IA en un producto existente, o si sientes que el roadmap actual está acumulando features sin una lógica de experiencia clara, en Room 714 trabajamos exactamente en esa intersección. No para decirte cuánta IA necesitas, sino para ayudarte a encontrar dónde tiene sentido —y dónde estás pagando un coste que nadie te está contando."
+        },
+        {
+          "translationId": 564,
+          "lang": "en",
+          "slug": "the-ai-nobody-asked-for-when-ai-features-are-just-noise",
+          "title": "The AI Nobody Asked For: When Adding Intelligence to Your Product Is Just Well-Branded Noise",
+          "metaTitle": "AI in your product: when the AI feature is noise",
+          "metaDescription": "Adding AI with no user job to solve is well-branded noise. Three diagnostic questions to ask before building any AI feature.",
+          "currentMetaDescription": "Most AI features added to digital products were never asked for. How to tell real integration from well-packaged noise — and why JTBD is the only honest compass.",
+          "sentenceHtml": "They are the questions we start with before <a href=\"/en/ai-in-the-product\">putting AI inside a product</a>.",
+          "lastParagraphText": "If your team is evaluating where and how to integrate AI capabilities into an existing product — or if you sense that the current roadmap is accumulating features without a clear experience logic — that's exactly the intersection where Room 714 works. Not to tell you how much AI you need, but to help you find where it makes sense, and where you're paying a cost nobody's telling you about."
+        }
+      ]
+    },
+    {
+      "n": 20,
+      "postId": 134,
+      "category": "TECH",
+      "cluster": "IA",
+      "translations": [
+        {
+          "translationId": 559,
+          "lang": "es",
+          "slug": "piloto-ia-empresarial-que-nunca-escala-demo-a-produccion",
+          "title": "El Piloto Que Nunca Escala: Por Qué los Programas de IA Empresarial Mueren entre la Demo y la Producción",
+          "metaTitle": "Por qué los pilotos de IA no llegan a producción",
+          "metaDescription": "La mayoría de programas de IA empresarial mueren entre la demo y la producción. La deuda de contexto y las decisiones de arquitectura que los matan.",
+          "currentMetaDescription": "El 70% de los programas de IA empresarial se quedan atascados tras el piloto. No es un problema de tecnología: es un problema de arquitectura de decisión y deuda de contexto.",
+          "sentenceHtml": "Es exactamente el trabajo de <a href=\"/es/ia-en-el-producto\">llevar la IA de piloto a producción</a> dentro de un producto.",
+          "lastParagraphText": "Si tu organización está en ese punto de inflexión —el piloto funciona, la dirección pide escalarlo, pero el equipo técnico sabe que algo no está listo— es el mejor momento para hacer una parada y revisar la arquitectura antes de añadir más carga. En Room 714 hacemos exactamente ese tipo de auditoría: antes del scale-up, no después del accidente. Si estás ahí, hablemos."
+        },
+        {
+          "translationId": 560,
+          "lang": "en",
+          "slug": "enterprise-ai-pilot-that-never-scales-demo-to-production",
+          "title": "The Pilot That Never Scales: Why Enterprise AI Programmes Die Between Demo and Production",
+          "metaTitle": "Why AI pilots never reach production",
+          "metaDescription": "Most enterprise AI programmes die between demo and production. The context debt and architecture decisions that kill them.",
+          "currentMetaDescription": "Most enterprise AI programmes stall after the pilot. It's not a technology problem — it's a decision architecture and context debt problem. Here's what actually breaks.",
+          "sentenceHtml": "It is exactly the work of <a href=\"/en/ai-in-the-product\">taking AI from pilot to production</a> inside a product.",
+          "lastParagraphText": "If your organisation is at that inflection point — the pilot works, leadership is asking to scale it, but the technical team knows something isn't ready — this is exactly the right moment to stop and review the architecture before adding more load. At Room 714, we do exactly that kind of audit: before the scale-up, not after the incident. If you're there, let's talk."
+        }
+      ]
+    },
+    {
+      "n": 21,
+      "postId": 133,
+      "category": "UX",
+      "cluster": "C2",
+      "translations": [
+        {
+          "translationId": 555,
+          "lang": "es",
+          "slug": "accesibilidad-no-es-una-feature-es-infraestructura",
+          "title": "Accesibilidad: El Coste de Tratar como Feature lo que es Infraestructura",
+          "metaTitle": "Accesibilidad como infraestructura, no feature",
+          "metaDescription": "Tratar la accesibilidad como una feature sale caro. Qué cambia al construirla desde el design system y los criterios de aceptación.",
+          "currentMetaDescription": "Tratar la accesibilidad como una feature que se añade al final es el error más caro del diseño de producto. Aquí explicamos por qué es infraestructura, no cosmética.",
+          "sentenceHtml": "Por eso forma parte de la base cuando <a href=\"/es/producto-para-tus-clientes\">rediseñamos el producto que usan tus clientes</a>.",
+          "lastParagraphText": "Si tu equipo está en el momento de construir o refactorizar un design system, o si la accesibilidad lleva meses apareciendo como deuda en los retrospectivos sin que nadie sepa cómo atacarla, es el tipo de conversación que tenemos habitualmente en Room 714. No para hacer una auditoría de checklist, sino para entender dónde está la palanca de mayor impacto y cómo integrarla sin parar lo que ya funciona. El error más frecuente no es no querer mejorar, es optimizar lo que no mueve la aguja mientras la infraestructura real sigue agrietada."
+        },
+        {
+          "translationId": 556,
+          "lang": "en",
+          "slug": "accessibility-is-not-a-feature-its-infrastructure",
+          "title": "Accessibility as Infrastructure: Why Treating It Like a Feature Costs You Everything",
+          "metaTitle": "Accessibility as infrastructure, not a feature",
+          "metaDescription": "Treating accessibility as a feature is expensive. What changes when you build it into the design system and the acceptance criteria.",
+          "currentMetaDescription": "Treating accessibility as an add-on feature is one of product design's most expensive mistakes. Here's why it's infrastructure — and what changes when you design it that way.",
+          "sentenceHtml": "That is why it is part of the foundation when <a href=\"/en/product-for-your-customers\">we redesign the product your customers use</a>.",
+          "lastParagraphText": "If your team is at the point of building or refactoring a design system, or if accessibility has been sitting in retrospective debt for months without anyone knowing how to tackle it, that's exactly the kind of conversation we have regularly at Room 714. Not to run a checklist audit, but to understand where the highest-leverage point is and how to integrate it without stopping what already works. The most common mistake isn't a lack of desire to improve — it's optimizing what doesn't move the needle while the real infrastructure stays cracked."
+        }
+      ]
+    },
+    {
+      "n": 23,
+      "postId": 131,
+      "category": "UX",
+      "cluster": "IA",
+      "translations": [
+        {
+          "translationId": 547,
+          "lang": "es",
+          "slug": "interfaz-de-ia-el-chat-no-es-la-respuesta-a-todo",
+          "title": "Interfaz de IA: El Chat no es la Respuesta a Todo",
+          "metaTitle": "Diseño de interfaces de IA: más allá del chat",
+          "metaDescription": "El chat no es la interfaz correcta para todo. Cuatro intenciones que gestiona mal y un marco de tres preguntas para elegir la modalidad.",
+          "currentMetaDescription": "Meter IA en un chat es la decisión de diseño más perezosa que existe. Te explicamos por qué la modalidad importa y cómo elegir la interfaz que tu usuario realmente necesita.",
+          "sentenceHtml": "Elegir bien la interfaz es parte de <a href=\"/es/ia-en-el-producto\">llevar la IA a producción con una experiencia usable</a>.",
+          "lastParagraphText": "Si tu producto tiene IA y tu primera decisión fue \"ponemos un chat\", merece la pena dedicar media jornada a revisitar esa decisión desde el JTBD. Igual el chat era la respuesta correcta. Igual no lo era. En Room 714 hacemos esa auditoría sistemáticamente antes de cualquier rediseño de producto con IA: no para demoler lo construido, sino para asegurarnos de que la interfaz trabaja a favor del usuario y no en contra de él."
+        },
+        {
+          "translationId": 548,
+          "lang": "en",
+          "slug": "ai-interface-design-chat-is-not-the-universal-answer",
+          "title": "AI Interface Design: Why Chat Is Not the Universal Answer",
+          "metaTitle": "AI interface design beyond chat",
+          "metaDescription": "Chat is not the right interface for everything. Four intents it handles badly and a three-question framework to choose the modality.",
+          "currentMetaDescription": "Defaulting every AI feature to a chat box is lazy design. Here's how to match AI interface modality to user intent — and why it matters more than the model underneath.",
+          "sentenceHtml": "Choosing the interface well is part of <a href=\"/en/ai-in-the-product\">taking AI to production with a usable experience</a>.",
+          "lastParagraphText": "If your product has AI and your first decision was \"let's add a chat,\" it's worth spending half a day revisiting that decision from a JTBD perspective. Maybe chat was the right answer. Maybe it wasn't. At Room 714, we run that audit systematically before any AI product redesign: not to tear down what's been built, but to make sure the interface works for the user, not against them."
+        }
+      ]
+    },
+    {
+      "n": 24,
+      "postId": 130,
+      "category": "TECH",
+      "cluster": "C3",
+      "translations": [
+        {
+          "translationId": 545,
+          "lang": "es",
+          "slug": "sistemas-que-fallan-sin-romperse-estabilidad-no-es-resiliencia",
+          "title": "Sistemas que Fallan sin Romperse: El Error de Confundir Estabilidad con Resiliencia",
+          "metaTitle": "Resiliencia de software: fallar sin romperse",
+          "metaDescription": "Que un sistema no falle no significa que sea resiliente. Interdependencias, fallos emergentes y cómo diseñar la degradación con gracia.",
+          "currentMetaDescription": "Cuando un sistema falla sin que nada se haya roto, el problema no es técnico: es de diseño. Cómo entender la fragilidad emergente antes de que se convierta en una crisis en producción.",
+          "sentenceHtml": "Es un criterio central cuando <a href=\"/es/producto-para-tu-equipo\">modernizamos sistemas sin parar la operación</a>.",
+          "lastParagraphText": "Si tu sistema está en producción y nunca has tenido una conversación seria sobre cómo degrada, ese es el primer síntoma de fragilidad. No el más urgente — pero sí el más revelador."
+        },
+        {
+          "translationId": 546,
+          "lang": "en",
+          "slug": "systems-that-fail-without-breaking-stability-is-not-resilience",
+          "title": "Systems That Fail Without Breaking: Why Stability Is Not Resilience",
+          "metaTitle": "Software resilience: failing without breaking",
+          "metaDescription": "A system that does not fail is not necessarily resilient. Interdependencies, emergent failures and how to design graceful degradation.",
+          "currentMetaDescription": "When a system fails without anything breaking, the problem isn't technical—it's design. How to spot emergent fragility before it becomes a production crisis.",
+          "sentenceHtml": "It is a central criterion when <a href=\"/en/product-for-your-team\">we modernise systems without stopping the operation</a>.",
+          "lastParagraphText": "If your system is in production and you've never had a serious conversation about how it degrades, that's the first symptom of fragility. Not the most urgent — but the most telling."
+        }
+      ]
+    },
+    {
+      "n": 25,
+      "postId": 129,
+      "category": "UX",
+      "cluster": "C1",
+      "translations": [
+        {
+          "translationId": 541,
+          "lang": "es",
+          "slug": "investigacion-de-usuario-muere-cuando-se-convierte-en-entregable",
+          "title": "Investigación de Usuario: El Activo que Muere en el Momento en que se Convierte en Entregable",
+          "metaTitle": "Investigación de usuario que sigue viva",
+          "metaDescription": "La investigación de usuario pierde su valor cuando se convierte en entregable. Cómo evitar sesgos y mantener el research vivo en el producto.",
+          "currentMetaDescription": "La investigación de usuario no falla por falta de datos, sino por convertirse en PDF. Por qué el research muere como entregable y cómo hacerlo vivir en las decisiones.",
+          "sentenceHtml": "Así trabajamos la investigación cuando <a href=\"/es/empezar-de-cero\">llevamos una idea a producto</a>: como algo vivo, no como un informe.",
+          "lastParagraphText": "Si quieres revisar cómo está funcionando el ciclo de research en tu equipo —qué se produce, quién lo consume y cuánto de eso aterriza en decisiones reales— en Room 714 hacemos exactamente esa auditoría. No para añadir más proceso, sino para eliminar el que no mueve nada."
+        },
+        {
+          "translationId": 542,
+          "lang": "en",
+          "slug": "user-research-the-asset-that-dies-the-moment-it-becomes-a-deliverable",
+          "title": "User Research: The Asset That Dies the Moment It Becomes a Deliverable",
+          "metaTitle": "User research that doesn't die in a report",
+          "metaDescription": "User research loses its value the moment it becomes a deliverable. How to avoid bias and keep research alive inside the product.",
+          "currentMetaDescription": "User research doesn't fail from lack of data — it fails when it becomes a PDF. Why research dies as a deliverable and how to keep it alive where decisions are made.",
+          "sentenceHtml": "That is how we treat research when <a href=\"/en/starting-from-scratch\">we take an idea to a product</a>: as something alive, not a report.",
+          "lastParagraphText": "If you want to review how the research cycle is working in your team — what gets produced, who consumes it, and how much actually lands in real decisions — that's exactly the kind of audit we run at Room 714. Not to add more process, but to remove the process that moves nothing."
+        }
+      ]
+    },
+    {
+      "n": 26,
+      "postId": 128,
+      "category": "TECH",
+      "cluster": "IA",
+      "translations": [
+        {
+          "translationId": 537,
+          "lang": "es",
+          "slug": "ia-en-produccion-lo-que-nadie-cuenta-cuando-el-piloto-funciona",
+          "title": "IA en Producción: Lo que Nadie te Cuenta cuando el Piloto ya Funciona",
+          "metaTitle": "IA en producción: lo que empieza tras el piloto",
+          "metaDescription": "El piloto de IA funciona y ahí empieza lo difícil: arquitectura, observabilidad y costes de escalado que nadie modeló. Cómo llegar a producción.",
+          "currentMetaDescription": "El piloto de IA funciona. El modelo responde bien. Y entonces llega producción real y todo se complica. Esto es lo que hay que resolver antes de escalar.",
+          "sentenceHtml": "Es el recorrido completo de <a href=\"/es/ia-en-el-producto\">llevar un piloto de IA a producción</a>.",
+          "lastParagraphText": "Si estás a punto de llevar un sistema de IA a producción o llevas meses con un piloto que no termina de convertirse en producto estable, en Room 714 hacemos auditorías de arquitectura centradas exactamente en estos puntos de fallo. No para rehacer lo que funciona, sino para identificar dónde el sistema va a crujir antes de que cruja delante de tus usuarios."
+        },
+        {
+          "translationId": 538,
+          "lang": "en",
+          "slug": "ai-in-production-the-hard-part-after-the-pilot-works",
+          "title": "AI in Production: The Hard Part Starts After Your Pilot Works",
+          "metaTitle": "AI in production: what starts after the pilot",
+          "metaDescription": "The AI pilot works, and that is where the hard part starts: architecture, observability and scaling costs nobody modelled. How to get to production.",
+          "currentMetaDescription": "Your AI pilot works. The model answers correctly. Then real production hits and everything breaks. Here's what you actually need to solve before you scale.",
+          "sentenceHtml": "It is the full journey of <a href=\"/en/ai-in-the-product\">taking an AI pilot to production</a>.",
+          "lastParagraphText": "If you're about to take an AI system to production, or you've had a pilot that won't stabilize into a reliable product for months, at Room 714 we run architecture audits focused precisely on these failure points. Not to rebuild what works, but to identify where the system will crack before it cracks in front of your users."
+        }
+      ]
+    },
+    {
+      "n": 27,
+      "postId": 127,
+      "category": "UX",
+      "cluster": "C2",
+      "translations": [
+        {
+          "translationId": 535,
+          "lang": "es",
+          "slug": "mejoras-de-ux-que-no-mejoran-nada-optimizar-lo-que-no-importa",
+          "title": "Mejoras de UX que No Mejoran Nada: El Problema de Optimizar lo que No Importa",
+          "metaTitle": "Mejoras de UX sin impacto: qué optimizar",
+          "metaDescription": "Muchas mejoras de UX optimizan pantallas que no importan. Por qué empezar por el trabajo del usuario y no por la interfaz.",
+          "currentMetaDescription": "Muchas mejoras de UX pulen lo que ya funciona y dejan intacto lo que rompe el producto. Cómo distinguir optimización real de cosmética digital con JTBD.",
+          "sentenceHtml": "Es el punto de partida cuando <a href=\"/es/producto-para-tus-clientes\">rediseñamos el producto que usan tus clientes</a>: medir en conversión y abandono, no en pantallas.",
+          "lastParagraphText": "Si tu equipo está en ese bucle —métricas de UX que suben mientras las de negocio se quedan planas— puede ser el momento de hacer un diagnóstico de producto desde el trabajo del usuario, no desde el backlog de mejoras. En Room 714 hacemos exactamente esa auditoría: identificar qué trabajo no se está resolviendo bien antes de proponer ninguna pantalla nueva. Porque a veces la mejor mejora de UX es darse cuenta de que el problema no está en la UX."
+        },
+        {
+          "translationId": 536,
+          "lang": "en",
+          "slug": "ux-improvements-that-improve-nothing-optimizing-the-wrong-thing",
+          "title": "UX Improvements That Improve Nothing: The Trap of Optimizing the Wrong Thing",
+          "metaTitle": "UX improvements with no impact: fix what matters",
+          "metaDescription": "Many UX improvements optimise screens that do not matter. Why to start from the user's job, not from the interface.",
+          "currentMetaDescription": "Most UX improvements polish what already works and ignore what breaks the product. How to tell real optimization from digital cosmetics using JTBD.",
+          "sentenceHtml": "It is our starting point when <a href=\"/en/product-for-your-customers\">we redesign the product your customers use</a>: measured in conversion and drop-off, not screens.",
+          "lastParagraphText": "If your team is in that loop — UX metrics climbing while business metrics stay flat — it may be time to diagnose the product from the user's job, not from the improvement backlog. At Room 714, that's exactly the audit we run: identifying what job isn't being done well before proposing a single new screen. Because sometimes the best UX improvement is realizing the problem isn't in the UX."
+        }
+      ]
+    },
+    {
+      "n": 28,
+      "postId": 126,
+      "category": "TECH",
+      "cluster": "IA",
+      "translations": [
+        {
+          "translationId": 533,
+          "lang": "es",
+          "slug": "rag-no-es-magia-como-elegir-arquitectura-de-recuperacion",
+          "title": "RAG no es Magia: Cómo Elegir la Arquitectura de Recuperación que tu Caso Realmente Necesita",
+          "metaTitle": "RAG: cómo elegir la arquitectura que necesitas",
+          "metaDescription": "RAG no es una sola arquitectura. Las cinco variantes que importan, el marco para elegir entre ellas y cuándo compensa el fine-tuning.",
+          "currentMetaDescription": "RAG no es una solución: es una familia de arquitecturas. Te explicamos cuándo usar cada variante y por qué la elección incorrecta te cuesta dinero, latencia y confianza de usuario.",
+          "sentenceHtml": "Elegir la arquitectura que aplica al caso es parte de <a href=\"/es/ia-en-el-producto\">llevar la IA a producción sin que alucine</a>.",
+          "lastParagraphText": "Si estás en ese punto de decisión —arquitectura de RAG, fine-tuning, combinación de ambos— y necesitas un diagnóstico sin compromiso previo con ninguna tecnología, eso es exactamente lo que hacemos en Room 714. La arquitectura correcta no es la más cara ni la más moderna. Es la que resuelve tu caso con la mínima complejidad necesaria."
+        },
+        {
+          "translationId": 534,
+          "lang": "en",
+          "slug": "rag-is-not-magic-how-to-choose-retrieval-architecture",
+          "title": "RAG Is Not Magic: Choosing the Retrieval Architecture Your Use Case Actually Needs",
+          "metaTitle": "RAG: choosing the architecture you need",
+          "metaDescription": "RAG is not a single architecture. The five variants that matter, the framework to choose between them and when fine-tuning pays off.",
+          "currentMetaDescription": "RAG is a family of architectures, not a silver bullet. We break down when to use each variant and why the wrong choice costs you money, latency, and user trust.",
+          "sentenceHtml": "Choosing the architecture that fits the case is part of <a href=\"/en/ai-in-the-product\">taking AI to production without hallucinations</a>.",
+          "lastParagraphText": "If you're at that decision point — RAG architecture, fine-tuning, or a combination — and need a diagnosis without prior commitment to any technology, that's exactly what we do at Room 714. The right architecture isn't the most expensive or the most modern. It's the one that solves your case with the minimum necessary complexity."
+        }
+      ]
+    },
+    {
+      "n": 29,
+      "postId": 125,
+      "category": "UX",
+      "cluster": "C2",
+      "translations": [
+        {
+          "translationId": 531,
+          "lang": "es",
+          "slug": "diseno-con-incertidumbre-la-ia-amplifica-la-ambiguedad",
+          "title": "Diseño con Incertidumbre: Por qué la IA no Elimina la Ambigüedad, la Amplifica",
+          "metaTitle": "Diseñar con incertidumbre en productos con IA",
+          "metaDescription": "La IA no elimina la ambigüedad: la amplifica. Cómo diseñar para rangos y no para puntos, y qué preguntar antes de que el producto actúe.",
+          "currentMetaDescription": "La IA genera predicciones, no certezas. Los equipos de UX que no distinguen entre ambas toman decisiones de diseño peores, no mejores. Así se corrige.",
+          "sentenceHtml": "Es parte del criterio con el que <a href=\"/es/producto-para-tus-clientes\">diseñamos la experiencia del producto que usan tus clientes</a>.",
+          "lastParagraphText": "Si tu equipo está integrando IA en el flujo de diseño y sientes que las decisiones son más rápidas pero no necesariamente mejores, eso es una señal de que el problema no es la herramienta. Es el proceso de criterio alrededor de ella. En Room 714 trabajamos con equipos de producto en auditorías de este tipo: no para quitar la IA, sino para que la usen de forma que realmente mejore lo que construyen. Si te reconoces en alguno de los patrones de este post, es una buena conversación para tener."
+        },
+        {
+          "translationId": 532,
+          "lang": "en",
+          "slug": "designing-under-uncertainty-ai-amplifies-ambiguity",
+          "title": "Designing Under Uncertainty: Why AI Doesn't Reduce Ambiguity — It Amplifies It",
+          "metaTitle": "Designing for uncertainty in AI products",
+          "metaDescription": "AI does not remove ambiguity: it amplifies it. How to design for ranges rather than points, and what to ask before the product acts.",
+          "currentMetaDescription": "AI produces predictions, not certainties. UX teams that can't tell the difference make worse design decisions, not better ones. Here's how to fix that.",
+          "sentenceHtml": "It is part of the judgement we apply when <a href=\"/en/product-for-your-customers\">designing the experience of the product your customers use</a>.",
+          "lastParagraphText": "If your team is integrating AI into its design workflow and you sense decisions are faster but not necessarily better, that's a signal the problem isn't the tool. It's the judgment process around it. At Room 714 we work with product teams on exactly this kind of audit — not to remove AI, but to help them use it in ways that genuinely improve what they build. If any of the patterns in this post sound familiar, it's a conversation worth having."
+        }
+      ]
+    },
+    {
+      "n": 31,
+      "postId": 123,
+      "category": "UX",
+      "cluster": "C2",
+      "translations": [
+        {
+          "translationId": 527,
+          "lang": "es",
+          "slug": "economia-del-comportamiento-lo-que-el-ux-ignora-cuando-disena-para-humanos",
+          "title": "Economía del Comportamiento: Lo que el UX Ignora cuando Diseña para Humanos",
+          "metaTitle": "Economía del comportamiento aplicada al UX",
+          "metaDescription": "El esfuerzo percibido y los sesgos moldean cada decisión en tu producto, aunque no salgan en las métricas. Cómo diseñar teniéndolos en cuenta.",
+          "currentMetaDescription": "Eliminar fricción no es suficiente. Te explicamos por qué los sesgos cognitivos y la percepción del esfuerzo son la capa de UX que la mayoría de equipos ignora.",
+          "sentenceHtml": "Lo tenemos en cuenta en cada paso cuando <a href=\"/es/producto-para-tus-clientes\">rediseñamos el alta y la contratación</a> de un producto.",
+          "lastParagraphText": "Si tu producto tiene buen NPS pero conversión mediocre, o buen onboarding pero retención floja, es probable que estés ignorando esta capa. Una auditoría conductual no requiere rediseñar desde cero: a veces basta con cambiar qué opción está marcada por defecto. Si quieres saber dónde están esos puntos ciegos en tu producto, es una conversación que merece la pena tener."
+        },
+        {
+          "translationId": 528,
+          "lang": "en",
+          "slug": "behavioral-economics-in-ux-the-hidden-friction-nobody-talks-about",
+          "title": "Behavioral Economics in UX: The Hidden Friction Nobody Talks About",
+          "metaTitle": "Behavioural economics applied to UX",
+          "metaDescription": "Perceived effort and biases shape every decision in your product, even when metrics do not show it. How to design with them in mind.",
+          "currentMetaDescription": "Removing friction isn't enough. Cognitive biases and effort perception are the UX layer most teams ignore — and the reason conversion stays stuck despite good flows.",
+          "sentenceHtml": "We account for it at every step when <a href=\"/en/product-for-your-customers\">we redesign a product's sign-up and onboarding</a>.",
+          "lastParagraphText": "If your product has solid NPS but mediocre conversion, or good onboarding but weak retention, you're likely ignoring this layer. A behavioral audit doesn't require a full redesign: sometimes changing which option is checked by default is enough. If you want to find out where those blind spots are in your product, it's a conversation worth having."
+        }
+      ]
+    },
+    {
+      "n": 32,
+      "postId": 122,
+      "category": "PRODUCT",
+      "cluster": "C1",
+      "translations": [
+        {
+          "translationId": 525,
+          "lang": "es",
+          "slug": "objetivos-no-herramientas-el-error-de-diseno-que-arruina-productos-digitales",
+          "title": "Objetivos, no Herramientas: El Error de Diseño que Arruina Productos Digitales",
+          "metaTitle": "Diseñar desde los objetivos del usuario (JTBD)",
+          "metaDescription": "Los productos que se organizan por herramientas y no por objetivos se vuelven catálogos. Cómo diseñar desde la situación del usuario con JTBD.",
+          "currentMetaDescription": "Construir un producto desde las herramientas disponibles, no desde los objetivos del usuario, es el error más caro del producto digital. Así se diagnostica y se corrige con JTBD.",
+          "sentenceHtml": "Es el marco con el que empezamos cuando <a href=\"/es/empezar-de-cero\">llevamos una idea a producto en producción</a>.",
+          "lastParagraphText": "En Room 714 trabajamos con equipos que ya tienen el producto construido y quieren entender por qué no retiene. La mayoría de las veces, el diagnóstico es este: demasiadas herramientas, demasiado pocos objetivos claros. Si reconoces ese síntoma, es el momento de hacer la pregunta correcta antes de añadir una función más."
+        },
+        {
+          "translationId": 526,
+          "lang": "en",
+          "slug": "goals-over-tools-the-design-mistake-that-sinks-digital-products",
+          "title": "Goals Over Tools: The Design Mistake That Sinks Digital Products",
+          "metaTitle": "Designing from user goals (JTBD)",
+          "metaDescription": "Products organised around tools instead of goals turn into catalogues. How to design from the user's situation with JTBD.",
+          "currentMetaDescription": "Building a product around available tools instead of user goals is the most expensive mistake in digital product design. Here's how to diagnose and fix it with JTBD.",
+          "sentenceHtml": "It is the framework we start with when <a href=\"/en/starting-from-scratch\">we take an idea to a product in production</a>.",
+          "lastParagraphText": "At Room 714 we work with teams who've already built the product and can't figure out why it doesn't retain users. Most of the time, the diagnosis is this: too many tools, too few clear goals. If that sounds familiar, it's time to ask the right question before adding one more feature."
+        }
+      ]
+    },
+    {
+      "n": 34,
+      "postId": 120,
+      "category": "TECH",
+      "cluster": "C2",
+      "translations": [
+        {
+          "translationId": 521,
+          "lang": "es",
+          "slug": "percepcion-vs-realidad-por-que-tu-app-de-ia-parece-lenta",
+          "title": "Percepción vs. Realidad: Por qué tu App de IA Parece Lenta aunque No lo Sea",
+          "metaTitle": "Rendimiento percibido en apps de IA",
+          "metaDescription": "Tu app de IA puede ser rápida y parecer lenta. El tiempo vacío como enemigo y cómo diseñar la espera en lugar de luchar contra ella.",
+          "currentMetaDescription": "Tu app de IA no es lenta: parece lenta. Descubre por qué optimizar la latencia real sin trabajar la percepción es el error más común en productos con IA",
+          "sentenceHtml": "Es de lo primero que revisamos al <a href=\"/es/producto-para-tus-clientes\">rediseñar la experiencia del producto que usan tus clientes</a>.",
+          "lastParagraphText": "Si estás midiendo el rendimiento de tu producto con IA solo desde el backend, tienes un punto ciego importante. En Room 714 revisamos toda la cadena, desde la arquitectura de inferencia hasta el primer píxel que ve el usuario. El problema suele estar en el medio."
+        },
+        {
+          "translationId": 522,
+          "lang": "en",
+          "slug": "perceived-performance-why-your-ai-app-feels-slow",
+          "title": "Perceived Performance: Why Your AI App Feels Slow Even When It Isn't",
+          "metaTitle": "Perceived performance: why your AI app feels slow",
+          "metaDescription": "Your AI app can be fast and still feel slow. Empty time as the enemy, and how to design the wait instead of fighting it.",
+          "currentMetaDescription": "Your AI app isn't slow — it just feels slow. Learn why optimizing real latency without addressing perceived performance is the most common mistake in AI products.",
+          "sentenceHtml": "It is one of the first things we review when <a href=\"/en/product-for-your-customers\">redesigning the experience of the product your customers use</a>.",
+          "lastParagraphText": "If you're measuring your AI product's performance only from the backend, you have a significant blind spot. At Room 714 we review the whole chain — from inference architecture to the first pixel the user sees. The problem is usually somewhere in between."
+        }
+      ]
+    },
+    {
+      "n": 39,
+      "postId": 114,
+      "category": "DESIGN",
+      "cluster": "C2",
+      "translations": [
+        {
+          "translationId": 505,
+          "lang": "es",
+          "slug": "ui-generativa-cuando-la-interfaz-deja-de-ser-un-plano",
+          "title": "UI Generativa: Cuando la Interfaz Deja de Ser un Plano y se Convierte en un Actor",
+          "metaTitle": "UI generativa: diseñar interfaces que actúan",
+          "metaDescription": "Con la UI generativa, el diseñador pasa de dibujar pantallas a definir reglas. Qué cambia en el diseño y el problema de confianza que las demos no enseñan.",
+          "currentMetaDescription": "La UI generativa no es solo una interfaz que cambia: es una que toma decisiones. Te explicamos por qué el diseño de restricciones es ahora más crítico que el diseño de pantallas",
+          "sentenceHtml": "Es una de las preguntas que abrimos al <a href=\"/es/producto-para-tus-clientes\">diseñar el producto que usan tus clientes</a> con IA dentro.",
+          "lastParagraphText": "Si estás evaluando incorporar UI generativa en tu producto, empieza por las preguntas difíciles: ¿qué nivel de variabilidad tolera tu usuario? ¿dónde necesita certeza absoluta y dónde acepta adaptación? En Room 714 ayudamos a trazar esa línea antes de que el agente empiece a dibujar solo."
+        },
+        {
+          "translationId": 506,
+          "lang": "en",
+          "slug": "generative-ui-when-the-interface-stops-being-a-blueprint",
+          "title": "Generative UI: When the Interface Stops Being a Blueprint and Starts Acting",
+          "metaTitle": "Generative UI: designing interfaces that act",
+          "metaDescription": "With generative UI, designers move from drawing screens to defining rules. What changes in design, and the trust problem demos do not show.",
+          "currentMetaDescription": "Generative UI doesn't just adapt — it makes decisions. Why designing constraints is now more critical than designing screens, and where most teams will get it wrong",
+          "sentenceHtml": "It is one of the questions we open when <a href=\"/en/product-for-your-customers\">designing the product your customers use</a> with AI inside.",
+          "lastParagraphText": "If you're evaluating generative UI for your product, start with the hard questions: how much variability does your user actually tolerate? Where do they need absolute certainty, and where do they accept adaptation? At Room 714 we help draw that line before the agent starts drawing on its own."
+        }
+      ]
+    },
+    {
+      "n": 40,
+      "postId": 113,
+      "category": "UX",
+      "cluster": "C1",
+      "translations": [
+        {
+          "translationId": 503,
+          "lang": "es",
+          "slug": "el-prototipo-que-miente-por-que-tus-tests-de-usabilidad-estan-contaminados",
+          "title": "El Prototipo que Miente: Por qué tus Tests de Usabilidad Están Contaminados",
+          "metaTitle": "El sesgo oculto de testear con prototipos",
+          "metaDescription": "Un prototipo demasiado pulido contamina tus tests de usabilidad. Cuándo la fidelidad distorsiona y por qué trabajar con artefactos descartables.",
+          "currentMetaDescription": "Los prototipos mienten a tus usuarios y tú lo sabes. Te contamos por qué la fidelidad del artefacto destruye la validez del test y cómo corregirlo antes de que sea tarde",
+          "sentenceHtml": "Así validamos antes de construir cuando <a href=\"/es/empezar-de-cero\">llevamos una idea a producto</a>.",
+          "lastParagraphText": "En Room 714 auditamos con frecuencia procesos de diseño donde el 60% del tiempo se invierte en prototipos que nadie va a testear y el 40% restante en tests que producen datos contaminados. Si tu equipo está en ese ciclo, tiene sentido parar y recalibrar antes del próximo sprint. Una conversación de una hora puede ahorrarte varios ciclos de iteración vacíos."
+        },
+        {
+          "translationId": 504,
+          "lang": "en",
+          "slug": "the-lying-prototype-why-your-usability-tests-are-giving-you-bad-data",
+          "title": "The Lying Prototype: Why Your Usability Tests Are Giving You Bad Data",
+          "metaTitle": "Prototype usability testing: the hidden bias",
+          "metaDescription": "An over-polished prototype contaminates your usability tests. When fidelity distorts results, and why to work with disposable artefacts.",
+          "currentMetaDescription": "High-fidelity prototypes signal \"fake\" to users before you ask a single question. Here's why your usability data is probably contaminated — and how to fix the test design.",
+          "sentenceHtml": "That is how we validate before building when <a href=\"/en/starting-from-scratch\">we take an idea to a product</a>.",
+          "lastParagraphText": "At Room 714 we regularly audit design processes where 60% of time goes into prototypes nobody will test, and the remaining 40% into tests that yield contaminated data. If your team is stuck in that cycle, it makes sense to stop and recalibrate before the next sprint. One conversation can save you several rounds of hollow iteration."
+        }
+      ]
+    },
+    {
+      "n": 41,
+      "postId": 112,
+      "category": "PRODUCT",
+      "cluster": "C1",
+      "translations": [
+        {
+          "translationId": 501,
+          "lang": "es",
+          "slug": "construir-antes-de-validar-el-error-de-producto-que-destruye-startups",
+          "title": "Construir Antes de Validar: El Error de Producto que Sigue Destruyendo Startups",
+          "metaTitle": "Validar una idea de producto antes de construir",
+          "metaDescription": "Construir antes de validar sigue destruyendo startups. Cómo revisar las asunciones y validar rápido en lugar de construir rápido.",
+          "currentMetaDescription": "Construir sin validar no es velocidad: es deuda de producto. Cómo aplicar JTBD para identificar asunciones peligrosas antes de escribir una sola línea de código.",
+          "sentenceHtml": "Es la regla de la casa cuando <a href=\"/es/empezar-de-cero\">llevamos una idea a producto</a>: revisamos el negocio antes de diseñar.",
+          "lastParagraphText": "Si quieres revisar dónde están las asunciones no validadas en tu roadmap actual, en Room 714 hacemos esa auditoría. Normalmente lo que encontramos sorprende."
+        },
+        {
+          "translationId": 502,
+          "lang": "en",
+          "slug": "build-before-validating-the-product-mistake-killing-startups",
+          "title": "Ship First, Validate Never: The Product Mistake That Keeps Killing Startups",
+          "metaTitle": "Validate a product idea before building it",
+          "metaDescription": "Building before validating keeps killing startups. How to review your assumptions and validate fast instead of building fast.",
+          "currentMetaDescription": "Building without validating isn't speed — it's product debt. How to use JTBD to surface dangerous assumptions before writing a single line of code.",
+          "sentenceHtml": "It is our house rule when <a href=\"/en/starting-from-scratch\">we take an idea to a product</a>: we review the business before designing.",
+          "lastParagraphText": "If you want to map where the unvalidated assumptions are hiding in your current roadmap, that's exactly the kind of audit Room 714 runs. What we find usually surprises people."
+        }
+      ]
+    },
+    {
+      "n": 43,
+      "postId": 108,
+      "category": "UX",
+      "cluster": "C2",
+      "translations": [
+        {
+          "translationId": 493,
+          "lang": "es",
+          "slug": "el-roi-de-ux-no-se-demuestra-con-metricas-bonitas-se-demuestra-con-decisiones",
+          "title": "El ROI de UX no se Demuestra con Métricas Bonitas: Se Demuestra con Decisiones",
+          "metaTitle": "Cómo demostrar el ROI de UX con decisiones",
+          "metaDescription": "El ROI de UX no se demuestra con métricas bonitas, sino con decisiones que cambian el producto. Cómo priorizar la fricción que más cuesta.",
+          "currentMetaDescription": "Tener datos de UX no es suficiente. El ROI real aparece cuando esos datos cambian decisiones de producto. Te explicamos dónde está la desconexión más común",
+          "sentenceHtml": "Por eso medimos en conversión y abandono cuando <a href=\"/es/producto-para-tus-clientes\">rediseñamos el producto que usan tus clientes</a>.",
+          "lastParagraphText": "Si tu producto tiene fricción que no sabes nombrar, o si tus métricas de UX no están conectadas a ninguna decisión real, es el momento de hacer una revisión a fondo. No de contratar más diseñadores, sino de cambiar cómo se usa la evidencia que ya tienes."
+        },
+        {
+          "translationId": 494,
+          "lang": "en",
+          "slug": "ux-roi-isnt-proven-with-pretty-metrics-its-proven-with-decisions",
+          "title": "UX ROI Isn't Proven with Pretty Metrics — It's Proven with Decisions",
+          "metaTitle": "How to prove UX ROI with decisions",
+          "metaDescription": "UX ROI is not proven with pretty metrics but with decisions that change the product. How to prioritise the friction that costs the most.",
+          "currentMetaDescription": "UX data alone doesn't drive ROI. The real value appears when insights change product decisions. Here's where the disconnect usually hides — and how to fix it.",
+          "sentenceHtml": "That is why we measure in conversion and drop-off when <a href=\"/en/product-for-your-customers\">we redesign the product your customers use</a>.",
+          "lastParagraphText": "If your product has friction you can't name — or if your UX metrics aren't connected to any real decisions — it's time for a proper review. Not to hire more designers, but to change how you use the evidence you already have."
+        }
+      ]
+    },
+    {
+      "n": 44,
+      "postId": 107,
+      "category": "PRODUCT",
+      "cluster": "C1",
+      "translations": [
+        {
+          "translationId": 491,
+          "lang": "es",
+          "slug": "una-app-grande-o-treinta-pequenas-la-matematica-de-producto-que-nadie-hace",
+          "title": "Una App Grande o Treinta Pequeñas: La Matemática de Producto que Nadie Hace",
+          "metaTitle": "Una app grande o varias pequeñas: cómo decidir",
+          "metaDescription": "Unificar o separar productos no es una cuestión de tamaño. Cuándo la dispersión es precisión y qué preguntas deciden la estrategia.",
+          "currentMetaDescription": "Apostar por un producto grande o construir varios pequeños es una decisión estratégica real. Aquí está la matemática que la mayoría de equipos evita hacer.",
+          "sentenceHtml": "Es una de las decisiones que tomamos al principio cuando <a href=\"/es/empezar-de-cero\">llevamos una idea o una línea de negocio a producto</a>.",
+          "lastParagraphText": "En Room 714 ayudamos a equipos a hacer esa matemática antes de comprometer recursos. Si estás en ese dilema —escalar el producto actual o fragmentarlo en piezas con más foco—, tiene sentido hablarlo antes de que la hoja de ruta ya esté firmada."
+        },
+        {
+          "translationId": 492,
+          "lang": "en",
+          "slug": "one-big-app-or-thirty-small-ones-the-product-math-nobody-does",
+          "title": "One Big App or Thirty Small Ones: The Product Math Nobody Does",
+          "metaTitle": "One big app or several small ones: how to decide",
+          "metaDescription": "Merging or splitting products is not a question of size. When dispersion is actually precision, and the questions that decide the strategy.",
+          "currentMetaDescription": "One flagship product or a portfolio of focused tools? The math changes everything — and most product teams never run the numbers. Here's how to think about it.",
+          "sentenceHtml": "It is one of the decisions we make early on when <a href=\"/en/starting-from-scratch\">we take an idea or a business line to a product</a>.",
+          "lastParagraphText": "At Room 714 we help teams run that math before resources are committed. If you're facing that dilemma — scale the current product or break it into more focused pieces — it's worth the conversation before the roadmap is locked in."
+        }
+      ]
+    },
+    {
+      "n": 46,
+      "postId": 105,
+      "category": "TECH",
+      "cluster": "C3",
+      "translations": [
+        {
+          "translationId": 487,
+          "lang": "es",
+          "slug": "local-first-la-arquitectura-que-le-devuelve-el-control-a-tu-producto",
+          "title": "Local-First: La Arquitectura que le Devuelve el Control a tu Producto",
+          "metaTitle": "Arquitectura local-first: cuándo es la decisión",
+          "metaDescription": "Cloud por defecto tiene un coste oculto de dependencia. Qué es la arquitectura local-first y cuándo devuelve el control a tu producto.",
+          "currentMetaDescription": "El cloud-by-default tiene un coste oculto que pocos productos calculan. Analizamos cuándo la arquitectura local-first es más inteligente, más barata y más resiliente",
+          "sentenceHtml": "Es una de las opciones que valoramos al <a href=\"/es/producto-para-tu-equipo\">modernizar el software de un equipo</a> sin lock-in.",
+          "lastParagraphText": "Si tu equipo está revisando la arquitectura de un producto y la palabra \"latencia\" o \"coste de infraestructura\" aparece en cada retrospectiva, merece la pena explorar qué parte de esa lógica puede vivir más cerca del usuario. En Room 714 ayudamos a evaluar ese trade-off sin dogmatismos: a veces el cloud es la respuesta correcta; muchas veces, no lo es del todo."
+        },
+        {
+          "translationId": 488,
+          "lang": "en",
+          "slug": "local-first-architecture-taking-back-control-of-your-product",
+          "title": "Local-First Architecture: Taking Back Control of Your Product",
+          "metaTitle": "Local-first architecture: when to choose it",
+          "metaDescription": "Cloud-by-default carries a hidden dependency cost. What local-first architecture is, and when it gives control back to your product.",
+          "currentMetaDescription": "Cloud-by-default has a hidden cost most products never calculate. We break down when local-first architecture is smarter, cheaper and more resilient than the default choice.",
+          "sentenceHtml": "It is one of the options we weigh when <a href=\"/en/product-for-your-team\">modernising a team's software</a> without lock-in.",
+          "lastParagraphText": "If your team is revisiting a product's architecture and the words \"latency\" or \"infrastructure cost\" keep showing up in every retro, it's worth exploring how much of that logic could live closer to the user. At Room 714 we help evaluate that trade-off without dogma: sometimes cloud is the right answer; often, it isn't entirely."
+        }
+      ]
+    },
+    {
+      "n": 47,
+      "postId": 79,
+      "category": "UX",
+      "cluster": "C2",
+      "translations": [
+        {
+          "translationId": 403,
+          "lang": "es",
+          "slug": "diseno-con-inteligencia-emocional-la-frontera-despues-de-la-utilidad",
+          "title": "Diseño con Inteligencia Emocional: La frontera después de la utilidad",
+          "metaTitle": "Diseño emocional: la empatía como retención",
+          "metaDescription": "Más allá de la utilidad, el diseño emocional adapta la experiencia al contexto del usuario. Cómo convertir la empatía en una métrica de retención.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "Es parte de cómo <a href=\"/es/producto-para-tus-clientes\">diseñamos la experiencia del producto que usan tus clientes</a>.",
+          "lastParagraphText": "En Room 714, ayudamos a construir capas de usabilidad emocional que transforman interfaces funcionales en experiencias humanas. La verdadera sofisticación técnica no es hacer que el usuario trabaje más rápido, sino hacer que se sienta mejor mientras trabaja."
+        },
+        {
+          "translationId": 404,
+          "lang": "en",
+          "slug": "emotionally-intelligent-design-the-frontier-beyond-utility",
+          "title": "Emotionally Intelligent Design: The Frontier Beyond Utility",
+          "metaTitle": "Emotional design: empathy as retention",
+          "metaDescription": "Beyond utility, emotional design adapts the experience to the user's context. How to turn empathy into a retention metric.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "It is part of how <a href=\"/en/product-for-your-customers\">we design the experience of the product your customers use</a>.",
+          "lastParagraphText": "At Room 714, we help build emotional usability layers that transform functional interfaces into human experiences. True technical sophistication isn't about making the user work faster; it’s about making them feel better while they work."
+        }
+      ]
+    },
+    {
+      "n": 48,
+      "postId": 74,
+      "category": "TECH",
+      "cluster": "IA",
+      "translations": [
+        {
+          "translationId": 389,
+          "lang": "es",
+          "slug": "el-modelo-canonico-que-no-alucine-tu-ia",
+          "title": "El Modelo Canónico: Que no \"alucine\" tu IA",
+          "metaTitle": "Modelo canónico de datos contra las alucinaciones",
+          "metaDescription": "Sin un modelo canónico de datos, la IA alucina aunque el modelo sea bueno. Por qué la coherencia de datos es tu ventaja competitiva.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "Es la base con la que <a href=\"/es/ia-en-el-producto\">llevamos la IA de piloto a producción</a>.",
+          "lastParagraphText": "En Room 714, ayudamos a las organizaciones a construir este \"diccionario central\" que permite que la IA sea verdaderamente estratégica y no solo un juguete caro que da respuestas contradictorias."
+        },
+        {
+          "translationId": 390,
+          "lang": "en",
+          "slug": "the-canonical-model-stop-hallucinating",
+          "title": "The Canonical Model: Stop Hallucinating",
+          "metaTitle": "A canonical data model to stop AI hallucinations",
+          "metaDescription": "Without a canonical data model, AI hallucinates even with a good model. Why data coherence is your competitive advantage.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "It is the foundation we use to <a href=\"/en/ai-in-the-product\">take AI from pilot to production</a>.",
+          "lastParagraphText": "At Room 714, we help organizations build this \"central dictionary\" that allows AI to be truly strategic rather than just an expensive toy giving contradictory answers."
+        }
+      ]
+    },
+    {
+      "n": 49,
+      "postId": 73,
+      "category": "DESIGN",
+      "cluster": "C2",
+      "translations": [
+        {
+          "translationId": 385,
+          "lang": "es",
+          "slug": "el-fin-del-user-centric-hacia-un-diseno-de-ecosistemas",
+          "title": "El fin del \"User-Centric\": Hacia un Diseño de Ecosistemas",
+          "metaTitle": "Diseño de ecosistemas más allá del user-centric",
+          "metaDescription": "Diseñar solo para el usuario deja fuera al resto del ecosistema. Qué es el diseño sistémico y por qué la UX es estrategia de negocio.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "Es la mirada con la que <a href=\"/es/producto-para-tus-clientes\">diseñamos el producto que usan tus clientes</a> cuando hay varias partes implicadas.",
+          "lastParagraphText": "En Room 714, ayudamos a las empresas a transicionar hacia una UX sistémica. Diseñamos productos que respetan al usuario, pero que también blindan la operativa y los valores de la compañía. La verdadera innovación no es hacer la vida más fácil a una persona, sino hacer que todo el sistema funcione mejor gracias a ese producto."
+        },
+        {
+          "translationId": 386,
+          "lang": "en",
+          "slug": "the-end-of-user-centric-toward-ecosystem-design",
+          "title": "The End of \"User-Centric\": Toward Ecosystem Design",
+          "metaTitle": "Ecosystem design beyond user-centric",
+          "metaDescription": "Designing only for the user leaves the rest of the ecosystem out. What systemic design is, and why UX is business strategy.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "It is the lens we use to <a href=\"/en/product-for-your-customers\">design the product your customers use</a> when several parties are involved.",
+          "lastParagraphText": "At Room 714, we help companies transition toward systemic UX. We design products that respect the user while also shielding the company's operations and values. True innovation isn't just making life easier for one person; it's making the whole system work better because of that product."
+        }
+      ]
+    },
+    {
+      "n": 50,
+      "postId": 70,
+      "category": "DESIGN",
+      "cluster": "C2",
+      "translations": [
+        {
+          "translationId": 367,
+          "lang": "es",
+          "slug": "bento-grids-como-dar-orden-al-caos-de-datos-de-la-ia",
+          "title": "Bento Grids: Cómo dar orden al caos de datos de la IA",
+          "metaTitle": "Bento grids: orden visual para datos de IA",
+          "metaDescription": "Las bento grids dan estructura modular a interfaces cargadas de datos de IA. Cuándo el diseño modular aporta orden y control al usuario.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "Lo usamos cuando encaja al <a href=\"/es/producto-para-tus-clientes\">rediseñar el área de cliente</a> de un producto con mucha información.",
+          "lastParagraphText": "En Room 714, aplicamos estas tendencias no por seguir la moda, sino porque entendemos que la IA necesita un \"contenedor\" que proyecte seguridad y eficiencia. Un producto que utiliza Bento Grids no solo se ve moderno; se percibe como una herramienta profesional donde cada dato tiene su lugar y cada espacio tiene un propósito."
+        },
+        {
+          "translationId": 368,
+          "lang": "en",
+          "slug": "bento-grids-bringing-order-to-ai-data-chaos",
+          "title": "Bento Grids: Bringing Order to AI Data Chaos",
+          "metaTitle": "Bento grids: visual order for AI data",
+          "metaDescription": "Bento grids give modular structure to interfaces full of AI data. When modular design brings order and a sense of control to users.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "We use it where it fits when <a href=\"/en/product-for-your-customers\">redesigning the customer area</a> of an information-heavy product.",
+          "lastParagraphText": "At Room 714, we apply these trends not just to be trendy, but because we understand that AI needs a \"container\" that projects security and efficiency. A product using Bento Grids doesn't just look modern; it’s perceived as a professional tool where every data point has its place and every space has a purpose."
+        }
+      ]
+    },
+    {
+      "n": 51,
+      "postId": 66,
+      "category": "DESIGN",
+      "cluster": "C2",
+      "translations": [
+        {
+          "translationId": 351,
+          "lang": "es",
+          "slug": "el-equilibrio-vital-entre-estetica-y-usabilidad",
+          "title": "El equilibrio vital entre Estética y Usabilidad",
+          "metaTitle": "Estética y usabilidad: el equilibrio en el diseño",
+          "metaDescription": "Un diseño bonito que no se usa no es un activo. Cómo equilibrar estética y usabilidad para que el diseño trabaje para el negocio.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "Es el equilibrio que buscamos cuando <a href=\"/es/producto-para-tus-clientes\">rediseñamos el producto que usan tus clientes</a>.",
+          "lastParagraphText": "En Room 714 ayudamos a las empresas a entender que un buen \"escaparate\" es lo que permite que la \"tienda\" sea rentable. Si tu producto no entra por los ojos, tu tecnología morirá en la oscuridad."
+        },
+        {
+          "translationId": 352,
+          "lang": "en",
+          "slug": "the-vital-balance-between-aesthetics-and-usability",
+          "title": "The Vital Balance Between Aesthetics and Usability",
+          "metaTitle": "Aesthetics and usability: the design balance",
+          "metaDescription": "A beautiful design nobody can use is not an asset. How to balance aesthetics and usability so design works for the business.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "It is the balance we look for when <a href=\"/en/product-for-your-customers\">we redesign the product your customers use</a>.",
+          "lastParagraphText": "At Room 714, we help companies understand that a great \"storefront\" is what allows the \"shop\" to be profitable. If your product doesn't appeal to the eyes, your technology will die in obscurity."
+        }
+      ]
+    },
+    {
+      "n": 52,
+      "postId": 65,
+      "category": "UX",
+      "cluster": "C3",
+      "translations": [
+        {
+          "translationId": 347,
+          "lang": "es",
+          "slug": "el-clasismo-del-software-el-cliente-gana-al-empleado",
+          "title": "El \"Clasismo\" del Software: El Cliente gana al Empleado",
+          "metaTitle": "Software interno: tu equipo también merece UX",
+          "metaDescription": "El software de cliente recibe todo el cuidado y el interno se queda atrás. Por qué la madurez digital empieza por las herramientas de tu equipo.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "Es justo lo que hacemos cuando <a href=\"/es/producto-para-tu-equipo\">tratamos el software de tu equipo como un producto</a>.",
+          "lastParagraphText": "Una empresa que ofrece una experiencia de cliente impecable pero obliga a sus empleados a usar software obsoleto vive en una contradicción insostenible. El diseño de interfaces internas es la inversión con el ROI más claro y directo: menos clics, más margen de beneficio."
+        },
+        {
+          "translationId": 348,
+          "lang": "en",
+          "slug": "software-classism-the-customer-wins-over-the-employee",
+          "title": "Software \"Classism\": The Customer wins over the Employee",
+          "metaTitle": "Internal software: why your team deserves good UX",
+          "metaDescription": "Customer software gets all the care while internal tools lag behind. Why digital maturity starts with the tools your team uses.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "It is exactly what we do when <a href=\"/en/product-for-your-team\">we treat your team's software as a product</a>.",
+          "lastParagraphText": "A company that offers a flawless customer experience but forces its employees to use obsolete software lives in an unsustainable contradiction. Internal interface design is the investment with the clearest and most direct ROI: fewer clicks, more profit margin."
+        }
+      ]
+    },
+    {
+      "n": 53,
+      "postId": 61,
+      "category": "UX",
+      "cluster": "C2",
+      "translations": [
+        {
+          "translationId": 331,
+          "lang": "es",
+          "slug": "micro-interacciones-disenando-la-confianza-en-la-ia",
+          "title": "Micro-interacciones: Diseñando la confianza en la IA",
+          "metaTitle": "Microinteracciones que generan confianza en la IA",
+          "metaDescription": "Las microinteracciones explican lo que la IA está haciendo y devuelven el control al usuario. Cómo diseñarlas para generar confianza.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "Es un detalle que cuidamos al <a href=\"/es/producto-para-tus-clientes\">diseñar la experiencia del producto que usan tus clientes</a>.",
+          "lastParagraphText": "¿Tu interfaz de IA genera seguridad en el usuario o es una caja negra que genera dudas cada vez que \"piensa\"?"
+        },
+        {
+          "translationId": 332,
+          "lang": "en",
+          "slug": "micro-interactions-designing-trust-in-ai",
+          "title": "Micro-interactions: Designing Trust in AI",
+          "metaTitle": "Micro-interactions that build trust in AI",
+          "metaDescription": "Micro-interactions explain what the AI is doing and give control back to users. How to design them to build trust.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "It is a detail we care about when <a href=\"/en/product-for-your-customers\">designing the experience of the product your customers use</a>.",
+          "lastParagraphText": "Does your AI interface generate security for the user, or is it a black box that creates doubt every time it \"thinks\"?"
+        }
+      ]
+    },
+    {
+      "n": 54,
+      "postId": 58,
+      "category": "DESIGN",
+      "cluster": "C2",
+      "translations": [
+        {
+          "translationId": 319,
+          "lang": "es",
+          "slug": "interfaces-adaptativas-el-fin-del-diseno-talla-unica",
+          "title": "Interfaces Adaptativas: El fin del diseño \"talla única\"",
+          "metaTitle": "Interfaces adaptativas: adiós a la talla única",
+          "metaDescription": "Las interfaces adaptativas pasan de la rejilla estática a la composición semántica. Cómo personalizar la experiencia sin volverla genérica.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "Es una de las vías que valoramos al <a href=\"/es/producto-para-tus-clientes\">rediseñar el producto que usan tus clientes</a>.",
+          "lastParagraphText": "Ayudamos a las empresas a transicionar de plataformas rígidas a ecosistemas adaptativos. No diseñamos \"pantallas\" que se quedan obsoletas al mes; diseñamos reglas de inteligencia visual que permiten que tu producto crezca y aprenda de sus usuarios. La ventaja competitiva ya no es tener la interfaz más bonita, sino la que mejor se anticipa a lo que el usuario necesita hacer a continuación."
+        },
+        {
+          "translationId": 320,
+          "lang": "en",
+          "slug": "adaptive-interfaces-the-end-of-one-size-fits-all-design",
+          "title": "Adaptive Interfaces: The End of \"One-Size-Fits-All\" Design",
+          "metaTitle": "Adaptive interfaces: goodbye to one-size-fits-all",
+          "metaDescription": "Adaptive interfaces move from static grids to semantic composition. How to personalise the experience without making it generic.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "It is one of the paths we consider when <a href=\"/en/product-for-your-customers\">redesigning the product your customers use</a>.",
+          "lastParagraphText": "We help companies transition from rigid platforms to adaptive ecosystems. We don’t design \"screens\" that become obsolete within a month; we design visual intelligence rules that allow your product to grow and learn from its users. The competitive advantage is no longer about having the prettiest interface, but the one that best anticipates what the user needs to do next."
+        }
+      ]
+    },
+    {
+      "n": 55,
+      "postId": 56,
+      "category": "UX",
+      "cluster": "C2",
+      "translations": [
+        {
+          "translationId": 311,
+          "lang": "es",
+          "slug": "el-infierno-de-la-usabilidad-cuando-ni-apple-se-salva",
+          "title": "El infierno de la Usabilidad: Cuando ni Apple se salva",
+          "metaTitle": "Carga cognitiva y usabilidad: ni Apple se salva",
+          "metaDescription": "Ni Apple se salva de la mala usabilidad. Qué nos enseña su caso sobre la carga cognitiva y la usabilidad de extremo a extremo.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "Es lo que medimos cuando <a href=\"/es/producto-para-tus-clientes\">rediseñamos el producto que usan tus clientes</a>: menos clics, más sentido.",
+          "lastParagraphText": "Te aseguro que encontrarás puntos de fricción que están matando tu productividad o tu tasa de conversión. La tecnología debe ser un puente, nunca un laberinto."
+        },
+        {
+          "translationId": 312,
+          "lang": "en",
+          "slug": "usability-hell-when-even-apple-doesnt-make-the-cut",
+          "title": "Usability Hell: When Even Apple Doesn’t Make the Cut",
+          "metaTitle": "Cognitive load and usability: not even Apple",
+          "metaDescription": "Not even Apple escapes bad usability. What its case teaches about cognitive load and end-to-end usability.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "It is what we measure when <a href=\"/en/product-for-your-customers\">we redesign the product your customers use</a>: fewer clicks, more sense.",
+          "lastParagraphText": "I guarantee you’ll find friction points that are killing your productivity or your conversion rate. Technology should be a bridge, never a labyrinth."
+        }
+      ]
+    },
+    {
+      "n": 56,
+      "postId": 53,
+      "category": "PRODUCT",
+      "cluster": "C2",
+      "translations": [
+        {
+          "translationId": 299,
+          "lang": "es",
+          "slug": "product-led-growth-plg-ia-el-producto-que-se-vende-solo",
+          "title": "Product-Led Growth (PLG) + IA: El producto que se vende solo",
+          "metaTitle": "Product-led growth con IA: onboarding que vende",
+          "metaDescription": "En el product-led growth, el producto hace la venta. Cómo la IA pasa del soporte reactivo al éxito predictivo durante el alta y el uso.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "Es el terreno en el que <a href=\"/es/producto-para-tus-clientes\">rediseñamos el alta y el onboarding</a> para que el producto se venda solo.",
+          "lastParagraphText": "La velocidad sin propósito es desperdicio. Un producto escalable es aquel que sabe demostrar su valor sin intervención humana, permitiendo que tu equipo se enfoque en innovar y no en explicar cómo funciona un botón."
+        },
+        {
+          "translationId": 300,
+          "lang": "en",
+          "slug": "ai-powered-product-led-growth-plg-the-product-that-sells-itself",
+          "title": "AI-Powered Product-Led Growth (PLG): The product that sells itself",
+          "metaTitle": "Product-led growth with AI: onboarding that sells",
+          "metaDescription": "In product-led growth, the product does the selling. How AI moves from reactive support to predictive success during sign-up and use.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "It is the ground on which <a href=\"/en/product-for-your-customers\">we redesign sign-up and onboarding</a> so the product sells itself.",
+          "lastParagraphText": "Speed without purpose is waste. A scalable product is one that knows how to demonstrate its value without human intervention, allowing your team to focus on innovating instead of explaining how a button works."
+        }
+      ]
+    },
+    {
+      "n": 58,
+      "postId": 52,
+      "category": "DESIGN",
+      "cluster": "C2",
+      "translations": [
+        {
+          "translationId": 295,
+          "lang": "es",
+          "slug": "visual-density-el-retorno-del-detalle-y-la-precision",
+          "title": "Visual Density: El retorno del detalle y la precisión",
+          "metaTitle": "Densidad visual y progressive disclosure en UI",
+          "metaDescription": "La densidad visual vuelve, pero bien dosificada. Cómo usar el progressive disclosure para mostrar detalle sin saturar al usuario.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "Lo aplicamos cuando <a href=\"/es/producto-para-tus-clientes\">rediseñamos áreas de cliente con mucha información</a>.",
+          "lastParagraphText": "En la era de la información, el lujo no es el vacío, sino la claridad en medio de la complejidad. ¿Tu interfaz ayuda a decidir mejor o está demasiado ocupada intentando parecer \"limpia\"?"
+        },
+        {
+          "translationId": 296,
+          "lang": "en",
+          "slug": "visual-density-the-return-of-detail-and-precision",
+          "title": "Visual Density: The Return of Detail and Precision",
+          "metaTitle": "Visual density and progressive disclosure in UI",
+          "metaDescription": "Visual density is back, but well dosed. How to use progressive disclosure to show detail without overwhelming users.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "We apply it when <a href=\"/en/product-for-your-customers\">we redesign information-heavy customer areas</a>.",
+          "lastParagraphText": "In the information age, luxury is not emptiness, but clarity in the midst of complexity. Does your interface help make better decisions, or is it too busy trying to look \"clean\"?"
+        }
+      ]
+    },
+    {
+      "n": 59,
+      "postId": 51,
+      "category": "UX",
+      "cluster": "C2",
+      "translations": [
+        {
+          "translationId": 291,
+          "lang": "es",
+          "slug": "la-ia-no-se-cansa-en-el-kilometro-42",
+          "title": "La IA no se cansa en el kilómetro 42",
+          "metaTitle": "Flujos diseñados por IA: la fatiga que no ve",
+          "metaDescription": "La IA no se cansa, tu usuario sí. Por qué delegar el diseño de flujos en la IA crea procesos lógicos pero inasumibles, y cómo filtrarlos.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "Es un filtro que aplicamos al <a href=\"/es/producto-para-tus-clientes\">rediseñar los flujos que usan tus clientes</a>.",
+          "lastParagraphText": "Si dejas que la IA diseñe tu usabilidad, acabarás con un producto que funciona perfectamente en el servidor pero que nadie quiere abrir en su navegador. La tecnología debe adaptarse a nuestra forma de sentir y pensar, no al revés."
+        },
+        {
+          "translationId": 292,
+          "lang": "en",
+          "slug": "ai-doesnt-get-tired-at-mile-26",
+          "title": "AI doesn’t get tired at mile 26",
+          "metaTitle": "AI-designed flows: the fatigue it can't see",
+          "metaDescription": "AI does not get tired, your users do. Why delegating flow design to AI creates logical but unbearable processes, and how to filter them.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "It is a filter we apply when <a href=\"/en/product-for-your-customers\">redesigning the flows your customers use</a>.",
+          "lastParagraphText": "If you let AI design your usability, you will end up with a product that works perfectly on the server but that no one wants to open in their browser. Technology must adapt to our way of feeling and thinking, not the other way around."
+        }
+      ]
+    },
+    {
+      "n": 60,
+      "postId": 49,
+      "category": "TECH",
+      "cluster": "C3",
+      "translations": [
+        {
+          "translationId": 283,
+          "lang": "es",
+          "slug": "el-ocaso-de-wordpress",
+          "title": "El ocaso de WordPress",
+          "metaTitle": "Migrar de WordPress sin romper nada",
+          "metaDescription": "Salir de WordPress no exige un big bang. Cómo convivir durante la transición, desacoplar sin romper y diseñar el plan de salida.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "Es el mismo enfoque con el que <a href=\"/es/producto-para-tu-equipo\">migramos sistemas heredados sin parar la operación</a>.",
+          "lastParagraphText": "El futuro no es monolítico; es modular, seguro y ultra-rápido. Que tu falta de conocimiento técnico no limite tu evolución. Nosotros te ayudamos."
+        },
+        {
+          "translationId": 284,
+          "lang": "en",
+          "slug": "the-twilight-of-wordpress",
+          "title": "The Twilight of WordPress",
+          "metaTitle": "Migrating off WordPress without breaking things",
+          "metaDescription": "Leaving WordPress does not require a big bang. How to coexist during the transition, decouple without breaking and plan the exit.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "It is the same approach we use to <a href=\"/en/product-for-your-team\">migrate legacy systems without stopping the operation</a>.",
+          "lastParagraphText": "The future is not monolithic; it is modular, secure, and ultra-fast. Don't let a lack of technical knowledge limit your evolution. We are here to help."
+        }
+      ]
+    },
+    {
+      "n": 62,
+      "postId": 43,
+      "category": "PRODUCT",
+      "cluster": "IA",
+      "translations": [
+        {
+          "translationId": 255,
+          "lang": "es",
+          "slug": "business-first-intelligence-la-ia-como-estrategia-de-negocio",
+          "title": "Business-First Intelligence: La IA como estrategia de negocio",
+          "metaTitle": "IA de negocio: entender antes de entrenar",
+          "metaDescription": "La IA que aporta empieza por entender el negocio, no por el modelo. Por qué el desarrollador que solo ejecuta tickets ya no basta.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "Es el orden con el que <a href=\"/es/ia-en-el-producto\">llevamos la IA a producción dentro de un producto</a>: primero el caso de negocio.",
+          "lastParagraphText": "La IA puede escribir el código, pero no puede definir la estrategia. En un mercado donde la ejecución técnica se está convirtiendo en una commodity, la única ventaja que no se puede automatizar es el criterio de negocio."
+        },
+        {
+          "translationId": 256,
+          "lang": "en",
+          "slug": "business-first-intelligence-ai-as-a-business-strategist",
+          "title": "Business-First Intelligence: AI as a Business Strategist",
+          "metaTitle": "Business-first AI: understand before you train",
+          "metaDescription": "AI that adds value starts from understanding the business, not the model. Why the ticket-taking developer is no longer enough.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "It is the order in which <a href=\"/en/ai-in-the-product\">we take AI to production inside a product</a>: the business case first.",
+          "lastParagraphText": "AI can write the code, but it cannot define the strategy. In a market where technical execution is becoming a commodity, the only advantage that cannot be automated is business judgment."
+        }
+      ]
+    },
+    {
+      "n": 63,
+      "postId": 38,
+      "category": "UX",
+      "cluster": "C2",
+      "translations": [
+        {
+          "translationId": 235,
+          "lang": "es",
+          "slug": "anticipatory-ux-eliminando-la-carga-de-decision",
+          "title": "Anticipatory UX: Eliminando la carga de decisión",
+          "metaTitle": "UX anticipatoria: reducir la carga de decisión",
+          "metaDescription": "El diseño proactivo se adelanta al usuario y le quita decisiones. Dónde está el equilibrio entre asistencia e intrusión.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "Es parte de cómo <a href=\"/es/producto-para-tus-clientes\">rediseñamos la experiencia del producto que usan tus clientes</a>.",
+          "lastParagraphText": ""
+        },
+        {
+          "translationId": 236,
+          "lang": "en",
+          "slug": "anticipatory-ux-removing-the-decision-burden",
+          "title": "Anticipatory UX: Removing the Decision Burden",
+          "metaTitle": "Anticipatory UX: reducing decision load",
+          "metaDescription": "Proactive design anticipates users and removes decisions from them. Where the balance between assistance and intrusion lies.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "It is part of how <a href=\"/en/product-for-your-customers\">we redesign the experience of the product your customers use</a>.",
+          "lastParagraphText": ""
+        }
+      ]
+    },
+    {
+      "n": 64,
+      "postId": 36,
+      "category": "PRODUCT",
+      "cluster": "C1",
+      "translations": [
+        {
+          "translationId": 227,
+          "lang": "es",
+          "slug": "unbundling-el-poder-de-la-especializacion",
+          "title": "Unbundling: El poder de la especialización",
+          "metaTitle": "Unbundling: cuándo especializar tu producto",
+          "metaDescription": "El unbundling separa productos generalistas en piezas especializadas. Cuándo especializar es la estrategia correcta para un producto nuevo.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "Es una de las primeras decisiones cuando <a href=\"/es/empezar-de-cero\">llevamos una nueva línea de negocio a producto</a>.",
+          "lastParagraphText": ""
+        },
+        {
+          "translationId": 228,
+          "lang": "en",
+          "slug": "unbundling-the-power-of-specialization",
+          "title": "Unbundling: The power of specialization",
+          "metaTitle": "Unbundling: when to specialise your product",
+          "metaDescription": "Unbundling splits generalist products into specialised pieces. When specialising is the right strategy for a new product.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "It is one of the first decisions when <a href=\"/en/starting-from-scratch\">we take a new business line to a product</a>.",
+          "lastParagraphText": ""
+        }
+      ]
+    },
+    {
+      "n": 65,
+      "postId": 35,
+      "category": "DESIGN",
+      "cluster": "C2",
+      "translations": [
+        {
+          "translationId": 223,
+          "lang": "es",
+          "slug": "bionic-design-interfaces-que-respiran-con-el-usuario",
+          "title": "Bionic Design: Interfaces que respiran con el usuario",
+          "metaTitle": "Bionic design: interfaces que se adaptan",
+          "metaDescription": "El bionic design adapta el ritmo de la interfaz al del usuario. Qué es la usabilidad sostenible y cómo aplicarla a un producto real.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "Es un criterio que tenemos presente al <a href=\"/es/producto-para-tus-clientes\">diseñar el producto que usan tus clientes</a>.",
+          "lastParagraphText": ""
+        },
+        {
+          "translationId": 224,
+          "lang": "en",
+          "slug": "bionic-design-interfaces-that-breathe-with-the-user",
+          "title": "Bionic Design: Interfaces that Breathe with the User",
+          "metaTitle": "Bionic design: interfaces that adapt to users",
+          "metaDescription": "Bionic design adapts the interface's pace to the user's. What sustainable usability is and how to apply it to a real product.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "It is a criterion we keep in mind when <a href=\"/en/product-for-your-customers\">designing the product your customers use</a>.",
+          "lastParagraphText": ""
+        }
+      ]
+    },
+    {
+      "n": 67,
+      "postId": 31,
+      "category": "PRODUCT",
+      "cluster": "C1",
+      "translations": [
+        {
+          "translationId": 207,
+          "lang": "es",
+          "slug": "la-trampa-de-la-escucha-activa-feedback-vs-vision",
+          "title": "La trampa de la \"Escucha Activa\": Feedback vs Visión",
+          "metaTitle": "Feedback de clientes frente a visión de producto",
+          "metaDescription": "Construir todo lo que piden los clientes lleva a un producto por acumulación. Cómo descubrir el porqué detrás del feedback sin perder la visión.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "Es el trabajo de descubrimiento con el que empezamos cuando <a href=\"/es/empezar-de-cero\">llevamos una idea a producto</a>.",
+          "lastParagraphText": "La Conclusión: Un gran producto es el resultado de mil \"nos\" y unos pocos \"síes\" estratégicos. El equilibrio consiste en satisfacer al cliente hoy sin hipotecar la agilidad y la claridad del producto mañana."
+        },
+        {
+          "translationId": 208,
+          "lang": "en",
+          "slug": "the-active-listening-trap-balancing-feedback-and-vision",
+          "title": "The \"Active Listening\" Trap: Balancing Feedback and Vision",
+          "metaTitle": "Customer feedback versus product vision",
+          "metaDescription": "Building everything customers ask for leads to a product built by accretion. How to find the why behind feedback without losing the vision.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "It is the discovery work we start with when <a href=\"/en/starting-from-scratch\">we take an idea to a product</a>.",
+          "lastParagraphText": "The Conclusion: A great product is the result of a thousand \"nos\" and a few strategic \"yeses\". Balance is about satisfying the customer today without compromising the agility and clarity of the product tomorrow."
+        }
+      ]
+    },
+    {
+      "n": 68,
+      "postId": 30,
+      "category": "DESIGN",
+      "cluster": "C2",
+      "translations": [
+        {
+          "translationId": 203,
+          "lang": "es",
+          "slug": "la-navaja-de-ockham-en-ux-el-diseno-no-es-un-fin-es-un-medio",
+          "title": "La navaja de Ockham en UX: El diseño no es un fin, es un medio",
+          "metaTitle": "La navaja de Ockham en UX: diseño como medio",
+          "metaDescription": "El diseño no es un fin, es un medio. Cómo aplicar la navaja de Ockham para equilibrar estética y utilidad y diseñar para la realidad.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "Es el principio con el que <a href=\"/es/producto-para-tus-clientes\">rediseñamos el producto que usan tus clientes</a>: quitar hasta que solo quede lo que sirve.",
+          "lastParagraphText": "La Conclusión: El diseño de éxito es aquel que el usuario no nota porque simplemente funciona. Nuestra meta es crear experiencias donde la tecnología y la estética se equilibren para potenciar el valor real del producto."
+        },
+        {
+          "translationId": 204,
+          "lang": "en",
+          "slug": "ockhams-razor-in-ux-design-is-a-means-not-an-end",
+          "title": "Ockham’s Razor in UX: Design is a means, not an end",
+          "metaTitle": "Ockham's razor in UX: design as a means",
+          "metaDescription": "Design is a means, not an end. How to apply Ockham's razor to balance aesthetics and utility and design for reality.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "It is the principle behind how <a href=\"/en/product-for-your-customers\">we redesign the product your customers use</a>: remove until only what serves remains.",
+          "lastParagraphText": "The Conclusion: Successful design is that which the user doesn't notice because it simply works. Our goal is to create experiences where technology and aesthetics balance each other to empower the real value of the product."
+        }
+      ]
+    },
+    {
+      "n": 70,
+      "postId": 27,
+      "category": "PRODUCT",
+      "cluster": "C2",
+      "translations": [
+        {
+          "translationId": 191,
+          "lang": "es",
+          "slug": "el-fin-de-la-demo-como-barrera-de-entrada",
+          "title": "El fin de la \"demo\" como barrera de entrada",
+          "metaTitle": "Time to value: el fin de la demo como barrera",
+          "metaDescription": "Obligar a pedir una demo frena la adopción. Por qué el time to value es la métrica de supervivencia y cómo diseñar la confianza desde el alta.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "Es lo que atacamos cuando <a href=\"/es/producto-para-tus-clientes\">rediseñamos el alta y el onboarding</a> de un producto.",
+          "lastParagraphText": "El futuro del B2B no es convencer a alguien para que compre; es diseñar un producto tan potente y fácil de adoptar que el cliente sienta que está perdiendo dinero cada minuto que pasa sin usarlo."
+        },
+        {
+          "translationId": 192,
+          "lang": "en",
+          "slug": "the-end-of-the-demo-as-a-barrier-to-entry",
+          "title": "The end of the \"demo\" as a barrier to entry",
+          "metaTitle": "Time to value: the end of the demo as a barrier",
+          "metaDescription": "Forcing a demo request slows adoption. Why time to value is the survival metric and how to design trust from sign-up onwards.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "It is what we tackle when <a href=\"/en/product-for-your-customers\">we redesign a product's sign-up and onboarding</a>.",
+          "lastParagraphText": "The future of B2B is not about convincing someone to buy; it’s about designing a product so powerful and easy to adopt that the client feels they are losing money every minute they spend without it."
+        }
+      ]
+    },
+    {
+      "n": 71,
+      "postId": 26,
+      "category": "UX",
+      "cluster": "C3",
+      "translations": [
+        {
+          "translationId": 187,
+          "lang": "es",
+          "slug": "el-diseno-como-antidoto-a-la-fatiga-cognitiva",
+          "title": "El diseño como antídoto a la fatiga cognitiva",
+          "metaTitle": "Fatiga cognitiva en el software interno",
+          "metaDescription": "Tu equipo pierde energía con interfaces fragmentadas y procesos laberínticos. Cómo diseñar software interno que reduzca la fatiga cognitiva.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "Es lo que medimos, en errores y tiempo, cuando <a href=\"/es/producto-para-tu-equipo\">modernizamos el software que usa tu equipo</a>.",
+          "lastParagraphText": "La verdadera transformación digital no ocurre cuando instalas una tecnología; ocurre cuando esa tecnología se vuelve invisible. En Room 714, nuestra especialidad es precisamente esa: borrar la fricción para que la excelencia de tu equipo pueda fluir sin obstáculos."
+        },
+        {
+          "translationId": 188,
+          "lang": "en",
+          "slug": "design-as-an-antidote-to-cognitive-fatigue",
+          "title": "Design as an antidote to cognitive fatigue",
+          "metaTitle": "Cognitive fatigue in internal software",
+          "metaDescription": "Your team loses energy to fragmented interfaces and maze-like processes. How to design internal software that reduces cognitive fatigue.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "It is what we measure, in errors and time, when <a href=\"/en/product-for-your-team\">we modernise the software your team uses</a>.",
+          "lastParagraphText": "True digital transformation doesn't happen when you install a technology; it happens when that technology becomes invisible. At Room 714, our speciality is precisely that: erasing friction so your team's excellence can flow without obstacles."
+        }
+      ]
+    },
+    {
+      "n": 72,
+      "postId": 22,
+      "category": "UX",
+      "cluster": "C3",
+      "translations": [
+        {
+          "translationId": 165,
+          "lang": "es",
+          "slug": "la-friccion-es-un-impuesto-al-beneficio",
+          "title": "La fricción es un impuesto al beneficio",
+          "metaTitle": "Usabilidad en procesos internos: el coste oculto",
+          "metaDescription": "La mala usabilidad en los procesos internos es una fuga de margen: segundos perdidos por empleado y por día. Cómo calcularla y reducirla.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "Es el punto de partida cuando <a href=\"/es/producto-para-tu-equipo\">modernizamos el back-office y las herramientas internas</a>.",
+          "lastParagraphText": "En el mundo B2B, la simplicidad no es un lujo; es la máxima sofisticación de la rentabilidad."
+        },
+        {
+          "translationId": 166,
+          "lang": "en",
+          "slug": "friction-the-invisible-tax-on-profit",
+          "title": "Friction: The invisible tax on profit",
+          "metaTitle": "Usability in internal processes: the hidden cost",
+          "metaDescription": "Poor usability in internal processes leaks margin: seconds lost per employee, every day. How to calculate that cost and reduce it.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "It is the starting point when <a href=\"/en/product-for-your-team\">we modernise back-office and internal tools</a>.",
+          "lastParagraphText": "In the B2B world, simplicity is not a luxury; it is the ultimate sophistication of profitability."
+        }
+      ]
+    },
+    {
+      "n": 73,
+      "postId": 19,
+      "category": "PRODUCT",
+      "cluster": "C1",
+      "translations": [
+        {
+          "translationId": 153,
+          "lang": "es",
+          "slug": "estas-sentado-en-una-mina-de-oro",
+          "title": "¿Estás sentado en una mina de oro?",
+          "metaTitle": "Convertir una herramienta interna en producto",
+          "metaDescription": "Muchas empresas de servicios esconden un producto en su operación. Cómo convertir una herramienta interna en margen y en una nueva línea de negocio.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "Es el tipo de proyecto con el que <a href=\"/es/empezar-de-cero\">llevamos una nueva línea de negocio a producto</a>.",
+          "lastParagraphText": "En Room 714, te ayudamos a ver lo que el día a día te oculta: la transición de una empresa que vende tiempo a una empresa que escala productos."
+        },
+        {
+          "translationId": 154,
+          "lang": "en",
+          "slug": "are-you-sitting-on-a-gold-mine",
+          "title": "Are you sitting on a gold mine?",
+          "metaTitle": "Turn an internal tool into a product",
+          "metaDescription": "Many service companies hide a product inside their operations. How to turn an internal tool into margin and a new line of business.",
+          "currentMetaDescription": null,
+          "sentenceHtml": "It is the kind of project in which <a href=\"/en/starting-from-scratch\">we take a new business line to a product</a>.",
+          "lastParagraphText": "At Room 714, we help you see what the daily grind hides: the transition from a company that sells time to a company that scales products."
+        }
+      ]
+    }
+  ]
+}

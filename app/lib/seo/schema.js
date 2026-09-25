@@ -32,10 +32,76 @@ export function organizationSchema(lang) {
     },
     sameAs: [LINKEDIN_COMPANY],
     founder: { "@id": FOUNDER_ID },
+    // Posicionamiento: seo/posicionamiento.md. Si cambia allí, cambia aquí.
     description:
       lang === "es"
-        ? "Estudio de producto digital: mejoramos y construimos el producto que usan tus clientes y el que usa tu equipo."
-        : "Digital product studio: we improve and build the product your customers use and the one your team uses.",
+        ? "Empresa especialista en producto digital (ideación, diseño y desarrollo de software) con foco en la experiencia de cliente. Hacemos el producto que usan tus clientes y el que usa tu equipo."
+        : "A digital product company specialising in ideation, design and software development, with a focus on customer experience. We build the product your customers use and the one your team uses.",
+    knowsAbout: KNOWS_ABOUT[lang] ?? KNOWS_ABOUT.en,
+  };
+}
+
+const KNOWS_ABOUT = {
+  es: [
+    "Producto digital",
+    "Ideación y discovery de producto digital",
+    "Diseño de producto digital",
+    "Experiencia de cliente",
+    "Diseño UX",
+    "Desarrollo de software",
+    "Modernización de software interno",
+    "IA aplicada al producto digital",
+  ],
+  en: [
+    "Digital product",
+    "Digital product ideation and discovery",
+    "Digital product design",
+    "Customer experience",
+    "UX design",
+    "Software development",
+    "Internal software modernisation",
+    "AI applied to digital products",
+  ],
+};
+
+// Nombre y tipo de servicio de cada página de servicio (las claves de
+// ROUTES). Van aquí y no en el diccionario porque no se pintan: solo los lee
+// el JSON-LD.
+const SERVICES = {
+  productoClientes: {
+    es: "Diseño de producto digital y experiencia de cliente",
+    en: "Digital product design and customer experience",
+  },
+  productoEquipo: {
+    es: "Modernización de software interno",
+    en: "Internal software modernisation",
+  },
+  iaProducto: {
+    es: "IA aplicada al producto digital, de piloto a producción",
+    en: "AI in the digital product, from pilot to production",
+  },
+  empezarDeCero: {
+    es: "Desarrollo de producto digital desde la idea",
+    en: "Digital product development from the idea",
+  },
+};
+
+/**
+ * Una página de servicio. El proveedor es la organización, referenciada por
+ * @id; la descripción es la misma meta description de la página, para que
+ * Google no lea dos versiones del mismo servicio.
+ */
+export function serviceSchema({ clave, lang, url, description }) {
+  const name = SERVICES[clave]?.[lang];
+  if (!name) return null;
+  return {
+    "@type": "Service",
+    "@id": `${url}#service`,
+    name,
+    serviceType: name,
+    description,
+    url,
+    provider: { "@id": ORGANIZATION_ID },
   };
 }
 

@@ -115,6 +115,8 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
             tags: draft.tags_es,
             content: draft.content_es,
             metaDescription: draft.meta_description_es,
+
+            metaTitle: draft.meta_title_es,
           },
           {
             lang: "en",
@@ -123,6 +125,8 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
             tags: draft.tags_en,
             content: draft.content_en,
             metaDescription: draft.meta_description_en,
+
+            metaTitle: draft.meta_title_en,
           },
         ],
       },
@@ -211,6 +215,9 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
     trendingBySources: summarizeSources(trending),
     recentPostsConsidered: recentPosts.length,
     usage: draft.usage,
+    // Cluster, búsqueda objetivo y avisos de las reglas de posicionamiento
+    // (seo/posicionamiento.md), para la revisión manual.
+    seo: draft.seo,
     email: emailResult,
     backlinks,
     outboundLinks,

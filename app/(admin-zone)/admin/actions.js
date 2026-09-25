@@ -139,6 +139,7 @@ export async function savePost(data) {
               linkedinPost: true,
               linkedinHashtags: true,
               metaDescription: true,
+              metaTitle: true,
             },
           },
         },
@@ -149,6 +150,9 @@ export async function savePost(data) {
           t.linkedinPost = prev.linkedinPost;
           t.linkedinHashtags = prev.linkedinHashtags ?? [];
           t.metaDescription = prev.metaDescription;
+          // Las traducciones se borran y se recrean al guardar: sin esto, editar
+          // un post desde el admin le quitaba el metaTitle.
+          t.metaTitle = prev.metaTitle;
           // Congelamos el slug de un post ya publicado: cambiar su URL
           // rompería enlaces existentes (web, LinkedIn, Google). Los
           // borradores sí regeneran el slug desde el título.

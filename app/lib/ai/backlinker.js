@@ -59,15 +59,32 @@ export function escapeRegExp(s) {
   return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
+/** ¿La posición `i` cae dentro de una etiqueta o del texto de un <a>? */
+function insideTagOrLink(html, i) {
+  const before = html.slice(0, i);
+  if (before.lastIndexOf("<") > before.lastIndexOf(">")) return true;
+  const opened = (before.match(/<a[\s>]/g) || []).length;
+  const closed = (before.match(/<\/a>/g) || []).length;
+  return opened > closed;
+}
+
 export function insertLinkAroundPhrase({ html, phrase, href }) {
   if (!html || !phrase) return { html, replaced: false };
-  // Sólo reemplaza la primera ocurrencia. Caso-sensitive para evitar tocar
-  // texto ya marcado o lugares inesperados.
-  const escaped = escapeRegExp(phrase);
-  const re = new RegExp(escaped, "");
-  if (!re.test(html)) return { html, replaced: false };
-  const next = html.replace(re, `<a href="${href}">${phrase}</a>`);
-  return { html: next, replaced: true };
+  // Sólo la primera ocurrencia que esté en texto normal. Caso-sensitive.
+  // Se saltan las que caen dentro de una etiqueta o de un enlace existente:
+  // antes se envolvía la primera a secas, y si la frase estaba en el anclaje
+  // de otro enlace (p. ej. el de la página del cluster) quedaban dos <a>
+  // anidados.
+  const re = new RegExp(escapeRegExp(phrase), "g");
+  for (const m of html.matchAll(re)) {
+    if (insideTagOrLink(html, m.index)) continue;
+    const next =
+      html.slice(0, m.index) +
+      `<a href="${href}">${phrase}</a>` +
+      html.slice(m.index + phrase.length);
+    return { html: next, replaced: true };
+  }
+  return { html, replaced: false };
 }
 
 export async function backlinkOldPosts({

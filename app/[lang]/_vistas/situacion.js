@@ -6,6 +6,7 @@ import PrimaryButton from "@/app/components/PrimaryButton";
 import { getDictionary } from "@/app/dictionaries";
 import { SITE_URL, buildAlternates, langPaths } from "@/app/lib/seo/urls";
 import { socialMeta } from "@/app/lib/seo/social";
+import { jsonLdGraph, serviceSchema } from "@/app/lib/seo/schema";
 import { path, pathsOf } from "@/app/lib/routes.mjs";
 import { AIRE_TRAS_BOTON, CANAL } from "@/app/lib/layout";
 
@@ -53,9 +54,21 @@ export function situacion(clave) {
     const dict = await getDictionary(lang);
     const t = dict.situaciones[clave];
     const labels = dict.situaciones.labels;
+    const serviceJsonLd = jsonLdGraph(
+      serviceSchema({
+        clave,
+        lang,
+        url: `${SITE_URL}${pathsOf(clave)[lang]}`,
+        description: t.seoDescription,
+      }),
+    );
 
     return (
       <div className="flex flex-col bg-black">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
+        />
         <Navbar dict={dict} isDark={true} />
 
         <main className={`${CANAL} pt-8 pb-16`}>
