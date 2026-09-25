@@ -56,7 +56,7 @@ async function revertir(fichero) {
   await prisma.$transaction(
     copia.filas.map((f) =>
       prisma.postTranslation.update({
-        where: { id: f.translationId },
+        where: { slug: f.slug },
         data: { metaTitle: f.metaTitle, metaDescription: f.metaDescription, content: f.content },
       }),
     ),
@@ -68,11 +68,14 @@ async function aplicar() {
   const { clusters, posts } = JSON.parse(fs.readFileSync(DATOS, "utf8"));
   const propuestas = posts.flatMap((p) => p.translations.map((t) => ({ ...t, n: p.n, cluster: p.cluster })));
 
+  // Por slug y no por id: guardar un post desde el admin borra y recrea sus
+  // traducciones, así que el id cambia. El slug de un post publicado está
+  // congelado y es único.
   const actuales = await prisma.postTranslation.findMany({
-    where: { id: { in: propuestas.map((t) => t.translationId) } },
+    where: { slug: { in: propuestas.map((t) => t.slug) } },
     select: { id: true, slug: true, lang: true, metaTitle: true, metaDescription: true, content: true },
   });
-  const porId = new Map(actuales.map((a) => [a.id, a]));
+  const porSlug = new Map(actuales.map((a) => [a.slug, a]));
 
   const cambios = [];
   const avisos = [];
@@ -80,10 +83,9 @@ async function aplicar() {
 
   for (const t of propuestas) {
     const etiqueta = `#${t.n} ${t.lang} ${t.slug}`;
-    const a = porId.get(t.translationId);
-    // Salvaguarda: el id tiene que seguir siendo la misma traducción.
-    if (!a || a.slug !== t.slug || a.lang !== t.lang) {
-      avisos.push(`${etiqueta}: la traducción ya no coincide (id ${t.translationId}); se salta entera`);
+    const a = porSlug.get(t.slug);
+    if (!a || a.lang !== t.lang) {
+      avisos.push(`${etiqueta}: no se encuentra la traducción; se salta entera`);
       continue;
     }
     const data = {};
@@ -148,7 +150,7 @@ async function aplicar() {
   console.log(`\nCopia de seguridad: ${copia}`);
 
   await prisma.$transaction(
-    cambios.map(({ t, data }) => prisma.postTranslation.update({ where: { id: t.translationId }, data })),
+    cambios.map(({ a, data }) => prisma.postTranslation.update({ where: { id: a.id }, data })),
   );
   console.log(`Escritas ${cambios.length} traducciones.`);
 }
