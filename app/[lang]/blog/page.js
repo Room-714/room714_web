@@ -5,30 +5,34 @@ import Navbar from "@/app/components/Navbar";
 import BlogClient from "@/app/components/BlogClient";
 import { CATEGORY_IDS } from "@/app/data/BlogCategories";
 import { SITE_URL, buildAlternates, samePath } from "@/app/lib/seo/urls";
+import { socialMeta } from "@/app/lib/seo/social";
 
 const baseUrl = SITE_URL;
 
 export async function generateMetadata({ params }) {
   const { lang = "en" } = await params;
+  // Posicionamiento: seo/posicionamiento.md. Con el sufijo ya puesto y
+  // `absolute`, para que og:title y twitter:title sean idénticos al <title>
+  // (la plantilla del layout solo se aplica al <title>).
   const titles = {
-    en: "Blog — Insights on Digital Product, UX & Technology",
-    es: "Blog — Ideas sobre Producto Digital, UX y Tecnología",
+    en: "Blog on digital product and customer experience | Room 714",
+    es: "Blog de producto digital y experiencia de cliente | Room 714",
   };
   const descriptions = {
-    en: "Articles on product strategy, UX design, software development, and digital transformation by Room 714.",
-    es: "Artículos sobre estrategia de producto, diseño UX, desarrollo de software y transformación digital de Room 714.",
+    en: "Room 714 articles on ideating, designing and building digital products, with a focus on customer experience. Practical opinion, no hype.",
+    es: "Artículos de Room 714 sobre cómo idear, diseñar y desarrollar producto digital con foco en la experiencia de cliente. Opinión práctica, sin humo.",
   };
 
   return {
-    title: titles[lang],
+    title: { absolute: titles[lang] },
     description: descriptions[lang],
     alternates: buildAlternates(lang, samePath("/blog")),
-    openGraph: {
+    ...socialMeta({
+      lang,
       title: titles[lang],
       description: descriptions[lang],
       url: `${baseUrl}/${lang}/blog`,
-      type: "website",
-    },
+    }),
   };
 }
 
