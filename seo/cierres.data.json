@@ -1,0 +1,373 @@
+{
+  "generatedAt": "2026-09-25",
+  "posts": [
+    {
+      "n": 2,
+      "lang": "es",
+      "slug": "orquestacion-herramientas-ia-problema-no-es-cuantas-usas",
+      "metaTitle": "Orquestación de herramientas de IA en tu stack",
+      "metaDescription": "Tres a seis herramientas de IA encadenadas no son una arquitectura. Cómo pasar de un stack construido por inercia a un pipeline decidido y gobernable.",
+      "cluster": {
+        "href": "/es/ia-en-el-producto",
+        "sentenceHtml": "Es la misma disciplina con la que <a href=\"/es/ia-en-el-producto\">llevamos la IA a producción dentro de un producto</a>: cada pieza, con un porqué.",
+        "paragraph": "last",
+        "paragraphText": "En Room 714 trabajamos con equipos que quieren pasar de un stack construido por inercia a una arquitectura construida por decisión. Si tu pipeline de IA tiene más puntos de fricción humana que automatización real, o si no puedes responder con claridad quién hace qué en tu sistema, es una conversación que vale la pena tener antes de añadir la próxima herramienta."
+      }
+    },
+    {
+      "n": 2,
+      "lang": "en",
+      "slug": "ai-tool-orchestration-problem-not-how-many-you-use",
+      "metaTitle": "AI tool orchestration: fix your stack",
+      "metaDescription": "Three to six chained AI tools are not an architecture. How to move from a stack built by inertia to a pipeline that is designed and governable.",
+      "cluster": {
+        "href": "/en/ai-in-the-product",
+        "sentenceHtml": "It is the same discipline we apply when <a href=\"/en/ai-in-the-product\">taking AI to production inside a product</a>: every piece with a reason.",
+        "paragraph": "last",
+        "paragraphText": "At Room 714 we work with teams that want to move from a stack built by inertia to an architecture built by decision. If your AI pipeline has more human friction points than real automation, or if you can't clearly answer who does what in your system, it's a conversation worth having before you add the next tool."
+      }
+    },
+    {
+      "n": 16,
+      "lang": "es",
+      "slug": "delegacion-ia-la-pregunta-de-gestion-mas-antigua-tiene-respuesta-nueva",
+      "metaTitle": "Qué delegar en la IA y qué mantener humano",
+      "metaDescription": "El modelo clásico de delegación no sirve con IA. Qué delegar, qué desaparece al hacerlo y dónde trazar la frontera entre lo automático y lo humano.",
+      "cluster": {
+        "href": "/es/ia-en-el-producto",
+        "sentenceHtml": "Es la primera frontera que trazamos al <a href=\"/es/ia-en-el-producto\">llevar la IA de piloto a producción</a>.",
+        "paragraph": "last",
+        "paragraphText": "Si la respuesta genera pausa, es el momento de auditar la arquitectura de delegación antes de que el problema sea más grande. En Room 714 hacemos exactamente eso: ayudamos a los equipos a trazar la frontera entre lo que debe automatizarse y lo que debe mantenerse humano. No como una postura ideológica, sino como una decisión estratégica con consecuencias medibles a doce meses."
+      }
+    },
+    {
+      "n": 16,
+      "lang": "en",
+      "slug": "ai-delegation-managements-oldest-question-new-riskier-answer",
+      "metaTitle": "What to delegate to AI and what to keep human",
+      "metaDescription": "The classic delegation model breaks with AI. Which tasks to delegate, which disappear when you do, and where to draw the line between automated and human.",
+      "cluster": {
+        "href": "/en/ai-in-the-product",
+        "sentenceHtml": "It is the first line we draw when <a href=\"/en/ai-in-the-product\">taking AI from pilot to production</a>.",
+        "paragraph": "last",
+        "paragraphText": "If that question generates a pause, it's time to audit your delegation architecture before the problem grows larger. At Room 714 that's precisely what we do: help teams draw the line between what should be automated and what must remain human. Not as an ideological stance, but as a strategic decision with measurable consequences twelve months out."
+      }
+    },
+    {
+      "n": 19,
+      "lang": "es",
+      "slug": "la-ia-que-nadie-pidio-cuando-añadir-inteligencia-es-ruido",
+      "case": {
+        "href": "/es/casos/ia-ecommerce-sin-tocar-la-tienda",
+        "sentenceHtml": "Es el enfoque de <a href=\"/es/casos/ia-ecommerce-sin-tocar-la-tienda\">una IA para un e-commerce de alimentación que no obligó a tocar la tienda</a>.",
+        "paragraph": 21,
+        "paragraphText": "Ninguno de estos casos requería que el usuario aprendiera un nuevo paradigma de interacción. Se integraron en flujos existentes, en momentos donde el usuario ya estaba tomando una decisión, y la IA redujo el coste cognitivo de esa decisión. Eso es integración real."
+      }
+    },
+    {
+      "n": 19,
+      "lang": "en",
+      "slug": "the-ai-nobody-asked-for-when-ai-features-are-just-noise",
+      "case": {
+        "href": "/en/cases/ai-ecommerce-without-touching-the-store",
+        "sentenceHtml": "It is the approach behind <a href=\"/en/cases/ai-ecommerce-without-touching-the-store\">an AI for an online grocery that didn't require touching the store</a>.",
+        "paragraph": 21,
+        "paragraphText": "None of these cases required users to learn a new interaction paradigm. They integrated into existing flows, at moments where the user was already making a decision, and AI reduced the cognitive cost of that decision. That's real integration."
+      }
+    },
+    {
+      "n": 22,
+      "lang": "en",
+      "slug": "hidden-cost-ai-developer-tools-productivity-trap",
+      "metaTitle": "The hidden cost of AI developer tools",
+      "metaDescription": "Tokens, context windows and fast obsolescence: what AI developer tools really cost, and how to audit them before the bill grows."
+    },
+    {
+      "n": 22,
+      "lang": "es",
+      "slug": "coste-oculto-herramientas-ia-para-desarrolladores",
+      "metaTitle": "Coste oculto de la IA para desarrolladores",
+      "metaDescription": "Tokens, contexto y obsolescencia acelerada: lo que cuestan las herramientas de IA para desarrollo y cómo auditarlas antes de que crezca la factura."
+    },
+    {
+      "n": 28,
+      "lang": "es",
+      "slug": "rag-no-es-magia-como-elegir-arquitectura-de-recuperacion",
+      "case": {
+        "href": "/es/casos/ia-ecommerce-sin-tocar-la-tienda",
+        "sentenceHtml": "Lo vimos de cerca en <a href=\"/es/casos/ia-ecommerce-sin-tocar-la-tienda\">un caso de IA sobre un e-commerce sin tocar la tienda</a>.",
+        "paragraph": 5,
+        "paragraphText": "El error empieza cuando RAG se convierte en el destino en vez de en el camino. Equipos que implementan RAG básico (un índice vectorial plano, recuperación por similitud coseno, contexto inyectado al prompt) para casos que requieren razonamiento sobre múltiples documentos relacionados, jerarquías de conceptos o síntesis de información contradictoria. El resultado es un modelo que recupera los fragmentos \"más parecidos semánticamente\" a la pregunta, pero no los fragmentos que realmente responden la pregunta."
+      }
+    },
+    {
+      "n": 28,
+      "lang": "en",
+      "slug": "rag-is-not-magic-how-to-choose-retrieval-architecture",
+      "case": {
+        "href": "/en/cases/ai-ecommerce-without-touching-the-store",
+        "sentenceHtml": "We saw it up close in <a href=\"/en/cases/ai-ecommerce-without-touching-the-store\">a case of AI on top of an e-commerce without touching the store</a>.",
+        "paragraph": 5,
+        "paragraphText": "The mistake begins when RAG becomes the destination instead of the path. Teams implementing basic RAG — a flat vector index, cosine similarity retrieval, context injected into the prompt — for cases that require reasoning over multiple related documents, concept hierarchies, or synthesis of contradictory information. The result is a model that retrieves fragments \"most semantically similar\" to the query, but not the fragments that actually answer it."
+      }
+    },
+    {
+      "n": 30,
+      "lang": "es",
+      "slug": "el-peligro-silencioso-de-la-ia-dejas-de-pensar",
+      "metaTitle": "El riesgo de dejar de pensar al usar IA",
+      "metaDescription": "El peligro de la IA no es que falle, es que deja de ejercitar tu criterio. Qué es la soberanía cognitiva y cómo usar IA sin cederle el juicio."
+    },
+    {
+      "n": 30,
+      "lang": "en",
+      "slug": "the-silent-danger-of-ai-you-stop-thinking",
+      "metaTitle": "The risk of AI making you stop thinking",
+      "metaDescription": "The danger of AI is not that it fails but that you stop exercising judgment. What cognitive sovereignty means and how to use AI without giving it up."
+    },
+    {
+      "n": 33,
+      "lang": "es",
+      "slug": "saas-bajo-asedio-cuando-tu-competencia-no-es-otro-software",
+      "metaTitle": "SaaS frente a la IA: cómo defender tu producto",
+      "metaDescription": "Tu competencia ya no es otro SaaS, es un modelo de lenguaje con el prompt adecuado. Qué parte de tu propuesta de valor es replicable y cuál es defendible."
+    },
+    {
+      "n": 33,
+      "lang": "en",
+      "slug": "saas-under-siege-when-your-real-competitors-arent-other-apps",
+      "metaTitle": "SaaS versus AI: how to defend your product",
+      "metaDescription": "Your competition is no longer another SaaS but a language model with the right prompt. Which part of your value proposition is replicable and which is not."
+    },
+    {
+      "n": 35,
+      "lang": "es",
+      "slug": "disenadores-en-la-era-de-la-ia-el-juicio-no-se-automatiza",
+      "metaTitle": "Diseñadores e IA: el criterio no se automatiza",
+      "metaDescription": "La IA ya ejecuta buena parte del trabajo de diseño. Lo que eso revela sobre el oficio y por qué el criterio es el músculo que hay que entrenar ahora."
+    },
+    {
+      "n": 35,
+      "lang": "en",
+      "slug": "designers-in-the-ai-era-judgment-is-the-last-thing-to-go",
+      "metaTitle": "Designers and AI: judgment can't be automated",
+      "metaDescription": "AI already executes a large part of design work. What that reveals about the craft, and why judgment is the muscle to train now."
+    },
+    {
+      "n": 36,
+      "lang": "en",
+      "slug": "shiny-tool-syndrome-why-chasing-every-ai-release-kills-your-product",
+      "metaTitle": "Shiny tool syndrome: getting product focus back",
+      "metaDescription": "Trying every new tool looks diligent and drains focus. Three criteria to decide what to adopt and what to ignore without slowing the product down."
+    },
+    {
+      "n": 36,
+      "lang": "es",
+      "slug": "el-sindrome-de-la-herramienta-nueva-probar-todo-te-impide-construir",
+      "metaTitle": "El síndrome de la herramienta nueva en producto",
+      "metaDescription": "Probar cada herramienta nueva parece diligencia y es un agujero de foco. Tres criterios para decidir qué adoptar y qué ignorar sin frenar el producto."
+    },
+    {
+      "n": 37,
+      "lang": "es",
+      "slug": "claude-md-el-contexto-como-recurso-escaso",
+      "metaTitle": "CLAUDE.md: el contexto como recurso escaso",
+      "metaDescription": "Cada instrucción de tu CLAUDE.md consume contexto y cambia el comportamiento del modelo. Por qué menos instrucciones funcionan mejor y cómo escribirlas."
+    },
+    {
+      "n": 37,
+      "lang": "en",
+      "slug": "claude-md-context-as-a-scarce-resource",
+      "metaTitle": "CLAUDE.md: context as a scarce resource",
+      "metaDescription": "Every instruction in your CLAUDE.md consumes context and shifts the model's behaviour. Why fewer instructions work better and how to write them."
+    },
+    {
+      "n": 38,
+      "lang": "es",
+      "slug": "tu-marca-invisible-los-motores-de-ia-no-saben-que-existes",
+      "metaTitle": "Visibilidad de marca en buscadores de IA",
+      "metaDescription": "Google te encuentra, pero los motores de IA no saben que existes. Cómo deciden los LLMs quién existe y qué puedes hacer para aparecer en sus respuestas."
+    },
+    {
+      "n": 38,
+      "lang": "en",
+      "slug": "your-invisible-brand-why-ai-search-engines-dont-know-you-exist",
+      "metaTitle": "Brand visibility in AI search engines",
+      "metaDescription": "Google finds you, but AI search engines don't know you exist. How LLMs decide who exists and what you can do to show up in their answers."
+    },
+    {
+      "n": 42,
+      "lang": "es",
+      "slug": "agentes-de-ia-con-autonomia-de-pago-cuando-el-codigo-firma-cheques",
+      "metaTitle": "Agentes de IA que pagan: autonomía con perímetro",
+      "metaDescription": "Los agentes de IA empiezan a mover dinero real. Por qué la autonomía necesita un perímetro de decisión, scopes por tarea y rollback antes de tocar una API.",
+      "cluster": {
+        "href": "/es/ia-en-el-producto",
+        "sentenceHtml": "Ese perímetro es parte de cómo <a href=\"/es/ia-en-el-producto\">llevamos la IA de piloto a producción</a>.",
+        "paragraph": "last",
+        "paragraphText": "Si estás evaluando arquitecturas agénticas para tu operación, en Room 714 empezamos siempre por mapear el perímetro de decisión antes de tocar ninguna API. La autonomía sin perímetro no es una ventaja competitiva: es un riesgo que todavía no has cuantificado."
+      }
+    },
+    {
+      "n": 42,
+      "lang": "en",
+      "slug": "ai-agents-that-spend-money-the-autonomy-nobody-budgeted-for",
+      "metaTitle": "AI agents that pay: autonomy with a perimeter",
+      "metaDescription": "AI agents are starting to move real money. Why autonomy needs a decision perimeter, per-task scopes and rollback before touching any API.",
+      "cluster": {
+        "href": "/en/ai-in-the-product",
+        "sentenceHtml": "That perimeter is part of how <a href=\"/en/ai-in-the-product\">we take AI from pilot to production</a>.",
+        "paragraph": "last",
+        "paragraphText": "If you're evaluating agentic architectures for your operation, Room 714 always starts by mapping the decision perimeter before touching any API. Autonomy without a perimeter isn't a competitive advantage — it's a risk you haven't quantified yet."
+      }
+    },
+    {
+      "n": 45,
+      "lang": "es",
+      "slug": "los-labs-de-ia-ya-no-hacen-ia-el-giro-hacia-el-runtime",
+      "metaTitle": "Del modelo al runtime: el nuevo lock-in de la IA",
+      "metaDescription": "Los laboratorios de IA ya no venden modelos, venden el runtime donde operan. Qué cedes al construir sobre él y cómo diseñar una orquestación portable.",
+      "cluster": {
+        "href": "/es/ia-en-el-producto",
+        "sentenceHtml": "Es una de las decisiones de arquitectura que tomamos al <a href=\"/es/ia-en-el-producto\">llevar la IA a producción dentro de un producto</a>.",
+        "paragraph": "last",
+        "paragraphText": "Si estás evaluando cómo integrar agentes o flujos automatizados en tu producto sin ceder el control de tu arquitectura, es exactamente el tipo de conversación que tenemos en Room 714. Antes de construir sobre el runtime de otro, conviene saber exactamente qué estás cediendo."
+      }
+    },
+    {
+      "n": 45,
+      "lang": "en",
+      "slug": "ai-labs-no-longer-ai-labs-the-runtime-pivot",
+      "metaTitle": "From model to runtime: AI's new lock-in",
+      "metaDescription": "AI labs no longer sell models but the runtime they run on. What you give up by building on it and how to design a portable orchestration.",
+      "cluster": {
+        "href": "/en/ai-in-the-product",
+        "sentenceHtml": "It is one of the architecture decisions we make when <a href=\"/en/ai-in-the-product\">taking AI to production inside a product</a>.",
+        "paragraph": "last",
+        "paragraphText": "If you're assessing how to integrate agents or automated workflows into your product without ceding architectural control, that's exactly the kind of conversation we have at Room 714. Before you build on someone else's runtime, it's worth knowing precisely what you're giving up."
+      }
+    },
+    {
+      "n": 48,
+      "lang": "es",
+      "slug": "el-modelo-canonico-que-no-alucine-tu-ia",
+      "case": {
+        "href": "/es/casos/activacion-modelo-canonico",
+        "sentenceHtml": "Es el mismo principio que aplicamos en <a href=\"/es/casos/activacion-modelo-canonico\">una plataforma B2B2C que pasó de un problema de activación a un modelo canónico para agentes de IA</a>.",
+        "paragraph": 3,
+        "paragraphText": "Técnicamente, implementar un modelo de datos canónico en 2026 no significa frenar el desarrollo. En Room 714, abogamos por arquitecturas donde cada microservicio mantenga su autonomía, pero se comunique a través de contratos de datos basados en este modelo común. Es la infraestructura necesaria para que la IA pueda realizar razonamientos \"cross-domain\". Si quieres que tu IA sea capaz de predecir la fuga de clientes analizando datos de soporte, ventas y uso de producto, todos esos sistemas deben estar de acuerdo en los conceptos básicos. La coherencia de datos es el combustible de la precisión."
+      }
+    },
+    {
+      "n": 48,
+      "lang": "en",
+      "slug": "the-canonical-model-stop-hallucinating",
+      "case": {
+        "href": "/en/cases/activation-canonical-model",
+        "sentenceHtml": "It is the same principle we applied in <a href=\"/en/cases/activation-canonical-model\">a B2B2C platform that went from an activation problem to a canonical model for AI agents</a>.",
+        "paragraph": 3,
+        "paragraphText": "Technically, implementing a canonical data model in 2026 doesn't mean slowing down development. At Room 714, we advocate for architectures where each microservice maintains its autonomy but communicates through data contracts based on this common model. This is the infrastructure required for AI to perform \"cross-domain\" reasoning. If you want your AI to predict customer churn by analyzing support, sales, and product usage data, all those systems must agree on basic concepts. Data coherence is the fuel for precision."
+      }
+    },
+    {
+      "n": 56,
+      "lang": "es",
+      "slug": "product-led-growth-plg-ia-el-producto-que-se-vende-solo",
+      "case": {
+        "href": "/es/casos/saas-soporte-autogestion",
+        "sentenceHtml": "Es lo que hicimos en <a href=\"/es/casos/saas-soporte-autogestion\">un SaaS B2B que dependía de su propio soporte</a>: que el cliente pudiera resolver solo.",
+        "paragraph": 4,
+        "paragraphText": "Para implementar un PLG real hoy, la clave técnica es la instrumentación de datos inteligente. No se trata de trackear todo, sino de conectar los agentes de IA con los eventos clave del usuario. La solución práctica es crear \"flujos de rescate\": si la IA detecta que un usuario se detiene más de 30 segundos en un paso crítico, la interfaz debe mutar para ofrecer una ayuda contextual o simplificar el proceso automáticamente. El producto no solo espera a ser usado; guía proactivamente al usuario hacia la victoria."
+      }
+    },
+    {
+      "n": 56,
+      "lang": "en",
+      "slug": "ai-powered-product-led-growth-plg-the-product-that-sells-itself",
+      "case": {
+        "href": "/en/cases/saas-support-self-service",
+        "sentenceHtml": "It is what we did for <a href=\"/en/cases/saas-support-self-service\">a B2B SaaS that depended on its own support team</a>: let customers solve things on their own.",
+        "paragraph": 4,
+        "paragraphText": "To implement real PLG today, the technical key is intelligent data instrumentation. It’s not about tracking everything, but about connecting AI agents with key user events. The practical solution is to create \"rescue flows\": if the AI detects that a user stalls for more than 30 seconds on a critical step, the interface must mutate to offer contextual help or simplify the process automatically. The product doesn't just wait to be used; it proactively guides the user toward victory."
+      }
+    },
+    {
+      "n": 57,
+      "lang": "es",
+      "slug": "el-fin-de-la-frontera-el-paradigma-full-stack",
+      "metaTitle": "El paradigma full-stack sin perder arquitectura",
+      "metaDescription": "La frontera entre frontend y backend se difumina. Por qué compartir repositorio no significa eliminar la arquitectura y cómo ganar eficiencia sin caos."
+    },
+    {
+      "n": 57,
+      "lang": "en",
+      "slug": "the-end-of-the-border-the-full-stack-paradigm",
+      "metaTitle": "Full-stack without losing the architecture",
+      "metaDescription": "The line between frontend and backend is blurring. Why sharing a repository doesn't mean dropping architecture, and how to gain efficiency without chaos."
+    },
+    {
+      "n": 61,
+      "lang": "es",
+      "slug": "de-programadores-de-sintaxis-a-ingenieros-de-flujos",
+      "metaTitle": "De programar sintaxis a orquestar flujos",
+      "metaDescription": "El valor del desarrollador pasa de escribir sintaxis a orquestar flujos con IA. Qué cambia en el oficio y qué habilidades pasan a importar más."
+    },
+    {
+      "n": 61,
+      "lang": "en",
+      "slug": "from-syntax-programmers-to-flow-engineers",
+      "metaTitle": "From writing syntax to orchestrating flows",
+      "metaDescription": "The developer's value is shifting from writing syntax to orchestrating AI-assisted flows. What changes in the craft and which skills now matter most."
+    },
+    {
+      "n": 66,
+      "lang": "es",
+      "slug": "monorepos-la-columna-vertebral-de-la-agilidad-moderna",
+      "metaTitle": "Monorepos con Turborepo: agilidad sin caos",
+      "metaDescription": "Un monorepo bien gestionado con Turborepo acelera a los equipos que comparten código. Cuándo compensa, cómo se organiza y qué problemas evita."
+    },
+    {
+      "n": 66,
+      "lang": "en",
+      "slug": "monorepos-the-backbone-of-modern-agility",
+      "metaTitle": "Monorepos with Turborepo: agility without chaos",
+      "metaDescription": "A well-managed monorepo with Turborepo speeds up teams that share code. When it pays off, how to organise it and which problems it prevents."
+    },
+    {
+      "n": 69,
+      "lang": "es",
+      "slug": "astro-y-fastify-la-ingenieria-de-la-eficiencia-radical",
+      "metaTitle": "Astro y Fastify: webs ligeras y backends rápidos",
+      "metaDescription": "Astro para una web que no pesa y Fastify para un backend de alta carga. Por qué esta combinación da eficiencia radical y cuándo tiene sentido elegirla."
+    },
+    {
+      "n": 69,
+      "lang": "en",
+      "slug": "astro-and-fastify-the-engineering-of-radical-efficiency",
+      "metaTitle": "Astro and Fastify: light sites, fast backends",
+      "metaDescription": "Astro for a site that weighs nothing and Fastify for a high-load backend. Why the pair delivers radical efficiency and when it makes sense to choose it."
+    },
+    {
+      "n": 70,
+      "lang": "es",
+      "slug": "el-fin-de-la-demo-como-barrera-de-entrada",
+      "case": {
+        "href": "/es/casos/saas-soporte-autogestion",
+        "sentenceHtml": "Es el mismo problema que resolvimos en <a href=\"/es/casos/saas-soporte-autogestion\">un SaaS B2B que vivía de su propio soporte</a>.",
+        "paragraph": 2,
+        "paragraphText": "La clave del Product-Led Sales es reducir radicalmente el Time to Value (TTV): el tiempo que tarda un usuario en experimentar su primer \"momento Aha!\". Si tu producto requiere una consultoría de tres semanas para mostrar su valor real, tienes un problema de diseño de producto, no un problema de ventas."
+      }
+    },
+    {
+      "n": 70,
+      "lang": "en",
+      "slug": "the-end-of-the-demo-as-a-barrier-to-entry",
+      "case": {
+        "href": "/en/cases/saas-support-self-service",
+        "sentenceHtml": "It is the same problem we solved for <a href=\"/en/cases/saas-support-self-service\">a B2B SaaS that lived on its own support</a>.",
+        "paragraph": 2,
+        "paragraphText": "The key to Product-Led Sales is radically reducing Time to Value (TTV): the time it takes for a user to experience their first \"Aha! moment\". If your product requires three weeks of consultancy to show its real worth, you have a product design problem, not a sales problem."
+      }
+    }
+  ]
+}
