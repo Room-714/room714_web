@@ -5,6 +5,7 @@ import Navbar from "@/app/components/Navbar";
 import PrimaryButton from "@/app/components/PrimaryButton";
 import { getDictionary } from "@/app/dictionaries";
 import { SITE_URL, buildAlternates, langPaths } from "@/app/lib/seo/urls";
+import { socialMeta } from "@/app/lib/seo/social";
 import { path, pathsOf } from "@/app/lib/routes.mjs";
 import { AIRE_TRAS_BOTON, CANAL } from "@/app/lib/layout";
 
@@ -38,12 +39,12 @@ export function situacion(clave) {
       title: { absolute: t.seoTitle },
       description: t.seoDescription,
       alternates: buildAlternates(lang, langPaths(rutas.es, rutas.en)),
-      openGraph: {
+      ...socialMeta({
+        lang,
         title: t.seoTitle,
         description: t.seoDescription,
         url: `${SITE_URL}${rutas[lang]}`,
-        type: "website",
-      },
+      }),
     };
   }
 

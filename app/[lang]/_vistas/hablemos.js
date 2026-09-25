@@ -3,6 +3,7 @@ import Navbar from "@/app/components/Navbar";
 import Image from "next/image";
 import ContactClient from "@/app/components/ContactClient";
 import { SITE_URL, buildAlternates, langPaths } from "@/app/lib/seo/urls";
+import { socialMeta } from "@/app/lib/seo/social";
 import { pathsOf } from "@/app/lib/routes.mjs";
 
 const baseUrl = SITE_URL;
@@ -16,12 +17,12 @@ export async function generateMetadata({ params }) {
     title: { absolute: dict.contact.seo.title },
     description: dict.contact.seo.description,
     alternates: buildAlternates(lang, langPaths(rutas.es, rutas.en)),
-    openGraph: {
+    ...socialMeta({
+      lang,
       title: dict.contact.seo.title,
       description: dict.contact.seo.description,
       url: `${baseUrl}${rutas[lang]}`,
-      type: "website",
-    },
+    }),
   };
 }
 
