@@ -44,3 +44,6 @@ next-env.d.ts
 backup-prospeccion-*.json
 
 backup-consolidacion-*.json
+
+# Copias que dejan los scripts antes de escribir en la BD de producción
+/scripts/backups/
