@@ -2,7 +2,7 @@
 
 Fuente de verdad para todo lo que Google lee de room714.com y para todo lo que se publique a partir de ahora: metadatos de las páginas, JSON-LD, posts existentes y generación automática de posts. Si algo de lo que se publique contradice este documento, se corrige el contenido, no el documento (salvo decisión explícita).
 
-*Versión 1 · 2026-09-25 · pendiente de aprobación.*
+*Versión 1 · aprobada el 2026-09-25.*
 
 ## 1. Posicionamiento
 
