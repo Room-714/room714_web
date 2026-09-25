@@ -1,5 +1,15 @@
 import { getAnthropicClient, MODEL } from "./anthropic";
 import { EDITORIAL_GUIDE, FEW_SHOT_EXAMPLES, LINKEDIN_GUIDE } from "./editorialGuide";
+import {
+  CASES,
+  CLUSTERS,
+  FALLBACK_LINK_SENTENCE,
+  RESERVED_QUERIES,
+  caseHrefs,
+  clusterForCategory,
+  clusterHref,
+  reservedQueriesIn,
+} from "../seo/clusters";
 
 const POST_TOOL = {
   name: "create_blog_post",
@@ -52,11 +62,35 @@ const POST_TOOL = {
       meta_description_es: {
         type: "string",
         description:
-          "Meta description en español (140-160 chars). Resume el ángulo central de forma punzante para CTR en Google. Sin punto final si es ajustada.",
+          "Meta description en español (120-155 chars). Resume el ángulo central de forma punzante para CTR en Google. Sin punto final si es ajustada.",
       },
       meta_description_en: {
         type: "string",
-        description: "Meta description en inglés (140-160 chars).",
+        description: "Meta description en inglés (120-155 chars).",
+      },
+      cluster: {
+        type: "string",
+        enum: Object.keys(CLUSTERS),
+        description:
+          "Cluster del post (ver sección POSICIONAMIENTO del prompt). Uno solo.",
+      },
+      target_query_es: {
+        type: "string",
+        description:
+          "Búsqueda objetivo en español: una complementaria de la lista del prompt o una variante long tail cercana. NUNCA una PROHIBIDA.",
+      },
+      target_query_en: {
+        type: "string",
+        description: "Búsqueda objetivo en inglés, equivalente a la ES.",
+      },
+      meta_title_es: {
+        type: "string",
+        description:
+          "Meta title en español, MÁXIMO 49 caracteres (el sitio añade ' | Room 714'). Orientado a target_query_es. Distinto del título.",
+      },
+      meta_title_en: {
+        type: "string",
+        description: "Meta title en inglés, MÁXIMO 49 caracteres.",
       },
     },
     required: [
@@ -71,9 +105,63 @@ const POST_TOOL = {
       "image_query",
       "meta_description_es",
       "meta_description_en",
+      "cluster",
+      "target_query_es",
+      "target_query_en",
+      "meta_title_es",
+      "meta_title_en",
     ],
   },
 };
+
+// Límites de los metadatos. El meta title lleva 49 porque el layout le añade
+// " | Room 714" (11) y Google corta hacia los 60.
+export const META_TITLE_MAX = 49;
+export const META_DESCRIPTION_MAX = 155;
+
+/**
+ * El bloque de posicionamiento del prompt de usuario: cluster sugerido,
+ * búsquedas libres y prohibidas, URL de la página del cluster y casos.
+ * Sale de app/lib/seo/clusters.js, que refleja seo/posicionamiento.md.
+ * Exportada solo para poder probarla.
+ */
+export function buildSeoBlock(category) {
+  const suggested = clusterForCategory(category);
+  const clusters = Object.entries(CLUSTERS)
+    .map(
+      ([key, c]) =>
+        `- **${key}** — ${c.name.es}${key === suggested ? " ← SUGERIDO para hoy" : ""}\n` +
+        `  - Página del cluster: ES \`${clusterHref(key, "es")}\` · EN \`${clusterHref(key, "en")}\`\n` +
+        `  - Búsquedas libres para posts: ES ${c.postQueries.es.map((q) => `"${q}"`).join(", ")} · EN ${c.postQueries.en.map((q) => `"${q}"`).join(", ")}`,
+    )
+    .join("\n");
+  const casesEs = caseHrefs("es");
+  const casesEn = caseHrefs("en");
+  const cases = CASES.map(
+    (c, i) => `- ES \`${casesEs[i]}\` · EN \`${casesEn[i]}\` — ${c.about.es}`,
+  ).join("\n");
+
+  return `## POSICIONAMIENTO Y SEO (obligatorio)
+
+Categoría de hoy: ${category}. Cluster sugerido: **${suggested}**. Cámbialo solo si el tema encaja claramente en otro.
+
+### Clusters
+${clusters}
+
+### Búsquedas PROHIBIDAS (son de las páginas de servicio; no las uses en title, meta_title ni target_query)
+- ES: ${RESERVED_QUERIES.es.map((q) => `"${q}"`).join(", ")}
+- EN: ${RESERVED_QUERIES.en.map((q) => `"${q}"`).join(", ")}
+
+### Casos anónimos (enlaza a uno SOLO si el tema encaja de verdad; máximo uno por idioma)
+${cases}
+
+### Qué tienes que entregar
+- \`cluster\`, \`target_query_es\`/\`target_query_en\` (una búsqueda libre o una variante long tail cercana; nunca una prohibida).
+- \`title_es\`/\`title_en\` orientados a esa búsqueda, sin perder el tono punzante de la guía.
+- \`meta_title_es\`/\`meta_title_en\` de MÁXIMO ${META_TITLE_MAX} caracteres y \`meta_description_es\`/\`meta_description_en\` de 120-${META_DESCRIPTION_MAX}.
+- Exactamente UN enlace por idioma a la página del cluster elegido, con su URL literal, dentro de un <p> (normalmente en el cierre), con anclaje natural.
+- Ángulo: la experiencia de cliente primero.`;
+}
 
 function buildCachedSystemBlocks() {
   const examplesText = FEW_SHOT_EXAMPLES.map(
@@ -194,6 +282,8 @@ REGLAS CRÍTICAS:
 - 2 enlaces mínimo, 3 máximo. Si ninguno de los recientes encaja, NO fuerces el enlace.
 - En content_en usa SOLO slugs slug_en (NO slug_es).
 
+${buildSeoBlock(category)}
+
 ## Tu tarea
 
 1. Identifica una tensión, tendencia o malentendido recurrente en los titulares de arriba (categoría ${category}).
@@ -201,22 +291,124 @@ REGLAS CRÍTICAS:
 3. Asegúrate de que el tema no se solapa con los posts recientes listados.
 4. Genera ambas versiones (ES y EN) coherentes pero NO traducción literal: cada una en su idioma nativo.
 5. Embedde 2-3 internal links a posts recientes relacionados (sección INTERNAL LINKING).
+6. Cumple la sección POSICIONAMIENTO Y SEO: cluster, búsqueda objetivo, meta title, meta description y el enlace a la página del cluster.
 
 Llama al tool create_blog_post con los campos correspondientes.${buildPublishedCorpusBlock(publishedCorpus)}`;
 }
 
-function sanitizeInvalidLinks(html, validSlugs, lang) {
+// Deja solo los enlaces a posts que existen y a las páginas permitidas
+// (`allowedHrefs`: la del cluster y los casos). Cualquier otro se queda en
+// su texto. Sin la lista de permitidas, el enlace obligatorio a la página
+// del cluster desaparecía aquí sin avisar.
+function sanitizeInvalidLinks(html, validSlugs, lang, allowedHrefs = new Set()) {
   if (!html) return html;
   const prefix = `/${lang}/blog/`;
   return html.replace(
     /<a\s+href="([^"]+)"[^>]*>([^<]*)<\/a>/g,
     (match, href, text) => {
+      if (allowedHrefs.has(href)) return match;
       if (!href.startsWith(prefix)) return text;
       const slug = href.slice(prefix.length).split(/[?#]/)[0];
       if (validSlugs.has(slug)) return match;
       return text;
     },
   );
+}
+
+const escapeRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+/** Deja el primer enlace a `href` y convierte el resto en su texto. */
+function keepFirstLinkTo(html, href) {
+  let seen = 0;
+  return html.replace(
+    new RegExp(`<a\\s+href="${escapeRe(href)}"[^>]*>([^<]*)<\\/a>`, "g"),
+    (match, text) => (seen++ === 0 ? match : text),
+  );
+}
+
+/** Añade `sentenceHtml` al final del último párrafo. */
+function appendToLastParagraph(html, sentenceHtml) {
+  const i = html.lastIndexOf("</p>");
+  if (i === -1) return `${html}<p>${sentenceHtml}</p>`;
+  return `${html.slice(0, i).replace(/\s+$/, "")} ${sentenceHtml}${html.slice(i)}`;
+}
+
+/** Corta en el último espacio antes de `max` y quita la puntuación colgante. */
+function cutAtWord(text, max) {
+  const t = text.trim();
+  if ([...t].length <= max) return t;
+  const cut = [...t].slice(0, max).join("");
+  return cut.slice(0, cut.lastIndexOf(" ")).replace(/[\s,;:.–—-]+$/, "");
+}
+
+/**
+ * Aplica las reglas de posicionamiento al borrador ya validado: cluster,
+ * enlace a su página (uno por idioma), casos (máximo uno), longitudes de
+ * metaTitle/metaDescription y búsquedas reservadas. Corrige lo que se puede
+ * corregir sin reescribir el post y deja el resto en `seo.warnings`, que
+ * sale en el resultado de la generación para la revisión manual.
+ */
+function applySeoRules(data, category) {
+  const warnings = [];
+  let cluster = data.cluster;
+  if (!CLUSTERS[cluster]) {
+    warnings.push(`cluster "${cluster}" no válido; se usa el de la categoría`);
+    cluster = clusterForCategory(category);
+  }
+
+  for (const lang of ["es", "en"]) {
+    const key = `content_${lang}`;
+    const href = clusterHref(cluster, lang);
+    const count = (data[key].match(new RegExp(`href="${escapeRe(href)}"`, "g")) || []).length;
+    if (count === 0) {
+      warnings.push(`${lang}: sin enlace a ${href}; se añade la frase de respaldo`);
+      const sentence = FALLBACK_LINK_SENTENCE[cluster][lang].replace(
+        /\[\[(.+?)\]\]/,
+        `<a href="${href}">$1</a>`,
+      );
+      data[key] = appendToLastParagraph(data[key], sentence);
+    } else if (count > 1) {
+      warnings.push(`${lang}: ${count} enlaces a ${href}; se deja el primero`);
+      data[key] = keepFirstLinkTo(data[key], href);
+    }
+    const cases = caseHrefs(lang).filter((h) => data[key].includes(`href="${h}"`));
+    for (const extra of cases.slice(1)) {
+      warnings.push(`${lang}: más de un caso enlazado; se quita ${extra}`);
+      data[key] = data[key].replace(
+        new RegExp(`<a\\s+href="${escapeRe(extra)}"[^>]*>([^<]*)<\\/a>`, "g"),
+        "$1",
+      );
+    }
+    if (cases[0]) data[key] = keepFirstLinkTo(data[key], cases[0]);
+
+    const metaTitle = data[`meta_title_${lang}`].trim();
+    if ([...metaTitle].length > META_TITLE_MAX) {
+      warnings.push(`${lang}: meta_title de ${[...metaTitle].length} caracteres; se descarta y se usará el título`);
+      data[`meta_title_${lang}`] = null;
+    } else {
+      data[`meta_title_${lang}`] = metaTitle;
+    }
+    const desc = data[`meta_description_${lang}`];
+    if ([...desc.trim()].length > META_DESCRIPTION_MAX) {
+      warnings.push(`${lang}: meta_description de ${[...desc.trim()].length} caracteres; se recorta`);
+      data[`meta_description_${lang}`] = cutAtWord(desc, META_DESCRIPTION_MAX);
+    }
+
+    for (const field of [`title_${lang}`, `meta_title_${lang}`, `target_query_${lang}`]) {
+      for (const q of reservedQueriesIn(data[field], lang)) {
+        warnings.push(`${lang}: ${field} contiene la búsqueda reservada "${q}"`);
+      }
+    }
+  }
+
+  data.cluster = cluster;
+  data.seo = {
+    cluster,
+    targetQuery: { es: data.target_query_es, en: data.target_query_en },
+    warnings,
+  };
+  if (warnings.length) console.warn("Reglas SEO del borrador:", warnings);
+  return data;
 }
 
 function countInternalLinks(html, lang) {
@@ -226,7 +418,8 @@ function countInternalLinks(html, lang) {
   return matches ? matches.length : 0;
 }
 
-function validateGenerated(data, { recentPosts = [] } = {}) {
+// Exportada solo para poder probarla.
+export function validateGenerated(data, { recentPosts = [], category } = {}) {
   const required = [
     "title_es",
     "title_en",
@@ -239,6 +432,11 @@ function validateGenerated(data, { recentPosts = [] } = {}) {
     "image_query",
     "meta_description_es",
     "meta_description_en",
+    "cluster",
+    "target_query_es",
+    "target_query_en",
+    "meta_title_es",
+    "meta_title_en",
   ];
   for (const key of required) {
     if (data[key] === undefined || data[key] === null || data[key] === "") {
@@ -261,14 +459,18 @@ function validateGenerated(data, { recentPosts = [] } = {}) {
   const validSlugsEn = new Set(
     recentPosts.map((p) => p.slug_en).filter(Boolean),
   );
-  data.content_es = sanitizeInvalidLinks(data.content_es, validSlugsEs, "es");
-  data.content_en = sanitizeInvalidLinks(data.content_en, validSlugsEn, "en");
+  // Páginas a las que el post puede enlazar además de a otros posts: la de
+  // su cluster y los casos. Un cluster inválido lo corrige applySeoRules.
+  const cluster = CLUSTERS[data.cluster] ? data.cluster : clusterForCategory(category);
+  const allowed = (lang) => new Set([clusterHref(cluster, lang), ...caseHrefs(lang)]);
+  data.content_es = sanitizeInvalidLinks(data.content_es, validSlugsEs, "es", allowed("es"));
+  data.content_en = sanitizeInvalidLinks(data.content_en, validSlugsEn, "en", allowed("en"));
   data.internalLinks = {
     es: countInternalLinks(data.content_es, "es"),
     en: countInternalLinks(data.content_en, "en"),
   };
 
-  return data;
+  return applySeoRules(data, category);
 }
 
 function buildUserPromptFromIdea({ category, chosenIdea, trending, recentPosts }) {
@@ -315,12 +517,15 @@ Dentro de content_es y content_en, **enlaza inline 2-3 posts** de la lista de ar
 
 USA SOLO los slugs literales de la lista (slug_es / slug_en). NO inventes. 1-2 enlaces; si ninguno encaja con naturalidad, NO fuerces.
 
+${buildSeoBlock(category)}
+
 ## Tu tarea
 
 1. Desarrolla el ángulo elegido en un post completo siguiendo la guía editorial.
 2. Genera ambas versiones (ES y EN) coherentes pero NO traducción literal: cada una en su idioma nativo.
 3. Asegúrate de que no se solapa con los posts recientes listados.
 4. Embedde 2-3 internal links a posts recientes relacionados (sección INTERNAL LINKING).
+5. Cumple la sección POSICIONAMIENTO Y SEO: cluster, búsqueda objetivo, meta title, meta description y el enlace a la página del cluster.
 
 Llama al tool create_blog_post con los campos correspondientes.`;
 }
@@ -340,7 +545,7 @@ const MAX_GENERATION_ATTEMPTS = 2;
 // Llama al tool create_blog_post con streaming (obligatorio por encima de ~16k
 // tokens para no chocar con el timeout HTTP del SDK), detecta el truncado por
 // max_tokens de forma explícita y reintenta si la generación no valida.
-async function generateViaCreateBlogPostTool({ userPrompt, recentPosts }) {
+async function generateViaCreateBlogPostTool({ userPrompt, recentPosts, category }) {
   const client = getAnthropicClient();
   let lastError;
 
@@ -388,7 +593,7 @@ async function generateViaCreateBlogPostTool({ userPrompt, recentPosts }) {
     }
 
     try {
-      const validated = validateGenerated(toolUse.input, { recentPosts });
+      const validated = validateGenerated(toolUse.input, { recentPosts, category });
       return {
         ...validated,
         usage: {
@@ -423,7 +628,7 @@ export async function generatePostDraft({
     recentPosts,
     publishedCorpus,
   });
-  return generateViaCreateBlogPostTool({ userPrompt, recentPosts });
+  return generateViaCreateBlogPostTool({ userPrompt, recentPosts, category });
 }
 
 export async function generatePostFromIdea({
@@ -438,7 +643,7 @@ export async function generatePostFromIdea({
     trending,
     recentPosts,
   });
-  return generateViaCreateBlogPostTool({ userPrompt, recentPosts });
+  return generateViaCreateBlogPostTool({ userPrompt, recentPosts, category });
 }
 
 /* ─── Tomas de LinkedIn ──────────────────────────────────────────────────────
