@@ -1,6 +1,6 @@
 # Cierres SEO (propuesta)
 
-*2026-09-25 · **pendiente de aprobación**. Nada de esto está escrito en la BD ni en el código.*
+*2026-09-25 · **aprobado**. La BD se actualiza con `scripts/seo-aplicar-cierres.mjs`.*
 
 Continúa [posicionamiento.md](posicionamiento.md) y [posts-clusters.md](posts-clusters.md). Datos leídos de la BD con Prisma en solo lectura, **después** de aplicar la pasada anterior.
 
@@ -117,7 +117,7 @@ La columna final muestra el final del párrafo actual (texto plano) y, en negrit
 - **Propuesta:** el `title.default` del layout pasa a ser el de la 404. Todas las páginas del sitio declaran su propio title (la home incluida), así que ese valor solo lo ven las 404. Lo verificaré recorriendo el sitemap entero: ninguna URL real debe salir con "Página no encontrada".
 - **Lo visible no cambia:** la 404 sigue mostrando "404 · This page could not be found." (el componente por defecto de Next).
 
-**Fuera de alcance, para que decidas:** una URL que no existe como ruta (p. ej. `/es/no-existe`) no pasa por el layout y seguirá con el title por defecto de Next, "404: This page could not be found." (en inglés en los dos idiomas). Para darle el title del idioma haría falta una ruta comodín `app/[lang]/[...resto]/page.js` que solo llame a `notFound()`: no crea contenido, pero es una ruta nueva, así que no la añado sin tu OK.
+**Rutas que no existen (decidido: no se añade ruta comodín).** Una URL que no existe como ruta (p. ej. `/es/no-existe`) no pasa por el layout y sigue con el title por defecto de Next, "404: This page could not be found.". Arreglarlo exigía una ruta `app/[lang]/[...resto]/page.js` que solo llamara a `notFound()`. No se añade: una 404 no se indexa, así que su title apenas pesa en SEO, y la ruta haría que cada URL inventada (bots, escaneos) ejecutara el render completo del sitio en lugar de la 404 estática.
 
 ## Aplicación (tras el OK)
 
