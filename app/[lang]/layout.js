@@ -12,7 +12,8 @@ import {
 import { GoogleTagManager } from "@next/third-parties/google";
 import CookieBanner from "@/app/components/CookieBanner";
 import BreadcrumbSchema from "@/app/components/BreadcrumbSchema";
-import { SITE_URL, buildAlternates, samePath } from "@/app/lib/seo/urls";
+import { SITE_URL } from "@/app/lib/seo/urls";
+import { socialMeta } from "@/app/lib/seo/social";
 import {
   founderSchema,
   jsonLdGraph,
@@ -52,29 +53,21 @@ const fontMynerve = Mynerve({
 export async function generateMetadata({ params }) {
   const { lang = "en" } = await params;
   const baseUrl = SITE_URL;
-
-  const titles = {
-    en: "Room 714 | Digital Product Studio",
-    es: "Room 714 | Estudio de Productos Digitales",
-  };
-
-  const descriptions = {
-    en: "We build scalable, high-performance digital products through UX methodology and technical excellence.",
-    es: "Construimos productos digitales escalables y de alto rendimiento mediante metodología UX y excelencia técnica.",
-  };
+  // Los valores por defecto son los de la portada, del mismo diccionario que
+  // usa ella: así og:title y twitter:title no se quedan con un mensaje viejo
+  // cuando cambia el title.
+  const { seo } = (await getDictionary(lang)).home;
 
   return {
     metadataBase: new URL(baseUrl),
     title: {
-      default: titles[lang],
+      default: seo.title,
       template: `%s | Room 714`,
     },
-    description: descriptions[lang],
-    // Canónica y hreflang absolutos y recíprocos. Antes las alternativas
-    // eran rutas relativas ("/en"), que Google admite pero deja al azar de
-    // la resolución, y usaban códigos con región (en-US, es-ES) cuando el
-    // contenido no es específico de un país.
-    alternates: buildAlternates(lang, samePath("")),
+    description: seo.description,
+    // Sin `alternates` a propósito: cada página declara su canónica y sus
+    // hreflang (la portada también, en su page.js). Lo único que heredaba la
+    // del layout eran los 404, que salían con canonical a la portada.
     robots: {
       index: true,
       follow: true,
@@ -89,28 +82,12 @@ export async function generateMetadata({ params }) {
     verification: {
       google: "K7UJlm_Q0B9ceNoSoa4Vxk56C16FKSffjUx2SZhLi2o",
     },
-    openGraph: {
-      title: titles[lang],
-      description: descriptions[lang],
+    ...socialMeta({
+      lang,
+      title: seo.title,
+      description: seo.description,
       url: `${baseUrl}/${lang}`,
-      siteName: "Room 714",
-      images: [
-        {
-          url: "/og-image.png", // Next.js lo resolverá a absoluta gracias a metadataBase
-          width: 1200,
-          height: 630,
-          alt: "Room 714 Digital Product Studio",
-        },
-      ],
-      locale: lang === "es" ? "es_ES" : "en_US",
-      type: "website",
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: titles[lang],
-      description: descriptions[lang],
-      images: ["/og-image.png"],
-    },
+    }),
   };
 }
 

@@ -6,6 +6,7 @@ import PrimaryButton from "@/app/components/PrimaryButton";
 import RulesSlider from "@/app/components/RulesSlider";
 import { getRules } from "@/app/data/Rules";
 import { SITE_URL, buildAlternates, langPaths } from "@/app/lib/seo/urls";
+import { socialMeta } from "@/app/lib/seo/social";
 import { path, pathsOf } from "@/app/lib/routes.mjs";
 import { LINKEDIN_FOUNDER, withUtm } from "@/app/lib/links";
 import { AIRE_TRAS_BOTON, CANAL } from "@/app/lib/layout";
@@ -20,12 +21,12 @@ export async function generateMetadata({ params }) {
     title: { absolute: dict.about.seo.title },
     description: dict.about.seo.description,
     alternates: buildAlternates(lang, langPaths(rutas.es, rutas.en)),
-    openGraph: {
+    ...socialMeta({
+      lang,
       title: dict.about.seo.title,
       description: dict.about.seo.description,
       url: `${SITE_URL}${rutas[lang]}`,
-      type: "website",
-    },
+    }),
   };
 }
 

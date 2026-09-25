@@ -6,8 +6,9 @@ import PrimaryButton from "@/app/components/PrimaryButton";
 import ProjectsList from "@/app/components/ProjectList";
 import ClientLogos from "@/app/components/ClientLogos";
 import { getProjectsData } from "@/app/data/Projects";
-import { buildAlternates, langPaths } from "@/app/lib/seo/urls";
+import { SITE_URL, buildAlternates, langPaths } from "@/app/lib/seo/urls";
 import { ORGANIZATION_ID, jsonLdGraph } from "@/app/lib/seo/schema";
+import { socialMeta } from "@/app/lib/seo/social";
 import { CASOS, path, pathsOf } from "@/app/lib/routes.mjs";
 import { AIRE_TRAS_BOTON, CANAL, TARJETA, TITULAR } from "@/app/lib/layout";
 
@@ -24,6 +25,12 @@ export async function generateMetadata({ params }) {
     // hereda la canónica de la portada: le declara a Google que es una copia
     // de la portada, y Google deja de indexarla.
     alternates: buildAlternates(lang, langPaths(rutas.es, rutas.en)),
+    ...socialMeta({
+      lang,
+      title: dict.casos.indice.seoTitle,
+      description: dict.casos.indice.seoDescription,
+      url: `${SITE_URL}${rutas[lang]}`,
+    }),
   };
 }
 
