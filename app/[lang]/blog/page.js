@@ -49,39 +49,45 @@ export default async function BlogPage({ params }) {
 
       {/* Header del Blog */}
       <header className="w-full my-20 py-20 px-4 flex flex-col justify-between items-between gap-8">
-        <div className="flex flex-wrap items-center mx-2 md:mx-4 lg:mx-8 gap-4">
-          <div className="relative">
-            <h1 className="text-7xl md:text-8xl lg:text-9xl font-black text-black leading-14">
+        {/* Un solo <h1> para las dos palabras (antes eran dos). Dentro de un
+            h1 solo cabe contenido en línea, así que los div pasan a span con
+            las mismas clases: los hijos del flex y los absolutos se siguen
+            comportando como bloque, y "our" lleva `block` porque ya no es hijo
+            directo del flex. La cruz es decorativa (alt vacío) para que el
+            encabezado no se lea "nuestro Cross vuestro blog". */}
+        <h1 className="flex flex-wrap items-center mx-2 md:mx-4 lg:mx-8 gap-4">
+          <span className="relative">
+            <span className="block text-7xl md:text-8xl lg:text-9xl font-black text-black leading-14">
               {dict.blog.our}
-            </h1>
+            </span>
 
             {/* La Cruz con posicionamiento dinámico */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className={`relative ${dict.blog.headerConfig.crossConfig}`}>
+            <span className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <span className={`relative ${dict.blog.headerConfig.crossConfig}`}>
                 <Image
                   src="/blog-cross.svg"
-                  alt="Cross"
+                  alt=""
                   width={120}
                   height={150}
                   className="h-auto w-full priority"
                 />
-              </div>
-            </div>
+              </span>
+            </span>
 
             {/* "your" dinámico */}
-            <div
+            <span
               className={`absolute select-none ${dict.blog.headerConfig.yourPos}`}
             >
               <span className="text-6xl md:text-7xl lg:text-8xl font-hand text-gray-500 -rotate-12 inline-block">
                 {dict.blog.your}
               </span>
-            </div>
-          </div>
+            </span>
+          </span>
 
-          <h1 className="text-7xl md:text-8xl lg:text-9xl font-black text-black leading-14">
+          <span className="text-7xl md:text-8xl lg:text-9xl font-black text-black leading-14">
             {dict.blog.blog}
-          </h1>
-        </div>
+          </span>
+        </h1>
 
         {/* Lado Derecho */}
         <div className="w-full flex flex-col items-end mt-30 pr-4">
