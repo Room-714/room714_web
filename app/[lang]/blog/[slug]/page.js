@@ -39,6 +39,9 @@ export async function generateMetadata({ params }) {
   if (!post) notFound();
 
   const { title, content, image, alternateSlugs, metaDescription } = post;
+  // Google corta el <title> hacia los 60 caracteres, sufijo incluido. El H1
+  // de la página no usa esto: sigue mostrando el título completo.
+  const seoTitle = post.metaTitle || title;
 
   const description =
     metaDescription ||
@@ -60,10 +63,10 @@ export async function generateMetadata({ params }) {
 
   return {
     // Sin sufijo: lo añade la plantilla `%s | Room 714` del layout.
-    title,
+    title: seoTitle,
     description: description,
     openGraph: {
-      title: title,
+      title: seoTitle,
       description: description,
       url: pageUrl,
       siteName: "Room 714",
@@ -73,7 +76,7 @@ export async function generateMetadata({ params }) {
     },
     twitter: {
       card: "summary_large_image",
-      title: title,
+      title: seoTitle,
       description: description,
       images: [imageUrl],
     },
