@@ -39,8 +39,8 @@
       "lead": "Most projects that start with a customer experience problem uncover a technology problem, and are already hurting the client's business.",
       "lead2": "Our integral method, combining design, technology and business, lets us cover the whole product and deliver end-to-end solutions that satisfy our clients.",
       "secondaryTitle": "Other projects",
-      "seoTitle": "Cases · Room 714",
-      "seoDescription": "Three real digital product cases: a regulated B2B SaaS, a B2B2C platform sold through service providers, and an e-commerce with AI. How they started, what we found and what changed."
+      "seoTitle": "Digital product case studies | Room 714",
+      "seoDescription": "Three real, anonymised digital product cases: a regulated B2B SaaS, a B2B2C platform and an e-commerce with AI. What we found and what changed."
     },
     "saasAutogestion": {
       "heroTitle": "The SaaS that did not care about its customers",
@@ -84,8 +84,8 @@
       "viene": "The product opens up a new business model: not only the company that needs to solve compliance across several countries, but the professionals who complete the service where the administration is not yet digitised. Expanding into other regulatory areas and other geographies is in next year's plan.",
       "llevamos": "The cost of a bad customer experience almost never shows up in the product. It shows up in the support headcount, which is why nobody sees it. And technical debt is not an IT problem: it is a margin problem.",
       "cierre": "Does your support team work on behalf of your customers?",
-      "seoTitle": "Case: the SaaS that used its own support instead of its customers · Room 714",
-      "seoDescription": "How we redesigned and rebuilt a regulated B2B SaaS: from over 200 tables to fewer than 20, customers who serve themselves, and a margin that went from almost nothing to double digits. Real anonymised case.",
+      "seoTitle": "Case: the B2B SaaS that ran on its own support | Room 714",
+      "seoDescription": "We redesigned and rebuilt a regulated B2B SaaS: from over 200 tables to fewer than 20, and customers who serve themselves. Real anonymised case.",
       "resumen": "A regulated B2B SaaS whose support team used the platform on behalf of its customers."
     },
     "activacionCanonico": {
@@ -133,8 +133,8 @@
       "donde": "We are still working on all three fronts: experience, architecture and data. And the third has changed meaning. The canonical model was born for business reporting; with agentic AI it has become essential, because an agent can only work autonomously on a knowledge base that is true and simple. Without that model, agents inherit the contradictions of every system. With it, they fly.",
       "llevamos": "An activation problem is almost never fixed on the activation screen. And the best AI preparation we have seen wasn't an AI project: it was putting the data in order.",
       "cierre": "Is whoever pays for your product not the one using it?",
-      "seoTitle": "Case: from an activation problem to a canonical model for AI agents · Room 714",
-      "seoDescription": "A B2B2C platform sold through service providers: personas and journeys, a multi-brand design system, a new mobile app, an API ten times smaller, and a canonical data model for agentic AI. Real anonymised case.",
+      "seoTitle": "Case: from an activation problem to agentic AI | Room 714",
+      "seoDescription": "A B2B2C platform: journeys, a multi-brand design system, a new mobile app and a canonical data model for agentic AI. Real anonymised case.",
       "resumen": "A platform sold through service providers with an activation problem."
     },
     "iaEcommerce": {
@@ -178,8 +178,8 @@
       "donde": "Widening what the vector database knows with tables from other standard client systems, so the embeddings work with more objective data and better context. The platform doesn't depend on the type of goods: it works for any catalogue and any customer base. We are considering turning it into a product.",
       "llevamos": "Useful AI in a shop is not a chat: it is knowing what to offer when what the customer wanted isn't there. And the fastest way to get AI into production in a small company is not to touch what already works.",
       "cierre": "Do you want AI in your product without risking what you already have?",
-      "seoTitle": "Case: AI on top of an e-commerce without touching it · Room 714",
-      "seoDescription": "A standalone AI platform for an online grocery: enriched catalogue, substitutes for stock-outs, intelligent repeat purchase and a virtual nutritionist, without changing anything in the client's store. Real anonymised case.",
+      "seoTitle": "Case: AI on an e-commerce without touching it | Room 714",
+      "seoDescription": "AI for an online grocery: enriched catalogue, substitutes for stock-outs and repeat purchase, without touching the store. Real anonymised case.",
       "resumen": "An online grocery that wanted AI without touching its store."
     }
   },
@@ -196,8 +196,8 @@
       "cardCta": "For your customers",
       "heroTitle": "Every unnecessary step in your product is a customer walking away",
       "heroDescription": "We redesign and build the flows your customers use to sign up, get started, operate and come back: onboarding, activation, customer area, app. And we measure it where it shows: conversion, drop-off, ARPU and support cost.",
-      "seoTitle": "Onboarding, sign-up and customer area redesign · Room 714",
-      "seoDescription": "We redesign and build the digital flows your customers use to sign up, get started and operate. Measured in conversion, drop-off and ARPU.",
+      "seoTitle": "Digital product design and customer experience | Room 714",
+      "seoDescription": "Digital product design focused on customer experience: we redesign sign-up, onboarding and the customer area. Measured in conversion and drop-off.",
       "teSuenaSi": [
         "Sign-up or activation is abandoned halfway through and nobody knows exactly at which step, or why.",
         "Onboarding a customer takes paper, phone calls or days of waiting, and your competitor does it in minutes.",
@@ -257,8 +257,8 @@
       "cardCta": "For your team",
       "heroTitle": "The software your team uses is a product too. And it shows when you don't treat it like one.",
       "heroDescription": "We modernise and build the tools your company runs on: back-office, dashboards, incident management, data platforms, legacy systems. Without stopping the operation, measured in errors, time and cost.",
-      "seoTitle": "Modernising internal software, back-office and dashboards · Room 714",
-      "seoDescription": "We modernise and build the tools your company runs on: back-office, dashboards, legacy systems. Without stopping the operation, with AI where it earns its place, measured in errors and time.",
+      "seoTitle": "Modernising internal software and back-office | Room 714",
+      "seoDescription": "We modernise the software your team runs on: back-office, dashboards and legacy systems. Without stopping the operation, measured in errors and time.",
       "teSuenaSi": [
         "Your team works with three screens, a spreadsheet and the memory of whoever has been there longest.",
         "The dashboards have all the data and nobody sees anything. Errors are spotted once they have already cost money.",
@@ -313,8 +313,8 @@
       "cardCta": "With AI",
       "heroTitle": "The demo worked. So why is it still a demo?",
       "heroDescription": "We take AI from pilot to production inside your product: the data and context layer that stops it making things up, the interface that makes it usable, and the cost that makes it viable. We are not selling you a model or a platform.",
-      "seoTitle": "AI from pilot to production inside your product · Room 714",
-      "seoDescription": "We take AI from pilot to production: semantic layer and canonical model so it doesn't hallucinate, the architecture your case actually needs, a usable interface and a viable cost.",
+      "seoTitle": "AI in your digital product: pilot to production | Room 714",
+      "seoDescription": "We take AI from pilot to production inside your digital product: a canonical model so it doesn't hallucinate, a usable interface and a viable cost.",
       "teSuenaSi": [
         "The assistant answers well in the demo and makes things up with real data.",
         "Every system calls the same thing by a different name and the AI inherits the chaos.",
@@ -374,8 +374,8 @@
       "cardCta": "From scratch",
       "heroTitle": "Before the first screen, the first question: is this a business?",
       "heroDescription": "We take ideas and new lines of business to a product in production. We review the model before designing, design before building, and build so it holds up when it works.",
-      "seoTitle": "From idea to a digital product in production · Room 714",
-      "seoDescription": "We take ideas and new lines of business to a product in production. We review the business before designing, design before building, and build with no lock-in.",
+      "seoTitle": "Digital product development, idea to production | Room 714",
+      "seoDescription": "Digital product development from idea to production: we review the business before designing and design before building. No lock-in.",
       "teSuenaSi": [
         "You have an idea or a mandate from the board and you need to turn it into something a customer can use and pay for.",
         "Your current product can't be evolved and has to be rebuilt without losing the customers already using it.",
@@ -495,8 +495,8 @@
       "description": "A 30-minute diagnostic session. You write to us, we reply within 24 working hours and set a time. We tell you what we would do, in what order and what it would cost. If we are not the right team, we tell you that too."
     },
     "seo": {
-      "title": "Room 714 · Digital product for your customers and your team",
-      "description": "We improve and build the digital product your customers use and the one your team uses. Experience, technology and business in the same team, measured in results. Madrid."
+      "title": "Digital product design and development company | Room 714",
+      "description": "Digital product company in Madrid: ideation, design and development of the product your customers use and the one your team uses. Measured in results."
     }
   },
   "contact": {
@@ -653,8 +653,8 @@
     },
     "cta": "Tell us about your case",
     "seo": {
-      "title": "How we work · Room 714",
-      "description": "Diagnosis, design and architecture together, delivery in increments, and measurement. A senior team of product, design and engineering led by José Antonio Ces Franjo. No agency, no consultancy."
+      "title": "How we work: a digital product studio in Madrid | Room 714",
+      "description": "A digital product studio in Madrid: diagnosis, design and architecture together, incremental delivery and measurement. Senior team, not an agency."
     }
   },
   "projects": {

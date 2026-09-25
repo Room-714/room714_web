@@ -39,8 +39,8 @@
       "lead": "La mayoría de proyectos que arrancan con un problema de experiencia de cliente, destapan un problema de tecnología y están afectando al negocio del cliente.",
       "lead2": "Nuestro método integral que combina diseño, tecnología y negocio nos permite abarcar todo el producto y proporcionar soluciones end-to-end que satisfacen a nuestros clientes.",
       "secondaryTitle": "Otros proyectos",
-      "seoTitle": "Casos · Room 714",
-      "seoDescription": "Tres casos reales de producto digital: un SaaS B2B regulado, una plataforma B2B2C vendida vía service providers y un e-commerce con IA. Cómo empezaron, qué encontramos y qué cambió."
+      "seoTitle": "Casos reales de producto digital | Room 714",
+      "seoDescription": "Tres casos reales y anónimos de producto digital: un SaaS B2B regulado, una plataforma B2B2C y un e-commerce con IA. Qué encontramos y qué cambió."
     },
     "saasAutogestion": {
       "heroTitle": "El SaaS al que no le importaban sus clientes",
@@ -84,8 +84,8 @@
       "viene": "El producto abre un modelo de negocio nuevo: no solo la empresa que necesita resolver su cumplimiento en varios países, sino los profesionales que completan el servicio allí donde la administración aún no está digitalizada. Ampliar a otros ámbitos regulatorios y a otras geografías está en el plan del año próximo.",
       "llevamos": "El coste de una mala experiencia de cliente casi nunca aparece en el producto. Aparece en la plantilla de soporte, y por eso nadie lo ve. Y la deuda técnica no es un problema de IT: es un problema de margen.",
       "cierre": "¿Tu equipo de soporte trabaja por tus clientes?",
-      "seoTitle": "Caso: el SaaS que usaba su propio soporte en lugar de sus clientes · Room 714",
-      "seoDescription": "Cómo rediseñamos y reconstruimos un SaaS B2B regulado: de más de 200 tablas a menos de 20, clientes que se autogestionan y un margen que pasó de casi nulo a dos dígitos. Caso real anonimizado.",
+      "seoTitle": "Caso: el SaaS B2B que vivía de su propio soporte | Room 714",
+      "seoDescription": "Rediseñamos y reconstruimos un SaaS B2B regulado: de más de 200 tablas a menos de 20 y clientes que se autogestionan. Caso real anonimizado.",
       "resumen": "Un SaaS B2B regulado cuyo equipo de soporte usaba la plataforma por sus clientes."
     },
     "activacionCanonico": {
@@ -133,8 +133,8 @@
       "donde": "Seguimos trabajando en los tres planos: experiencia, arquitectura y datos. Y el tercero ha cambiado de sentido. El modelo canónico nació para el seguimiento del negocio; con la llegada de la IA agéntica se ha vuelto imprescindible, porque un agente solo puede trabajar de forma autónoma sobre una base de conocimiento cierta y simple. Sin ese modelo, los agentes heredan las contradicciones de cada sistema. Con él, vuelan.",
       "llevamos": "Un problema de activación casi nunca se arregla en la pantalla de activación. Y la mejor preparación para la IA que hemos visto no fue un proyecto de IA: fue poner orden en los datos.",
       "cierre": "¿El que paga tu producto no es el que lo usa?",
-      "seoTitle": "Caso: de un problema de activación a un modelo canónico para agentes de IA · Room 714",
-      "seoDescription": "Plataforma B2B2C vendida vía service providers: personas y journeys, sistema de diseño multimarca, app móvil nueva, API diez veces más pequeña y modelo canónico de datos para IA agéntica. Caso real anonimizado.",
+      "seoTitle": "Caso: de un problema de activación a IA agéntica | Room 714",
+      "seoDescription": "Plataforma B2B2C: journeys, sistema de diseño multimarca, app móvil nueva y modelo canónico de datos para IA agéntica. Caso real anonimizado.",
       "resumen": "Una plataforma vendida a través de service providers con un problema de activación."
     },
     "iaEcommerce": {
@@ -178,8 +178,8 @@
       "donde": "Ampliando lo que sabe la base de datos vectorial con tablas de otros sistemas estándar del cliente, para que los embeddings trabajen con más datos objetivos y mejor contexto. La plataforma no depende del tipo de mercancía: funciona para cualquier catálogo y cualquier parque de clientes. Estamos pensando en convertirla en producto.",
       "llevamos": "La IA útil en un comercio no es un chat: es saber qué ofrecer cuando lo que el cliente quería no está. Y la manera más rápida de llevar IA a producción en una empresa pequeña es no tocar lo que ya funciona.",
       "cierre": "¿Quieres IA en tu producto sin poner en riesgo lo que ya tienes?",
-      "seoTitle": "Caso: IA sobre un e-commerce sin tocar el e-commerce · Room 714",
-      "seoDescription": "Plataforma autónoma de IA para un comercio online de alimentación: catálogo enriquecido, sustitutos ante roturas de stock, recompra inteligente y nutricionista virtual, sin cambiar nada en la tienda del cliente. Caso real anonimizado.",
+      "seoTitle": "Caso: IA sobre un e-commerce sin tocar la tienda | Room 714",
+      "seoDescription": "IA para un e-commerce de alimentación: catálogo enriquecido, sustitutos ante roturas de stock y recompra, sin tocar la tienda. Caso anonimizado.",
       "resumen": "Un comercio online de alimentación que quería IA sin tocar su tienda."
     }
   },
@@ -196,8 +196,8 @@
       "cardCta": "Para tu cliente",
       "heroTitle": "Cada paso que sobra en tu producto es un cliente que se va",
       "heroDescription": "Rediseñamos y construimos los flujos que tus clientes usan para contratar, darse de alta, operar y volver: onboarding, activación, área de cliente, app. Y lo medimos donde se nota: conversión, abandono, ARPU y coste de atención.",
-      "seoTitle": "Rediseño de onboarding, contratación y área de cliente · Room 714",
-      "seoDescription": "Rediseñamos y construimos los flujos digitales que tus clientes usan para contratar, darse de alta y operar. Medido en conversión, abandono y ARPU.",
+      "seoTitle": "Diseño de producto digital y experiencia cliente | Room 714",
+      "seoDescription": "Diseño de producto digital centrado en la experiencia de cliente: rediseñamos alta, contratación y área de cliente. Medido en conversión y abandono.",
       "teSuenaSi": [
         "La contratación o la activación se abandona a mitad y nadie sabe exactamente en qué paso ni por qué.",
         "El alta de un cliente exige papel, llamadas o días de espera, y la competencia lo hace en minutos.",
@@ -257,8 +257,8 @@
       "cardCta": "Para tu equipo",
       "heroTitle": "El software que usa tu equipo también es un producto. Y se nota cuando no lo tratas como tal.",
       "heroDescription": "Modernizamos y construimos las herramientas con las que tu empresa opera: back-office, dashboards, gestión de incidencias, plataformas de datos, sistemas heredados. Sin parar la operación y medido en errores, tiempo y coste.",
-      "seoTitle": "Modernizar software interno, back-office y dashboards · Room 714",
-      "seoDescription": "Modernizamos y construimos las herramientas con las que opera tu empresa: back-office, dashboards, sistemas heredados. Sin parar la operación, con IA donde aporta, medido en errores y tiempo.",
+      "seoTitle": "Modernizar software interno y back-office | Room 714",
+      "seoDescription": "Modernizamos el software con el que opera tu equipo: back-office, dashboards y sistemas heredados. Sin parar la operación, medido en errores y tiempo.",
       "teSuenaSi": [
         "Tu equipo trabaja con tres pantallas, un Excel y la memoria de la persona que lleva más años.",
         "Los dashboards tienen todos los datos y nadie ve nada. Los errores se detectan cuando ya han costado dinero.",
@@ -313,8 +313,8 @@
       "cardCta": "Con la IA",
       "heroTitle": "La demo funcionó. ¿Por qué sigue siendo una demo?",
       "heroDescription": "Llevamos la IA de piloto a producción dentro de tu producto: la capa de datos y contexto que evita que invente, la interfaz que la hace usable y el coste que la hace viable. Sin vender un modelo ni una plataforma.",
-      "seoTitle": "IA de piloto a producción dentro de tu producto · Room 714",
-      "seoDescription": "Llevamos la IA de piloto a producción: capa semántica y modelo canónico para que no alucine, arquitectura que aplica al caso, interfaz usable y coste viable.",
+      "seoTitle": "IA en tu producto digital: de piloto a producción | Room 714",
+      "seoDescription": "Llevamos la IA de piloto a producción dentro de tu producto digital: modelo canónico para que no alucine, interfaz usable y un coste viable.",
       "teSuenaSi": [
         "El asistente responde bien en la demo y se inventa cosas con datos reales.",
         "Cada sistema llama de forma distinta a la misma cosa y la IA hereda el caos.",
@@ -374,8 +374,8 @@
       "cardCta": "Desde cero",
       "heroTitle": "Antes de la primera pantalla, la primera pregunta: ¿esto es un negocio?",
       "heroDescription": "Llevamos ideas y nuevas líneas de negocio a producto en producción. Revisamos el modelo antes de diseñar, diseñamos antes de construir y construimos para que aguante cuando funcione.",
-      "seoTitle": "De idea a producto digital en producción · Room 714",
-      "seoDescription": "Llevamos ideas y nuevas líneas de negocio a producto en producción. Revisamos el negocio antes de diseñar, diseñamos antes de construir y construimos sin lock-in.",
+      "seoTitle": "Desarrollo de producto digital desde la idea | Room 714",
+      "seoDescription": "Desarrollo de producto digital de la idea a producción: revisamos el negocio antes de diseñar y diseñamos antes de construir. Sin lock-in.",
       "teSuenaSi": [
         "Tienes una idea o un mandato de dirección y necesitas convertirlo en algo que un cliente pueda usar y pagar.",
         "Tu producto actual no se puede evolucionar y hay que rehacerlo sin perder a los clientes que ya lo usan.",
@@ -495,8 +495,8 @@
       "description": "Sesión de diagnóstico de 30 minutos. Nos escribes, te respondemos en 24 h laborables y fijamos hora. Te decimos qué haríamos, en qué orden y qué costaría. Si no somos los adecuados, también te lo decimos."
     },
     "seo": {
-      "title": "Room 714 · Producto digital para tus clientes y para tu equipo",
-      "description": "Mejoramos y construimos el producto digital que usan tus clientes y el que usa tu equipo. Experiencia, tecnología y negocio en el mismo equipo, medido en resultados. Madrid."
+      "title": "Empresa de producto digital: diseño y desarrollo | Room 714",
+      "description": "Empresa de producto digital en Madrid: ideación, diseño y desarrollo del producto que usan tus clientes y el que usa tu equipo. Medido en resultados."
     }
   },
   "contact": {
@@ -653,8 +653,8 @@
     },
     "cta": "Cuéntanos tu caso",
     "seo": {
-      "title": "Cómo trabajamos · Room 714",
-      "description": "Diagnóstico, diseño y arquitectura juntos, construcción por entregas y medición. Un equipo senior de producto, diseño e ingeniería dirigido por José Antonio Ces Franjo. Sin agencia, sin consultora."
+      "title": "Estudio de producto digital en Madrid | Room 714",
+      "description": "Estudio de producto digital en Madrid: diagnóstico, diseño y arquitectura juntos, entregas y medición. Equipo senior, sin agencia ni consultora."
     }
   },
   "projects": {
