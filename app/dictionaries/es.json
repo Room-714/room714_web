@@ -796,7 +796,18 @@
     "terms": "Términos y condiciones",
     "privacy": "Política de Privacidad",
     "cookies": "Política de Cookies",
-    "copyright": "Room 714. Todos los derechos reservados."
+    "copyright": "Room 714. Todos los derechos reservados.",
+    "kit_consulting": {
+      "aria_label": "Programa Kit Consulting",
+      "text": "Asesor Digital Adherido al Programa Kit Consulting, financiado por la Unión Europea (NextGenerationEU) en el marco del Plan de Recuperación, Transformación y Resiliencia.",
+      "alt": {
+        "kc": "Kit Consulting – Juntos hacia un futuro digital",
+        "ue": "Financiado por la Unión Europea – NextGenerationEU",
+        "gob": "Gobierno de España – Ministerio para la Transformación Digital y de la Función Pública",
+        "redes": "red.es",
+        "prtr": "Plan de Recuperación, Transformación y Resiliencia"
+      }
+    }
   },
   "cookies": {
     "title": "🍪 Cookies?",

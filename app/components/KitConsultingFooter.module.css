@@ -1,0 +1,108 @@
+/* Banda de publicidad obligatoria del programa Kit Consulting.
+   El SVG es la ristra oficial completa (1920×168) tal como la entrega Red.es;
+   cada logo es una ventana de ese mismo archivo, definida por --x y --w en
+   unidades del viewBox. Así cada logo tiene su propio <img> y su alt sin
+   tocar el SVG. */
+
+.band {
+  display: grid;
+  justify-items: center;
+  gap: 22px;
+  padding: 32px 16px 4px;
+}
+
+.claim {
+  margin: 0;
+  max-width: 90ch;
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.claim a {
+  color: inherit;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.claim a:hover {
+  opacity: 0.7;
+}
+
+.claim a:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .claim a {
+    transition: none;
+  }
+}
+
+/* Móvil: tres filas (KC / UE + Gobierno / red.es + PRTR) a escala fija.
+   Con --s: 0.4 el logo KC mide 153 px, por encima del mínimo de 130 px. */
+.ristra {
+  --s: 0.4;
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: center;
+  align-items: center;
+  gap: 16px 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  position: relative;
+  overflow: hidden;
+  justify-self: center;
+  width: calc(var(--w) * var(--s) * 1px);
+  height: calc(168 * var(--s) * 1px);
+}
+
+.lead {
+  grid-column: 1 / -1;
+}
+
+.item img {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  max-width: none;
+  width: calc(1920 * var(--s) * 1px);
+  left: calc(var(--x) * var(--s) * -1px);
+}
+
+/* Desde 768 px la ristra va entera, cada logo en su posición oficial.
+   A 720 px de ancho el logo KC ya mide 144 px. */
+@media (min-width: 768px) {
+  .band {
+    padding: 40px 24px 8px;
+  }
+
+  .claim {
+    font-size: 14px;
+  }
+
+  .ristra {
+    position: relative;
+    display: block;
+    width: min(100%, 1200px);
+    aspect-ratio: 1920 / 168;
+  }
+
+  .item {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    left: calc(var(--x) / 1920 * 100%);
+    width: calc(var(--w) / 1920 * 100%);
+  }
+
+  .item img {
+    width: calc(1920 / var(--w) * 100%);
+    left: calc(var(--x) / var(--w) * -100%);
+  }
+}

@@ -21,6 +21,7 @@ import {
 import { LINKEDIN_COMPANY, withUtm } from "@/app/lib/links";
 import { path } from "@/app/lib/routes.mjs";
 import AnalyticsEvents from "@/app/components/AnalyticsEvents";
+import KitConsultingFooter from "@/app/components/KitConsultingFooter";
 import { Analytics } from "@vercel/analytics/next";
 import { cookies } from "next/headers";
 
@@ -290,6 +291,9 @@ export default async function RootLayout({ children, params }) {
                 {dict.footer.cookies}
               </Link>
             </div>
+
+            {/* KIT CONSULTING: publicidad obligatoria del programa */}
+            <KitConsultingFooter dict={dict.footer.kit_consulting} />
 
             {/* COPYRIGHT */}
             <div className="py-8 text-center text-xs sm:text-sm md:text-base lg:text-lg text-white font-title font-light">
