@@ -44,7 +44,7 @@ const SEO_DESCRIPTIONS = {
 export async function generateMetadata({ params }) {
   const { lang, slug } = await params;
   const category = getCategoryFromSlug(lang, slug);
-  if (!category) return { title: "Category not found" };
+  if (!category) notFound();
 
   const label = CATEGORY_LABELS[category][lang];
   const titles = {

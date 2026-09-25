@@ -12,7 +12,7 @@ import {
 import { GoogleTagManager } from "@next/third-parties/google";
 import CookieBanner from "@/app/components/CookieBanner";
 import BreadcrumbSchema from "@/app/components/BreadcrumbSchema";
-import { SITE_URL, buildAlternates, samePath } from "@/app/lib/seo/urls";
+import { SITE_URL } from "@/app/lib/seo/urls";
 import { socialMeta } from "@/app/lib/seo/social";
 import {
   founderSchema,
@@ -65,11 +65,9 @@ export async function generateMetadata({ params }) {
       template: `%s | Room 714`,
     },
     description: seo.description,
-    // Canónica y hreflang absolutos y recíprocos. Antes las alternativas
-    // eran rutas relativas ("/en"), que Google admite pero deja al azar de
-    // la resolución, y usaban códigos con región (en-US, es-ES) cuando el
-    // contenido no es específico de un país.
-    alternates: buildAlternates(lang, samePath("")),
+    // Sin `alternates` a propósito: cada página declara su canónica y sus
+    // hreflang (la portada también, en su page.js). Lo único que heredaba la
+    // del layout eran los 404, que salían con canonical a la portada.
     robots: {
       index: true,
       follow: true,
