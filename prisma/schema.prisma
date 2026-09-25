@@ -80,6 +80,9 @@ model PostTranslation {
   linkedinPost     String?  @db.Text
   linkedinHashtags String[] @default([])
   metaDescription  String?
+  // Título corto para <title> y og:title (≤ 49: el layout añade " | Room 714").
+  // Null = se usa `title`. El H1 del post siempre es `title`.
+  metaTitle        String?
 
   post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
 

@@ -9,6 +9,8 @@ Generado el 2026-09-25 a partir del `<title>` que sirve cada post (`next start` 
 
 ## Cómo aplicarlo
 
+> **Estado (2026-09-25):** paso 1 hecho. La columna `metaTitle` existe en producción (`db push`, único cambio: `ALTER TABLE "PostTranslation" ADD COLUMN "metaTitle" TEXT;`) y el campo está en el schema. Falta el paso 2: rellenar los textos aprobados.
+
 El código de la rama `fix/seo-ajustes` ya lee `metaTitle ?? title`, así que sin columna todo sigue igual que hoy. Para activarlo:
 
 1. **Primero la BD, luego el código.** Añadir el campo al schema y crear la columna antes de desplegar cualquier código que incluya el schema nuevo. Si se despliega el schema sin la columna, Prisma la pide en cada consulta a `PostTranslation` y fallan todas.

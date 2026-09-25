@@ -163,9 +163,8 @@ export async function getPostBySlug(rawSlug, lang = "es") {
     tags: currentTranslation.tags,
     content: currentTranslation.content,
     metaDescription: currentTranslation.metaDescription,
-    // Título corto para <title> y og:title (el H1 sigue siendo `title`). La
-    // columna aún no existe en el schema: hasta que se añada llega undefined y
-    // la página usa el título completo.
+    // Título corto para <title> y og:title (el H1 sigue siendo `title`). Si
+    // está vacío, la página usa el título completo.
     metaTitle: currentTranslation.metaTitle ?? null,
     alternateSlugs,
   };
