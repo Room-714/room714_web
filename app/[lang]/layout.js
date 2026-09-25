@@ -61,7 +61,12 @@ export async function generateMetadata({ params }) {
   return {
     metadataBase: new URL(baseUrl),
     title: {
-      default: seo.title,
+      // El default solo lo ven las 404 de dentro del sitio: todas las páginas
+      // declaran su propio title (la portada también, en su page.js), y
+      // cuando una página llama a notFound() Next descarta sus metadatos y
+      // usa estos. Antes era el de la portada, y un post inexistente salía
+      // con el title de la home.
+      default: lang === "es" ? "Página no encontrada | Room 714" : "Page not found | Room 714",
       template: `%s | Room 714`,
     },
     description: seo.description,
