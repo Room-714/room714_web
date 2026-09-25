@@ -108,62 +108,61 @@ export async function getPostsByCategory(category, lang = "es") {
   }
 }
 
+// Sin try/catch a propósito: "no existe" devuelve null (→ 404) y un error de
+// BD se propaga (→ 5xx). Tragarse el error convertía una caída de la BD en un
+// 200 con title "Post not found" y la canónica de la portada: un soft-404 que
+// puede hacer que Google desindexe el post.
 export async function getPostBySlug(rawSlug, lang = "es") {
-  try {
-    const now = new Date();
+  const now = new Date();
 
-    // Único punto por el que pasan todas las consultas por slug, así que es
-    // aquí donde se deshace el percent-encoding de los params.
-    const slug = normalizeSlugParam(rawSlug);
+  // Único punto por el que pasan todas las consultas por slug, así que es
+  // aquí donde se deshace el percent-encoding de los params.
+  const slug = normalizeSlugParam(rawSlug);
 
-    const currentTranslation = await prisma.postTranslation.findFirst({
-      where: {
-        slug: slug,
-        lang: lang,
-        // Añadimos el filtro al modelo relacionado 'post'
-        post: {
-          published: true,
-          date: {
-            lte: now, // Solo si ya es la hora o pasó
-          },
+  const currentTranslation = await prisma.postTranslation.findFirst({
+    where: {
+      slug: slug,
+      lang: lang,
+      // Añadimos el filtro al modelo relacionado 'post'
+      post: {
+        published: true,
+        date: {
+          lte: now, // Solo si ya es la hora o pasó
         },
       },
-      include: {
-        post: {
-          include: { translations: true },
-        },
+    },
+    include: {
+      post: {
+        include: { translations: true },
       },
-    });
+    },
+  });
 
-    // Si el post no existe, está en borrador o es futuro, devolvemos null
-    // Esto hará que Next.js dispare un 404 automáticamente si manejas bien el null en la page
-    if (!currentTranslation) return null;
+  // Si el post no existe, está en borrador o es futuro, devolvemos null
+  // Esto hará que Next.js dispare un 404 automáticamente si manejas bien el null en la page
+  if (!currentTranslation) return null;
 
-    const alternateSlugs = {
-      es: currentTranslation.post.translations.find((t) => t.lang === "es")
-        ?.slug,
-      en: currentTranslation.post.translations.find((t) => t.lang === "en")
-        ?.slug,
-    };
+  const alternateSlugs = {
+    es: currentTranslation.post.translations.find((t) => t.lang === "es")
+      ?.slug,
+    en: currentTranslation.post.translations.find((t) => t.lang === "en")
+      ?.slug,
+  };
 
-    return {
-      id: currentTranslation.post.id,
-      date: currentTranslation.post.date.toISOString().split("T")[0],
-      // Fechas completas para el JSON-LD. `date` se queda como está porque es
-      // la que se pinta en la página.
-      datePublished: currentTranslation.post.date.toISOString(),
-      dateModified: currentTranslation.post.updatedAt?.toISOString() ?? null,
-      image: currentTranslation.post.image,
-      category: currentTranslation.post.category,
-      slug: currentTranslation.slug,
-      title: currentTranslation.title,
-      tags: currentTranslation.tags,
-      content: currentTranslation.content,
-      metaDescription: currentTranslation.metaDescription,
-      alternateSlugs,
-    };
-  } catch (error) {
-    console.error("Error fetching post by slug:", error);
-    return null;
-  }
+  return {
+    id: currentTranslation.post.id,
+    date: currentTranslation.post.date.toISOString().split("T")[0],
+    // Fechas completas para el JSON-LD. `date` se queda como está porque es
+    // la que se pinta en la página.
+    datePublished: currentTranslation.post.date.toISOString(),
+    dateModified: currentTranslation.post.updatedAt?.toISOString() ?? null,
+    image: currentTranslation.post.image,
+    category: currentTranslation.post.category,
+    slug: currentTranslation.slug,
+    title: currentTranslation.title,
+    tags: currentTranslation.tags,
+    content: currentTranslation.content,
+    metaDescription: currentTranslation.metaDescription,
+    alternateSlugs,
+  };
 }

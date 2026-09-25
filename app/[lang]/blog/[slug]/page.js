@@ -34,7 +34,9 @@ export async function generateMetadata({ params }) {
   const { slug, lang } = await params;
   const post = await getPostBySlug(slug, lang);
 
-  if (!post) return { title: "Post not found" };
+  // 404 real también desde los metadatos: devolver un title de "no
+  // encontrado" dejaba la página en 200 con la canónica del layout.
+  if (!post) notFound();
 
   const { title, content, image, alternateSlugs, metaDescription } = post;
 
