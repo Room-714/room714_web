@@ -337,3 +337,33 @@ Los tres posts publicados después del 25/09 caen en clusters del posicionamient
 
 Reparto a 2026-10-05 (76 posts): C1 9 · C2 29 · C3 12 · IA 15 · fuera de cluster 11.
 
+## 4. Enlazado interno: párrafos puente
+
+✋ **Propuesta, nada escrito en la BD.** Un párrafo nuevo por post e idioma, **antes del párrafo de cierre**. El cierre ya lleva desde el 25/09 el enlace a la página del cluster, así que el post se queda con dos enlaces a páginas propias, distintos. El anclaje es "cómo trabajamos", no una búsqueda reservada. Cuando estén aprobados, se aplicarían con un script idempotente y en modo de prueba por defecto, como los del 25/09, localizando cada post por slug. El script lo ejecutarías tú.
+
+**Visual density** · `visual-density-el-retorno-del-detalle-y-la-precision` · `visual-density-the-return-of-detail-and-precision` (C2)
+
+> **ES** La densidad no es una cuestión estética: es una decisión de experiencia de cliente. Cuánto detalle enseña una pantalla, y en qué momento, decide si quien usa tu producto digital actúa rápido o se pierde entre datos. Por eso diseñamos esas decisiones junto a la arquitectura y no después: es parte de [cómo trabajamos](/es/como-trabajamos).
+>
+> **EN** Density is not an aesthetic question: it is a customer experience decision. How much detail a screen shows, and when, decides whether the people using your digital product act quickly or get lost in data. That is why we design those decisions alongside the architecture, not after it: it is part of [how we work](/en/how-we-work).
+
+**Bento grids** · `bento-grids-como-dar-orden-al-caos-de-datos-de-la-ia` · `bento-grids-bringing-order-to-ai-data-chaos` (C2)
+
+> **ES** Una bento grid solo pone orden si cada bloque responde a algo que tu cliente necesita hacer. Organizar un producto digital por los objetivos de quien lo usa, y no por los datos que tenemos a mano, es lo que convierte un panel vistoso en una buena experiencia de cliente. Así planteamos el diseño desde el primer día, como contamos en [cómo trabajamos](/es/como-trabajamos).
+>
+> **EN** A bento grid only brings order if every block answers something your customer needs to do. Organising a digital product around the goals of the people who use it, not around the data we happen to have, is what turns a flashy dashboard into a good customer experience. That is how we approach design from day one, as we explain in [how we work](/en/how-we-work).
+
+**Observabilidad de agentes** · `observabilidad-agentes-ia-lo-que-los-logs-no-te-cuentan` · `agent-observability-what-logs-dont-tell-you` (IA)
+
+> **ES** Un agente que falla en silencio no es solo un problema técnico: es un cliente que recibe una respuesta equivocada sin que nadie se entere. Medir lo que hace la IA dentro de un producto digital es medir la experiencia de cliente que entrega. Por eso, cuando ponemos un agente en producción, la observabilidad se diseña desde el principio; es parte de [cómo trabajamos](/es/como-trabajamos).
+>
+> **EN** An agent that fails silently is not just a technical problem: it is a customer getting the wrong answer without anyone noticing. Measuring what AI does inside a digital product means measuring the customer experience it delivers. That is why, when we put an agent into production, observability is designed in from the start; it is part of [how we work](/en/how-we-work).
+
+**Chat is the wrong interface for AI** · `interfaz-de-ia-el-chat-no-es-la-respuesta-a-todo` · `ai-interface-design-chat-is-not-the-universal-answer` (IA)
+
+> **ES** Elegir entre un chat, un formulario o un botón no es un detalle de interfaz: define cuánto esfuerzo le pide tu producto digital a cada cliente. Una IA bien integrada se nota en la experiencia de cliente, no en la cantidad de conversación que genera. Por eso decidimos la modalidad con el diseño y la tecnología delante, como contamos en [cómo trabajamos](/es/como-trabajamos).
+>
+> **EN** Choosing between a chat, a form or a button is not an interface detail: it sets how much effort your digital product asks of each customer. Well-integrated AI shows in the customer experience, not in how much conversation it generates. That is why we choose the modality with design and technology in front of us, as we explain in [how we work](/en/how-we-work).
+
+Los slugs y el cluster salen de los datos del 25/09 en el repo. Antes de aplicar nada, hay que confirmar con el fixture que siguen siendo los mismos.
+
