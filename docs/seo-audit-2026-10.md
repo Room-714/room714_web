@@ -367,3 +367,32 @@ Reparto a 2026-10-05 (76 posts): C1 9 · C2 29 · C3 12 · IA 15 · fuera de clu
 
 Los slugs y el cluster salen de los datos del 25/09 en el repo. Antes de aplicar nada, hay que confirmar con el fixture que siguen siendo los mismos.
 
+## 5. Higiene de indexación
+
+**Sitemap.** Se comprobó `/sitemap.xml` servido en local y se cruzó con la auditoría de la tarea 1.
+- **Páginas y categorías: 34 URLs, todas correctas.** Todas responden 200 sin redirección, su canonical es la propia URL, ninguna lleva `noindex` y ninguna cae bajo un `Disallow`. Solo quedan fuera las 6 legales, que llevan `noindex` y no deben estar.
+- **Posts.** El sitemap y la página del post usan el mismo filtro (`published` y `date <= now`) y la misma función para la URL (`blogUrl`), así que por construcción salen con 200 y su canonical. El único caso que podría escaparse es un slug publicado que además figure como origen en `PostRedirect`: la página redirigiría y el sitemap lo seguiría anunciando. Ver más abajo: con la copia del 30/08 no hay ninguno.
+
+**robots.txt** (`app/robots.js`): `Allow: /` y `Disallow` de `/api/`, `/private/` y `/admin/`. No bloquea nada que deba indexarse. `/_next/` no está bloqueado, como debe ser: ahí viven el CSS y el JS. `/llms.txt` está permitido. **Sin cambios.**
+
+**Enlaces internos de las plantillas** (menú, footer, CTA, tarjetas). Se sacaron los `<a href>` de las 40 páginas servidas en local: hay 40 destinos internos distintos y **todos responden 200 sin redirección**. En el código no hay ninguna ruta antigua escrita a mano (`/about`, `/contact`, `/projects`, `/diagnostic`, `/legal`) ni enlaces sin idioma: todo sale de `app/lib/routes.mjs`. **Sin cambios.**
+
+**Enlaces dentro del cuerpo de los posts.** Del fixture salen 8 enlaces que no van a un post publicado. El destino final sale de la copia de `PostRedirect` del 30/08 (`backup-consolidacion-2026-08-30.json`, en el repo), sin más lecturas de la BD. En los 6 primeros, la redirección del 30/08 lleva a un post que sigue publicado. Los 2 últimos apuntan a un slug que nunca tuvo redirección: lo más probable es que den 404, y el destino propuesto es el post de *user research* actual.
+
+✋ **Propuesta, nada escrito en la BD.** Se cambiaría solo el `href`, con el mismo script idempotente que el resto. El anclaje no cambia.
+
+| Post | Enlace actual | ✋ Destino final propuesto |
+|---|---|---|
+| /en/blog/the-lying-prototype-why-your-usability-tests-are-giving-you-bad-data | /en/blog/the-designer-who-ships-code-evolution-or-trap | /en/blog/designers-in-the-ai-era-judgment-is-the-last-thing-to-go |
+| /es/blog/el-prototipo-que-miente-por-que-tus-tests-de-usabilidad-estan-contaminados | /es/blog/el-disenador-que-entrega-codigo-evolucion-o-trampa | /es/blog/disenadores-en-la-era-de-la-ia-el-juicio-no-se-automatiza |
+| /en/blog/ux-roi-isnt-proven-with-pretty-metrics-its-proven-with-decisions | /en/blog/usability-as-a-filter-to-avoid-cognitive-overload | /en/blog/design-as-an-antidote-to-cognitive-fatigue |
+| /es/blog/el-roi-de-ux-no-se-demuestra-con-metricas-bonitas-se-demuestra-con-decisiones | /es/blog/la-usabilidad-como-filtro-para-evitar-la-fatiga-cognitiva | /es/blog/el-diseno-como-antidoto-a-la-fatiga-cognitiva |
+| /en/blog/one-big-app-or-thirty-small-ones-the-product-math-nobody-does | /en/blog/ai-isnt-a-problem-its-maybe-a-solution-returning-to-jtbd | /en/blog/build-before-validating-the-product-mistake-killing-startups |
+| /es/blog/una-app-grande-o-treinta-pequenas-la-matematica-de-producto-que-nadie-hace | /es/blog/ia-no-es-un-problema-es-quizas-una-solucion-volviendo-al-jtbd | /es/blog/construir-antes-de-validar-el-error-de-producto-que-destruye-startups |
+| /en/blog/the-lying-prototype-why-your-usability-tests-are-giving-you-bad-data | /en/blog/user-research-dies-when-it-becomes-a-deliverable | /en/blog/user-research-the-asset-that-dies-the-moment-it-becomes-a-deliverable |
+| /en/blog/emotionally-intelligent-design-the-frontier-beyond-utility | /en/blog/user-research-dies-when-it-becomes-a-deliverable | quitar este `<a>`: envuelve otro enlace (`<a><a href="…intentional-friction…">`), HTML inválido. El enlace interior se queda. |
+
+La redirección del 30/08 podría haber cambiado después. Antes de aplicar, el script debería comprobar cada destino contra el fixture.
+
+**`PostRedirect` frente al sitemap.** Ningún slug publicado hoy figura como origen en la copia de `PostRedirect` del 30/08, así que no hay posts del sitemap que redirijan, al menos con esos datos. Las redirecciones creadas después del 30/08 no están comprobadas: no entraban en la lectura autorizada.
+
