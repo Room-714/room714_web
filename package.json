@@ -15,14 +15,14 @@
     "@anthropic-ai/sdk": "^0.95.2",
     "@next/third-parties": "^16.1.2",
     "@prisma/client": "^6.2.1",
-    "@tiptap/pm": "^3.17.1",
-    "@tiptap/react": "^3.17.1",
-    "@tiptap/starter-kit": "^3.17.1",
+    "@tiptap/pm": "^3.31.4",
+    "@tiptap/react": "^3.31.4",
+    "@tiptap/starter-kit": "^3.31.4",
     "@vercel/analytics": "^2.0.1",
     "@vercel/blob": "^2.0.1",
     "framer-motion": "^12.38.0",
     "lucide-react": "^0.562.0",
-    "next": "^16.2.6",
+    "next": "^16.3.8",
     "next-auth": "^4.24.13",
     "react": "19.2.3",
     "react-dom": "19.2.3",
@@ -36,7 +36,7 @@
     "eslint-config-next": "16.1.1",
     "prisma": "^6.2.1",
     "tailwindcss": "^4",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.11"
   },
   "overrides": {
     "postcss": "^8.5.10"
