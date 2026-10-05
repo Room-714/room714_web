@@ -396,3 +396,43 @@ La redirección del 30/08 podría haber cambiado después. Antes de aplicar, el 
 
 **`PostRedirect` frente al sitemap.** Ningún slug publicado hoy figura como origen en la copia de `PostRedirect` del 30/08, así que no hay posts del sitemap que redirijan, al menos con esos datos. Las redirecciones creadas después del 30/08 no están comprobadas: no entraban en la lectura autorizada.
 
+## 6. Datos estructurados de los posts
+
+**Verificado** en `articleSchema` ([app/lib/seo/schema.js](../app/lib/seo/schema.js)) y en `app/[lang]/blog/[slug]/page.js`. Cada post emite un `@graph` con `BlogPosting` y `BreadcrumbList`:
+- `headline`: el título.
+- `datePublished`: la fecha de publicación (ISO).
+- `author`: `{ "@id": …/#jose-antonio-ces-franjo }`. La `Person` la declara el layout en la misma página, así que la referencia se resuelve.
+- `inLanguage`: `es-ES` o `en-US`.
+
+También lleva `description`, `image`, `dateModified` (el `updatedAt` real), `publisher` y `mainEntityOfPage`.
+
+**Añadido: `about`.** `{ "@type": "Thing", "name": <nombre del cluster en el idioma del post> }`. El cluster sale de `clusterOfContent`, es decir, del enlace del post a la página de su cluster. Los posts fuera de cluster no lo llevan. Por ejemplo, un post de C2 en español da `"name": "Diseño de producto y experiencia de cliente"`. Para IA el nombre es el de `clusters.js`, "IA aplicada al producto (ligada a experiencia de cliente)". ✋ Si se prefiere sin el paréntesis, habría que añadir a `clusters.js` un campo de tema aparte; no lo he hecho para no cambiar los nombres.
+
+Hay tests nuevos en `schema.test.js` (campos obligatorios, `about` presente y ausente). **El schema de Organization no cambia.**
+
+## Resumen
+
+### Cambiado en esta rama
+| Tarea | Cambio |
+|---|---|
+| 1 | Informe y `scripts/seo-auditar-rutas.mjs` (auditoría local de la HTML servida), con datos en `seo/fixtures/rutas-metadatos.json`. |
+| 3 | `clusterFromHrefs`, `clusterOfContent` y `CLUSTERS_POSICIONAMIENTO` en `clusters.js`; test `clusters.test.js`; `scripts/seo-exportar-fixture-posts.mjs` y el fixture `seo/fixtures/posts-publicados.json`; `scripts/seo-informe-posts.mjs`. |
+| 5 | Ninguno: sitemap, robots.txt y enlaces de las plantillas están bien. |
+| 6 | `about` en el `BlogPosting` de los posts con cluster. |
+
+Ningún cambio visible: ni copy, ni diseño, ni layout, ni navegación. Tampoco se ha tocado la BD ni el schema de Prisma.
+
+### ✋ Pendiente de aprobación (una por una)
+1. Las tres descripciones de categoría más largas de 155 (tarea 1a).
+2. Copy de Cómo trabajamos: opción A (intro) u opción B (método), y opcionalmente el H1 (tarea 2).
+3. Si se quita IA de las opciones del generador para posts nuevos (tarea 3).
+4. Los cuatro párrafos puente (tarea 4).
+5. Los 8 enlaces de posts que van a una redirección o a un 404 (tarea 5).
+6. `about` de IA con o sin el paréntesis (tarea 6).
+
+### Verificación
+- **Lectura de prod:** una sola, la SELECT del fixture, con `connection_limit=1`. No ha habido más.
+- **Build:** `next build` local contra prod con `connection_limit=1` y `experimental.cpus: 1`, este último solo para esa ejecución. Ha terminado sin errores. El cambio en `next.config.mjs` está revertido y no entra en la rama.
+- **vitest:** 186 de 186.
+- **Comprobaciones sin datos actuales:** `about` en la HTML real de un post no se ha visto, porque los posts se renderizan bajo demanda y verlo exigiría otra lectura; lo cubren los tests unitarios. Las redirecciones creadas después del 30/08 tampoco están comprobadas.
+- **Lint.** `npx eslint` da 2 errores que ya estaban en `main` (`react/no-unescaped-entities` en `app/(admin-zone)/admin/components/RegenerateModal.js:104`), fuera del alcance de esta rama. Los ficheros de esta rama pasan sin errores.

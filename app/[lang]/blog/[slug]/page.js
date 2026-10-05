@@ -12,6 +12,7 @@ import {
   breadcrumbSchema,
   jsonLdGraph,
 } from "@/app/lib/seo/schema";
+import { CLUSTERS, clusterOfContent } from "@/app/lib/seo/clusters";
 import { LINKEDIN_FOUNDER, withUtm } from "@/app/lib/links";
 import { prisma } from "@/app/lib/prisma";
 import { ArrowLeft } from "lucide-react";
@@ -120,6 +121,7 @@ export default async function PostPage({ params }) {
     ? image
     : `${SITE_URL}${image?.startsWith("/") ? "" : "/"}${image}`;
   const pageUrl = blogUrl(lang, post.slug);
+  const cluster = clusterOfContent(content, lang);
 
   const blogJsonLd = jsonLdGraph(
     articleSchema({
@@ -131,6 +133,7 @@ export default async function PostPage({ params }) {
       datePublished: post.datePublished,
       dateModified: post.dateModified,
       articleBody: plainText,
+      about: cluster ? CLUSTERS[cluster].name[lang] : null,
     }),
     breadcrumbSchema([
       { name: dict.nav.home, url: `${SITE_URL}/${lang}` },
