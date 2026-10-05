@@ -258,3 +258,24 @@ Cómo se calcula cada columna:
 
 </details>
 
+## 2. Cómo trabajamos: edición mínima de copy
+
+✋ **Nada aplicado.** Son ediciones del diccionario (`about.hero.description` o `about.metodo.pasos[0].body` en `app/dictionaries/{es,en}.json`). No cambian diseño, layout ni tono. El title y la description de la página no se tocan.
+
+**Opción A (recomendada), en la intro (`about.hero.description`).** Cambia una frase.
+
+| | Actual | Propuesta |
+|---|---|---|
+| ES | Somos un equipo de ingenieros con foco en el producto: en su diseño, en su usabilidad y en su arquitectura. Nos centramos en lo que puede cambiar tu cuenta de resultados. | Somos un equipo de ingenieros especialistas en **producto digital**: en su diseño, en su usabilidad y en su arquitectura, con la **experiencia de cliente** como medida. Nos centramos en lo que puede cambiar tu cuenta de resultados. |
+| EN | We are a team of engineers focused on the product: on its design, its usability and its architecture. We concentrate on what can change your P&L. | We are a team of engineers specialising in **digital product**: its design, its usability and its architecture, with **customer experience** as the yardstick. We concentrate on what can change your P&L. |
+
+**Opción B, en "El método", paso 1 (`about.metodo.pasos[0].body`).** Para quien prefiera no tocar la intro.
+
+| | Actual | Propuesta |
+|---|---|---|
+| ES | Miramos las tres cosas a la vez: cómo usan el producto tus clientes o tu equipo, qué tecnología hay debajo y qué negocio hay detrás. Entregamos un plan priorizado con estimación. | Miramos las tres cosas a la vez: la **experiencia de cliente** (o de tu equipo) con el **producto digital**, qué tecnología hay debajo y qué negocio hay detrás. Entregamos un plan priorizado con estimación. |
+| EN | We look at all three at once: how your customers or your team use the product, what technology sits underneath, and what business sits behind it. We deliver a prioritised plan with estimates. | We look at all three at once: the **customer experience** (or your team's) with the **digital product**, what technology sits underneath, and what business sits behind it. We deliver a prioritised plan with estimates. |
+
+**H1.** Se mantiene "No somos una agencia al uso ni una consultora" / "We are not your usual agency, nor a consultancy".
+✋ *Opción, solo si se quiere:* "No somos una agencia al uso ni una consultora: somos un estudio de producto digital" / "We are not your usual agency, nor a consultancy: we are a digital product studio". Refuerza "estudio de producto digital", la búsqueda asignada a esta página, pero alarga un titular que hoy funciona.
+
