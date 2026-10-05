@@ -24,11 +24,11 @@ const baseUrl = SITE_URL;
 
 const SEO_DESCRIPTIONS = {
   TECH: {
-    es: "Análisis y opiniones sobre tecnología aplicada a producto digital: IA, modelos pequeños (SLM), arquitectura, MCP, RAG y eficiencia computacional. La visión de Room 714.",
-    en: "Analysis and opinions on technology applied to digital product: AI, small language models (SLMs), architecture, MCP, RAG, and computational efficiency. Room 714's view.",
+    es: "Tecnología aplicada al producto digital: IA, modelos pequeños (SLM), arquitectura, MCP, RAG y eficiencia computacional. La visión de Room 714.",
+    en: "Technology applied to digital product: AI, small language models (SLMs), architecture, MCP, RAG and computational efficiency. Room 714's view.",
   },
   PRODUCT: {
-    es: "Estrategia de producto, Jobs-to-be-Done (JTBD), Product-Led Growth, y por qué la mayoría de productos con IA no la necesitan. Análisis crítico desde Room 714.",
+    es: "Estrategia de producto digital, Jobs-to-be-Done (JTBD), Product-Led Growth y por qué muchos productos con IA no la necesitan. Análisis de Room 714.",
     en: "Product strategy, Jobs-to-be-Done (JTBD), Product-Led Growth, and why most AI-enabled products don't actually need AI. Critical analysis from Room 714.",
   },
   UX: {

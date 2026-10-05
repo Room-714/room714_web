@@ -1,0 +1,2481 @@
+{
+  "exportedAt": "2026-10-05T16:44:38.073Z",
+  "query": "PostTranslation ⨝ Post WHERE published AND date <= now() (una SELECT, connection_limit=1)",
+  "posts": [
+    {
+      "postId": 156,
+      "slug": "apis-for-ai-agents-contract-your-backend-hasnt-signed",
+      "locale": "en",
+      "title": "APIs for AI Agents: The Contract Your Backend Still Hasn't Signed",
+      "metaTitle": "APIs for AI Agents: The Broken Contract",
+      "metaDescription": "Your APIs were designed for humans who read errors. An AI agent doesn't read — it retries. Why your backend architecture needs an explicit contract before",
+      "publishedAt": "2026-10-05T05:30:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/en/blog/agent-observability-what-logs-dont-tell-you",
+        "/en/blog/ai-agents-production-test-suite-passes-users-suffer",
+        "/en/blog/ai-tool-orchestration-problem-not-how-many-you-use",
+        "/en/blog/architecture-without-purpose-scaling-before-understanding-costly-mistake",
+        "/en/blog/enterprise-ai-pilot-that-never-scales-demo-to-production",
+        "/en/product-for-your-team"
+      ]
+    },
+    {
+      "postId": 156,
+      "slug": "apis-para-agentes-ia-contrato-que-tu-backend-no-ha-firmado",
+      "locale": "es",
+      "title": "APIs para Agentes: El Contrato que tu Backend Todavía No Ha Firmado",
+      "metaTitle": "APIs para Agentes IA: El Contrato Roto",
+      "metaDescription": "Tus APIs fueron diseñadas para humanos que leen errores. Un agente de IA no lee: reintenta. Por qué la arquitectura de tu backend necesita un contrato",
+      "publishedAt": "2026-10-05T05:30:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/es/blog/agentes-en-produccion-suite-de-tests-pasa-usuarios-sufren",
+        "/es/blog/arquitectura-sin-proposito-escalar-antes-de-entender-error-caro",
+        "/es/blog/observabilidad-agentes-ia-lo-que-los-logs-no-te-cuentan",
+        "/es/blog/orquestacion-herramientas-ia-problema-no-es-cuantas-usas",
+        "/es/blog/piloto-ia-empresarial-que-nunca-escala-demo-a-produccion",
+        "/es/producto-para-tu-equipo"
+      ]
+    },
+    {
+      "postId": 155,
+      "slug": "ux-business-case-defend-design-decisions-boardroom",
+      "locale": "en",
+      "title": "The UX Business Case That Actually Holds Up: How to Defend Design Decisions in the Boardroom",
+      "metaTitle": "UX Business Case That Survives the Board",
+      "metaDescription": "Saying UX \"improves the experience\" won't survive a budget meeting. Here's how to translate design decisions into business language that actually holds up",
+      "publishedAt": "2026-09-30T05:30:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/en/blog/dashboards-that-decide-data-visualization-ux",
+        "/en/blog/intentional-friction-designing-resistance-as-a-feature-not-a-bug",
+        "/en/blog/the-problem-before-the-problem-diagnosis-is-the-real-design-work",
+        "/en/cases/saas-support-self-service",
+        "/en/product-for-your-customers"
+      ]
+    },
+    {
+      "postId": 155,
+      "slug": "roi-de-ux-que-sobrevive-al-comite-defender-decision-de-diseno",
+      "locale": "es",
+      "title": "El ROI de UX que Sobrevive al Comité: Cómo Defender una Decisión de Diseño sin Morir en el Intento",
+      "metaTitle": "ROI de UX que Sobrevive al Comité",
+      "metaDescription": "Argumentar mejoras de UX con \"mejora la experiencia\" no convence a nadie con presupuesto. Te explicamos cómo traducir decisiones de diseño a lenguaje de",
+      "publishedAt": "2026-09-30T05:30:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/es/blog/dashboards-que-deciden-visualizacion-de-datos-ux",
+        "/es/blog/el-problema-antes-del-problema-diagnostico-es-el-diseno",
+        "/es/blog/friccion-intencionada-diseno-que-dice-no-para-que-el-usuario-gane",
+        "/es/casos/saas-soporte-autogestion",
+        "/es/producto-para-tus-clientes"
+      ]
+    },
+    {
+      "postId": 154,
+      "slug": "context-vs-memory-ai-systems-production",
+      "locale": "en",
+      "title": "Context vs. Memory in AI Systems: The Misunderstanding That Breaks Production",
+      "metaTitle": "Context vs. Memory in AI: Architecture Mistake",
+      "metaDescription": "Mixing up context and memory in AI systems isn't a minor detail—it's the architectural mistake that turns your production agents into unpredictable black",
+      "publishedAt": "2026-09-28T05:30:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/en/blog/agent-observability-what-logs-dont-tell-you",
+        "/en/blog/ai-agents-production-test-suite-passes-users-suffer",
+        "/en/blog/hidden-cost-ai-developer-tools-productivity-trap",
+        "/en/blog/reliability-without-guarantees-ai-consistency-problem-teams-ignore",
+        "/en/product-for-your-team"
+      ]
+    },
+    {
+      "postId": 154,
+      "slug": "contexto-vs-memoria-ia-sistemas-produccion",
+      "locale": "es",
+      "title": "Contexto vs. Memoria en IA: El Malentendido que Rompe tus Sistemas en Producción",
+      "metaTitle": "Contexto vs. Memoria en IA: Error de Arquitectura",
+      "metaDescription": "Confundir contexto y memoria en sistemas de IA no es un matiz técnico: es el error que convierte tus agentes en producción en cajas negras impredecibles.",
+      "publishedAt": "2026-09-28T05:30:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/es/blog/agentes-en-produccion-suite-de-tests-pasa-usuarios-sufren",
+        "/es/blog/coste-oculto-herramientas-ia-para-desarrolladores",
+        "/es/blog/fiabilidad-sin-garantias-el-problema-de-consistencia-en-sistemas-ia",
+        "/es/blog/observabilidad-agentes-ia-lo-que-los-logs-no-te-cuentan",
+        "/es/producto-para-tu-equipo"
+      ]
+    },
+    {
+      "postId": 153,
+      "slug": "the-problem-before-the-problem-diagnosis-is-the-real-design-work",
+      "locale": "en",
+      "title": "The Problem Before the Problem: Why Diagnosis Is the Real Design Work",
+      "metaTitle": "Product diagnosis: the problem before the brief",
+      "metaDescription": "Redesigning without a diagnosis fixes the wrong symptom. How to separate symptom from cause before the brief, with JTBD and tools that work.",
+      "publishedAt": "2026-09-23T05:30:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/en/blog/dashboards-that-decide-data-visualization-ux",
+        "/en/blog/no-interface-illusion-invisible-ux-not-same-as-good-ux",
+        "/en/blog/technically-correct-experientially-broken-the-bug-no-ticket-captures",
+        "/en/blog/the-ai-nobody-asked-for-when-ai-features-are-just-noise",
+        "/en/blog/user-research-the-asset-that-dies-the-moment-it-becomes-a-deliverable",
+        "/en/starting-from-scratch"
+      ]
+    },
+    {
+      "postId": 153,
+      "slug": "el-problema-antes-del-problema-diagnostico-es-el-diseno",
+      "locale": "es",
+      "title": "El Problema antes del Problema: Por qué el Diagnóstico es el Diseño",
+      "metaTitle": "Diagnóstico de producto antes del brief",
+      "metaDescription": "Rediseñar sin diagnosticar resuelve el síntoma equivocado. Cómo separar síntoma y causa antes del brief, con JTBD y herramientas que funcionan.",
+      "publishedAt": "2026-09-23T05:30:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/es/blog/codigo-correcto-experiencia-rota-el-fallo-que-el-ticket-no-describe",
+        "/es/blog/dashboards-que-deciden-visualizacion-de-datos-ux",
+        "/es/blog/interfaces-sin-botones-mejor-ux-es-no-ver-nada",
+        "/es/blog/investigacion-de-usuario-muere-cuando-se-convierte-en-entregable",
+        "/es/blog/la-ia-que-nadie-pidio-cuando-añadir-inteligencia-es-ruido",
+        "/es/empezar-de-cero"
+      ]
+    },
+    {
+      "postId": 152,
+      "slug": "ai-tool-orchestration-problem-not-how-many-you-use",
+      "locale": "en",
+      "title": "AI Tool Orchestration: The Real Problem Isn't How Many You Use — It's That You Don't Know Why",
+      "metaTitle": "AI tool orchestration: fix your stack",
+      "metaDescription": "Three to six chained AI tools are not an architecture. How to move from a stack built by inertia to a pipeline that is designed and governable.",
+      "publishedAt": "2026-09-21T05:30:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/en/ai-in-the-product",
+        "/en/blog/agent-observability-what-logs-dont-tell-you",
+        "/en/blog/ai-agents-production-test-suite-passes-users-suffer",
+        "/en/blog/architecture-without-purpose-scaling-before-understanding-costly-mistake",
+        "/en/blog/enterprise-ai-pilot-that-never-scales-demo-to-production",
+        "/en/blog/hidden-cost-ai-developer-tools-productivity-trap",
+        "/en/blog/reliability-without-guarantees-ai-consistency-problem-teams-ignore"
+      ]
+    },
+    {
+      "postId": 152,
+      "slug": "orquestacion-herramientas-ia-problema-no-es-cuantas-usas",
+      "locale": "es",
+      "title": "Orquestación de Herramientas de IA: El Problema no es Cuántas Usas, sino Que no Sabes por Qué",
+      "metaTitle": "Orquestación de herramientas de IA en tu stack",
+      "metaDescription": "Tres a seis herramientas de IA encadenadas no son una arquitectura. Cómo pasar de un stack construido por inercia a un pipeline decidido y gobernable.",
+      "publishedAt": "2026-09-21T05:30:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/es/blog/agentes-en-produccion-suite-de-tests-pasa-usuarios-sufren",
+        "/es/blog/arquitectura-sin-proposito-escalar-antes-de-entender-error-caro",
+        "/es/blog/coste-oculto-herramientas-ia-para-desarrolladores",
+        "/es/blog/fiabilidad-sin-garantias-el-problema-de-consistencia-en-sistemas-ia",
+        "/es/blog/observabilidad-agentes-ia-lo-que-los-logs-no-te-cuentan",
+        "/es/blog/piloto-ia-empresarial-que-nunca-escala-demo-a-produccion",
+        "/es/ia-en-el-producto"
+      ]
+    },
+    {
+      "postId": 151,
+      "slug": "no-interface-illusion-invisible-ux-not-same-as-good-ux",
+      "locale": "en",
+      "title": "The No-Interface Illusion: Why Invisible UX Is Not the Same as Good UX",
+      "metaTitle": "Invisible UX: when removing buttons hurts",
+      "metaDescription": "The invisible interface promises less friction and often takes control away from users. How to decide what to hide and when to hand back the wheel.",
+      "publishedAt": "2026-09-16T05:30:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/en/blog/ai-agents-production-test-suite-passes-users-suffer",
+        "/en/blog/novelty-budget-interfaces-that-innovate-too-fast-lose-the-user",
+        "/en/blog/reversibility-design-criterion-nobody-briefs-ai-makes-urgent",
+        "/en/product-for-your-customers"
+      ]
+    },
+    {
+      "postId": 151,
+      "slug": "interfaces-sin-botones-mejor-ux-es-no-ver-nada",
+      "locale": "es",
+      "title": "Interfaces sin Botones: Cuando la \"Mejor UX\" es No Ver Nada (y Por Qué Eso nos Preocupa)",
+      "metaTitle": "UX invisible: cuándo quitar botones empeora la UX",
+      "metaDescription": "La interfaz invisible promete menos fricción y a menudo quita control al usuario. Cómo decidir qué ocultar y cuándo devolver el volante.",
+      "publishedAt": "2026-09-16T05:30:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/es/blog/agentes-en-produccion-suite-de-tests-pasa-usuarios-sufren",
+        "/es/blog/presupuesto-de-novedad-interfaces-que-innovan-demasiado-rapido-pierden-al-usuario",
+        "/es/blog/reversibilidad-criterio-diseno-que-nadie-pone-en-el-brief",
+        "/es/producto-para-tus-clientes"
+      ]
+    },
+    {
+      "postId": 150,
+      "slug": "ai-agents-production-test-suite-passes-users-suffer",
+      "locale": "en",
+      "title": "Agent Testing Theater: Why Your Test Suite Passes and Your Users Still Suffer",
+      "metaTitle": "Testing AI agents in production",
+      "metaDescription": "Your agent test suite passes and users still suffer. The blind spots between staging and production, and how to measure what matters.",
+      "publishedAt": "2026-09-14T05:30:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/en/ai-in-the-product",
+        "/en/blog/agent-observability-what-logs-dont-tell-you",
+        "/en/blog/ai-in-production-the-hard-part-after-the-pilot-works",
+        "/en/blog/architecture-without-purpose-scaling-before-understanding-costly-mistake",
+        "/en/blog/reliability-without-guarantees-ai-consistency-problem-teams-ignore",
+        "/en/blog/systems-that-fail-without-breaking-stability-is-not-resilience"
+      ]
+    },
+    {
+      "postId": 150,
+      "slug": "agentes-en-produccion-suite-de-tests-pasa-usuarios-sufren",
+      "locale": "es",
+      "title": "Agentes en Producción: Por qué tu Suite de Tests Pasa y tus Usuarios Sufren",
+      "metaTitle": "Testing de agentes de IA en producción",
+      "metaDescription": "Tu suite de tests de agentes pasa y los usuarios siguen sufriendo. Los puntos ciegos entre staging y producción y cómo medir lo que importa.",
+      "publishedAt": "2026-09-14T05:30:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/es/blog/arquitectura-sin-proposito-escalar-antes-de-entender-error-caro",
+        "/es/blog/fiabilidad-sin-garantias-el-problema-de-consistencia-en-sistemas-ia",
+        "/es/blog/ia-en-produccion-lo-que-nadie-cuenta-cuando-el-piloto-funciona",
+        "/es/blog/observabilidad-agentes-ia-lo-que-los-logs-no-te-cuentan",
+        "/es/blog/sistemas-que-fallan-sin-romperse-estabilidad-no-es-resiliencia",
+        "/es/ia-en-el-producto"
+      ]
+    },
+    {
+      "postId": 149,
+      "slug": "dashboards-that-decide-data-visualization-ux",
+      "locale": "en",
+      "title": "Dashboards That Actually Decide: Why Most Data Visualizations Are Just Expensive Wallpaper",
+      "metaTitle": "Dashboards that help decisions, not decor",
+      "metaDescription": "Most dashboards show data with no decision hierarchy. How to design internal dashboards that answer the question your team actually has.",
+      "publishedAt": "2026-09-09T05:30:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/en/blog/intentional-friction-designing-resistance-as-a-feature-not-a-bug",
+        "/en/blog/novelty-budget-interfaces-that-innovate-too-fast-lose-the-user",
+        "/en/blog/user-research-the-asset-that-dies-the-moment-it-becomes-a-deliverable",
+        "/en/blog/ux-improvements-that-improve-nothing-optimizing-the-wrong-thing",
+        "/en/product-for-your-team"
+      ]
+    },
+    {
+      "postId": 149,
+      "slug": "dashboards-que-deciden-visualizacion-de-datos-ux",
+      "locale": "es",
+      "title": "Dashboards que Deciden: Por qué el 90% de las Visualizaciones de Datos No Sirven para Nada",
+      "metaTitle": "Dashboards que ayudan a decidir, no a decorar",
+      "metaDescription": "La mayoría de dashboards muestran datos sin jerarquía de decisión. Cómo diseñar paneles internos que respondan a la pregunta que tu equipo tiene.",
+      "publishedAt": "2026-09-09T05:30:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/es/blog/friccion-intencionada-diseno-que-dice-no-para-que-el-usuario-gane",
+        "/es/blog/investigacion-de-usuario-muere-cuando-se-convierte-en-entregable",
+        "/es/blog/mejoras-de-ux-que-no-mejoran-nada-optimizar-lo-que-no-importa",
+        "/es/blog/presupuesto-de-novedad-interfaces-que-innovan-demasiado-rapido-pierden-al-usuario",
+        "/es/producto-para-tu-equipo"
+      ]
+    },
+    {
+      "postId": 148,
+      "slug": "agent-observability-what-logs-dont-tell-you",
+      "locale": "en",
+      "title": "Agent Observability: What Logs Don't Tell You (and Where the Real Answer Lives)",
+      "metaTitle": "AI agent observability beyond logs",
+      "metaDescription": "An agent can return perfect JSON and still get the substance wrong. What to instrument, what to measure and how to set an operational baseline.",
+      "publishedAt": "2026-09-07T05:30:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/en/ai-in-the-product",
+        "/en/blog/ai-delegation-managements-oldest-question-new-riskier-answer",
+        "/en/blog/ai-in-production-the-hard-part-after-the-pilot-works",
+        "/en/blog/post-launch-live-software-does-not-end-it-begins",
+        "/en/blog/reliability-without-guarantees-ai-consistency-problem-teams-ignore",
+        "/en/blog/systems-that-fail-without-breaking-stability-is-not-resilience"
+      ]
+    },
+    {
+      "postId": 148,
+      "slug": "observabilidad-agentes-ia-lo-que-los-logs-no-te-cuentan",
+      "locale": "es",
+      "title": "Observabilidad de Agentes: Lo que los Logs No Te Cuentan (y Dónde Sí Está la Respuesta)",
+      "metaTitle": "Observabilidad de agentes de IA: más que logs",
+      "metaDescription": "Un agente puede devolver el JSON perfecto y fallar en el fondo. Qué instrumentar, qué medir y cómo fijar una línea base operativa.",
+      "publishedAt": "2026-09-07T05:30:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/es/blog/delegacion-ia-la-pregunta-de-gestion-mas-antigua-tiene-respuesta-nueva",
+        "/es/blog/fiabilidad-sin-garantias-el-problema-de-consistencia-en-sistemas-ia",
+        "/es/blog/ia-en-produccion-lo-que-nadie-cuenta-cuando-el-piloto-funciona",
+        "/es/blog/post-lanzamiento-software-vivo-no-termina-empieza",
+        "/es/blog/sistemas-que-fallan-sin-romperse-estabilidad-no-es-resiliencia",
+        "/es/ia-en-el-producto"
+      ]
+    },
+    {
+      "postId": 147,
+      "slug": "novelty-budget-interfaces-that-innovate-too-fast-lose-the-user",
+      "locale": "en",
+      "title": "The Novelty Budget: Why Interfaces That Innovate Too Fast Lose the User",
+      "metaTitle": "Novelty budget: innovate without losing users",
+      "metaDescription": "Every convention you break costs user attention. How to spend an interface's novelty budget and where to concentrate it.",
+      "publishedAt": "2026-09-02T05:30:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/en/blog/behavioral-economics-in-ux-the-hidden-friction-nobody-talks-about",
+        "/en/blog/intentional-friction-designing-resistance-as-a-feature-not-a-bug",
+        "/en/blog/reversibility-design-criterion-nobody-briefs-ai-makes-urgent",
+        "/en/blog/technically-correct-experientially-broken-the-bug-no-ticket-captures",
+        "/en/blog/ux-improvements-that-improve-nothing-optimizing-the-wrong-thing",
+        "/en/product-for-your-customers"
+      ]
+    },
+    {
+      "postId": 147,
+      "slug": "presupuesto-de-novedad-interfaces-que-innovan-demasiado-rapido-pierden-al-usuario",
+      "locale": "es",
+      "title": "El Presupuesto de Novedad: Por qué las Interfaces que Innovan Demasiado Rápido Pierden al Usuario",
+      "metaTitle": "Presupuesto de novedad en el diseño de interfaces",
+      "metaDescription": "Cada convención que rompes cuesta atención al usuario. Cómo repartir el presupuesto de novedad de una interfaz y dónde concentrarlo.",
+      "publishedAt": "2026-09-02T05:30:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/es/blog/codigo-correcto-experiencia-rota-el-fallo-que-el-ticket-no-describe",
+        "/es/blog/economia-del-comportamiento-lo-que-el-ux-ignora-cuando-disena-para-humanos",
+        "/es/blog/friccion-intencionada-diseno-que-dice-no-para-que-el-usuario-gane",
+        "/es/blog/mejoras-de-ux-que-no-mejoran-nada-optimizar-lo-que-no-importa",
+        "/es/blog/reversibilidad-criterio-diseno-que-nadie-pone-en-el-brief",
+        "/es/producto-para-tus-clientes"
+      ]
+    },
+    {
+      "postId": 146,
+      "slug": "reliability-without-guarantees-ai-consistency-problem-teams-ignore",
+      "locale": "en",
+      "title": "Reliability Without Guarantees: The AI Consistency Problem Teams Ignore Until It Bites Back",
+      "metaTitle": "AI system reliability: drift and verification",
+      "metaDescription": "An AI system can work and still not be trustworthy. Drift, ignored alerts and the verification cost nobody budgets for.",
+      "publishedAt": "2026-08-31T05:30:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/en/ai-in-the-product",
+        "/en/blog/ai-architecture-security-the-gap-nobody-audits",
+        "/en/blog/ai-delegation-managements-oldest-question-new-riskier-answer",
+        "/en/blog/apis-for-ai-agents-contract-your-backend-hasnt-signed",
+        "/en/blog/cheap-code-expensive-engineering-ai-technical-debt",
+        "/en/blog/post-launch-live-software-does-not-end-it-begins",
+        "/en/blog/systems-that-fail-without-breaking-stability-is-not-resilience",
+        "/en/blog/the-silent-danger-of-ai-you-stop-thinking"
+      ]
+    },
+    {
+      "postId": 146,
+      "slug": "fiabilidad-sin-garantias-el-problema-de-consistencia-en-sistemas-ia",
+      "locale": "es",
+      "title": "Fiabilidad sin Garantías: El Problema que los Equipos de IA Ignoran hasta que el Sistema los Ignora a Ellos",
+      "metaTitle": "Fiabilidad en IA: deriva y verificación",
+      "metaDescription": "Un sistema de IA puede funcionar y aun así no ser fiable. Deriva, alertas que se ignoran y el coste de verificar que nadie presupuesta.",
+      "publishedAt": "2026-08-31T05:30:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/es/blog/apis-para-agentes-ia-contrato-que-tu-backend-no-ha-firmado",
+        "/es/blog/codigo-barato-ingenieria-cara-ia-deuda-tecnica",
+        "/es/blog/delegacion-ia-la-pregunta-de-gestion-mas-antigua-tiene-respuesta-nueva",
+        "/es/blog/post-lanzamiento-software-vivo-no-termina-empieza",
+        "/es/blog/seguridad-arquitecturas-ia-el-agujero-que-nadie-audita",
+        "/es/blog/sistemas-que-fallan-sin-romperse-estabilidad-no-es-resiliencia",
+        "/es/ia-en-el-producto"
+      ]
+    },
+    {
+      "postId": 145,
+      "slug": "reversibility-design-criterion-nobody-briefs-ai-makes-urgent",
+      "locale": "en",
+      "title": "Reversibility: The Design Criterion Nobody Briefs (and That AI Makes Urgent)",
+      "metaTitle": "Reversibility in UX: undo as a contract",
+      "metaDescription": "Being able to undo is part of user trust, and AI makes it urgent. Patterns to design reversible actions without slowing the flow.",
+      "publishedAt": "2026-08-26T08:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/en/blog/accessibility-as-debt-what-your-design-system-misses",
+        "/en/blog/designing-under-uncertainty-ai-amplifies-ambiguity",
+        "/en/blog/intentional-friction-designing-resistance-as-a-feature-not-a-bug",
+        "/en/blog/technically-correct-experientially-broken-the-bug-no-ticket-captures",
+        "/en/product-for-your-customers"
+      ]
+    },
+    {
+      "postId": 145,
+      "slug": "reversibilidad-criterio-diseno-que-nadie-pone-en-el-brief",
+      "locale": "es",
+      "title": "Reversibilidad: El Criterio de Diseño que Nadie Pone en el Brief (y que la IA Hace Urgente)",
+      "metaTitle": "Reversibilidad en UX: deshacer como contrato",
+      "metaDescription": "Poder deshacer es parte de la confianza del usuario, y la IA lo vuelve urgente. Patrones para diseñar acciones reversibles sin frenar el flujo.",
+      "publishedAt": "2026-08-26T08:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/es/blog/accesibilidad-como-deuda-lo-que-tu-sistema-de-diseno-no-ve",
+        "/es/blog/codigo-correcto-experiencia-rota-el-fallo-que-el-ticket-no-describe",
+        "/es/blog/diseno-con-incertidumbre-la-ia-amplifica-la-ambiguedad",
+        "/es/blog/friccion-intencionada-diseno-que-dice-no-para-que-el-usuario-gane",
+        "/es/producto-para-tus-clientes"
+      ]
+    },
+    {
+      "postId": 144,
+      "slug": "post-launch-live-software-does-not-end-it-begins",
+      "locale": "en",
+      "title": "Post-Launch: Live Software Doesn't End, It Begins",
+      "metaTitle": "Software maintenance after launch",
+      "metaDescription": "Launch does not finish software: it starts its life. The three kinds of maintenance nobody plans and how to observe what runs in production.",
+      "publishedAt": "2026-08-24T08:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/en/blog/architecture-without-purpose-scaling-before-understanding-costly-mistake",
+        "/en/blog/cheap-code-expensive-engineering-ai-technical-debt",
+        "/en/blog/enterprise-ai-pilot-that-never-scales-demo-to-production",
+        "/en/blog/systems-that-fail-without-breaking-stability-is-not-resilience",
+        "/en/product-for-your-team"
+      ]
+    },
+    {
+      "postId": 144,
+      "slug": "post-lanzamiento-software-vivo-no-termina-empieza",
+      "locale": "es",
+      "title": "Post-Lanzamiento: El Software Vivo no Termina, Empieza",
+      "metaTitle": "Mantenimiento de software tras el lanzamiento",
+      "metaDescription": "El lanzamiento no termina el software: empieza su vida. Los tres tipos de mantenimiento que nadie planifica y cómo observar lo que está en producción.",
+      "publishedAt": "2026-08-24T08:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/es/blog/arquitectura-sin-proposito-escalar-antes-de-entender-error-caro",
+        "/es/blog/codigo-barato-ingenieria-cara-ia-deuda-tecnica",
+        "/es/blog/piloto-ia-empresarial-que-nunca-escala-demo-a-produccion",
+        "/es/blog/sistemas-que-fallan-sin-romperse-estabilidad-no-es-resiliencia",
+        "/es/producto-para-tu-equipo"
+      ]
+    },
+    {
+      "postId": 143,
+      "slug": "notification-systems-design-that-shouts-when-it-should-whisper",
+      "locale": "en",
+      "title": "Notification Systems: When Design Shouts Instead of Whispering",
+      "metaTitle": "Notification design: signal versus noise",
+      "metaDescription": "Notifications spend attention your engagement dashboard never records. How to design a signal taxonomy, the timing and the content.",
+      "publishedAt": "2026-08-19T08:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/en/blog/architecture-without-purpose-scaling-before-understanding-costly-mistake",
+        "/en/blog/behavioral-economics-in-ux-the-hidden-friction-nobody-talks-about",
+        "/en/blog/intentional-friction-designing-resistance-as-a-feature-not-a-bug",
+        "/en/blog/the-ai-nobody-asked-for-when-ai-features-are-just-noise",
+        "/en/product-for-your-customers"
+      ]
+    },
+    {
+      "postId": 143,
+      "slug": "sistemas-de-notificaciones-diseno-que-grita-cuando-deberia-susurrar",
+      "locale": "es",
+      "title": "Sistemas de Notificaciones: El Diseño que Grita cuando Debería Susurrar",
+      "metaTitle": "Diseño de notificaciones: señal frente a ruido",
+      "metaDescription": "Las notificaciones gastan la atención que el dashboard de engagement no mide. Cómo diseñar una taxonomía de señales, el momento y el contenido.",
+      "publishedAt": "2026-08-19T08:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/es/blog/arquitectura-sin-proposito-escalar-antes-de-entender-error-caro",
+        "/es/blog/economia-del-comportamiento-lo-que-el-ux-ignora-cuando-disena-para-humanos",
+        "/es/blog/friccion-intencionada-diseno-que-dice-no-para-que-el-usuario-gane",
+        "/es/blog/la-ia-que-nadie-pidio-cuando-añadir-inteligencia-es-ruido",
+        "/es/producto-para-tus-clientes"
+      ]
+    },
+    {
+      "postId": 142,
+      "slug": "architecture-without-purpose-scaling-before-understanding-costly-mistake",
+      "locale": "en",
+      "title": "Architecture Without Purpose: Why Scaling Before Understanding Is Software's Most Expensive Mistake",
+      "metaTitle": "Scaling too early: a costly architecture error",
+      "metaDescription": "Scaling an architecture before understanding the problem is software's most expensive mistake. When to scale, and the question to ask first.",
+      "publishedAt": "2026-08-17T08:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/en/blog/cheap-code-expensive-engineering-ai-technical-debt",
+        "/en/blog/context-vs-memory-ai-systems-production",
+        "/en/blog/enterprise-ai-pilot-that-never-scales-demo-to-production",
+        "/en/blog/systems-that-fail-without-breaking-stability-is-not-resilience",
+        "/en/product-for-your-team"
+      ]
+    },
+    {
+      "postId": 142,
+      "slug": "arquitectura-sin-proposito-escalar-antes-de-entender-error-caro",
+      "locale": "es",
+      "title": "Arquitectura sin Propósito: Por qué Escalar antes de Entender es el Error más Caro del Software",
+      "metaTitle": "Escalar antes de entender: error de arquitectura",
+      "metaDescription": "Escalar una arquitectura antes de entender el problema es el error más caro del software. Cuándo escalar, y qué pregunta hacerse antes.",
+      "publishedAt": "2026-08-17T08:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/es/blog/codigo-barato-ingenieria-cara-ia-deuda-tecnica",
+        "/es/blog/contexto-vs-memoria-ia-sistemas-produccion",
+        "/es/blog/piloto-ia-empresarial-que-nunca-escala-demo-a-produccion",
+        "/es/blog/sistemas-que-fallan-sin-romperse-estabilidad-no-es-resiliencia",
+        "/es/producto-para-tu-equipo"
+      ]
+    },
+    {
+      "postId": 141,
+      "slug": "accessibility-as-debt-what-your-design-system-misses",
+      "locale": "en",
+      "title": "Accessibility as Debt: What Your Design System Misses and Your Users Notice",
+      "metaTitle": "Accessibility in your design system: the debt",
+      "metaDescription": "Accessibility that is not in the design system builds up as debt. Four layers to integrate it, and why it is an economic argument.",
+      "publishedAt": "2026-08-12T08:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/en/blog/accessibility-is-not-a-feature-its-infrastructure",
+        "/en/blog/technically-correct-experientially-broken-the-bug-no-ticket-captures",
+        "/en/blog/the-problem-before-the-problem-diagnosis-is-the-real-design-work",
+        "/en/blog/ux-improvements-that-improve-nothing-optimizing-the-wrong-thing",
+        "/en/product-for-your-customers"
+      ]
+    },
+    {
+      "postId": 141,
+      "slug": "accesibilidad-como-deuda-lo-que-tu-sistema-de-diseno-no-ve",
+      "locale": "es",
+      "title": "Accesibilidad como Deuda: Lo que tu Sistema de Diseño No Ve (y el Usuario Sí Siente)",
+      "metaTitle": "Accesibilidad en el sistema de diseño: la deuda",
+      "metaDescription": "La accesibilidad que no está en el sistema de diseño se acumula como deuda. Cuatro capas para integrarla y por qué es un argumento económico.",
+      "publishedAt": "2026-08-12T08:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/es/blog/accesibilidad-no-es-una-feature-es-infraestructura",
+        "/es/blog/el-problema-antes-del-problema-diagnostico-es-el-diseno",
+        "/es/blog/mejoras-de-ux-que-no-mejoran-nada-optimizar-lo-que-no-importa",
+        "/es/producto-para-tus-clientes"
+      ]
+    },
+    {
+      "postId": 140,
+      "slug": "cheap-code-expensive-engineering-ai-technical-debt",
+      "locale": "en",
+      "title": "Cheap Code, Expensive Engineering: What AI Is Really Doing to Technical Debt",
+      "metaTitle": "AI and technical debt: cheap code isn't cheap",
+      "metaDescription": "AI makes code cheap to write and expensive to maintain. How to measure understandability and what AI can do in the pipeline without adding debt.",
+      "publishedAt": "2026-08-10T08:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/en/blog/ai-agents-production-test-suite-passes-users-suffer",
+        "/en/blog/ai-delegation-managements-oldest-question-new-riskier-answer",
+        "/en/blog/enterprise-ai-pilot-that-never-scales-demo-to-production",
+        "/en/blog/hidden-cost-ai-developer-tools-productivity-trap",
+        "/en/blog/systems-that-fail-without-breaking-stability-is-not-resilience",
+        "/en/blog/the-silent-danger-of-ai-you-stop-thinking",
+        "/en/product-for-your-team"
+      ]
+    },
+    {
+      "postId": 140,
+      "slug": "codigo-barato-ingenieria-cara-ia-deuda-tecnica",
+      "locale": "es",
+      "title": "Código Barato, Ingeniería Cara: Lo que la IA le Está Haciendo a la Deuda Técnica",
+      "metaTitle": "Deuda técnica con IA: el código barato sale caro",
+      "metaDescription": "La IA abarata escribir código y encarece mantenerlo. Cómo medir la comprensibilidad y qué sí puede hacer la IA en el pipeline sin crear deuda.",
+      "publishedAt": "2026-08-10T08:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/es/blog/agentes-en-produccion-suite-de-tests-pasa-usuarios-sufren",
+        "/es/blog/coste-oculto-herramientas-ia-para-desarrolladores",
+        "/es/blog/delegacion-ia-la-pregunta-de-gestion-mas-antigua-tiene-respuesta-nueva",
+        "/es/blog/el-peligro-silencioso-de-la-ia-dejas-de-pensar",
+        "/es/blog/piloto-ia-empresarial-que-nunca-escala-demo-a-produccion",
+        "/es/blog/sistemas-que-fallan-sin-romperse-estabilidad-no-es-resiliencia",
+        "/es/producto-para-tu-equipo"
+      ]
+    },
+    {
+      "postId": 139,
+      "slug": "intentional-friction-designing-resistance-as-a-feature-not-a-bug",
+      "locale": "en",
+      "title": "Intentional Friction: Designing Resistance as a Feature, Not a Bug",
+      "metaTitle": "Intentional friction: when to slow users down",
+      "metaDescription": "Not everything should be easy: well-placed friction protects users from their own mistakes. Where it makes sense, how to design it, where it doesn't.",
+      "publishedAt": "2026-08-05T08:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/en/blog/behavioral-economics-in-ux-the-hidden-friction-nobody-talks-about",
+        "/en/blog/no-interface-illusion-invisible-ux-not-same-as-good-ux",
+        "/en/blog/technically-correct-experientially-broken-the-bug-no-ticket-captures",
+        "/en/blog/the-ai-nobody-asked-for-when-ai-features-are-just-noise",
+        "/en/blog/user-research-the-asset-that-dies-the-moment-it-becomes-a-deliverable",
+        "/en/blog/ux-improvements-that-improve-nothing-optimizing-the-wrong-thing",
+        "/en/product-for-your-customers"
+      ]
+    },
+    {
+      "postId": 139,
+      "slug": "friccion-intencionada-diseno-que-dice-no-para-que-el-usuario-gane",
+      "locale": "es",
+      "title": "Fricción Intencionada: El Diseño que Dice No para Que el Usuario Gane",
+      "metaTitle": "Fricción intencionada: cuándo frenar al usuario",
+      "metaDescription": "No todo debe ser fácil: la fricción bien puesta protege al usuario de sus errores. Dónde tiene sentido, cómo diseñarla y dónde sobra.",
+      "publishedAt": "2026-08-05T08:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/es/blog/codigo-correcto-experiencia-rota-el-fallo-que-el-ticket-no-describe",
+        "/es/blog/economia-del-comportamiento-lo-que-el-ux-ignora-cuando-disena-para-humanos",
+        "/es/blog/interfaces-sin-botones-mejor-ux-es-no-ver-nada",
+        "/es/blog/investigacion-de-usuario-muere-cuando-se-convierte-en-entregable",
+        "/es/blog/la-ia-que-nadie-pidio-cuando-añadir-inteligencia-es-ruido",
+        "/es/blog/mejoras-de-ux-que-no-mejoran-nada-optimizar-lo-que-no-importa",
+        "/es/producto-para-tus-clientes"
+      ]
+    },
+    {
+      "postId": 138,
+      "slug": "ai-delegation-managements-oldest-question-new-riskier-answer",
+      "locale": "en",
+      "title": "AI Delegation: Management's Oldest Question Has a New—and Riskier—Answer",
+      "metaTitle": "What to delegate to AI and what to keep human",
+      "metaDescription": "The classic delegation model breaks with AI. Which tasks to delegate, which disappear when you do, and where to draw the line between automated and human.",
+      "publishedAt": "2026-08-03T08:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/en/ai-in-the-product",
+        "/en/blog/ai-agents-that-spend-money-the-autonomy-nobody-budgeted-for",
+        "/en/blog/ai-in-production-the-hard-part-after-the-pilot-works",
+        "/en/blog/enterprise-ai-pilot-that-never-scales-demo-to-production",
+        "/en/blog/the-ai-nobody-asked-for-when-ai-features-are-just-noise",
+        "/en/blog/the-silent-danger-of-ai-you-stop-thinking"
+      ]
+    },
+    {
+      "postId": 138,
+      "slug": "delegacion-ia-la-pregunta-de-gestion-mas-antigua-tiene-respuesta-nueva",
+      "locale": "es",
+      "title": "Delegación y IA: La Pregunta de Gestión más Antigua tiene una Respuesta Nueva (y Más Peligrosa)",
+      "metaTitle": "Qué delegar en la IA y qué mantener humano",
+      "metaDescription": "El modelo clásico de delegación no sirve con IA. Qué delegar, qué desaparece al hacerlo y dónde trazar la frontera entre lo automático y lo humano.",
+      "publishedAt": "2026-08-03T08:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/es/blog/agentes-de-ia-con-autonomia-de-pago-cuando-el-codigo-firma-cheques",
+        "/es/blog/el-peligro-silencioso-de-la-ia-dejas-de-pensar",
+        "/es/blog/ia-en-produccion-lo-que-nadie-cuenta-cuando-el-piloto-funciona",
+        "/es/blog/la-ia-que-nadie-pidio-cuando-añadir-inteligencia-es-ruido",
+        "/es/blog/piloto-ia-empresarial-que-nunca-escala-demo-a-produccion",
+        "/es/ia-en-el-producto"
+      ]
+    },
+    {
+      "postId": 137,
+      "slug": "technically-correct-experientially-broken-the-bug-no-ticket-captures",
+      "locale": "en",
+      "title": "Technically Correct, Experientially Broken: The Bug No Ticket Can Capture",
+      "metaTitle": "Correct code, broken user experience",
+      "metaDescription": "The ticket measures what it can, not what matters. Three places where the experience breaks while the code works, and how to spot them.",
+      "publishedAt": "2026-07-29T08:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/en/blog/behavioral-economics-in-ux-the-hidden-friction-nobody-talks-about",
+        "/en/blog/no-interface-illusion-invisible-ux-not-same-as-good-ux",
+        "/en/blog/the-ai-nobody-asked-for-when-ai-features-are-just-noise",
+        "/en/blog/user-research-the-asset-that-dies-the-moment-it-becomes-a-deliverable",
+        "/en/blog/ux-improvements-that-improve-nothing-optimizing-the-wrong-thing",
+        "/en/product-for-your-customers"
+      ]
+    },
+    {
+      "postId": 137,
+      "slug": "codigo-correcto-experiencia-rota-el-fallo-que-el-ticket-no-describe",
+      "locale": "es",
+      "title": "Código Correcto, Experiencia Rota: El Fallo que el Ticket no Puede Describir",
+      "metaTitle": "Código correcto, experiencia de usuario rota",
+      "metaDescription": "El ticket mide lo que puede, no lo que importa. Tres lugares donde la experiencia se rompe sin que el código falle, y cómo detectarlos.",
+      "publishedAt": "2026-07-29T08:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/es/blog/interfaces-sin-botones-mejor-ux-es-no-ver-nada",
+        "/es/blog/investigacion-de-usuario-muere-cuando-se-convierte-en-entregable",
+        "/es/blog/la-ia-que-nadie-pidio-cuando-añadir-inteligencia-es-ruido",
+        "/es/blog/mejoras-de-ux-que-no-mejoran-nada-optimizar-lo-que-no-importa",
+        "/es/producto-para-tus-clientes"
+      ]
+    },
+    {
+      "postId": 136,
+      "slug": "ai-architecture-security-the-gap-nobody-audits",
+      "locale": "en",
+      "title": "AI Architecture Security: The Gap Nobody Audits Until It's Too Late",
+      "metaTitle": "AI architecture security: what goes unaudited",
+      "metaDescription": "Teams audit the model and forget the system. Real attack vectors in AI architectures, and principles to design them securely.",
+      "publishedAt": "2026-07-27T08:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/en/ai-in-the-product",
+        "/en/blog/agent-observability-what-logs-dont-tell-you",
+        "/en/blog/ai-agents-that-spend-money-the-autonomy-nobody-budgeted-for",
+        "/en/blog/ai-architecture-security-the-gap-nobody-audits",
+        "/en/blog/ai-in-production-the-hard-part-after-the-pilot-works",
+        "/en/blog/enterprise-ai-pilot-that-never-scales-demo-to-production",
+        "/en/blog/hidden-cost-ai-developer-tools-productivity-trap",
+        "/en/blog/systems-that-fail-without-breaking-stability-is-not-resilience"
+      ]
+    },
+    {
+      "postId": 136,
+      "slug": "seguridad-arquitecturas-ia-el-agujero-que-nadie-audita",
+      "locale": "es",
+      "title": "Seguridad en Arquitecturas de IA: El Agujero que Nadie Audita hasta que es Demasiado Tarde",
+      "metaTitle": "Seguridad en arquitecturas de IA",
+      "metaDescription": "Se audita el modelo y se olvida el sistema. Vectores de ataque reales en arquitecturas de IA y principios para diseñarlas seguras.",
+      "publishedAt": "2026-07-27T08:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/es/blog/agentes-de-ia-con-autonomia-de-pago-cuando-el-codigo-firma-cheques",
+        "/es/blog/coste-oculto-herramientas-ia-para-desarrolladores",
+        "/es/blog/ia-en-produccion-lo-que-nadie-cuenta-cuando-el-piloto-funciona",
+        "/es/blog/observabilidad-agentes-ia-lo-que-los-logs-no-te-cuentan",
+        "/es/blog/piloto-ia-empresarial-que-nunca-escala-demo-a-produccion",
+        "/es/blog/seguridad-arquitecturas-ia-el-agujero-que-nadie-audita",
+        "/es/blog/sistemas-que-fallan-sin-romperse-estabilidad-no-es-resiliencia",
+        "/es/ia-en-el-producto"
+      ]
+    },
+    {
+      "postId": 135,
+      "slug": "the-ai-nobody-asked-for-when-ai-features-are-just-noise",
+      "locale": "en",
+      "title": "The AI Nobody Asked For: When Adding Intelligence to Your Product Is Just Well-Branded Noise",
+      "metaTitle": "AI in your product: when the AI feature is noise",
+      "metaDescription": "Adding AI with no user job to solve is well-branded noise. Three diagnostic questions to ask before building any AI feature.",
+      "publishedAt": "2026-07-22T08:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/en/ai-in-the-product",
+        "/en/blog/ai-interface-design-chat-is-not-the-universal-answer",
+        "/en/blog/designing-under-uncertainty-ai-amplifies-ambiguity",
+        "/en/blog/reversibility-design-criterion-nobody-briefs-ai-makes-urgent",
+        "/en/blog/user-research-the-asset-that-dies-the-moment-it-becomes-a-deliverable",
+        "/en/blog/ux-improvements-that-improve-nothing-optimizing-the-wrong-thing",
+        "/en/cases/ai-ecommerce-without-touching-the-store"
+      ]
+    },
+    {
+      "postId": 135,
+      "slug": "la-ia-que-nadie-pidio-cuando-añadir-inteligencia-es-ruido",
+      "locale": "es",
+      "title": "La IA que Nadie Pidió: Cuando Añadir Inteligencia al Producto es Solo Ruido con Buena Prensa",
+      "metaTitle": "IA en el producto: cuándo sobra la feature de IA",
+      "metaDescription": "Añadir IA sin un trabajo del usuario que resolver es ruido con buena prensa. Tres preguntas de diagnóstico antes de cualquier feature de IA.",
+      "publishedAt": "2026-07-22T08:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/es/blog/diseno-con-incertidumbre-la-ia-amplifica-la-ambiguedad",
+        "/es/blog/interfaz-de-ia-el-chat-no-es-la-respuesta-a-todo",
+        "/es/blog/investigacion-de-usuario-muere-cuando-se-convierte-en-entregable",
+        "/es/blog/mejoras-de-ux-que-no-mejoran-nada-optimizar-lo-que-no-importa",
+        "/es/blog/reversibilidad-criterio-diseno-que-nadie-pone-en-el-brief",
+        "/es/casos/ia-ecommerce-sin-tocar-la-tienda",
+        "/es/ia-en-el-producto"
+      ]
+    },
+    {
+      "postId": 134,
+      "slug": "enterprise-ai-pilot-that-never-scales-demo-to-production",
+      "locale": "en",
+      "title": "The Pilot That Never Scales: Why Enterprise AI Programmes Die Between Demo and Production",
+      "metaTitle": "Why AI pilots never reach production",
+      "metaDescription": "Most enterprise AI programmes die between demo and production. The context debt and architecture decisions that kill them.",
+      "publishedAt": "2026-07-20T08:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/en/ai-in-the-product",
+        "/en/blog/ai-in-production-the-hard-part-after-the-pilot-works",
+        "/en/blog/hidden-cost-ai-developer-tools-productivity-trap",
+        "/en/blog/reliability-without-guarantees-ai-consistency-problem-teams-ignore",
+        "/en/blog/systems-that-fail-without-breaking-stability-is-not-resilience",
+        "/en/blog/the-silent-danger-of-ai-you-stop-thinking"
+      ]
+    },
+    {
+      "postId": 134,
+      "slug": "piloto-ia-empresarial-que-nunca-escala-demo-a-produccion",
+      "locale": "es",
+      "title": "El Piloto Que Nunca Escala: Por Qué los Programas de IA Empresarial Mueren entre la Demo y la Producción",
+      "metaTitle": "Por qué los pilotos de IA no llegan a producción",
+      "metaDescription": "La mayoría de programas de IA empresarial mueren entre la demo y la producción. La deuda de contexto y las decisiones de arquitectura que los matan.",
+      "publishedAt": "2026-07-20T08:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/es/blog/coste-oculto-herramientas-ia-para-desarrolladores",
+        "/es/blog/el-peligro-silencioso-de-la-ia-dejas-de-pensar",
+        "/es/blog/fiabilidad-sin-garantias-el-problema-de-consistencia-en-sistemas-ia",
+        "/es/blog/ia-en-produccion-lo-que-nadie-cuenta-cuando-el-piloto-funciona",
+        "/es/blog/sistemas-que-fallan-sin-romperse-estabilidad-no-es-resiliencia",
+        "/es/ia-en-el-producto"
+      ]
+    },
+    {
+      "postId": 133,
+      "slug": "accessibility-is-not-a-feature-its-infrastructure",
+      "locale": "en",
+      "title": "Accessibility as Infrastructure: Why Treating It Like a Feature Costs You Everything",
+      "metaTitle": "Accessibility as infrastructure, not a feature",
+      "metaDescription": "Treating accessibility as a feature is expensive. What changes when you build it into the design system and the acceptance criteria.",
+      "publishedAt": "2026-07-15T08:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/en/blog/accessibility-is-not-a-feature-its-infrastructure",
+        "/en/blog/user-research-the-asset-that-dies-the-moment-it-becomes-a-deliverable",
+        "/en/blog/ux-improvements-that-improve-nothing-optimizing-the-wrong-thing",
+        "/en/product-for-your-customers"
+      ]
+    },
+    {
+      "postId": 133,
+      "slug": "accesibilidad-no-es-una-feature-es-infraestructura",
+      "locale": "es",
+      "title": "Accesibilidad: El Coste de Tratar como Feature lo que es Infraestructura",
+      "metaTitle": "Accesibilidad como infraestructura, no feature",
+      "metaDescription": "Tratar la accesibilidad como una feature sale caro. Qué cambia al construirla desde el design system y los criterios de aceptación.",
+      "publishedAt": "2026-07-15T08:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/es/blog/accesibilidad-no-es-una-feature-es-infraestructura",
+        "/es/blog/investigacion-de-usuario-muere-cuando-se-convierte-en-entregable",
+        "/es/blog/mejoras-de-ux-que-no-mejoran-nada-optimizar-lo-que-no-importa",
+        "/es/producto-para-tus-clientes"
+      ]
+    },
+    {
+      "postId": 132,
+      "slug": "hidden-cost-ai-developer-tools-productivity-trap",
+      "locale": "en",
+      "title": "The Hidden Cost of AI Developer Tools: When \"Productivity\" Gets Expensive",
+      "metaTitle": "The hidden cost of AI developer tools",
+      "metaDescription": "Tokens, context windows and fast obsolescence: what AI developer tools really cost, and how to audit them before the bill grows.",
+      "publishedAt": "2026-07-13T08:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/en/blog/ai-agents-that-spend-money-the-autonomy-nobody-budgeted-for",
+        "/en/blog/ai-in-production-the-hard-part-after-the-pilot-works",
+        "/en/blog/ai-tool-orchestration-problem-not-how-many-you-use",
+        "/en/blog/claude-md-context-as-a-scarce-resource",
+        "/en/blog/systems-that-fail-without-breaking-stability-is-not-resilience",
+        "/en/blog/the-silent-danger-of-ai-you-stop-thinking"
+      ]
+    },
+    {
+      "postId": 132,
+      "slug": "coste-oculto-herramientas-ia-para-desarrolladores",
+      "locale": "es",
+      "title": "El Coste Oculto de las Herramientas de IA para Desarrolladores: Cuando la \"Productividad\" Sale Cara",
+      "metaTitle": "Coste oculto de la IA para desarrolladores",
+      "metaDescription": "Tokens, contexto y obsolescencia acelerada: lo que cuestan las herramientas de IA para desarrollo y cómo auditarlas antes de que crezca la factura.",
+      "publishedAt": "2026-07-13T08:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/es/blog/agentes-de-ia-con-autonomia-de-pago-cuando-el-codigo-firma-cheques",
+        "/es/blog/claude-md-el-contexto-como-recurso-escaso",
+        "/es/blog/el-peligro-silencioso-de-la-ia-dejas-de-pensar",
+        "/es/blog/ia-en-produccion-lo-que-nadie-cuenta-cuando-el-piloto-funciona",
+        "/es/blog/orquestacion-herramientas-ia-problema-no-es-cuantas-usas",
+        "/es/blog/sistemas-que-fallan-sin-romperse-estabilidad-no-es-resiliencia"
+      ]
+    },
+    {
+      "postId": 131,
+      "slug": "ai-interface-design-chat-is-not-the-universal-answer",
+      "locale": "en",
+      "title": "AI Interface Design: Why Chat Is Not the Universal Answer",
+      "metaTitle": "AI interface design beyond chat",
+      "metaDescription": "Chat is not the right interface for everything. Four intents it handles badly and a three-question framework to choose the modality.",
+      "publishedAt": "2026-07-08T08:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/en/ai-in-the-product",
+        "/en/blog/designing-under-uncertainty-ai-amplifies-ambiguity",
+        "/en/blog/goals-over-tools-the-design-mistake-that-sinks-digital-products",
+        "/en/blog/notification-systems-design-that-shouts-when-it-should-whisper",
+        "/en/blog/ux-improvements-that-improve-nothing-optimizing-the-wrong-thing"
+      ]
+    },
+    {
+      "postId": 131,
+      "slug": "interfaz-de-ia-el-chat-no-es-la-respuesta-a-todo",
+      "locale": "es",
+      "title": "Interfaz de IA: El Chat no es la Respuesta a Todo",
+      "metaTitle": "Diseño de interfaces de IA: más allá del chat",
+      "metaDescription": "El chat no es la interfaz correcta para todo. Cuatro intenciones que gestiona mal y un marco de tres preguntas para elegir la modalidad.",
+      "publishedAt": "2026-07-08T08:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/es/blog/diseno-con-incertidumbre-la-ia-amplifica-la-ambiguedad",
+        "/es/blog/mejoras-de-ux-que-no-mejoran-nada-optimizar-lo-que-no-importa",
+        "/es/blog/objetivos-no-herramientas-el-error-de-diseno-que-arruina-productos-digitales",
+        "/es/blog/sistemas-de-notificaciones-diseno-que-grita-cuando-deberia-susurrar",
+        "/es/ia-en-el-producto"
+      ]
+    },
+    {
+      "postId": 130,
+      "slug": "systems-that-fail-without-breaking-stability-is-not-resilience",
+      "locale": "en",
+      "title": "Systems That Fail Without Breaking: Why Stability Is Not Resilience",
+      "metaTitle": "Software resilience: failing without breaking",
+      "metaDescription": "A system that does not fail is not necessarily resilient. Interdependencies, emergent failures and how to design graceful degradation.",
+      "publishedAt": "2026-07-06T08:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/en/blog/agent-observability-what-logs-dont-tell-you",
+        "/en/blog/ai-architecture-security-the-gap-nobody-audits",
+        "/en/blog/ai-in-production-the-hard-part-after-the-pilot-works",
+        "/en/blog/rag-is-not-magic-how-to-choose-retrieval-architecture",
+        "/en/blog/the-silent-danger-of-ai-you-stop-thinking",
+        "/en/product-for-your-team"
+      ]
+    },
+    {
+      "postId": 130,
+      "slug": "sistemas-que-fallan-sin-romperse-estabilidad-no-es-resiliencia",
+      "locale": "es",
+      "title": "Sistemas que Fallan sin Romperse: El Error de Confundir Estabilidad con Resiliencia",
+      "metaTitle": "Resiliencia de software: fallar sin romperse",
+      "metaDescription": "Que un sistema no falle no significa que sea resiliente. Interdependencias, fallos emergentes y cómo diseñar la degradación con gracia.",
+      "publishedAt": "2026-07-06T08:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/es/blog/el-peligro-silencioso-de-la-ia-dejas-de-pensar",
+        "/es/blog/ia-en-produccion-lo-que-nadie-cuenta-cuando-el-piloto-funciona",
+        "/es/blog/observabilidad-agentes-ia-lo-que-los-logs-no-te-cuentan",
+        "/es/blog/rag-no-es-magia-como-elegir-arquitectura-de-recuperacion",
+        "/es/blog/seguridad-arquitecturas-ia-el-agujero-que-nadie-audita",
+        "/es/producto-para-tu-equipo"
+      ]
+    },
+    {
+      "postId": 129,
+      "slug": "user-research-the-asset-that-dies-the-moment-it-becomes-a-deliverable",
+      "locale": "en",
+      "title": "User Research: The Asset That Dies the Moment It Becomes a Deliverable",
+      "metaTitle": "User research that doesn't die in a report",
+      "metaDescription": "User research loses its value the moment it becomes a deliverable. How to avoid bias and keep research alive inside the product.",
+      "publishedAt": "2026-07-02T08:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/en/blog/behavioral-economics-in-ux-the-hidden-friction-nobody-talks-about",
+        "/en/blog/dashboards-that-decide-data-visualization-ux",
+        "/en/blog/goals-over-tools-the-design-mistake-that-sinks-digital-products",
+        "/en/blog/the-lying-prototype-why-your-usability-tests-are-giving-you-bad-data",
+        "/en/blog/ux-improvements-that-improve-nothing-optimizing-the-wrong-thing",
+        "/en/blog/ux-roi-isnt-proven-with-pretty-metrics-its-proven-with-decisions",
+        "/en/starting-from-scratch"
+      ]
+    },
+    {
+      "postId": 129,
+      "slug": "investigacion-de-usuario-muere-cuando-se-convierte-en-entregable",
+      "locale": "es",
+      "title": "Investigación de Usuario: El Activo que Muere en el Momento en que se Convierte en Entregable",
+      "metaTitle": "Investigación de usuario que sigue viva",
+      "metaDescription": "La investigación de usuario pierde su valor cuando se convierte en entregable. Cómo evitar sesgos y mantener el research vivo en el producto.",
+      "publishedAt": "2026-07-02T08:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/es/blog/dashboards-que-deciden-visualizacion-de-datos-ux",
+        "/es/blog/economia-del-comportamiento-lo-que-el-ux-ignora-cuando-disena-para-humanos",
+        "/es/blog/el-prototipo-que-miente-por-que-tus-tests-de-usabilidad-estan-contaminados",
+        "/es/blog/el-roi-de-ux-no-se-demuestra-con-metricas-bonitas-se-demuestra-con-decisiones",
+        "/es/blog/mejoras-de-ux-que-no-mejoran-nada-optimizar-lo-que-no-importa",
+        "/es/blog/objetivos-no-herramientas-el-error-de-diseno-que-arruina-productos-digitales",
+        "/es/empezar-de-cero"
+      ]
+    },
+    {
+      "postId": 128,
+      "slug": "ai-in-production-the-hard-part-after-the-pilot-works",
+      "locale": "en",
+      "title": "AI in Production: The Hard Part Starts After Your Pilot Works",
+      "metaTitle": "AI in production: what starts after the pilot",
+      "metaDescription": "The AI pilot works, and that is where the hard part starts: architecture, observability and scaling costs nobody modelled. How to get to production.",
+      "publishedAt": "2026-06-29T08:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/en/ai-in-the-product",
+        "/en/blog/cheap-code-expensive-engineering-ai-technical-debt",
+        "/en/blog/perceived-performance-why-your-ai-app-feels-slow",
+        "/en/blog/rag-is-not-magic-how-to-choose-retrieval-architecture",
+        "/en/blog/the-silent-danger-of-ai-you-stop-thinking"
+      ]
+    },
+    {
+      "postId": 128,
+      "slug": "ia-en-produccion-lo-que-nadie-cuenta-cuando-el-piloto-funciona",
+      "locale": "es",
+      "title": "IA en Producción: Lo que Nadie te Cuenta cuando el Piloto ya Funciona",
+      "metaTitle": "IA en producción: lo que empieza tras el piloto",
+      "metaDescription": "El piloto de IA funciona y ahí empieza lo difícil: arquitectura, observabilidad y costes de escalado que nadie modeló. Cómo llegar a producción.",
+      "publishedAt": "2026-06-29T08:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/es/blog/codigo-barato-ingenieria-cara-ia-deuda-tecnica",
+        "/es/blog/el-peligro-silencioso-de-la-ia-dejas-de-pensar",
+        "/es/blog/percepcion-vs-realidad-por-que-tu-app-de-ia-parece-lenta",
+        "/es/blog/rag-no-es-magia-como-elegir-arquitectura-de-recuperacion",
+        "/es/ia-en-el-producto"
+      ]
+    },
+    {
+      "postId": 127,
+      "slug": "ux-improvements-that-improve-nothing-optimizing-the-wrong-thing",
+      "locale": "en",
+      "title": "UX Improvements That Improve Nothing: The Trap of Optimizing the Wrong Thing",
+      "metaTitle": "UX improvements with no impact: fix what matters",
+      "metaDescription": "Many UX improvements optimise screens that do not matter. Why to start from the user's job, not from the interface.",
+      "publishedAt": "2026-06-24T08:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/en/blog/behavioral-economics-in-ux-the-hidden-friction-nobody-talks-about",
+        "/en/blog/designing-under-uncertainty-ai-amplifies-ambiguity",
+        "/en/blog/goals-over-tools-the-design-mistake-that-sinks-digital-products",
+        "/en/blog/novelty-budget-interfaces-that-innovate-too-fast-lose-the-user",
+        "/en/blog/technically-correct-experientially-broken-the-bug-no-ticket-captures",
+        "/en/product-for-your-customers"
+      ]
+    },
+    {
+      "postId": 127,
+      "slug": "mejoras-de-ux-que-no-mejoran-nada-optimizar-lo-que-no-importa",
+      "locale": "es",
+      "title": "Mejoras de UX que No Mejoran Nada: El Problema de Optimizar lo que No Importa",
+      "metaTitle": "Mejoras de UX sin impacto: qué optimizar",
+      "metaDescription": "Muchas mejoras de UX optimizan pantallas que no importan. Por qué empezar por el trabajo del usuario y no por la interfaz.",
+      "publishedAt": "2026-06-24T08:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/es/blog/codigo-correcto-experiencia-rota-el-fallo-que-el-ticket-no-describe",
+        "/es/blog/diseno-con-incertidumbre-la-ia-amplifica-la-ambiguedad",
+        "/es/blog/economia-del-comportamiento-lo-que-el-ux-ignora-cuando-disena-para-humanos",
+        "/es/blog/objetivos-no-herramientas-el-error-de-diseno-que-arruina-productos-digitales",
+        "/es/blog/presupuesto-de-novedad-interfaces-que-innovan-demasiado-rapido-pierden-al-usuario",
+        "/es/producto-para-tus-clientes"
+      ]
+    },
+    {
+      "postId": 126,
+      "slug": "rag-is-not-magic-how-to-choose-retrieval-architecture",
+      "locale": "en",
+      "title": "RAG Is Not Magic: Choosing the Retrieval Architecture Your Use Case Actually Needs",
+      "metaTitle": "RAG: choosing the architecture you need",
+      "metaDescription": "RAG is not a single architecture. The five variants that matter, the framework to choose between them and when fine-tuning pays off.",
+      "publishedAt": "2026-06-22T08:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/en/ai-in-the-product",
+        "/en/blog/perceived-performance-why-your-ai-app-feels-slow",
+        "/en/blog/saas-under-siege-when-your-real-competitors-arent-other-apps",
+        "/en/blog/the-silent-danger-of-ai-you-stop-thinking",
+        "/en/cases/ai-ecommerce-without-touching-the-store"
+      ]
+    },
+    {
+      "postId": 126,
+      "slug": "rag-no-es-magia-como-elegir-arquitectura-de-recuperacion",
+      "locale": "es",
+      "title": "RAG no es Magia: Cómo Elegir la Arquitectura de Recuperación que tu Caso Realmente Necesita",
+      "metaTitle": "RAG: cómo elegir la arquitectura que necesitas",
+      "metaDescription": "RAG no es una sola arquitectura. Las cinco variantes que importan, el marco para elegir entre ellas y cuándo compensa el fine-tuning.",
+      "publishedAt": "2026-06-22T08:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/es/blog/el-peligro-silencioso-de-la-ia-dejas-de-pensar",
+        "/es/blog/percepcion-vs-realidad-por-que-tu-app-de-ia-parece-lenta",
+        "/es/blog/saas-bajo-asedio-cuando-tu-competencia-no-es-otro-software",
+        "/es/casos/ia-ecommerce-sin-tocar-la-tienda",
+        "/es/ia-en-el-producto"
+      ]
+    },
+    {
+      "postId": 125,
+      "slug": "designing-under-uncertainty-ai-amplifies-ambiguity",
+      "locale": "en",
+      "title": "Designing Under Uncertainty: Why AI Doesn't Reduce Ambiguity — It Amplifies It",
+      "metaTitle": "Designing for uncertainty in AI products",
+      "metaDescription": "AI does not remove ambiguity: it amplifies it. How to design for ranges rather than points, and what to ask before the product acts.",
+      "publishedAt": "2026-06-17T08:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/en/blog/behavioral-economics-in-ux-the-hidden-friction-nobody-talks-about",
+        "/en/blog/designers-in-the-ai-era-judgment-is-the-last-thing-to-go",
+        "/en/blog/reversibility-design-criterion-nobody-briefs-ai-makes-urgent",
+        "/en/blog/the-ai-nobody-asked-for-when-ai-features-are-just-noise",
+        "/en/blog/the-silent-danger-of-ai-you-stop-thinking",
+        "/en/product-for-your-customers"
+      ]
+    },
+    {
+      "postId": 125,
+      "slug": "diseno-con-incertidumbre-la-ia-amplifica-la-ambiguedad",
+      "locale": "es",
+      "title": "Diseño con Incertidumbre: Por qué la IA no Elimina la Ambigüedad, la Amplifica",
+      "metaTitle": "Diseñar con incertidumbre en productos con IA",
+      "metaDescription": "La IA no elimina la ambigüedad: la amplifica. Cómo diseñar para rangos y no para puntos, y qué preguntar antes de que el producto actúe.",
+      "publishedAt": "2026-06-17T08:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/es/blog/disenadores-en-la-era-de-la-ia-el-juicio-no-se-automatiza",
+        "/es/blog/economia-del-comportamiento-lo-que-el-ux-ignora-cuando-disena-para-humanos",
+        "/es/blog/el-peligro-silencioso-de-la-ia-dejas-de-pensar",
+        "/es/blog/la-ia-que-nadie-pidio-cuando-añadir-inteligencia-es-ruido",
+        "/es/blog/reversibilidad-criterio-diseno-que-nadie-pone-en-el-brief",
+        "/es/producto-para-tus-clientes"
+      ]
+    },
+    {
+      "postId": 124,
+      "slug": "the-silent-danger-of-ai-you-stop-thinking",
+      "locale": "en",
+      "title": "The Silent Danger of AI: Not That It Fails, But That You Stop Thinking",
+      "metaTitle": "The risk of AI making you stop thinking",
+      "metaDescription": "The danger of AI is not that it fails but that you stop exercising judgment. What cognitive sovereignty means and how to use AI without giving it up.",
+      "publishedAt": "2026-06-15T08:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/en/blog/claude-md-context-as-a-scarce-resource",
+        "/en/blog/enterprise-ai-pilot-that-never-scales-demo-to-production",
+        "/en/blog/goals-over-tools-the-design-mistake-that-sinks-digital-products",
+        "/en/blog/reliability-without-guarantees-ai-consistency-problem-teams-ignore",
+        "/en/blog/saas-under-siege-when-your-real-competitors-arent-other-apps"
+      ]
+    },
+    {
+      "postId": 124,
+      "slug": "el-peligro-silencioso-de-la-ia-dejas-de-pensar",
+      "locale": "es",
+      "title": "El Peligro Silencioso de la IA: No es que Falle, es que Dejas de Pensar",
+      "metaTitle": "El riesgo de dejar de pensar al usar IA",
+      "metaDescription": "El peligro de la IA no es que falle, es que deja de ejercitar tu criterio. Qué es la soberanía cognitiva y cómo usar IA sin cederle el juicio.",
+      "publishedAt": "2026-06-15T08:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/es/blog/claude-md-el-contexto-como-recurso-escaso",
+        "/es/blog/fiabilidad-sin-garantias-el-problema-de-consistencia-en-sistemas-ia",
+        "/es/blog/objetivos-no-herramientas-el-error-de-diseno-que-arruina-productos-digitales",
+        "/es/blog/piloto-ia-empresarial-que-nunca-escala-demo-a-produccion",
+        "/es/blog/saas-bajo-asedio-cuando-tu-competencia-no-es-otro-software"
+      ]
+    },
+    {
+      "postId": 123,
+      "slug": "behavioral-economics-in-ux-the-hidden-friction-nobody-talks-about",
+      "locale": "en",
+      "title": "Behavioral Economics in UX: The Hidden Friction Nobody Talks About",
+      "metaTitle": "Behavioural economics applied to UX",
+      "metaDescription": "Perceived effort and biases shape every decision in your product, even when metrics do not show it. How to design with them in mind.",
+      "publishedAt": "2026-06-10T08:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/en/blog/accessibility-is-not-a-feature-its-infrastructure",
+        "/en/blog/goals-over-tools-the-design-mistake-that-sinks-digital-products",
+        "/en/blog/perceived-performance-why-your-ai-app-feels-slow",
+        "/en/blog/ux-business-case-defend-design-decisions-boardroom",
+        "/en/product-for-your-customers"
+      ]
+    },
+    {
+      "postId": 123,
+      "slug": "economia-del-comportamiento-lo-que-el-ux-ignora-cuando-disena-para-humanos",
+      "locale": "es",
+      "title": "Economía del Comportamiento: Lo que el UX Ignora cuando Diseña para Humanos",
+      "metaTitle": "Economía del comportamiento aplicada al UX",
+      "metaDescription": "El esfuerzo percibido y los sesgos moldean cada decisión en tu producto, aunque no salgan en las métricas. Cómo diseñar teniéndolos en cuenta.",
+      "publishedAt": "2026-06-10T08:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/es/blog/accesibilidad-no-es-una-feature-es-infraestructura",
+        "/es/blog/objetivos-no-herramientas-el-error-de-diseno-que-arruina-productos-digitales",
+        "/es/blog/percepcion-vs-realidad-por-que-tu-app-de-ia-parece-lenta",
+        "/es/blog/roi-de-ux-que-sobrevive-al-comite-defender-decision-de-diseno",
+        "/es/producto-para-tus-clientes"
+      ]
+    },
+    {
+      "postId": 122,
+      "slug": "goals-over-tools-the-design-mistake-that-sinks-digital-products",
+      "locale": "en",
+      "title": "Goals Over Tools: The Design Mistake That Sinks Digital Products",
+      "metaTitle": "Designing from user goals (JTBD)",
+      "metaDescription": "Products organised around tools instead of goals turn into catalogues. How to design from the user's situation with JTBD.",
+      "publishedAt": "2026-06-09T08:00:00.000Z",
+      "category": "PRODUCT",
+      "internalHrefs": [
+        "/en/blog/build-before-validating-the-product-mistake-killing-startups",
+        "/en/blog/shiny-tool-syndrome-why-chasing-every-ai-release-kills-your-product",
+        "/en/starting-from-scratch"
+      ]
+    },
+    {
+      "postId": 122,
+      "slug": "objetivos-no-herramientas-el-error-de-diseno-que-arruina-productos-digitales",
+      "locale": "es",
+      "title": "Objetivos, no Herramientas: El Error de Diseño que Arruina Productos Digitales",
+      "metaTitle": "Diseñar desde los objetivos del usuario (JTBD)",
+      "metaDescription": "Los productos que se organizan por herramientas y no por objetivos se vuelven catálogos. Cómo diseñar desde la situación del usuario con JTBD.",
+      "publishedAt": "2026-06-09T08:00:00.000Z",
+      "category": "PRODUCT",
+      "internalHrefs": [
+        "/es/blog/construir-antes-de-validar-el-error-de-producto-que-destruye-startups",
+        "/es/blog/el-sindrome-de-la-herramienta-nueva-probar-todo-te-impide-construir",
+        "/es/empezar-de-cero"
+      ]
+    },
+    {
+      "postId": 121,
+      "slug": "saas-under-siege-when-your-real-competitors-arent-other-apps",
+      "locale": "en",
+      "title": "SaaS Under Siege: When Your Real Competitors Aren't Other Apps",
+      "metaTitle": "SaaS versus AI: how to defend your product",
+      "metaDescription": "Your competition is no longer another SaaS but a language model with the right prompt. Which part of your value proposition is replicable and which is not.",
+      "publishedAt": "2026-06-08T08:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/en/blog/perceived-performance-why-your-ai-app-feels-slow"
+      ]
+    },
+    {
+      "postId": 121,
+      "slug": "saas-bajo-asedio-cuando-tu-competencia-no-es-otro-software",
+      "locale": "es",
+      "title": "SaaS Bajo Asedio: Cuando tu Competencia ya No es Otro Software",
+      "metaTitle": "SaaS frente a la IA: cómo defender tu producto",
+      "metaDescription": "Tu competencia ya no es otro SaaS, es un modelo de lenguaje con el prompt adecuado. Qué parte de tu propuesta de valor es replicable y cuál es defendible.",
+      "publishedAt": "2026-06-08T08:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/es/blog/percepcion-vs-realidad-por-que-tu-app-de-ia-parece-lenta"
+      ]
+    },
+    {
+      "postId": 120,
+      "slug": "perceived-performance-why-your-ai-app-feels-slow",
+      "locale": "en",
+      "title": "Perceived Performance: Why Your AI App Feels Slow Even When It Isn't",
+      "metaTitle": "Perceived performance: why your AI app feels slow",
+      "metaDescription": "Your AI app can be fast and still feel slow. Empty time as the enemy, and how to design the wait instead of fighting it.",
+      "publishedAt": "2026-06-05T08:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/en/blog/ai-architecture-security-the-gap-nobody-audits",
+        "/en/blog/claude-md-context-as-a-scarce-resource",
+        "/en/product-for-your-customers"
+      ]
+    },
+    {
+      "postId": 120,
+      "slug": "percepcion-vs-realidad-por-que-tu-app-de-ia-parece-lenta",
+      "locale": "es",
+      "title": "Percepción vs. Realidad: Por qué tu App de IA Parece Lenta aunque No lo Sea",
+      "metaTitle": "Rendimiento percibido en apps de IA",
+      "metaDescription": "Tu app de IA puede ser rápida y parecer lenta. El tiempo vacío como enemigo y cómo diseñar la espera en lugar de luchar contra ella.",
+      "publishedAt": "2026-06-05T08:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/es/blog/claude-md-el-contexto-como-recurso-escaso",
+        "/es/blog/seguridad-arquitecturas-ia-el-agujero-que-nadie-audita",
+        "/es/producto-para-tus-clientes"
+      ]
+    },
+    {
+      "postId": 119,
+      "slug": "designers-in-the-ai-era-judgment-is-the-last-thing-to-go",
+      "locale": "en",
+      "title": "Designers in the AI Era: Judgment Is the Last Thing to Go",
+      "metaTitle": "Designers and AI: judgment can't be automated",
+      "metaDescription": "AI already executes a large part of design work. What that reveals about the craft, and why judgment is the muscle to train now.",
+      "publishedAt": "2026-06-04T08:00:00.000Z",
+      "category": "DESIGN",
+      "internalHrefs": [
+        "/en/blog/generative-ui-when-the-interface-stops-being-a-blueprint",
+        "/en/blog/the-lying-prototype-why-your-usability-tests-are-giving-you-bad-data"
+      ]
+    },
+    {
+      "postId": 119,
+      "slug": "disenadores-en-la-era-de-la-ia-el-juicio-no-se-automatiza",
+      "locale": "es",
+      "title": "Diseñadores en la Era de la IA: El Juicio no se Automatiza",
+      "metaTitle": "Diseñadores e IA: el criterio no se automatiza",
+      "metaDescription": "La IA ya ejecuta buena parte del trabajo de diseño. Lo que eso revela sobre el oficio y por qué el criterio es el músculo que hay que entrenar ahora.",
+      "publishedAt": "2026-06-04T08:00:00.000Z",
+      "category": "DESIGN",
+      "internalHrefs": [
+        "/es/blog/el-prototipo-que-miente-por-que-tus-tests-de-usabilidad-estan-contaminados",
+        "/es/blog/ui-generativa-cuando-la-interfaz-deja-de-ser-un-plano"
+      ]
+    },
+    {
+      "postId": 117,
+      "slug": "shiny-tool-syndrome-why-chasing-every-ai-release-kills-your-product",
+      "locale": "en",
+      "title": "Shiny Tool Syndrome: Why Chasing Every AI Release Kills Your Product Focus",
+      "metaTitle": "Shiny tool syndrome: getting product focus back",
+      "metaDescription": "Trying every new tool looks diligent and drains focus. Three criteria to decide what to adopt and what to ignore without slowing the product down.",
+      "publishedAt": "2026-06-02T08:00:00.000Z",
+      "category": "PRODUCT",
+      "internalHrefs": [
+        "/en/blog/build-before-validating-the-product-mistake-killing-startups"
+      ]
+    },
+    {
+      "postId": 117,
+      "slug": "el-sindrome-de-la-herramienta-nueva-probar-todo-te-impide-construir",
+      "locale": "es",
+      "title": "El Síndrome de la Herramienta Nueva: Por qué Probar Todo te Impide Construir Algo",
+      "metaTitle": "El síndrome de la herramienta nueva en producto",
+      "metaDescription": "Probar cada herramienta nueva parece diligencia y es un agujero de foco. Tres criterios para decidir qué adoptar y qué ignorar sin frenar el producto.",
+      "publishedAt": "2026-06-02T08:00:00.000Z",
+      "category": "PRODUCT",
+      "internalHrefs": [
+        "/es/blog/construir-antes-de-validar-el-error-de-producto-que-destruye-startups"
+      ]
+    },
+    {
+      "postId": 116,
+      "slug": "claude-md-context-as-a-scarce-resource",
+      "locale": "en",
+      "title": "CLAUDE.md Is a Budget, Not a Manual: Why Your AI Instructions Are Burning Money",
+      "metaTitle": "CLAUDE.md: context as a scarce resource",
+      "metaDescription": "Every instruction in your CLAUDE.md consumes context and shifts the model's behaviour. Why fewer instructions work better and how to write them.",
+      "publishedAt": "2026-06-01T08:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/en/blog/ai-agents-production-test-suite-passes-users-suffer",
+        "/en/blog/ai-agents-that-spend-money-the-autonomy-nobody-budgeted-for",
+        "/en/blog/hidden-cost-ai-developer-tools-productivity-trap"
+      ]
+    },
+    {
+      "postId": 116,
+      "slug": "claude-md-el-contexto-como-recurso-escaso",
+      "locale": "es",
+      "title": "CLAUDE.md y el Contexto como Recurso Escaso: Lo que tus Instrucciones le Cuestan al Modelo",
+      "metaTitle": "CLAUDE.md: el contexto como recurso escaso",
+      "metaDescription": "Cada instrucción de tu CLAUDE.md consume contexto y cambia el comportamiento del modelo. Por qué menos instrucciones funcionan mejor y cómo escribirlas.",
+      "publishedAt": "2026-06-01T08:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/es/blog/agentes-de-ia-con-autonomia-de-pago-cuando-el-codigo-firma-cheques",
+        "/es/blog/agentes-en-produccion-suite-de-tests-pasa-usuarios-sufren",
+        "/es/blog/coste-oculto-herramientas-ia-para-desarrolladores"
+      ]
+    },
+    {
+      "postId": 115,
+      "slug": "your-invisible-brand-why-ai-search-engines-dont-know-you-exist",
+      "locale": "en",
+      "title": "Your Invisible Brand: Why AI Search Engines Don't Know You Exist (Even If Google Does)",
+      "metaTitle": "Brand visibility in AI search engines",
+      "metaDescription": "Google finds you, but AI search engines don't know you exist. How LLMs decide who exists and what you can do to show up in their answers.",
+      "publishedAt": "2026-05-29T08:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/en/blog/ai-labs-no-longer-ai-labs-the-runtime-pivot"
+      ]
+    },
+    {
+      "postId": 115,
+      "slug": "tu-marca-invisible-los-motores-de-ia-no-saben-que-existes",
+      "locale": "es",
+      "title": "Tu Marca Invisible: Por qué los Motores de IA No Saben que Existes aunque Google Sí",
+      "metaTitle": "Visibilidad de marca en buscadores de IA",
+      "metaDescription": "Google te encuentra, pero los motores de IA no saben que existes. Cómo deciden los LLMs quién existe y qué puedes hacer para aparecer en sus respuestas.",
+      "publishedAt": "2026-05-29T08:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/es/blog/los-labs-de-ia-ya-no-hacen-ia-el-giro-hacia-el-runtime"
+      ]
+    },
+    {
+      "postId": 114,
+      "slug": "generative-ui-when-the-interface-stops-being-a-blueprint",
+      "locale": "en",
+      "title": "Generative UI: When the Interface Stops Being a Blueprint and Starts Acting",
+      "metaTitle": "Generative UI: designing interfaces that act",
+      "metaDescription": "With generative UI, designers move from drawing screens to defining rules. What changes in design, and the trust problem demos do not show.",
+      "publishedAt": "2026-05-28T08:00:00.000Z",
+      "category": "DESIGN",
+      "internalHrefs": [
+        "/en/blog/generative-ui-when-the-interface-stops-being-a-blueprint",
+        "/en/product-for-your-customers"
+      ]
+    },
+    {
+      "postId": 114,
+      "slug": "ui-generativa-cuando-la-interfaz-deja-de-ser-un-plano",
+      "locale": "es",
+      "title": "UI Generativa: Cuando la Interfaz Deja de Ser un Plano y se Convierte en un Actor",
+      "metaTitle": "UI generativa: diseñar interfaces que actúan",
+      "metaDescription": "Con la UI generativa, el diseñador pasa de dibujar pantallas a definir reglas. Qué cambia en el diseño y el problema de confianza que las demos no enseñan.",
+      "publishedAt": "2026-05-28T08:00:00.000Z",
+      "category": "DESIGN",
+      "internalHrefs": [
+        "/es/blog/ui-generativa-cuando-la-interfaz-deja-de-ser-un-plano",
+        "/es/producto-para-tus-clientes"
+      ]
+    },
+    {
+      "postId": 113,
+      "slug": "the-lying-prototype-why-your-usability-tests-are-giving-you-bad-data",
+      "locale": "en",
+      "title": "The Lying Prototype: Why Your Usability Tests Are Giving You Bad Data",
+      "metaTitle": "Prototype usability testing: the hidden bias",
+      "metaDescription": "An over-polished prototype contaminates your usability tests. When fidelity distorts results, and why to work with disposable artefacts.",
+      "publishedAt": "2026-05-27T08:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/en/blog/build-before-validating-the-product-mistake-killing-startups",
+        "/en/blog/the-designer-who-ships-code-evolution-or-trap",
+        "/en/blog/the-problem-before-the-problem-diagnosis-is-the-real-design-work",
+        "/en/blog/user-research-dies-when-it-becomes-a-deliverable",
+        "/en/starting-from-scratch"
+      ]
+    },
+    {
+      "postId": 113,
+      "slug": "el-prototipo-que-miente-por-que-tus-tests-de-usabilidad-estan-contaminados",
+      "locale": "es",
+      "title": "El Prototipo que Miente: Por qué tus Tests de Usabilidad Están Contaminados",
+      "metaTitle": "El sesgo oculto de testear con prototipos",
+      "metaDescription": "Un prototipo demasiado pulido contamina tus tests de usabilidad. Cuándo la fidelidad distorsiona y por qué trabajar con artefactos descartables.",
+      "publishedAt": "2026-05-27T08:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/es/blog/construir-antes-de-validar-el-error-de-producto-que-destruye-startups",
+        "/es/blog/el-disenador-que-entrega-codigo-evolucion-o-trampa",
+        "/es/blog/el-problema-antes-del-problema-diagnostico-es-el-diseno",
+        "/es/blog/investigacion-de-usuario-muere-cuando-se-convierte-en-entregable",
+        "/es/empezar-de-cero"
+      ]
+    },
+    {
+      "postId": 112,
+      "slug": "build-before-validating-the-product-mistake-killing-startups",
+      "locale": "en",
+      "title": "Ship First, Validate Never: The Product Mistake That Keeps Killing Startups",
+      "metaTitle": "Validate a product idea before building it",
+      "metaDescription": "Building before validating keeps killing startups. How to review your assumptions and validate fast instead of building fast.",
+      "publishedAt": "2026-05-26T08:00:00.000Z",
+      "category": "PRODUCT",
+      "internalHrefs": [
+        "/en/blog/one-big-app-or-thirty-small-ones-the-product-math-nobody-does",
+        "/en/starting-from-scratch"
+      ]
+    },
+    {
+      "postId": 112,
+      "slug": "construir-antes-de-validar-el-error-de-producto-que-destruye-startups",
+      "locale": "es",
+      "title": "Construir Antes de Validar: El Error de Producto que Sigue Destruyendo Startups",
+      "metaTitle": "Validar una idea de producto antes de construir",
+      "metaDescription": "Construir antes de validar sigue destruyendo startups. Cómo revisar las asunciones y validar rápido en lugar de construir rápido.",
+      "publishedAt": "2026-05-26T08:00:00.000Z",
+      "category": "PRODUCT",
+      "internalHrefs": [
+        "/es/blog/una-app-grande-o-treinta-pequenas-la-matematica-de-producto-que-nadie-hace",
+        "/es/empezar-de-cero"
+      ]
+    },
+    {
+      "postId": 111,
+      "slug": "ai-agents-that-spend-money-the-autonomy-nobody-budgeted-for",
+      "locale": "en",
+      "title": "AI Agents That Spend Money: The Autonomy Nobody Budgeted For",
+      "metaTitle": "AI agents that pay: autonomy with a perimeter",
+      "metaDescription": "AI agents are starting to move real money. Why autonomy needs a decision perimeter, per-task scopes and rollback before touching any API.",
+      "publishedAt": "2026-05-25T08:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/en/ai-in-the-product",
+        "/en/blog/agent-observability-what-logs-dont-tell-you",
+        "/en/blog/ai-architecture-security-the-gap-nobody-audits",
+        "/en/blog/ai-delegation-managements-oldest-question-new-riskier-answer",
+        "/en/blog/ai-in-production-the-hard-part-after-the-pilot-works"
+      ]
+    },
+    {
+      "postId": 111,
+      "slug": "agentes-de-ia-con-autonomia-de-pago-cuando-el-codigo-firma-cheques",
+      "locale": "es",
+      "title": "Agentes de IA con Autonomía de Pago: Cuando el Código Empieza a Firmar Cheques",
+      "metaTitle": "Agentes de IA que pagan: autonomía con perímetro",
+      "metaDescription": "Los agentes de IA empiezan a mover dinero real. Por qué la autonomía necesita un perímetro de decisión, scopes por tarea y rollback antes de tocar una API.",
+      "publishedAt": "2026-05-25T08:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/es/blog/delegacion-ia-la-pregunta-de-gestion-mas-antigua-tiene-respuesta-nueva",
+        "/es/blog/ia-en-produccion-lo-que-nadie-cuenta-cuando-el-piloto-funciona",
+        "/es/blog/observabilidad-agentes-ia-lo-que-los-logs-no-te-cuentan",
+        "/es/blog/seguridad-arquitecturas-ia-el-agujero-que-nadie-audita",
+        "/es/ia-en-el-producto"
+      ]
+    },
+    {
+      "postId": 108,
+      "slug": "ux-roi-isnt-proven-with-pretty-metrics-its-proven-with-decisions",
+      "locale": "en",
+      "title": "UX ROI Isn't Proven with Pretty Metrics — It's Proven with Decisions",
+      "metaTitle": "How to prove UX ROI with decisions",
+      "metaDescription": "UX ROI is not proven with pretty metrics but with decisions that change the product. How to prioritise the friction that costs the most.",
+      "publishedAt": "2026-05-20T08:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/en/blog/designers-in-the-ai-era-judgment-is-the-last-thing-to-go",
+        "/en/blog/intentional-friction-designing-resistance-as-a-feature-not-a-bug",
+        "/en/blog/usability-as-a-filter-to-avoid-cognitive-overload",
+        "/en/blog/ux-business-case-defend-design-decisions-boardroom",
+        "/en/blog/ux-improvements-that-improve-nothing-optimizing-the-wrong-thing",
+        "/en/product-for-your-customers"
+      ]
+    },
+    {
+      "postId": 108,
+      "slug": "el-roi-de-ux-no-se-demuestra-con-metricas-bonitas-se-demuestra-con-decisiones",
+      "locale": "es",
+      "title": "El ROI de UX no se Demuestra con Métricas Bonitas: Se Demuestra con Decisiones",
+      "metaTitle": "Cómo demostrar el ROI de UX con decisiones",
+      "metaDescription": "El ROI de UX no se demuestra con métricas bonitas, sino con decisiones que cambian el producto. Cómo priorizar la fricción que más cuesta.",
+      "publishedAt": "2026-05-20T08:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/es/blog/disenadores-en-la-era-de-la-ia-el-juicio-no-se-automatiza",
+        "/es/blog/friccion-intencionada-diseno-que-dice-no-para-que-el-usuario-gane",
+        "/es/blog/la-usabilidad-como-filtro-para-evitar-la-fatiga-cognitiva",
+        "/es/blog/mejoras-de-ux-que-no-mejoran-nada-optimizar-lo-que-no-importa",
+        "/es/blog/roi-de-ux-que-sobrevive-al-comite-defender-decision-de-diseno",
+        "/es/producto-para-tus-clientes"
+      ]
+    },
+    {
+      "postId": 107,
+      "slug": "one-big-app-or-thirty-small-ones-the-product-math-nobody-does",
+      "locale": "en",
+      "title": "One Big App or Thirty Small Ones: The Product Math Nobody Does",
+      "metaTitle": "One big app or several small ones: how to decide",
+      "metaDescription": "Merging or splitting products is not a question of size. When dispersion is actually precision, and the questions that decide the strategy.",
+      "publishedAt": "2026-05-19T08:00:00.000Z",
+      "category": "PRODUCT",
+      "internalHrefs": [
+        "/en/blog/ai-isnt-a-problem-its-maybe-a-solution-returning-to-jtbd",
+        "/en/blog/designers-in-the-ai-era-judgment-is-the-last-thing-to-go",
+        "/en/starting-from-scratch"
+      ]
+    },
+    {
+      "postId": 107,
+      "slug": "una-app-grande-o-treinta-pequenas-la-matematica-de-producto-que-nadie-hace",
+      "locale": "es",
+      "title": "Una App Grande o Treinta Pequeñas: La Matemática de Producto que Nadie Hace",
+      "metaTitle": "Una app grande o varias pequeñas: cómo decidir",
+      "metaDescription": "Unificar o separar productos no es una cuestión de tamaño. Cuándo la dispersión es precisión y qué preguntas deciden la estrategia.",
+      "publishedAt": "2026-05-19T08:00:00.000Z",
+      "category": "PRODUCT",
+      "internalHrefs": [
+        "/es/blog/disenadores-en-la-era-de-la-ia-el-juicio-no-se-automatiza",
+        "/es/blog/ia-no-es-un-problema-es-quizas-una-solucion-volviendo-al-jtbd",
+        "/es/empezar-de-cero"
+      ]
+    },
+    {
+      "postId": 106,
+      "slug": "ai-labs-no-longer-ai-labs-the-runtime-pivot",
+      "locale": "en",
+      "title": "AI Labs Are No Longer AI Labs: The Runtime Pivot Nobody Is Talking About",
+      "metaTitle": "From model to runtime: AI's new lock-in",
+      "metaDescription": "AI labs no longer sell models but the runtime they run on. What you give up by building on it and how to design a portable orchestration.",
+      "publishedAt": "2026-05-18T08:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/en/ai-in-the-product",
+        "/en/blog/ai-tool-orchestration-problem-not-how-many-you-use",
+        "/en/blog/local-first-architecture-taking-back-control-of-your-product",
+        "/en/blog/systems-that-fail-without-breaking-stability-is-not-resilience"
+      ]
+    },
+    {
+      "postId": 106,
+      "slug": "los-labs-de-ia-ya-no-hacen-ia-el-giro-hacia-el-runtime",
+      "locale": "es",
+      "title": "Los Labs de IA ya no hacen IA: El Giro hacia el Runtime que Nadie Está Nombrando",
+      "metaTitle": "Del modelo al runtime: el nuevo lock-in de la IA",
+      "metaDescription": "Los laboratorios de IA ya no venden modelos, venden el runtime donde operan. Qué cedes al construir sobre él y cómo diseñar una orquestación portable.",
+      "publishedAt": "2026-05-18T08:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/es/blog/local-first-la-arquitectura-que-le-devuelve-el-control-a-tu-producto",
+        "/es/blog/orquestacion-herramientas-ia-problema-no-es-cuantas-usas",
+        "/es/blog/sistemas-que-fallan-sin-romperse-estabilidad-no-es-resiliencia",
+        "/es/ia-en-el-producto"
+      ]
+    },
+    {
+      "postId": 105,
+      "slug": "local-first-architecture-taking-back-control-of-your-product",
+      "locale": "en",
+      "title": "Local-First Architecture: Taking Back Control of Your Product",
+      "metaTitle": "Local-first architecture: when to choose it",
+      "metaDescription": "Cloud-by-default carries a hidden dependency cost. What local-first architecture is, and when it gives control back to your product.",
+      "publishedAt": "2026-05-15T08:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/en/blog/local-first-architecture-taking-back-control-of-your-product",
+        "/en/blog/post-launch-live-software-does-not-end-it-begins",
+        "/en/product-for-your-team"
+      ]
+    },
+    {
+      "postId": 105,
+      "slug": "local-first-la-arquitectura-que-le-devuelve-el-control-a-tu-producto",
+      "locale": "es",
+      "title": "Local-First: La Arquitectura que le Devuelve el Control a tu Producto",
+      "metaTitle": "Arquitectura local-first: cuándo es la decisión",
+      "metaDescription": "Cloud por defecto tiene un coste oculto de dependencia. Qué es la arquitectura local-first y cuándo devuelve el control a tu producto.",
+      "publishedAt": "2026-05-15T08:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/es/blog/local-first-la-arquitectura-que-le-devuelve-el-control-a-tu-producto",
+        "/es/blog/post-lanzamiento-software-vivo-no-termina-empieza",
+        "/es/producto-para-tu-equipo"
+      ]
+    },
+    {
+      "postId": 79,
+      "slug": "emotionally-intelligent-design-the-frontier-beyond-utility",
+      "locale": "en",
+      "title": "Emotionally Intelligent Design: The Frontier Beyond Utility",
+      "metaTitle": "Emotional design: empathy as retention",
+      "metaDescription": "Beyond utility, emotional design adapts the experience to the user's context. How to turn empathy into a retention metric.",
+      "publishedAt": "2026-04-24T06:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/en/blog/intentional-friction-designing-resistance-as-a-feature-not-a-bug",
+        "/en/blog/user-research-dies-when-it-becomes-a-deliverable",
+        "/en/product-for-your-customers"
+      ]
+    },
+    {
+      "postId": 79,
+      "slug": "diseno-con-inteligencia-emocional-la-frontera-despues-de-la-utilidad",
+      "locale": "es",
+      "title": "Diseño con Inteligencia Emocional: La frontera después de la utilidad",
+      "metaTitle": "Diseño emocional: la empatía como retención",
+      "metaDescription": "Más allá de la utilidad, el diseño emocional adapta la experiencia al contexto del usuario. Cómo convertir la empatía en una métrica de retención.",
+      "publishedAt": "2026-04-24T06:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/es/blog/friccion-intencionada-diseno-que-dice-no-para-que-el-usuario-gane",
+        "/es/blog/investigacion-de-usuario-muere-cuando-se-convierte-en-entregable",
+        "/es/producto-para-tus-clientes"
+      ]
+    },
+    {
+      "postId": 74,
+      "slug": "the-canonical-model-stop-hallucinating",
+      "locale": "en",
+      "title": "The Canonical Model: Stop Hallucinating",
+      "metaTitle": "A canonical data model to stop AI hallucinations",
+      "metaDescription": "Without a canonical data model, AI hallucinates even with a good model. Why data coherence is your competitive advantage.",
+      "publishedAt": "2026-04-23T06:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/en/ai-in-the-product",
+        "/en/blog/cheap-code-expensive-engineering-ai-technical-debt",
+        "/en/blog/systems-that-fail-without-breaking-stability-is-not-resilience",
+        "/en/cases/activation-canonical-model"
+      ]
+    },
+    {
+      "postId": 74,
+      "slug": "el-modelo-canonico-que-no-alucine-tu-ia",
+      "locale": "es",
+      "title": "El Modelo Canónico: Que no \"alucine\" tu IA",
+      "metaTitle": "Modelo canónico de datos contra las alucinaciones",
+      "metaDescription": "Sin un modelo canónico de datos, la IA alucina aunque el modelo sea bueno. Por qué la coherencia de datos es tu ventaja competitiva.",
+      "publishedAt": "2026-04-23T06:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/es/blog/codigo-barato-ingenieria-cara-ia-deuda-tecnica",
+        "/es/blog/sistemas-que-fallan-sin-romperse-estabilidad-no-es-resiliencia",
+        "/es/casos/activacion-modelo-canonico",
+        "/es/ia-en-el-producto"
+      ]
+    },
+    {
+      "postId": 73,
+      "slug": "the-end-of-user-centric-toward-ecosystem-design",
+      "locale": "en",
+      "title": "The End of \"User-Centric\": Toward Ecosystem Design",
+      "metaTitle": "Ecosystem design beyond user-centric",
+      "metaDescription": "Designing only for the user leaves the rest of the ecosystem out. What systemic design is, and why UX is business strategy.",
+      "publishedAt": "2026-04-21T06:00:00.000Z",
+      "category": "DESIGN",
+      "internalHrefs": [
+        "/en/blog/adaptive-interfaces-the-end-of-one-size-fits-all-design",
+        "/en/blog/ockhams-razor-in-ux-design-is-a-means-not-an-end",
+        "/en/blog/the-vital-balance-between-aesthetics-and-usability",
+        "/en/product-for-your-customers"
+      ]
+    },
+    {
+      "postId": 73,
+      "slug": "el-fin-del-user-centric-hacia-un-diseno-de-ecosistemas",
+      "locale": "es",
+      "title": "El fin del \"User-Centric\": Hacia un Diseño de Ecosistemas",
+      "metaTitle": "Diseño de ecosistemas más allá del user-centric",
+      "metaDescription": "Diseñar solo para el usuario deja fuera al resto del ecosistema. Qué es el diseño sistémico y por qué la UX es estrategia de negocio.",
+      "publishedAt": "2026-04-21T06:00:00.000Z",
+      "category": "DESIGN",
+      "internalHrefs": [
+        "/es/blog/el-equilibrio-vital-entre-estetica-y-usabilidad",
+        "/es/blog/interfaces-adaptativas-el-fin-del-diseno-talla-unica",
+        "/es/blog/la-navaja-de-ockham-en-ux-el-diseno-no-es-un-fin-es-un-medio",
+        "/es/producto-para-tus-clientes"
+      ]
+    },
+    {
+      "postId": 70,
+      "slug": "bento-grids-bringing-order-to-ai-data-chaos",
+      "locale": "en",
+      "title": "Bento Grids: Bringing Order to AI Data Chaos",
+      "metaTitle": "Bento grids: visual order for AI data",
+      "metaDescription": "Bento grids give modular structure to interfaces full of AI data. When modular design brings order and a sense of control to users.",
+      "publishedAt": "2026-04-14T06:00:00.000Z",
+      "category": "DESIGN",
+      "internalHrefs": [
+        "/en/blog/adaptive-interfaces-the-end-of-one-size-fits-all-design",
+        "/en/blog/generative-ui-when-the-interface-stops-being-a-blueprint",
+        "/en/blog/visual-density-the-return-of-detail-and-precision",
+        "/en/product-for-your-customers"
+      ]
+    },
+    {
+      "postId": 70,
+      "slug": "bento-grids-como-dar-orden-al-caos-de-datos-de-la-ia",
+      "locale": "es",
+      "title": "Bento Grids: Cómo dar orden al caos de datos de la IA",
+      "metaTitle": "Bento grids: orden visual para datos de IA",
+      "metaDescription": "Las bento grids dan estructura modular a interfaces cargadas de datos de IA. Cuándo el diseño modular aporta orden y control al usuario.",
+      "publishedAt": "2026-04-14T06:00:00.000Z",
+      "category": "DESIGN",
+      "internalHrefs": [
+        "/es/blog/interfaces-adaptativas-el-fin-del-diseno-talla-unica",
+        "/es/blog/ui-generativa-cuando-la-interfaz-deja-de-ser-un-plano",
+        "/es/blog/visual-density-el-retorno-del-detalle-y-la-precision",
+        "/es/producto-para-tus-clientes"
+      ]
+    },
+    {
+      "postId": 66,
+      "slug": "the-vital-balance-between-aesthetics-and-usability",
+      "locale": "en",
+      "title": "The Vital Balance Between Aesthetics and Usability",
+      "metaTitle": "Aesthetics and usability: the design balance",
+      "metaDescription": "A beautiful design nobody can use is not an asset. How to balance aesthetics and usability so design works for the business.",
+      "publishedAt": "2026-04-10T06:00:00.000Z",
+      "category": "DESIGN",
+      "internalHrefs": [
+        "/en/blog/ockhams-razor-in-ux-design-is-a-means-not-an-end",
+        "/en/blog/the-vital-balance-between-aesthetics-and-usability",
+        "/en/blog/visual-density-the-return-of-detail-and-precision",
+        "/en/product-for-your-customers"
+      ]
+    },
+    {
+      "postId": 66,
+      "slug": "el-equilibrio-vital-entre-estetica-y-usabilidad",
+      "locale": "es",
+      "title": "El equilibrio vital entre Estética y Usabilidad",
+      "metaTitle": "Estética y usabilidad: el equilibrio en el diseño",
+      "metaDescription": "Un diseño bonito que no se usa no es un activo. Cómo equilibrar estética y usabilidad para que el diseño trabaje para el negocio.",
+      "publishedAt": "2026-04-10T06:00:00.000Z",
+      "category": "DESIGN",
+      "internalHrefs": [
+        "/es/blog/el-equilibrio-vital-entre-estetica-y-usabilidad",
+        "/es/blog/la-navaja-de-ockham-en-ux-el-diseno-no-es-un-fin-es-un-medio",
+        "/es/blog/visual-density-el-retorno-del-detalle-y-la-precision",
+        "/es/producto-para-tus-clientes"
+      ]
+    },
+    {
+      "postId": 65,
+      "slug": "software-classism-the-customer-wins-over-the-employee",
+      "locale": "en",
+      "title": "Software \"Classism\": The Customer wins over the Employee",
+      "metaTitle": "Internal software: why your team deserves good UX",
+      "metaDescription": "Customer software gets all the care while internal tools lag behind. Why digital maturity starts with the tools your team uses.",
+      "publishedAt": "2026-04-09T06:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/en/blog/accessibility-is-not-a-feature-its-infrastructure",
+        "/en/blog/notification-systems-design-that-shouts-when-it-should-whisper",
+        "/en/product-for-your-team"
+      ]
+    },
+    {
+      "postId": 65,
+      "slug": "el-clasismo-del-software-el-cliente-gana-al-empleado",
+      "locale": "es",
+      "title": "El \"Clasismo\" del Software: El Cliente gana al Empleado",
+      "metaTitle": "Software interno: tu equipo también merece UX",
+      "metaDescription": "El software de cliente recibe todo el cuidado y el interno se queda atrás. Por qué la madurez digital empieza por las herramientas de tu equipo.",
+      "publishedAt": "2026-04-09T06:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/es/blog/accesibilidad-no-es-una-feature-es-infraestructura",
+        "/es/blog/sistemas-de-notificaciones-diseno-que-grita-cuando-deberia-susurrar",
+        "/es/producto-para-tu-equipo"
+      ]
+    },
+    {
+      "postId": 61,
+      "slug": "micro-interactions-designing-trust-in-ai",
+      "locale": "en",
+      "title": "Micro-interactions: Designing Trust in AI",
+      "metaTitle": "Micro-interactions that build trust in AI",
+      "metaDescription": "Micro-interactions explain what the AI is doing and give control back to users. How to design them to build trust.",
+      "publishedAt": "2026-04-01T06:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/en/blog/designing-under-uncertainty-ai-amplifies-ambiguity",
+        "/en/blog/intentional-friction-designing-resistance-as-a-feature-not-a-bug",
+        "/en/product-for-your-customers"
+      ]
+    },
+    {
+      "postId": 61,
+      "slug": "micro-interacciones-disenando-la-confianza-en-la-ia",
+      "locale": "es",
+      "title": "Micro-interacciones: Diseñando la confianza en la IA",
+      "metaTitle": "Microinteracciones que generan confianza en la IA",
+      "metaDescription": "Las microinteracciones explican lo que la IA está haciendo y devuelven el control al usuario. Cómo diseñarlas para generar confianza.",
+      "publishedAt": "2026-04-01T06:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/es/blog/diseno-con-incertidumbre-la-ia-amplifica-la-ambiguedad",
+        "/es/blog/friccion-intencionada-diseno-que-dice-no-para-que-el-usuario-gane",
+        "/es/producto-para-tus-clientes"
+      ]
+    },
+    {
+      "postId": 58,
+      "slug": "adaptive-interfaces-the-end-of-one-size-fits-all-design",
+      "locale": "en",
+      "title": "Adaptive Interfaces: The End of \"One-Size-Fits-All\" Design",
+      "metaTitle": "Adaptive interfaces: goodbye to one-size-fits-all",
+      "metaDescription": "Adaptive interfaces move from static grids to semantic composition. How to personalise the experience without making it generic.",
+      "publishedAt": "2026-03-27T07:00:00.000Z",
+      "category": "DESIGN",
+      "internalHrefs": [
+        "/en/blog/bionic-design-interfaces-that-breathe-with-the-user",
+        "/en/blog/visual-density-the-return-of-detail-and-precision",
+        "/en/product-for-your-customers"
+      ]
+    },
+    {
+      "postId": 58,
+      "slug": "interfaces-adaptativas-el-fin-del-diseno-talla-unica",
+      "locale": "es",
+      "title": "Interfaces Adaptativas: El fin del diseño \"talla única\"",
+      "metaTitle": "Interfaces adaptativas: adiós a la talla única",
+      "metaDescription": "Las interfaces adaptativas pasan de la rejilla estática a la composición semántica. Cómo personalizar la experiencia sin volverla genérica.",
+      "publishedAt": "2026-03-27T07:00:00.000Z",
+      "category": "DESIGN",
+      "internalHrefs": [
+        "/es/blog/bionic-design-interfaces-que-respiran-con-el-usuario",
+        "/es/blog/visual-density-el-retorno-del-detalle-y-la-precision",
+        "/es/producto-para-tus-clientes"
+      ]
+    },
+    {
+      "postId": 56,
+      "slug": "usability-hell-when-even-apple-doesnt-make-the-cut",
+      "locale": "en",
+      "title": "Usability Hell: When Even Apple Doesn’t Make the Cut",
+      "metaTitle": "Cognitive load and usability: not even Apple",
+      "metaDescription": "Not even Apple escapes bad usability. What its case teaches about cognitive load and end-to-end usability.",
+      "publishedAt": "2026-03-25T07:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/en/blog/accessibility-as-debt-what-your-design-system-misses",
+        "/en/blog/ai-interface-design-chat-is-not-the-universal-answer",
+        "/en/product-for-your-customers"
+      ]
+    },
+    {
+      "postId": 56,
+      "slug": "el-infierno-de-la-usabilidad-cuando-ni-apple-se-salva",
+      "locale": "es",
+      "title": "El infierno de la Usabilidad: Cuando ni Apple se salva",
+      "metaTitle": "Carga cognitiva y usabilidad: ni Apple se salva",
+      "metaDescription": "Ni Apple se salva de la mala usabilidad. Qué nos enseña su caso sobre la carga cognitiva y la usabilidad de extremo a extremo.",
+      "publishedAt": "2026-03-25T07:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/es/blog/accesibilidad-como-deuda-lo-que-tu-sistema-de-diseno-no-ve",
+        "/es/blog/interfaz-de-ia-el-chat-no-es-la-respuesta-a-todo",
+        "/es/producto-para-tus-clientes"
+      ]
+    },
+    {
+      "postId": 53,
+      "slug": "ai-powered-product-led-growth-plg-the-product-that-sells-itself",
+      "locale": "en",
+      "title": "AI-Powered Product-Led Growth (PLG): The product that sells itself",
+      "metaTitle": "Product-led growth with AI: onboarding that sells",
+      "metaDescription": "In product-led growth, the product does the selling. How AI moves from reactive support to predictive success during sign-up and use.",
+      "publishedAt": "2026-03-20T07:00:00.000Z",
+      "category": "PRODUCT",
+      "internalHrefs": [
+        "/en/blog/build-before-validating-the-product-mistake-killing-startups",
+        "/en/blog/goals-over-tools-the-design-mistake-that-sinks-digital-products",
+        "/en/blog/shiny-tool-syndrome-why-chasing-every-ai-release-kills-your-product",
+        "/en/cases/saas-support-self-service",
+        "/en/product-for-your-customers"
+      ]
+    },
+    {
+      "postId": 53,
+      "slug": "product-led-growth-plg-ia-el-producto-que-se-vende-solo",
+      "locale": "es",
+      "title": "Product-Led Growth (PLG) + IA: El producto que se vende solo",
+      "metaTitle": "Product-led growth con IA: onboarding que vende",
+      "metaDescription": "En el product-led growth, el producto hace la venta. Cómo la IA pasa del soporte reactivo al éxito predictivo durante el alta y el uso.",
+      "publishedAt": "2026-03-20T07:00:00.000Z",
+      "category": "PRODUCT",
+      "internalHrefs": [
+        "/es/blog/construir-antes-de-validar-el-error-de-producto-que-destruye-startups",
+        "/es/blog/el-sindrome-de-la-herramienta-nueva-probar-todo-te-impide-construir",
+        "/es/blog/objetivos-no-herramientas-el-error-de-diseno-que-arruina-productos-digitales",
+        "/es/casos/saas-soporte-autogestion",
+        "/es/producto-para-tus-clientes"
+      ]
+    },
+    {
+      "postId": 50,
+      "slug": "the-end-of-the-border-the-full-stack-paradigm",
+      "locale": "en",
+      "title": "The End of the Border: The Full-stack Paradigm",
+      "metaTitle": "Full-stack without losing the architecture",
+      "metaDescription": "The line between frontend and backend is blurring. Why sharing a repository doesn't mean dropping architecture, and how to gain efficiency without chaos.",
+      "publishedAt": "2026-03-19T07:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/en/blog/perceived-performance-why-your-ai-app-feels-slow",
+        "/en/blog/systems-that-fail-without-breaking-stability-is-not-resilience"
+      ]
+    },
+    {
+      "postId": 50,
+      "slug": "el-fin-de-la-frontera-el-paradigma-full-stack",
+      "locale": "es",
+      "title": "El fin de la frontera: el paradigma Full-stack",
+      "metaTitle": "El paradigma full-stack sin perder arquitectura",
+      "metaDescription": "La frontera entre frontend y backend se difumina. Por qué compartir repositorio no significa eliminar la arquitectura y cómo ganar eficiencia sin caos.",
+      "publishedAt": "2026-03-19T07:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/es/blog/percepcion-vs-realidad-por-que-tu-app-de-ia-parece-lenta",
+        "/es/blog/sistemas-que-fallan-sin-romperse-estabilidad-no-es-resiliencia"
+      ]
+    },
+    {
+      "postId": 52,
+      "slug": "visual-density-the-return-of-detail-and-precision",
+      "locale": "en",
+      "title": "Visual Density: The Return of Detail and Precision",
+      "metaTitle": "Visual density and progressive disclosure in UI",
+      "metaDescription": "Visual density is back, but well dosed. How to use progressive disclosure to show detail without overwhelming users.",
+      "publishedAt": "2026-03-18T07:00:00.000Z",
+      "category": "DESIGN",
+      "internalHrefs": [
+        "/en/blog/bento-grids-bringing-order-to-ai-data-chaos",
+        "/en/blog/generative-ui-when-the-interface-stops-being-a-blueprint",
+        "/en/blog/ockhams-razor-in-ux-design-is-a-means-not-an-end",
+        "/en/product-for-your-customers"
+      ]
+    },
+    {
+      "postId": 52,
+      "slug": "visual-density-el-retorno-del-detalle-y-la-precision",
+      "locale": "es",
+      "title": "Visual Density: El retorno del detalle y la precisión",
+      "metaTitle": "Densidad visual y progressive disclosure en UI",
+      "metaDescription": "La densidad visual vuelve, pero bien dosificada. Cómo usar el progressive disclosure para mostrar detalle sin saturar al usuario.",
+      "publishedAt": "2026-03-18T07:00:00.000Z",
+      "category": "DESIGN",
+      "internalHrefs": [
+        "/es/blog/bento-grids-como-dar-orden-al-caos-de-datos-de-la-ia",
+        "/es/blog/la-navaja-de-ockham-en-ux-el-diseno-no-es-un-fin-es-un-medio",
+        "/es/blog/ui-generativa-cuando-la-interfaz-deja-de-ser-un-plano",
+        "/es/producto-para-tus-clientes"
+      ]
+    },
+    {
+      "postId": 51,
+      "slug": "ai-doesnt-get-tired-at-mile-26",
+      "locale": "en",
+      "title": "AI doesn’t get tired at mile 26",
+      "metaTitle": "AI-designed flows: the fatigue it can't see",
+      "metaDescription": "AI does not get tired, your users do. Why delegating flow design to AI creates logical but unbearable processes, and how to filter them.",
+      "publishedAt": "2026-03-17T07:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/en/blog/accessibility-as-debt-what-your-design-system-misses",
+        "/en/blog/ai-interface-design-chat-is-not-the-universal-answer",
+        "/en/product-for-your-customers"
+      ]
+    },
+    {
+      "postId": 51,
+      "slug": "la-ia-no-se-cansa-en-el-kilometro-42",
+      "locale": "es",
+      "title": "La IA no se cansa en el kilómetro 42",
+      "metaTitle": "Flujos diseñados por IA: la fatiga que no ve",
+      "metaDescription": "La IA no se cansa, tu usuario sí. Por qué delegar el diseño de flujos en la IA crea procesos lógicos pero inasumibles, y cómo filtrarlos.",
+      "publishedAt": "2026-03-17T07:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/es/blog/accesibilidad-como-deuda-lo-que-tu-sistema-de-diseno-no-ve",
+        "/es/blog/interfaz-de-ia-el-chat-no-es-la-respuesta-a-todo",
+        "/es/producto-para-tus-clientes"
+      ]
+    },
+    {
+      "postId": 49,
+      "slug": "the-twilight-of-wordpress",
+      "locale": "en",
+      "title": "The Twilight of WordPress",
+      "metaTitle": "Migrating off WordPress without breaking things",
+      "metaDescription": "Leaving WordPress does not require a big bang. How to coexist during the transition, decouple without breaking and plan the exit.",
+      "publishedAt": "2026-03-16T07:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/en/blog/systems-that-fail-without-breaking-stability-is-not-resilience",
+        "/en/blog/your-invisible-brand-why-ai-search-engines-dont-know-you-exist",
+        "/en/product-for-your-team"
+      ]
+    },
+    {
+      "postId": 49,
+      "slug": "el-ocaso-de-wordpress",
+      "locale": "es",
+      "title": "El ocaso de WordPress",
+      "metaTitle": "Migrar de WordPress sin romper nada",
+      "metaDescription": "Salir de WordPress no exige un big bang. Cómo convivir durante la transición, desacoplar sin romper y diseñar el plan de salida.",
+      "publishedAt": "2026-03-16T07:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/es/blog/sistemas-que-fallan-sin-romperse-estabilidad-no-es-resiliencia",
+        "/es/blog/tu-marca-invisible-los-motores-de-ia-no-saben-que-existes",
+        "/es/producto-para-tu-equipo"
+      ]
+    },
+    {
+      "postId": 45,
+      "slug": "from-syntax-programmers-to-flow-engineers",
+      "locale": "en",
+      "title": "From Syntax Programmers to Flow Engineers",
+      "metaTitle": "From writing syntax to orchestrating flows",
+      "metaDescription": "The developer's value is shifting from writing syntax to orchestrating AI-assisted flows. What changes in the craft and which skills now matter most.",
+      "publishedAt": "2026-03-12T07:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/en/blog/ai-delegation-managements-oldest-question-new-riskier-answer",
+        "/en/blog/the-silent-danger-of-ai-you-stop-thinking"
+      ]
+    },
+    {
+      "postId": 45,
+      "slug": "de-programadores-de-sintaxis-a-ingenieros-de-flujos",
+      "locale": "es",
+      "title": "De programadores de sintaxis a Ingenieros de Flujos",
+      "metaTitle": "De programar sintaxis a orquestar flujos",
+      "metaDescription": "El valor del desarrollador pasa de escribir sintaxis a orquestar flujos con IA. Qué cambia en el oficio y qué habilidades pasan a importar más.",
+      "publishedAt": "2026-03-12T07:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/es/blog/delegacion-ia-la-pregunta-de-gestion-mas-antigua-tiene-respuesta-nueva",
+        "/es/blog/el-peligro-silencioso-de-la-ia-dejas-de-pensar"
+      ]
+    },
+    {
+      "postId": 43,
+      "slug": "business-first-intelligence-ai-as-a-business-strategist",
+      "locale": "en",
+      "title": "Business-First Intelligence: AI as a Business Strategist",
+      "metaTitle": "Business-first AI: understand before you train",
+      "metaDescription": "AI that adds value starts from understanding the business, not the model. Why the ticket-taking developer is no longer enough.",
+      "publishedAt": "2026-03-06T07:00:00.000Z",
+      "category": "PRODUCT",
+      "internalHrefs": [
+        "/en/ai-in-the-product",
+        "/en/blog/build-before-validating-the-product-mistake-killing-startups",
+        "/en/blog/shiny-tool-syndrome-why-chasing-every-ai-release-kills-your-product"
+      ]
+    },
+    {
+      "postId": 43,
+      "slug": "business-first-intelligence-la-ia-como-estrategia-de-negocio",
+      "locale": "es",
+      "title": "Business-First Intelligence: La IA como estrategia de negocio",
+      "metaTitle": "IA de negocio: entender antes de entrenar",
+      "metaDescription": "La IA que aporta empieza por entender el negocio, no por el modelo. Por qué el desarrollador que solo ejecuta tickets ya no basta.",
+      "publishedAt": "2026-03-06T07:00:00.000Z",
+      "category": "PRODUCT",
+      "internalHrefs": [
+        "/es/blog/construir-antes-de-validar-el-error-de-producto-que-destruye-startups",
+        "/es/blog/el-sindrome-de-la-herramienta-nueva-probar-todo-te-impide-construir",
+        "/es/ia-en-el-producto"
+      ]
+    },
+    {
+      "postId": 38,
+      "slug": "anticipatory-ux-removing-the-decision-burden",
+      "locale": "en",
+      "title": "Anticipatory UX: Removing the Decision Burden",
+      "metaTitle": "Anticipatory UX: reducing decision load",
+      "metaDescription": "Proactive design anticipates users and removes decisions from them. Where the balance between assistance and intrusion lies.",
+      "publishedAt": "2026-02-27T07:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/en/blog/no-interface-illusion-invisible-ux-not-same-as-good-ux",
+        "/en/blog/technically-correct-experientially-broken-the-bug-no-ticket-captures",
+        "/en/blog/ux-improvements-that-improve-nothing-optimizing-the-wrong-thing",
+        "/en/product-for-your-customers"
+      ]
+    },
+    {
+      "postId": 38,
+      "slug": "anticipatory-ux-eliminando-la-carga-de-decision",
+      "locale": "es",
+      "title": "Anticipatory UX: Eliminando la carga de decisión",
+      "metaTitle": "UX anticipatoria: reducir la carga de decisión",
+      "metaDescription": "El diseño proactivo se adelanta al usuario y le quita decisiones. Dónde está el equilibrio entre asistencia e intrusión.",
+      "publishedAt": "2026-02-27T07:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/es/blog/codigo-correcto-experiencia-rota-el-fallo-que-el-ticket-no-describe",
+        "/es/blog/interfaces-sin-botones-mejor-ux-es-no-ver-nada",
+        "/es/blog/mejoras-de-ux-que-no-mejoran-nada-optimizar-lo-que-no-importa",
+        "/es/producto-para-tus-clientes"
+      ]
+    },
+    {
+      "postId": 36,
+      "slug": "unbundling-the-power-of-specialization",
+      "locale": "en",
+      "title": "Unbundling: The power of specialization",
+      "metaTitle": "Unbundling: when to specialise your product",
+      "metaDescription": "Unbundling splits generalist products into specialised pieces. When specialising is the right strategy for a new product.",
+      "publishedAt": "2026-02-25T07:00:00.000Z",
+      "category": "PRODUCT",
+      "internalHrefs": [
+        "/en/starting-from-scratch"
+      ]
+    },
+    {
+      "postId": 36,
+      "slug": "unbundling-el-poder-de-la-especializacion",
+      "locale": "es",
+      "title": "Unbundling: El poder de la especialización",
+      "metaTitle": "Unbundling: cuándo especializar tu producto",
+      "metaDescription": "El unbundling separa productos generalistas en piezas especializadas. Cuándo especializar es la estrategia correcta para un producto nuevo.",
+      "publishedAt": "2026-02-25T07:00:00.000Z",
+      "category": "PRODUCT",
+      "internalHrefs": [
+        "/es/empezar-de-cero"
+      ]
+    },
+    {
+      "postId": 35,
+      "slug": "bionic-design-interfaces-that-breathe-with-the-user",
+      "locale": "en",
+      "title": "Bionic Design: Interfaces that Breathe with the User",
+      "metaTitle": "Bionic design: interfaces that adapt to users",
+      "metaDescription": "Bionic design adapts the interface's pace to the user's. What sustainable usability is and how to apply it to a real product.",
+      "publishedAt": "2026-02-24T07:00:00.000Z",
+      "category": "DESIGN",
+      "internalHrefs": [
+        "/en/blog/adaptive-interfaces-the-end-of-one-size-fits-all-design",
+        "/en/blog/ockhams-razor-in-ux-design-is-a-means-not-an-end",
+        "/en/blog/the-end-of-user-centric-toward-ecosystem-design",
+        "/en/product-for-your-customers"
+      ]
+    },
+    {
+      "postId": 35,
+      "slug": "bionic-design-interfaces-que-respiran-con-el-usuario",
+      "locale": "es",
+      "title": "Bionic Design: Interfaces que respiran con el usuario",
+      "metaTitle": "Bionic design: interfaces que se adaptan",
+      "metaDescription": "El bionic design adapta el ritmo de la interfaz al del usuario. Qué es la usabilidad sostenible y cómo aplicarla a un producto real.",
+      "publishedAt": "2026-02-24T07:00:00.000Z",
+      "category": "DESIGN",
+      "internalHrefs": [
+        "/es/blog/el-fin-del-user-centric-hacia-un-diseno-de-ecosistemas",
+        "/es/blog/interfaces-adaptativas-el-fin-del-diseno-talla-unica",
+        "/es/blog/la-navaja-de-ockham-en-ux-el-diseno-no-es-un-fin-es-un-medio",
+        "/es/producto-para-tus-clientes"
+      ]
+    },
+    {
+      "postId": 34,
+      "slug": "monorepos-the-backbone-of-modern-agility",
+      "locale": "en",
+      "title": "Monorepos: The Backbone of Modern Agility",
+      "metaTitle": "Monorepos with Turborepo: agility without chaos",
+      "metaDescription": "A well-managed monorepo with Turborepo speeds up teams that share code. When it pays off, how to organise it and which problems it prevents.",
+      "publishedAt": "2026-02-23T07:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/en/blog/cheap-code-expensive-engineering-ai-technical-debt",
+        "/en/blog/systems-that-fail-without-breaking-stability-is-not-resilience"
+      ]
+    },
+    {
+      "postId": 34,
+      "slug": "monorepos-la-columna-vertebral-de-la-agilidad-moderna",
+      "locale": "es",
+      "title": "Monorepos: La columna vertebral de la agilidad moderna",
+      "metaTitle": "Monorepos con Turborepo: agilidad sin caos",
+      "metaDescription": "Un monorepo bien gestionado con Turborepo acelera a los equipos que comparten código. Cuándo compensa, cómo se organiza y qué problemas evita.",
+      "publishedAt": "2026-02-23T07:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/es/blog/codigo-barato-ingenieria-cara-ia-deuda-tecnica",
+        "/es/blog/sistemas-que-fallan-sin-romperse-estabilidad-no-es-resiliencia"
+      ]
+    },
+    {
+      "postId": 31,
+      "slug": "the-active-listening-trap-balancing-feedback-and-vision",
+      "locale": "en",
+      "title": "The \"Active Listening\" Trap: Balancing Feedback and Vision",
+      "metaTitle": "Customer feedback versus product vision",
+      "metaDescription": "Building everything customers ask for leads to a product built by accretion. How to find the why behind feedback without losing the vision.",
+      "publishedAt": "2026-02-18T07:00:00.000Z",
+      "category": "PRODUCT",
+      "internalHrefs": [
+        "/en/blog/build-before-validating-the-product-mistake-killing-startups",
+        "/en/blog/goals-over-tools-the-design-mistake-that-sinks-digital-products",
+        "/en/starting-from-scratch"
+      ]
+    },
+    {
+      "postId": 31,
+      "slug": "la-trampa-de-la-escucha-activa-feedback-vs-vision",
+      "locale": "es",
+      "title": "La trampa de la \"Escucha Activa\": Feedback vs Visión",
+      "metaTitle": "Feedback de clientes frente a visión de producto",
+      "metaDescription": "Construir todo lo que piden los clientes lleva a un producto por acumulación. Cómo descubrir el porqué detrás del feedback sin perder la visión.",
+      "publishedAt": "2026-02-18T07:00:00.000Z",
+      "category": "PRODUCT",
+      "internalHrefs": [
+        "/es/blog/construir-antes-de-validar-el-error-de-producto-que-destruye-startups",
+        "/es/blog/objetivos-no-herramientas-el-error-de-diseno-que-arruina-productos-digitales",
+        "/es/empezar-de-cero"
+      ]
+    },
+    {
+      "postId": 30,
+      "slug": "ockhams-razor-in-ux-design-is-a-means-not-an-end",
+      "locale": "en",
+      "title": "Ockham’s Razor in UX: Design is a means, not an end",
+      "metaTitle": "Ockham's razor in UX: design as a means",
+      "metaDescription": "Design is a means, not an end. How to apply Ockham's razor to balance aesthetics and utility and design for reality.",
+      "publishedAt": "2026-02-17T07:00:00.000Z",
+      "category": "DESIGN",
+      "internalHrefs": [
+        "/en/blog/the-vital-balance-between-aesthetics-and-usability",
+        "/en/blog/visual-density-the-return-of-detail-and-precision",
+        "/en/product-for-your-customers"
+      ]
+    },
+    {
+      "postId": 30,
+      "slug": "la-navaja-de-ockham-en-ux-el-diseno-no-es-un-fin-es-un-medio",
+      "locale": "es",
+      "title": "La navaja de Ockham en UX: El diseño no es un fin, es un medio",
+      "metaTitle": "La navaja de Ockham en UX: diseño como medio",
+      "metaDescription": "El diseño no es un fin, es un medio. Cómo aplicar la navaja de Ockham para equilibrar estética y utilidad y diseñar para la realidad.",
+      "publishedAt": "2026-02-17T07:00:00.000Z",
+      "category": "DESIGN",
+      "internalHrefs": [
+        "/es/blog/el-equilibrio-vital-entre-estetica-y-usabilidad",
+        "/es/blog/visual-density-el-retorno-del-detalle-y-la-precision",
+        "/es/producto-para-tus-clientes"
+      ]
+    },
+    {
+      "postId": 29,
+      "slug": "astro-and-fastify-the-engineering-of-radical-efficiency",
+      "locale": "en",
+      "title": "Astro and Fastify: The Engineering of Radical Efficiency",
+      "metaTitle": "Astro and Fastify: light sites, fast backends",
+      "metaDescription": "Astro for a site that weighs nothing and Fastify for a high-load backend. Why the pair delivers radical efficiency and when it makes sense to choose it.",
+      "publishedAt": "2026-02-16T07:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/en/blog/perceived-performance-why-your-ai-app-feels-slow",
+        "/en/blog/your-invisible-brand-why-ai-search-engines-dont-know-you-exist"
+      ]
+    },
+    {
+      "postId": 29,
+      "slug": "astro-y-fastify-la-ingenieria-de-la-eficiencia-radical",
+      "locale": "es",
+      "title": "Astro y Fastify: La ingeniería de la eficiencia radical",
+      "metaTitle": "Astro y Fastify: webs ligeras y backends rápidos",
+      "metaDescription": "Astro para una web que no pesa y Fastify para un backend de alta carga. Por qué esta combinación da eficiencia radical y cuándo tiene sentido elegirla.",
+      "publishedAt": "2026-02-16T07:00:00.000Z",
+      "category": "TECH",
+      "internalHrefs": [
+        "/es/blog/percepcion-vs-realidad-por-que-tu-app-de-ia-parece-lenta",
+        "/es/blog/tu-marca-invisible-los-motores-de-ia-no-saben-que-existes"
+      ]
+    },
+    {
+      "postId": 27,
+      "slug": "the-end-of-the-demo-as-a-barrier-to-entry",
+      "locale": "en",
+      "title": "The end of the \"demo\" as a barrier to entry",
+      "metaTitle": "Time to value: the end of the demo as a barrier",
+      "metaDescription": "Forcing a demo request slows adoption. Why time to value is the survival metric and how to design trust from sign-up onwards.",
+      "publishedAt": "2026-02-12T07:00:00.000Z",
+      "category": "PRODUCT",
+      "internalHrefs": [
+        "/en/blog/ai-powered-product-led-growth-plg-the-product-that-sells-itself",
+        "/en/blog/build-before-validating-the-product-mistake-killing-startups",
+        "/en/blog/goals-over-tools-the-design-mistake-that-sinks-digital-products",
+        "/en/cases/saas-support-self-service",
+        "/en/product-for-your-customers"
+      ]
+    },
+    {
+      "postId": 27,
+      "slug": "el-fin-de-la-demo-como-barrera-de-entrada",
+      "locale": "es",
+      "title": "El fin de la \"demo\" como barrera de entrada",
+      "metaTitle": "Time to value: el fin de la demo como barrera",
+      "metaDescription": "Obligar a pedir una demo frena la adopción. Por qué el time to value es la métrica de supervivencia y cómo diseñar la confianza desde el alta.",
+      "publishedAt": "2026-02-12T07:00:00.000Z",
+      "category": "PRODUCT",
+      "internalHrefs": [
+        "/es/blog/construir-antes-de-validar-el-error-de-producto-que-destruye-startups",
+        "/es/blog/objetivos-no-herramientas-el-error-de-diseno-que-arruina-productos-digitales",
+        "/es/blog/product-led-growth-plg-ia-el-producto-que-se-vende-solo",
+        "/es/casos/saas-soporte-autogestion",
+        "/es/producto-para-tus-clientes"
+      ]
+    },
+    {
+      "postId": 26,
+      "slug": "design-as-an-antidote-to-cognitive-fatigue",
+      "locale": "en",
+      "title": "Design as an antidote to cognitive fatigue",
+      "metaTitle": "Cognitive fatigue in internal software",
+      "metaDescription": "Your team loses energy to fragmented interfaces and maze-like processes. How to design internal software that reduces cognitive fatigue.",
+      "publishedAt": "2026-02-11T07:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/en/blog/behavioral-economics-in-ux-the-hidden-friction-nobody-talks-about",
+        "/en/blog/designers-in-the-ai-era-judgment-is-the-last-thing-to-go",
+        "/en/product-for-your-team"
+      ]
+    },
+    {
+      "postId": 26,
+      "slug": "el-diseno-como-antidoto-a-la-fatiga-cognitiva",
+      "locale": "es",
+      "title": "El diseño como antídoto a la fatiga cognitiva",
+      "metaTitle": "Fatiga cognitiva en el software interno",
+      "metaDescription": "Tu equipo pierde energía con interfaces fragmentadas y procesos laberínticos. Cómo diseñar software interno que reduzca la fatiga cognitiva.",
+      "publishedAt": "2026-02-11T07:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/es/blog/disenadores-en-la-era-de-la-ia-el-juicio-no-se-automatiza",
+        "/es/blog/economia-del-comportamiento-lo-que-el-ux-ignora-cuando-disena-para-humanos",
+        "/es/producto-para-tu-equipo"
+      ]
+    },
+    {
+      "postId": 22,
+      "slug": "friction-the-invisible-tax-on-profit",
+      "locale": "en",
+      "title": "Friction: The invisible tax on profit",
+      "metaTitle": "Usability in internal processes: the hidden cost",
+      "metaDescription": "Poor usability in internal processes leaks margin: seconds lost per employee, every day. How to calculate that cost and reduce it.",
+      "publishedAt": "2026-02-05T07:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/en/blog/behavioral-economics-in-ux-the-hidden-friction-nobody-talks-about",
+        "/en/blog/ux-improvements-that-improve-nothing-optimizing-the-wrong-thing",
+        "/en/blog/ux-roi-isnt-proven-with-pretty-metrics-its-proven-with-decisions",
+        "/en/product-for-your-team"
+      ]
+    },
+    {
+      "postId": 22,
+      "slug": "la-friccion-es-un-impuesto-al-beneficio",
+      "locale": "es",
+      "title": "La fricción es un impuesto al beneficio",
+      "metaTitle": "Usabilidad en procesos internos: el coste oculto",
+      "metaDescription": "La mala usabilidad en los procesos internos es una fuga de margen: segundos perdidos por empleado y por día. Cómo calcularla y reducirla.",
+      "publishedAt": "2026-02-05T07:00:00.000Z",
+      "category": "UX",
+      "internalHrefs": [
+        "/es/blog/economia-del-comportamiento-lo-que-el-ux-ignora-cuando-disena-para-humanos",
+        "/es/blog/el-roi-de-ux-no-se-demuestra-con-metricas-bonitas-se-demuestra-con-decisiones",
+        "/es/blog/mejoras-de-ux-que-no-mejoran-nada-optimizar-lo-que-no-importa",
+        "/es/producto-para-tu-equipo"
+      ]
+    },
+    {
+      "postId": 19,
+      "slug": "are-you-sitting-on-a-gold-mine",
+      "locale": "en",
+      "title": "Are you sitting on a gold mine?",
+      "metaTitle": "Turn an internal tool into a product",
+      "metaDescription": "Many service companies hide a product inside their operations. How to turn an internal tool into margin and a new line of business.",
+      "publishedAt": "2026-02-02T07:00:00.000Z",
+      "category": "PRODUCT",
+      "internalHrefs": [
+        "/en/blog/ai-powered-product-led-growth-plg-the-product-that-sells-itself",
+        "/en/blog/build-before-validating-the-product-mistake-killing-startups",
+        "/en/starting-from-scratch"
+      ]
+    },
+    {
+      "postId": 19,
+      "slug": "estas-sentado-en-una-mina-de-oro",
+      "locale": "es",
+      "title": "¿Estás sentado en una mina de oro?",
+      "metaTitle": "Convertir una herramienta interna en producto",
+      "metaDescription": "Muchas empresas de servicios esconden un producto en su operación. Cómo convertir una herramienta interna en margen y en una nueva línea de negocio.",
+      "publishedAt": "2026-02-02T07:00:00.000Z",
+      "category": "PRODUCT",
+      "internalHrefs": [
+        "/es/blog/construir-antes-de-validar-el-error-de-producto-que-destruye-startups",
+        "/es/blog/product-led-growth-plg-ia-el-producto-que-se-vende-solo",
+        "/es/empezar-de-cero"
+      ]
+    }
+  ]
+}

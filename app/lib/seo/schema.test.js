@@ -81,6 +81,21 @@ describe("articleSchema", () => {
     expect(articleSchema(base).inLanguage).toBe("es-ES");
     expect(articleSchema({ ...base, lang: "en" }).inLanguage).toBe("en-US");
   });
+
+  it("lleva headline, datePublished, author e inLanguage", () => {
+    const a = articleSchema(base);
+    expect(a["@type"]).toBe("BlogPosting");
+    for (const campo of ["headline", "datePublished", "author", "inLanguage"]) expect(a[campo]).toBeTruthy();
+  });
+
+  it("declara el tema del cluster en `about`", () => {
+    const a = articleSchema({ ...base, about: "Diseño de producto y experiencia de cliente" });
+    expect(a.about).toEqual({ "@type": "Thing", name: "Diseño de producto y experiencia de cliente" });
+  });
+
+  it("sin cluster, no lleva `about`", () => {
+    expect(articleSchema({ ...base, about: null })).not.toHaveProperty("about");
+  });
 });
 
 describe("breadcrumbSchema", () => {

@@ -125,6 +125,9 @@ export function founderSchema() {
  * `dateModified` sale del updatedAt real de la fila, no de la fecha de
  * publicación: repetir la misma fecha en los dos campos le dice a Google que
  * el artículo nunca se ha tocado.
+ *
+ * `about` es el tema del cluster del post (app/lib/seo/clusters.js); los
+ * posts fuera de cluster no lo llevan.
  */
 export function articleSchema({
   lang,
@@ -135,6 +138,7 @@ export function articleSchema({
   datePublished,
   dateModified,
   articleBody,
+  about,
 }) {
   return {
     "@type": "BlogPosting",
@@ -148,6 +152,7 @@ export function articleSchema({
     mainEntityOfPage: { "@type": "WebPage", "@id": url },
     articleBody,
     inLanguage: lang === "es" ? "es-ES" : "en-US",
+    ...(about ? { about: { "@type": "Thing", name: about } } : {}),
   };
 }
 

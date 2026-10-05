@@ -3,6 +3,7 @@ import { EDITORIAL_GUIDE, FEW_SHOT_EXAMPLES, LINKEDIN_GUIDE } from "./editorialG
 import {
   CASES,
   CLUSTERS,
+  CLUSTERS_POSICIONAMIENTO,
   FALLBACK_LINK_SENTENCE,
   RESERVED_QUERIES,
   caseHrefs,
@@ -70,7 +71,9 @@ const POST_TOOL = {
       },
       cluster: {
         type: "string",
-        enum: Object.keys(CLUSTERS),
+        // IA se queda para los posts que ya lo tenían: los nuevos van a uno
+        // de los tres clusters del posicionamiento (lo vigila clusters.test.js).
+        enum: CLUSTERS_POSICIONAMIENTO,
         description:
           "Cluster del post (ver sección POSICIONAMIENTO del prompt). Uno solo.",
       },
@@ -127,7 +130,7 @@ export const META_DESCRIPTION_MAX = 155;
  */
 export function buildSeoBlock(category) {
   const suggested = clusterForCategory(category);
-  const clusters = Object.entries(CLUSTERS)
+  const clusters = CLUSTERS_POSICIONAMIENTO.map((key) => [key, CLUSTERS[key]])
     .map(
       ([key, c]) =>
         `- **${key}** — ${c.name.es}${key === suggested ? " ← SUGERIDO para hoy" : ""}\n` +
@@ -351,7 +354,7 @@ function cutAtWord(text, max) {
 function applySeoRules(data, category) {
   const warnings = [];
   let cluster = data.cluster;
-  if (!CLUSTERS[cluster]) {
+  if (!CLUSTERS_POSICIONAMIENTO.includes(cluster)) {
     warnings.push(`cluster "${cluster}" no válido; se usa el de la categoría`);
     cluster = clusterForCategory(category);
   }
@@ -461,7 +464,7 @@ export function validateGenerated(data, { recentPosts = [], category } = {}) {
   );
   // Páginas a las que el post puede enlazar además de a otros posts: la de
   // su cluster y los casos. Un cluster inválido lo corrige applySeoRules.
-  const cluster = CLUSTERS[data.cluster] ? data.cluster : clusterForCategory(category);
+  const cluster = CLUSTERS_POSICIONAMIENTO.includes(data.cluster) ? data.cluster : clusterForCategory(category);
   const allowed = (lang) => new Set([clusterHref(cluster, lang), ...caseHrefs(lang)]);
   data.content_es = sanitizeInvalidLinks(data.content_es, validSlugsEs, "es", allowed("es"));
   data.content_en = sanitizeInvalidLinks(data.content_en, validSlugsEn, "en", allowed("en"));
