@@ -22,14 +22,18 @@ if (!/^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(BASE)) {
   process.exit(1);
 }
 
-const decode = (s) =>
-  s
-    ?.replace(/&amp;/g, "&")
-    .replace(/&quot;/g, '"')
-    .replace(/&#x27;|&#39;/g, "'")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .trim() ?? null;
+// Una sola pasada: decodificar &amp; antes que el resto convertiría
+// "&amp;lt;" en "<" (doble decodificación).
+const ENTIDADES = { "&amp;": "&", "&quot;": '"', "&#x27;": "'", "&#39;": "'", "&lt;": "<", "&gt;": ">" };
+const decode = (s) => s?.replace(/&(?:amp|quot|#x27|#39|lt|gt);/g, (e) => ENTIDADES[e]).trim() ?? null;
+
+// Texto de un fragmento HTML: quita etiquetas hasta que no quede ninguna y
+// después cualquier < o > suelto, para que no sobreviva un "<script" partido.
+function textoDe(html) {
+  let t = html.replace(/<br\s*\/?>/g, " ");
+  for (let antes = null; antes !== t; ) [antes, t] = [t, t.replace(/<[^<>]*>/g, "")];
+  return t.replace(/[<>]/g, "").replace(/\s+/g, " ");
+}
 const attr = (tag, name) => decode(tag.match(new RegExp(`${name}="([^"]*)"`))?.[1]);
 const metaTags = (html) => html.match(/<(meta|link)\b[^>]*>/g) ?? [];
 
@@ -45,9 +49,7 @@ function extraer(html) {
       .filter((x) => x.startsWith("<link") && attr(x, "rel") === "alternate" && attr(x, "hrefLang"))
       .map((x) => [attr(x, "hrefLang"), attr(x, "href")]),
   );
-  const h1s = [...html.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/g)].map((m) =>
-    decode(m[1].replace(/<br\s*\/?>/g, " ").replace(/<[^>]*>/g, "").replace(/\s+/g, " ")),
-  );
+  const h1s = [...html.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/g)].map((m) => decode(textoDe(m[1])));
   return {
     title: decode(html.match(/<title[^>]*>([\s\S]*?)<\/title>/)?.[1]),
     description: meta("description"),

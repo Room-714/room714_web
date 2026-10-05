@@ -37,7 +37,8 @@ const titles = veces(titleDe);
 const descs = veces((p) => p.metaDescription || null);
 const porPost = Object.groupBy(posts, (p) => p.postId);
 
-const celda = (s) => String(s ?? "—").replace(/\|/g, "\\|");
+// Celda de tabla Markdown: primero la barra invertida, luego la barra vertical.
+const celda = (s) => String(s ?? "—").replace(/\\/g, "\\\\").replace(/\|/g, "\\|");
 const filas = [];
 const conProblemas = [];
 const recuento = {};
