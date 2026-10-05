@@ -279,3 +279,61 @@ Cómo se calcula cada columna:
 **H1.** Se mantiene "No somos una agencia al uso ni una consultora" / "We are not your usual agency, nor a consultancy".
 ✋ *Opción, solo si se quiere:* "No somos una agencia al uso ni una consultora: somos un estudio de producto digital" / "We are not your usual agency, nor a consultancy: we are a digital product studio". Refuerza "estudio de producto digital", la búsqueda asignada a esta página, pero alarga un titular que hoy funciona.
 
+## 3. Clusters del blog
+
+**Sin cambios de schema ni de nombres.** El mecanismo del 25/09 sigue igual: el cluster no se guarda en la base de datos y cada post enlaza a la página de su cluster, que es lo que mete el generador. Se ha añadido:
+
+- `clusterFromHrefs(hrefs, lang)` y `clusterOfContent(html, lang)` en [app/lib/seo/clusters.js](../app/lib/seo/clusters.js). Deducen el cluster de un post a partir del enlace a la página de su cluster, y devuelven `null` (fuera de cluster) si no lo hay. También `CLUSTERS_POSICIONAMIENTO = ["C1", "C2", "C3"]`.
+- **Test** [app/lib/seo/clusters.test.js](../app/lib/seo/clusters.test.js). Falla si un post publicado **desde el 02/10/2026 (hora de Madrid)** no está en C1, C2 o C3, es decir, si está en IA o fuera de cluster. Los posts anteriores conservan su cluster, IA incluido. Si falta el fixture, el test también falla.
+
+Equivalencias con los nombres del encargo: `discovery` = **C1**, `producto-cx` = **C2**, `desarrollo` = **C3**. En código se quedan los nombres actuales.
+
+✋ **Decisión pendiente.** El generador (`buildSeoBlock` en `app/lib/ai/generator.js`) sigue ofreciendo IA como cluster válido para posts nuevos. Si elige IA, el test lo marcará cuando se refresque el fixture. Para evitarlo en origen habría que quitar IA de las opciones del prompt de los posts nuevos; no lo he tocado.
+
+### Fixture `seo/fixtures/posts-publicados.json`
+
+**Exportado el 2026-10-05.** Una sola SELECT de solo lectura, con `connection_limit=1` y sin consultas en paralelo, usando `scripts/seo-exportar-fixture-posts.mjs` (`node --env-file=.env.local scripts/seo-exportar-fixture-posts.mjs`). No baja el cuerpo de los posts, solo sus enlaces internos. Para refrescarlo se vuelve a lanzar el mismo script, que hace esta consulta:
+
+```sql
+SELECT t."postId", t.slug, t.lang AS locale, t.title, t."metaTitle", t."metaDescription",
+       p.date AS "publishedAt", p.category::text AS category,
+       ARRAY(SELECT DISTINCT m[1]
+               FROM regexp_matches(t.content, 'href="(?:https?://(?:www\.)?room714\.com)?(/[^"#?]*)', 'g') AS m
+              ORDER BY 1) AS "internalHrefs"
+  FROM "PostTranslation" t JOIN "Post" p ON p.id = t."postId"
+ WHERE p.published = true AND p.date <= now()
+ ORDER BY p.date DESC, t.lang;
+```
+
+Formato del fichero: `{ "exportedAt": "<ISO>", "posts": [ { "postId", "slug", "locale", "title", "metaTitle", "metaDescription", "publishedAt" (ISO), "category", "internalHrefs": [...] } ] }`. Con él:
+1. `npx vitest run` aplica el test de clusters.
+2. `node scripts/seo-informe-posts.mjs` saca la tabla de posts (tarea 1b) y los enlaces internos de los posts que redirigen o dan 404 (tarea 5).
+
+### Posts fuera de cluster
+
+**Confirmado con el fixture: siguen siendo los 11 posts (22 traducciones) del 25/09** ([seo/cierres.md](../seo/cierres.md)).
+
+Los tres posts publicados después del 25/09 caen en clusters del posicionamiento, y el test pasa:
+
+| Fecha | ES | Cluster |
+|---|---|---|
+| 2026-09-28 | contexto-vs-memoria-ia-sistemas-produccion | C3 |
+| 2026-09-30 | roi-de-ux-que-sobrevive-al-comite-defender-decision-de-diseno | C2 |
+| 2026-10-05 | apis-para-agentes-ia-contrato-que-tu-backend-no-ha-firmado | C3 |
+
+| # | ES | EN | Tema |
+|---|---|---|---|
+| 22 | coste-oculto-herramientas-ia-para-desarrolladores | hidden-cost-ai-developer-tools-productivity-trap | Productividad del equipo técnico |
+| 30 | el-peligro-silencioso-de-la-ia-dejas-de-pensar | the-silent-danger-of-ai-you-stop-thinking | Reflexión general |
+| 33 | saas-bajo-asedio-cuando-tu-competencia-no-es-otro-software | saas-under-siege-when-your-real-competitors-arent-other-apps | Estrategia de mercado |
+| 35 | disenadores-en-la-era-de-la-ia-el-juicio-no-se-automatiza | designers-in-the-ai-era-judgment-is-the-last-thing-to-go | Oficio del diseñador |
+| 36 | el-sindrome-de-la-herramienta-nueva-probar-todo-te-impide-construir | shiny-tool-syndrome-why-chasing-every-ai-release-kills-your-product | Disciplina del equipo |
+| 37 | claude-md-el-contexto-como-recurso-escaso | claude-md-context-as-a-scarce-resource | Herramienta de desarrollo |
+| 38 | tu-marca-invisible-los-motores-de-ia-no-saben-que-existes | your-invisible-brand-why-ai-search-engines-dont-know-you-exist | Marketing en buscadores de IA |
+| 57 | el-fin-de-la-frontera-el-paradigma-full-stack | the-end-of-the-border-the-full-stack-paradigm | Organización de equipos |
+| 61 | de-programadores-de-sintaxis-a-ingenieros-de-flujos | from-syntax-programmers-to-flow-engineers | Carrera profesional |
+| 66 | monorepos-la-columna-vertebral-de-la-agilidad-moderna | monorepos-the-backbone-of-modern-agility | Herramienta de desarrollo |
+| 69 | astro-y-fastify-la-ingenieria-de-la-eficiencia-radical | astro-and-fastify-the-engineering-of-radical-efficiency | Tecnología concreta |
+
+Reparto a 2026-10-05 (76 posts): C1 9 · C2 29 · C3 12 · IA 15 · fuera de cluster 11.
+

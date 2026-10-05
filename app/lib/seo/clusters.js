@@ -129,6 +129,26 @@ export function caseHrefs(lang) {
   return CASES.map((c) => path(c.key, lang));
 }
 
+/** Los tres clusters del posicionamiento. IA se queda solo para los posts que ya lo tenían. */
+export const CLUSTERS_POSICIONAMIENTO = ["C1", "C2", "C3"];
+
+/**
+ * El cluster de un post, deducido de sus enlaces internos: el de la página de
+ * cluster a la que enlaza. No se guarda en BD; el generador mete exactamente
+ * un enlace a esa página, y los posts antiguos lo recibieron con
+ * scripts/seo-aplicar-clusters-posts.mjs. Sin enlace, null (fuera de cluster).
+ */
+export function clusterFromHrefs(hrefs, lang) {
+  const set = new Set(hrefs || []);
+  return Object.keys(CLUSTERS).find((c) => set.has(clusterHref(c, lang))) ?? null;
+}
+
+/** Igual que clusterFromHrefs, a partir del HTML del cuerpo del post. */
+export function clusterOfContent(content, lang) {
+  const hrefs = [...String(content || "").matchAll(/href="(?:https?:\/\/(?:www\.)?room714\.com)?(\/[^"#?]*)/g)].map((m) => m[1]);
+  return clusterFromHrefs(hrefs, lang);
+}
+
 /** Las búsquedas reservadas que aparecen en un texto (sin distinguir mayúsculas). */
 export function reservedQueriesIn(text, lang) {
   const t = String(text || "").toLowerCase();
