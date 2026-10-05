@@ -27,12 +27,21 @@ if (!/^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(BASE)) {
 const ENTIDADES = { "&amp;": "&", "&quot;": '"', "&#x27;": "'", "&#39;": "'", "&lt;": "<", "&gt;": ">" };
 const decode = (s) => s?.replace(/&(?:amp|quot|#x27|#39|lt|gt);/g, (e) => ENTIDADES[e]).trim() ?? null;
 
-// Texto de un fragmento HTML: quita etiquetas hasta que no quede ninguna y
-// después cualquier < o > suelto, para que no sobreviva un "<script" partido.
+// Texto de un fragmento HTML, carácter a carácter: todo lo que va entre < y >
+// se descarta (un <br> cuenta como espacio), así que no puede quedar ninguna
+// etiqueta a medias. Solo sirve para medir y comparar el H1, no para pintarlo.
 function textoDe(html) {
-  let t = html.replace(/<br\s*\/?>/g, " ");
-  for (let antes = null; antes !== t; ) [antes, t] = [t, t.replace(/<[^<>]*>/g, "")];
-  return t.replace(/[<>]/g, "").replace(/\s+/g, " ");
+  let texto = "";
+  let etiqueta = null;
+  for (const c of html) {
+    if (c === "<") etiqueta = "";
+    else if (c === ">" && etiqueta !== null) {
+      if (/^br\b/i.test(etiqueta)) texto += " ";
+      etiqueta = null;
+    } else if (etiqueta !== null) etiqueta += c;
+    else texto += c;
+  }
+  return texto.replace(/\s+/g, " ");
 }
 const attr = (tag, name) => decode(tag.match(new RegExp(`${name}="([^"]*)"`))?.[1]);
 const metaTags = (html) => html.match(/<(meta|link)\b[^>]*>/g) ?? [];
