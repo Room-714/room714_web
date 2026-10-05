@@ -446,14 +446,11 @@ Todo aprobado. Para el punto 2 se aplica la opción A, la recomendada; A y B era
 | 1a · Descripciones de categoría | ✅ Aplicado en `app/[lang]/blog/category/[slug]/page.js` (142, 147 y 142 caracteres). |
 | 2 · Cómo trabajamos | ✅ Opción A en `about.hero.description` (ES y EN). ✅ H1 alternativo, con punto en lugar de dos puntos: la vista pinta cada frase en su línea ("…ni una consultora." / "Somos un estudio de producto digital"). Revisado en capturas a 1440 y 820 px: el layout no cambia. |
 | 3 · IA en el generador | ✅ El enum de la herramienta, el prompt y la validación se limitan a C1, C2 y C3. Si el modelo devuelve IA, el post pasa al cluster de su categoría. |
-| 4 · Párrafos puente | ⏳ Textos en [seo/oct-2026.data.json](../seo/oct-2026.data.json). **Sin escribir en la BD:** el modo automático de Claude Code bloqueó el script que escribe en producción. |
-| 5 · Enlaces de posts | ⏳ Igual: 7 cambios de `href` y 1 `<a>` anidado en `seo/oct-2026.data.json`, sin escribir en la BD. |
+| 4 · Párrafos puente | ✅ Aplicados en la BD: 8 traducciones (datos en [seo/oct-2026.data.json](../seo/oct-2026.data.json)). |
+| 5 · Enlaces de posts | ✅ Aplicados en la BD: 7 `href` repuntados y 1 `<a>` anidado quitado. |
 | 6 · `about` sin paréntesis | ✅ Campo `topic` en cada cluster (`name` no cambia). IA declara "IA aplicada al producto" / "AI applied to the product". |
 
-**Para aplicar 4 y 5** hace falta un script que lea `seo/oct-2026.data.json` con las mismas garantías que los del 25/09:
-- Modo de prueba por defecto.
-- Copia del cuerpo en `scripts/backups/` y forma de revertirla.
-- Localiza cada post por slug y es idempotente: solo añade el puente si el post aún no enlaza a Cómo trabajamos, y solo cambia un `href` si el destino está publicado.
-- `connection_limit=1`, una lectura y una transacción.
-
-Lo escribe y lo lanza José, o Claude con permiso para escribir en producción.
+**4 y 5 aplicados el 2026-10-05 a las 19:18** con [scripts/seo-aplicar-oct-2026.mjs](../scripts/seo-aplicar-oct-2026.mjs), lanzado por José:
+- Cambios: 15 traducciones, 16 cambios (8 puentes, 7 enlaces y 1 anidado), 0 avisos.
+- Copia previa: `scripts/backups/seo-oct-2026-2026-10-05T17-18-25-859Z.json`. Se revierte con `--revertir=<copia> --apply`.
+- Una simulación posterior da 0 cambios pendientes.
