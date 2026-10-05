@@ -11,11 +11,13 @@ import { path } from "../routes.mjs";
  * Los tres clusters más la IA transversal. `page` es la clave de ROUTES de
  * la página a la que enlazan los posts del cluster. `postQueries` son las
  * búsquedas complementarias libres para posts (hipótesis del documento,
- * sin volumen validado todavía).
+ * sin volumen validado todavía). `topic` es el tema que declara el JSON-LD
+ * de los posts (`about`): el nombre sin aclaraciones internas.
  */
 export const CLUSTERS = {
   C1: {
     name: { es: "Ideación y discovery de producto digital", en: "Digital product ideation and discovery" },
+    topic: { es: "Ideación y discovery de producto digital", en: "Digital product ideation and discovery" },
     page: "empezarDeCero",
     postQueries: {
       es: ["validar una idea de producto digital", "discovery de producto digital", "definir el MVP de un producto digital"],
@@ -24,6 +26,7 @@ export const CLUSTERS = {
   },
   C2: {
     name: { es: "Diseño de producto y experiencia de cliente", en: "Product design and customer experience" },
+    topic: { es: "Diseño de producto y experiencia de cliente", en: "Product design and customer experience" },
     page: "productoClientes",
     postQueries: {
       es: ["mejorar la experiencia de cliente digital", "reducir el abandono en el alta", "diseño del área de cliente", "sistema de diseño multimarca"],
@@ -32,6 +35,7 @@ export const CLUSTERS = {
   },
   C3: {
     name: { es: "Desarrollo de software de producto", en: "Product software development" },
+    topic: { es: "Desarrollo de software de producto", en: "Product software development" },
     page: "productoEquipo",
     postQueries: {
       es: ["desarrollo de back-office a medida", "migrar un sistema heredado sin parar la operación", "arquitectura de producto digital"],
@@ -40,6 +44,7 @@ export const CLUSTERS = {
   },
   IA: {
     name: { es: "IA aplicada al producto (ligada a experiencia de cliente)", en: "AI applied to the product (tied to customer experience)" },
+    topic: { es: "IA aplicada al producto", en: "AI applied to the product" },
     page: "iaProducto",
     postQueries: {
       es: ["IA en la experiencia de cliente", "modelo canónico de datos para IA"],

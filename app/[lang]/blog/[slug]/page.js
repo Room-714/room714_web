@@ -133,7 +133,7 @@ export default async function PostPage({ params }) {
       datePublished: post.datePublished,
       dateModified: post.dateModified,
       articleBody: plainText,
-      about: cluster ? CLUSTERS[cluster].name[lang] : null,
+      about: cluster ? CLUSTERS[cluster].topic[lang] : null,
     }),
     breadcrumbSchema([
       { name: dict.nav.home, url: `${SITE_URL}/${lang}` },

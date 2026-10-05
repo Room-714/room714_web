@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import {
+  CLUSTERS,
   CLUSTERS_POSICIONAMIENTO,
   clusterFromHrefs,
   clusterHref,
@@ -36,6 +37,16 @@ describe("clusterOfContent", () => {
     expect(clusterOfContent('<p>Así <a href="/es/producto-para-tu-equipo">lo hacemos</a>.</p>', "es")).toBe("C3");
     expect(clusterOfContent('<a href="https://www.room714.com/en/ai-in-the-product">x</a>', "en")).toBe("IA");
     expect(clusterOfContent("<p>Sin enlaces.</p>", "es")).toBeNull();
+  });
+});
+
+describe("CLUSTERS", () => {
+  it("cada cluster tiene un tema para el JSON-LD, sin paréntesis", () => {
+    for (const c of Object.values(CLUSTERS))
+      for (const lang of ["es", "en"]) {
+        expect(c.topic[lang]).toBeTruthy();
+        expect(c.topic[lang]).not.toMatch(/[()]/);
+      }
   });
 });
 
