@@ -1,0 +1,57 @@
+{
+  "aprobado": "2026-10-05 · docs/seo-audit-2026-10.md, tareas 4 y 5",
+  "puentes": [
+    {
+      "lang": "es",
+      "slug": "visual-density-el-retorno-del-detalle-y-la-precision",
+      "html": "La densidad no es una cuestión estética: es una decisión de experiencia de cliente. Cuánto detalle enseña una pantalla, y en qué momento, decide si quien usa tu producto digital actúa rápido o se pierde entre datos. Por eso diseñamos esas decisiones junto a la arquitectura y no después: es parte de <a href=\"/es/como-trabajamos\">cómo trabajamos</a>."
+    },
+    {
+      "lang": "en",
+      "slug": "visual-density-the-return-of-detail-and-precision",
+      "html": "Density is not an aesthetic question: it is a customer experience decision. How much detail a screen shows, and when, decides whether the people using your digital product act quickly or get lost in data. That is why we design those decisions alongside the architecture, not after it: it is part of <a href=\"/en/how-we-work\">how we work</a>."
+    },
+    {
+      "lang": "es",
+      "slug": "bento-grids-como-dar-orden-al-caos-de-datos-de-la-ia",
+      "html": "Una bento grid solo pone orden si cada bloque responde a algo que tu cliente necesita hacer. Organizar un producto digital por los objetivos de quien lo usa, y no por los datos que tenemos a mano, es lo que convierte un panel vistoso en una buena experiencia de cliente. Así planteamos el diseño desde el primer día, como contamos en <a href=\"/es/como-trabajamos\">cómo trabajamos</a>."
+    },
+    {
+      "lang": "en",
+      "slug": "bento-grids-bringing-order-to-ai-data-chaos",
+      "html": "A bento grid only brings order if every block answers something your customer needs to do. Organising a digital product around the goals of the people who use it, not around the data we happen to have, is what turns a flashy dashboard into a good customer experience. That is how we approach design from day one, as we explain in <a href=\"/en/how-we-work\">how we work</a>."
+    },
+    {
+      "lang": "es",
+      "slug": "observabilidad-agentes-ia-lo-que-los-logs-no-te-cuentan",
+      "html": "Un agente que falla en silencio no es solo un problema técnico: es un cliente que recibe una respuesta equivocada sin que nadie se entere. Medir lo que hace la IA dentro de un producto digital es medir la experiencia de cliente que entrega. Por eso, cuando ponemos un agente en producción, la observabilidad se diseña desde el principio; es parte de <a href=\"/es/como-trabajamos\">cómo trabajamos</a>."
+    },
+    {
+      "lang": "en",
+      "slug": "agent-observability-what-logs-dont-tell-you",
+      "html": "An agent that fails silently is not just a technical problem: it is a customer getting the wrong answer without anyone noticing. Measuring what AI does inside a digital product means measuring the customer experience it delivers. That is why, when we put an agent into production, observability is designed in from the start; it is part of <a href=\"/en/how-we-work\">how we work</a>."
+    },
+    {
+      "lang": "es",
+      "slug": "interfaz-de-ia-el-chat-no-es-la-respuesta-a-todo",
+      "html": "Elegir entre un chat, un formulario o un botón no es un detalle de interfaz: define cuánto esfuerzo le pide tu producto digital a cada cliente. Una IA bien integrada se nota en la experiencia de cliente, no en la cantidad de conversación que genera. Por eso decidimos la modalidad con el diseño y la tecnología delante, como contamos en <a href=\"/es/como-trabajamos\">cómo trabajamos</a>."
+    },
+    {
+      "lang": "en",
+      "slug": "ai-interface-design-chat-is-not-the-universal-answer",
+      "html": "Choosing between a chat, a form or a button is not an interface detail: it sets how much effort your digital product asks of each customer. Well-integrated AI shows in the customer experience, not in how much conversation it generates. That is why we choose the modality with design and technology in front of us, as we explain in <a href=\"/en/how-we-work\">how we work</a>."
+    }
+  ],
+  "enlaces": [
+    { "lang": "en", "slug": "the-lying-prototype-why-your-usability-tests-are-giving-you-bad-data", "de": "/en/blog/the-designer-who-ships-code-evolution-or-trap", "a": "/en/blog/designers-in-the-ai-era-judgment-is-the-last-thing-to-go" },
+    { "lang": "es", "slug": "el-prototipo-que-miente-por-que-tus-tests-de-usabilidad-estan-contaminados", "de": "/es/blog/el-disenador-que-entrega-codigo-evolucion-o-trampa", "a": "/es/blog/disenadores-en-la-era-de-la-ia-el-juicio-no-se-automatiza" },
+    { "lang": "en", "slug": "ux-roi-isnt-proven-with-pretty-metrics-its-proven-with-decisions", "de": "/en/blog/usability-as-a-filter-to-avoid-cognitive-overload", "a": "/en/blog/design-as-an-antidote-to-cognitive-fatigue" },
+    { "lang": "es", "slug": "el-roi-de-ux-no-se-demuestra-con-metricas-bonitas-se-demuestra-con-decisiones", "de": "/es/blog/la-usabilidad-como-filtro-para-evitar-la-fatiga-cognitiva", "a": "/es/blog/el-diseno-como-antidoto-a-la-fatiga-cognitiva" },
+    { "lang": "en", "slug": "one-big-app-or-thirty-small-ones-the-product-math-nobody-does", "de": "/en/blog/ai-isnt-a-problem-its-maybe-a-solution-returning-to-jtbd", "a": "/en/blog/build-before-validating-the-product-mistake-killing-startups" },
+    { "lang": "es", "slug": "una-app-grande-o-treinta-pequenas-la-matematica-de-producto-que-nadie-hace", "de": "/es/blog/ia-no-es-un-problema-es-quizas-una-solucion-volviendo-al-jtbd", "a": "/es/blog/construir-antes-de-validar-el-error-de-producto-que-destruye-startups" },
+    { "lang": "en", "slug": "the-lying-prototype-why-your-usability-tests-are-giving-you-bad-data", "de": "/en/blog/user-research-dies-when-it-becomes-a-deliverable", "a": "/en/blog/user-research-the-asset-that-dies-the-moment-it-becomes-a-deliverable" }
+  ],
+  "anidados": [
+    { "lang": "en", "slug": "emotionally-intelligent-design-the-frontier-beyond-utility", "exterior": "/en/blog/user-research-dies-when-it-becomes-a-deliverable" }
+  ]
+}

@@ -1,6 +1,6 @@
 # Auditoría SEO · octubre 2026
 
-*2026-10-05 · rama `seo/oct-2026` · **pendiente de aprobación** lo marcado con ✋.*
+*2026-10-05 · rama `seo/oct-2026` · lo marcado con ✋ se aprobó el mismo día; el estado de cada punto está en **Aplicación**, al final.*
 
 Posicionamiento de referencia: [seo/posicionamiento.md](../seo/posicionamiento.md) y su reflejo en código, [app/lib/seo/clusters.js](../app/lib/seo/clusters.js). Este informe **no cambia** el title ni la meta description de `/es`, `/en`, `/es/como-trabajamos` ni `/en/how-we-work`.
 
@@ -436,3 +436,24 @@ Ningún cambio visible: ni copy, ni diseño, ni layout, ni navegación. Tampoco 
 - **vitest:** 186 de 186.
 - **Comprobaciones sin datos actuales:** `about` en la HTML real de un post no se ha visto, porque los posts se renderizan bajo demanda y verlo exigiría otra lectura; lo cubren los tests unitarios. Las redirecciones creadas después del 30/08 tampoco están comprobadas.
 - **Lint.** `npx eslint` da 2 errores que ya estaban en `main` (`react/no-unescaped-entities` en `app/(admin-zone)/admin/components/RegenerateModal.js:104`), fuera del alcance de esta rama. Los ficheros de esta rama pasan sin errores.
+
+## Aplicación (2026-10-05)
+
+Todo aprobado. Para el punto 2 se aplica la opción A, la recomendada; A y B eran excluyentes.
+
+| Punto | Estado |
+|---|---|
+| 1a · Descripciones de categoría | ✅ Aplicado en `app/[lang]/blog/category/[slug]/page.js` (142, 147 y 142 caracteres). |
+| 2 · Cómo trabajamos | ✅ Opción A en `about.hero.description` (ES y EN). ✅ H1 alternativo, con punto en lugar de dos puntos: la vista pinta cada frase en su línea ("…ni una consultora." / "Somos un estudio de producto digital"). Revisado en capturas a 1440 y 820 px: el layout no cambia. |
+| 3 · IA en el generador | ✅ El enum de la herramienta, el prompt y la validación se limitan a C1, C2 y C3. Si el modelo devuelve IA, el post pasa al cluster de su categoría. |
+| 4 · Párrafos puente | ⏳ Textos en [seo/oct-2026.data.json](../seo/oct-2026.data.json). **Sin escribir en la BD:** el modo automático de Claude Code bloqueó el script que escribe en producción. |
+| 5 · Enlaces de posts | ⏳ Igual: 7 cambios de `href` y 1 `<a>` anidado en `seo/oct-2026.data.json`, sin escribir en la BD. |
+| 6 · `about` sin paréntesis | ✅ Campo `topic` en cada cluster (`name` no cambia). IA declara "IA aplicada al producto" / "AI applied to the product". |
+
+**Para aplicar 4 y 5** hace falta un script que lea `seo/oct-2026.data.json` con las mismas garantías que los del 25/09:
+- Modo de prueba por defecto.
+- Copia del cuerpo en `scripts/backups/` y forma de revertirla.
+- Localiza cada post por slug y es idempotente: solo añade el puente si el post aún no enlaza a Cómo trabajamos, y solo cambia un `href` si el destino está publicado.
+- `connection_limit=1`, una lectura y una transacción.
+
+Lo escribe y lo lanza José, o Claude con permiso para escribir en producción.
