@@ -98,6 +98,11 @@ describe("validateGenerated · reglas de posicionamiento", () => {
     expect(out.cluster).toBe("C1");
     expect(out.content_es).toContain('href="/es/empezar-de-cero"');
   });
+  it("un post nuevo no puede caer en IA: pasa al cluster de su categoría", () => {
+    const out = validateGenerated(draft({ cluster: "IA" }), { category: "TECH" });
+    expect(out.cluster).toBe("C3");
+    expect(out.seo.warnings.join()).toMatch(/cluster "IA" no válido/);
+  });
 });
 
 describe("buildSeoBlock", () => {
@@ -107,6 +112,12 @@ describe("buildSeoBlock", () => {
     expect(block).toContain("/es/producto-para-tu-equipo");
     expect(block).toContain('"empresa de producto digital"');
     expect(block).toContain("/en/cases/saas-support-self-service");
+  });
+
+  it("no ofrece el cluster IA a los posts nuevos", () => {
+    const block = buildSeoBlock("TECH");
+    expect(block).not.toContain("**IA**");
+    expect(block).not.toContain("/es/ia-en-el-producto");
   });
 });
 
