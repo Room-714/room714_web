@@ -101,7 +101,7 @@ export default function RegenerateModal({ postId, onClose, onRegenerated }) {
                 Elige un ángulo alternativo
               </h2>
               <p className="text-sm text-gray-500 mt-1">
-                Categoría {meta.category} · Reemplazará: <em>"{meta.currentTitle}"</em>
+                Categoría {meta.category} · Reemplazará: <em>&quot;{meta.currentTitle}&quot;</em>
               </p>
             </div>
 
