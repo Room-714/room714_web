@@ -1,0 +1,805 @@
+{
+  "generatedAt": "2026-10-05T16:01:18.891Z",
+  "rutas": [
+    {
+      "clave": "home",
+      "lang": "es",
+      "path": "/es",
+      "enSitemap": true,
+      "status": 200,
+      "location": null,
+      "title": "Empresa de producto digital: diseño y desarrollo | Room 714",
+      "description": "Empresa de producto digital en Madrid: ideación, diseño y desarrollo del producto que usan tus clientes y el que usa tu equipo. Medido en resultados.",
+      "h1": [
+        "¿Tu producto digital te da resultados o te da trabajo?"
+      ],
+      "canonical": "https://www.room714.com/es",
+      "robots": "index, follow",
+      "hreflang": {
+        "es": "https://www.room714.com/es",
+        "en": "https://www.room714.com/en",
+        "x-default": "https://www.room714.com/en"
+      }
+    },
+    {
+      "clave": "home",
+      "lang": "en",
+      "path": "/en",
+      "enSitemap": true,
+      "status": 200,
+      "location": null,
+      "title": "Digital product design and development company | Room 714",
+      "description": "Digital product company in Madrid: ideation, design and development of the product your customers use and the one your team uses. Measured in results.",
+      "h1": [
+        "Does your digital product give you results, or give you work?"
+      ],
+      "canonical": "https://www.room714.com/en",
+      "robots": "index, follow",
+      "hreflang": {
+        "es": "https://www.room714.com/es",
+        "en": "https://www.room714.com/en",
+        "x-default": "https://www.room714.com/en"
+      }
+    },
+    {
+      "clave": "productoClientes",
+      "lang": "es",
+      "path": "/es/producto-para-tus-clientes",
+      "enSitemap": true,
+      "status": 200,
+      "location": null,
+      "title": "Diseño de producto digital y experiencia cliente | Room 714",
+      "description": "Diseño de producto digital centrado en la experiencia de cliente: rediseñamos alta, contratación y área de cliente. Medido en conversión y abandono.",
+      "h1": [
+        "Cada paso que sobra en tu producto es un cliente que se va"
+      ],
+      "canonical": "https://www.room714.com/es/producto-para-tus-clientes",
+      "robots": "index, follow",
+      "hreflang": {
+        "es": "https://www.room714.com/es/producto-para-tus-clientes",
+        "en": "https://www.room714.com/en/product-for-your-customers",
+        "x-default": "https://www.room714.com/en/product-for-your-customers"
+      }
+    },
+    {
+      "clave": "productoClientes",
+      "lang": "en",
+      "path": "/en/product-for-your-customers",
+      "enSitemap": true,
+      "status": 200,
+      "location": null,
+      "title": "Digital product design and customer experience | Room 714",
+      "description": "Digital product design focused on customer experience: we redesign sign-up, onboarding and the customer area. Measured in conversion and drop-off.",
+      "h1": [
+        "Every unnecessary step in your product is a customer walking away"
+      ],
+      "canonical": "https://www.room714.com/en/product-for-your-customers",
+      "robots": "index, follow",
+      "hreflang": {
+        "es": "https://www.room714.com/es/producto-para-tus-clientes",
+        "en": "https://www.room714.com/en/product-for-your-customers",
+        "x-default": "https://www.room714.com/en/product-for-your-customers"
+      }
+    },
+    {
+      "clave": "productoEquipo",
+      "lang": "es",
+      "path": "/es/producto-para-tu-equipo",
+      "enSitemap": true,
+      "status": 200,
+      "location": null,
+      "title": "Modernizar software interno y back-office | Room 714",
+      "description": "Modernizamos el software con el que opera tu equipo: back-office, dashboards y sistemas heredados. Sin parar la operación, medido en errores y tiempo.",
+      "h1": [
+        "El software que usa tu equipo también es un producto. Y se nota cuando no lo tratas como tal."
+      ],
+      "canonical": "https://www.room714.com/es/producto-para-tu-equipo",
+      "robots": "index, follow",
+      "hreflang": {
+        "es": "https://www.room714.com/es/producto-para-tu-equipo",
+        "en": "https://www.room714.com/en/product-for-your-team",
+        "x-default": "https://www.room714.com/en/product-for-your-team"
+      }
+    },
+    {
+      "clave": "productoEquipo",
+      "lang": "en",
+      "path": "/en/product-for-your-team",
+      "enSitemap": true,
+      "status": 200,
+      "location": null,
+      "title": "Modernising internal software and back-office | Room 714",
+      "description": "We modernise the software your team runs on: back-office, dashboards and legacy systems. Without stopping the operation, measured in errors and time.",
+      "h1": [
+        "The software your team uses is a product too. And it shows when you don't treat it like one."
+      ],
+      "canonical": "https://www.room714.com/en/product-for-your-team",
+      "robots": "index, follow",
+      "hreflang": {
+        "es": "https://www.room714.com/es/producto-para-tu-equipo",
+        "en": "https://www.room714.com/en/product-for-your-team",
+        "x-default": "https://www.room714.com/en/product-for-your-team"
+      }
+    },
+    {
+      "clave": "iaProducto",
+      "lang": "es",
+      "path": "/es/ia-en-el-producto",
+      "enSitemap": true,
+      "status": 200,
+      "location": null,
+      "title": "IA en tu producto digital: de piloto a producción | Room 714",
+      "description": "Llevamos la IA de piloto a producción dentro de tu producto digital: modelo canónico para que no alucine, interfaz usable y un coste viable.",
+      "h1": [
+        "La demo funcionó. ¿Por qué sigue siendo una demo?"
+      ],
+      "canonical": "https://www.room714.com/es/ia-en-el-producto",
+      "robots": "index, follow",
+      "hreflang": {
+        "es": "https://www.room714.com/es/ia-en-el-producto",
+        "en": "https://www.room714.com/en/ai-in-the-product",
+        "x-default": "https://www.room714.com/en/ai-in-the-product"
+      }
+    },
+    {
+      "clave": "iaProducto",
+      "lang": "en",
+      "path": "/en/ai-in-the-product",
+      "enSitemap": true,
+      "status": 200,
+      "location": null,
+      "title": "AI in your digital product: pilot to production | Room 714",
+      "description": "We take AI from pilot to production inside your digital product: a canonical model so it doesn't hallucinate, a usable interface and a viable cost.",
+      "h1": [
+        "The demo worked. So why is it still a demo?"
+      ],
+      "canonical": "https://www.room714.com/en/ai-in-the-product",
+      "robots": "index, follow",
+      "hreflang": {
+        "es": "https://www.room714.com/es/ia-en-el-producto",
+        "en": "https://www.room714.com/en/ai-in-the-product",
+        "x-default": "https://www.room714.com/en/ai-in-the-product"
+      }
+    },
+    {
+      "clave": "empezarDeCero",
+      "lang": "es",
+      "path": "/es/empezar-de-cero",
+      "enSitemap": true,
+      "status": 200,
+      "location": null,
+      "title": "Desarrollo de producto digital desde la idea | Room 714",
+      "description": "Desarrollo de producto digital de la idea a producción: revisamos el negocio antes de diseñar y diseñamos antes de construir. Sin lock-in.",
+      "h1": [
+        "Antes de la primera pantalla, la primera pregunta: ¿esto es un negocio?"
+      ],
+      "canonical": "https://www.room714.com/es/empezar-de-cero",
+      "robots": "index, follow",
+      "hreflang": {
+        "es": "https://www.room714.com/es/empezar-de-cero",
+        "en": "https://www.room714.com/en/starting-from-scratch",
+        "x-default": "https://www.room714.com/en/starting-from-scratch"
+      }
+    },
+    {
+      "clave": "empezarDeCero",
+      "lang": "en",
+      "path": "/en/starting-from-scratch",
+      "enSitemap": true,
+      "status": 200,
+      "location": null,
+      "title": "Digital product development, idea to production | Room 714",
+      "description": "Digital product development from idea to production: we review the business before designing and design before building. No lock-in.",
+      "h1": [
+        "Before the first screen, the first question: is this a business?"
+      ],
+      "canonical": "https://www.room714.com/en/starting-from-scratch",
+      "robots": "index, follow",
+      "hreflang": {
+        "es": "https://www.room714.com/es/empezar-de-cero",
+        "en": "https://www.room714.com/en/starting-from-scratch",
+        "x-default": "https://www.room714.com/en/starting-from-scratch"
+      }
+    },
+    {
+      "clave": "casos",
+      "lang": "es",
+      "path": "/es/casos",
+      "enSitemap": true,
+      "status": 200,
+      "location": null,
+      "title": "Casos reales de producto digital | Room 714",
+      "description": "Tres casos reales y anónimos de producto digital: un SaaS B2B regulado, una plataforma B2B2C y un e-commerce con IA. Qué encontramos y qué cambió.",
+      "h1": [
+        "Así solemos empezar nuestro trabajo…"
+      ],
+      "canonical": "https://www.room714.com/es/casos",
+      "robots": "index, follow",
+      "hreflang": {
+        "es": "https://www.room714.com/es/casos",
+        "en": "https://www.room714.com/en/cases",
+        "x-default": "https://www.room714.com/en/cases"
+      }
+    },
+    {
+      "clave": "casos",
+      "lang": "en",
+      "path": "/en/cases",
+      "enSitemap": true,
+      "status": 200,
+      "location": null,
+      "title": "Digital product case studies | Room 714",
+      "description": "Three real, anonymised digital product cases: a regulated B2B SaaS, a B2B2C platform and an e-commerce with AI. What we found and what changed.",
+      "h1": [
+        "This is how we usually start our work…"
+      ],
+      "canonical": "https://www.room714.com/en/cases",
+      "robots": "index, follow",
+      "hreflang": {
+        "es": "https://www.room714.com/es/casos",
+        "en": "https://www.room714.com/en/cases",
+        "x-default": "https://www.room714.com/en/cases"
+      }
+    },
+    {
+      "clave": "comoTrabajamos",
+      "lang": "es",
+      "path": "/es/como-trabajamos",
+      "enSitemap": true,
+      "status": 200,
+      "location": null,
+      "title": "Estudio de producto digital en Madrid | Room 714",
+      "description": "Estudio de producto digital en Madrid: diagnóstico, diseño y arquitectura juntos, entregas y medición. Equipo senior, sin agencia ni consultora.",
+      "h1": [
+        "No somos una agencia al uso ni una consultora"
+      ],
+      "canonical": "https://www.room714.com/es/como-trabajamos",
+      "robots": "index, follow",
+      "hreflang": {
+        "es": "https://www.room714.com/es/como-trabajamos",
+        "en": "https://www.room714.com/en/how-we-work",
+        "x-default": "https://www.room714.com/en/how-we-work"
+      }
+    },
+    {
+      "clave": "comoTrabajamos",
+      "lang": "en",
+      "path": "/en/how-we-work",
+      "enSitemap": true,
+      "status": 200,
+      "location": null,
+      "title": "How we work: a digital product studio in Madrid | Room 714",
+      "description": "A digital product studio in Madrid: diagnosis, design and architecture together, incremental delivery and measurement. Senior team, not an agency.",
+      "h1": [
+        "We are not your usual agency, nor a consultancy"
+      ],
+      "canonical": "https://www.room714.com/en/how-we-work",
+      "robots": "index, follow",
+      "hreflang": {
+        "es": "https://www.room714.com/es/como-trabajamos",
+        "en": "https://www.room714.com/en/how-we-work",
+        "x-default": "https://www.room714.com/en/how-we-work"
+      }
+    },
+    {
+      "clave": "blog",
+      "lang": "es",
+      "path": "/es/blog",
+      "enSitemap": true,
+      "status": 200,
+      "location": null,
+      "title": "Blog de producto digital y experiencia de cliente | Room 714",
+      "description": "Artículos de Room 714 sobre cómo idear, diseñar y desarrollar producto digital con foco en la experiencia de cliente. Opinión práctica, sin humo.",
+      "h1": [
+        "nuestrovuestroblog"
+      ],
+      "canonical": "https://www.room714.com/es/blog",
+      "robots": "index, follow",
+      "hreflang": {
+        "es": "https://www.room714.com/es/blog",
+        "en": "https://www.room714.com/en/blog",
+        "x-default": "https://www.room714.com/en/blog"
+      }
+    },
+    {
+      "clave": "blog",
+      "lang": "en",
+      "path": "/en/blog",
+      "enSitemap": true,
+      "status": 200,
+      "location": null,
+      "title": "Blog on digital product and customer experience | Room 714",
+      "description": "Room 714 articles on ideating, designing and building digital products, with a focus on customer experience. Practical opinion, no hype.",
+      "h1": [
+        "ouryourblog"
+      ],
+      "canonical": "https://www.room714.com/en/blog",
+      "robots": "index, follow",
+      "hreflang": {
+        "es": "https://www.room714.com/es/blog",
+        "en": "https://www.room714.com/en/blog",
+        "x-default": "https://www.room714.com/en/blog"
+      }
+    },
+    {
+      "clave": "hablemos",
+      "lang": "es",
+      "path": "/es/hablemos",
+      "enSitemap": true,
+      "status": 200,
+      "location": null,
+      "title": "Sesión de diagnóstico gratuita | Room 714",
+      "description": "30 minutos para saber qué le pasa a tu producto digital y qué haríamos primero. Gratuita. Escríbenos y te respondemos en 24 h laborables.",
+      "h1": [
+        "¿Qué te pica?"
+      ],
+      "canonical": "https://www.room714.com/es/hablemos",
+      "robots": "index, follow",
+      "hreflang": {
+        "es": "https://www.room714.com/es/hablemos",
+        "en": "https://www.room714.com/en/lets-talk",
+        "x-default": "https://www.room714.com/en/lets-talk"
+      }
+    },
+    {
+      "clave": "hablemos",
+      "lang": "en",
+      "path": "/en/lets-talk",
+      "enSitemap": true,
+      "status": 200,
+      "location": null,
+      "title": "Free diagnostic session | Room 714",
+      "description": "30 minutes to find out what's wrong with your digital product and what we would do first. Free. Write to us and we reply within 24 working hours.",
+      "h1": [
+        "What is bugging you?"
+      ],
+      "canonical": "https://www.room714.com/en/lets-talk",
+      "robots": "index, follow",
+      "hreflang": {
+        "es": "https://www.room714.com/es/hablemos",
+        "en": "https://www.room714.com/en/lets-talk",
+        "x-default": "https://www.room714.com/en/lets-talk"
+      }
+    },
+    {
+      "clave": "empleo",
+      "lang": "es",
+      "path": "/es/careers",
+      "enSitemap": true,
+      "status": 200,
+      "location": null,
+      "title": "Empleo — Únete a Room 714",
+      "description": "Envíanos tu CV. Revisamos cada perfil en producto, diseño, usabilidad y tecnología. Wizard breve, criba asistida por IA, feedback honesto.",
+      "h1": [
+        "Únete a Room 714"
+      ],
+      "canonical": "https://www.room714.com/es/careers",
+      "robots": "index, follow",
+      "hreflang": {
+        "es": "https://www.room714.com/es/careers",
+        "en": "https://www.room714.com/en/careers",
+        "x-default": "https://www.room714.com/en/careers"
+      }
+    },
+    {
+      "clave": "empleo",
+      "lang": "en",
+      "path": "/en/careers",
+      "enSitemap": true,
+      "status": 200,
+      "location": null,
+      "title": "Careers — Join Room 714",
+      "description": "Send us your CV. We review every profile in product, design, usability and engineering. Quick wizard, AI-assisted screening, honest feedback.",
+      "h1": [
+        "Join Room 714"
+      ],
+      "canonical": "https://www.room714.com/en/careers",
+      "robots": "index, follow",
+      "hreflang": {
+        "es": "https://www.room714.com/es/careers",
+        "en": "https://www.room714.com/en/careers",
+        "x-default": "https://www.room714.com/en/careers"
+      }
+    },
+    {
+      "clave": "privacidad",
+      "lang": "es",
+      "path": "/es/privacy",
+      "enSitemap": false,
+      "status": 200,
+      "location": null,
+      "title": "Política de Privacidad | Room 714",
+      "description": "Política de privacidad de Room 714.",
+      "h1": [
+        "Política de Privacidad"
+      ],
+      "canonical": "https://www.room714.com/es/privacy",
+      "robots": "noindex, follow",
+      "hreflang": {
+        "es": "https://www.room714.com/es/privacy",
+        "en": "https://www.room714.com/en/privacy",
+        "x-default": "https://www.room714.com/en/privacy"
+      }
+    },
+    {
+      "clave": "privacidad",
+      "lang": "en",
+      "path": "/en/privacy",
+      "enSitemap": false,
+      "status": 200,
+      "location": null,
+      "title": "Privacy Policy | Room 714",
+      "description": "Room 714 privacy policy.",
+      "h1": [
+        "Privacy Policy"
+      ],
+      "canonical": "https://www.room714.com/en/privacy",
+      "robots": "noindex, follow",
+      "hreflang": {
+        "es": "https://www.room714.com/es/privacy",
+        "en": "https://www.room714.com/en/privacy",
+        "x-default": "https://www.room714.com/en/privacy"
+      }
+    },
+    {
+      "clave": "terminos",
+      "lang": "es",
+      "path": "/es/terms",
+      "enSitemap": false,
+      "status": 200,
+      "location": null,
+      "title": "Términos y Condiciones | Room 714",
+      "description": "Términos y condiciones de uso de Room 714.",
+      "h1": [
+        "Términos y Condiciones"
+      ],
+      "canonical": "https://www.room714.com/es/terms",
+      "robots": "noindex, follow",
+      "hreflang": {
+        "es": "https://www.room714.com/es/terms",
+        "en": "https://www.room714.com/en/terms",
+        "x-default": "https://www.room714.com/en/terms"
+      }
+    },
+    {
+      "clave": "terminos",
+      "lang": "en",
+      "path": "/en/terms",
+      "enSitemap": false,
+      "status": 200,
+      "location": null,
+      "title": "Terms and Conditions | Room 714",
+      "description": "Room 714 terms and conditions.",
+      "h1": [
+        "Terms & Conditions"
+      ],
+      "canonical": "https://www.room714.com/en/terms",
+      "robots": "noindex, follow",
+      "hreflang": {
+        "es": "https://www.room714.com/es/terms",
+        "en": "https://www.room714.com/en/terms",
+        "x-default": "https://www.room714.com/en/terms"
+      }
+    },
+    {
+      "clave": "cookies",
+      "lang": "es",
+      "path": "/es/cookies",
+      "enSitemap": false,
+      "status": 200,
+      "location": null,
+      "title": "Política de Cookies | Room 714",
+      "description": "Política de cookies de Room 714.",
+      "h1": [
+        "Política de Cookies"
+      ],
+      "canonical": "https://www.room714.com/es/cookies",
+      "robots": "noindex, follow",
+      "hreflang": {
+        "es": "https://www.room714.com/es/cookies",
+        "en": "https://www.room714.com/en/cookies",
+        "x-default": "https://www.room714.com/en/cookies"
+      }
+    },
+    {
+      "clave": "cookies",
+      "lang": "en",
+      "path": "/en/cookies",
+      "enSitemap": false,
+      "status": 200,
+      "location": null,
+      "title": "Cookie Policy | Room 714",
+      "description": "Room 714 cookie policy.",
+      "h1": [
+        "Cookie Policy"
+      ],
+      "canonical": "https://www.room714.com/en/cookies",
+      "robots": "noindex, follow",
+      "hreflang": {
+        "es": "https://www.room714.com/es/cookies",
+        "en": "https://www.room714.com/en/cookies",
+        "x-default": "https://www.room714.com/en/cookies"
+      }
+    },
+    {
+      "clave": "saasAutogestion",
+      "lang": "es",
+      "path": "/es/casos/saas-soporte-autogestion",
+      "enSitemap": true,
+      "status": 200,
+      "location": null,
+      "title": "Caso: el SaaS B2B que vivía de su propio soporte | Room 714",
+      "description": "Rediseñamos y reconstruimos un SaaS B2B regulado: de más de 200 tablas a menos de 20 y clientes que se autogestionan. Caso real anonimizado.",
+      "h1": [
+        "El SaaS al que no le importaban sus clientes"
+      ],
+      "canonical": "https://www.room714.com/es/casos/saas-soporte-autogestion",
+      "robots": "index, follow",
+      "hreflang": {
+        "es": "https://www.room714.com/es/casos/saas-soporte-autogestion",
+        "en": "https://www.room714.com/en/cases/saas-support-self-service",
+        "x-default": "https://www.room714.com/en/cases/saas-support-self-service"
+      }
+    },
+    {
+      "clave": "saasAutogestion",
+      "lang": "en",
+      "path": "/en/cases/saas-support-self-service",
+      "enSitemap": true,
+      "status": 200,
+      "location": null,
+      "title": "Case: the B2B SaaS that ran on its own support | Room 714",
+      "description": "We redesigned and rebuilt a regulated B2B SaaS: from over 200 tables to fewer than 20, and customers who serve themselves. Real anonymised case.",
+      "h1": [
+        "The SaaS that did not care about its customers"
+      ],
+      "canonical": "https://www.room714.com/en/cases/saas-support-self-service",
+      "robots": "index, follow",
+      "hreflang": {
+        "es": "https://www.room714.com/es/casos/saas-soporte-autogestion",
+        "en": "https://www.room714.com/en/cases/saas-support-self-service",
+        "x-default": "https://www.room714.com/en/cases/saas-support-self-service"
+      }
+    },
+    {
+      "clave": "activacionCanonico",
+      "lang": "es",
+      "path": "/es/casos/activacion-modelo-canonico",
+      "enSitemap": true,
+      "status": 200,
+      "location": null,
+      "title": "Caso: de un problema de activación a IA agéntica | Room 714",
+      "description": "Plataforma B2B2C: journeys, sistema de diseño multimarca, app móvil nueva y modelo canónico de datos para IA agéntica. Caso real anonimizado.",
+      "h1": [
+        "Nadie activaba un servicio que le regalaban"
+      ],
+      "canonical": "https://www.room714.com/es/casos/activacion-modelo-canonico",
+      "robots": "index, follow",
+      "hreflang": {
+        "es": "https://www.room714.com/es/casos/activacion-modelo-canonico",
+        "en": "https://www.room714.com/en/cases/activation-canonical-model",
+        "x-default": "https://www.room714.com/en/cases/activation-canonical-model"
+      }
+    },
+    {
+      "clave": "activacionCanonico",
+      "lang": "en",
+      "path": "/en/cases/activation-canonical-model",
+      "enSitemap": true,
+      "status": 200,
+      "location": null,
+      "title": "Case: from an activation problem to agentic AI | Room 714",
+      "description": "A B2B2C platform: journeys, a multi-brand design system, a new mobile app and a canonical data model for agentic AI. Real anonymised case.",
+      "h1": [
+        "Nobody activated a service they were given for free"
+      ],
+      "canonical": "https://www.room714.com/en/cases/activation-canonical-model",
+      "robots": "index, follow",
+      "hreflang": {
+        "es": "https://www.room714.com/es/casos/activacion-modelo-canonico",
+        "en": "https://www.room714.com/en/cases/activation-canonical-model",
+        "x-default": "https://www.room714.com/en/cases/activation-canonical-model"
+      }
+    },
+    {
+      "clave": "iaEcommerce",
+      "lang": "es",
+      "path": "/es/casos/ia-ecommerce-sin-tocar-la-tienda",
+      "enSitemap": true,
+      "status": 200,
+      "location": null,
+      "title": "Caso: IA sobre un e-commerce sin tocar la tienda | Room 714",
+      "description": "IA para un e-commerce de alimentación: catálogo enriquecido, sustitutos ante roturas de stock y recompra, sin tocar la tienda. Caso anonimizado.",
+      "h1": [
+        "Una IA que ayuda a vender más y a fidelizar"
+      ],
+      "canonical": "https://www.room714.com/es/casos/ia-ecommerce-sin-tocar-la-tienda",
+      "robots": "index, follow",
+      "hreflang": {
+        "es": "https://www.room714.com/es/casos/ia-ecommerce-sin-tocar-la-tienda",
+        "en": "https://www.room714.com/en/cases/ai-ecommerce-without-touching-the-store",
+        "x-default": "https://www.room714.com/en/cases/ai-ecommerce-without-touching-the-store"
+      }
+    },
+    {
+      "clave": "iaEcommerce",
+      "lang": "en",
+      "path": "/en/cases/ai-ecommerce-without-touching-the-store",
+      "enSitemap": true,
+      "status": 200,
+      "location": null,
+      "title": "Case: AI on an e-commerce without touching it | Room 714",
+      "description": "AI for an online grocery: enriched catalogue, substitutes for stock-outs and repeat purchase, without touching the store. Real anonymised case.",
+      "h1": [
+        "An AI that helps sell more and build loyalty"
+      ],
+      "canonical": "https://www.room714.com/en/cases/ai-ecommerce-without-touching-the-store",
+      "robots": "index, follow",
+      "hreflang": {
+        "es": "https://www.room714.com/es/casos/ia-ecommerce-sin-tocar-la-tienda",
+        "en": "https://www.room714.com/en/cases/ai-ecommerce-without-touching-the-store",
+        "x-default": "https://www.room714.com/en/cases/ai-ecommerce-without-touching-the-store"
+      }
+    },
+    {
+      "clave": "categoria:TECH",
+      "lang": "es",
+      "path": "/es/blog/category/tecnologia",
+      "enSitemap": true,
+      "status": 200,
+      "location": null,
+      "title": "Tecnología — Blog Room 714",
+      "description": "Análisis y opiniones sobre tecnología aplicada a producto digital: IA, modelos pequeños (SLM), arquitectura, MCP, RAG y eficiencia computacional. La visión de Room 714.",
+      "h1": [
+        "Tecnología"
+      ],
+      "canonical": "https://www.room714.com/es/blog/category/tecnologia",
+      "robots": "index, follow",
+      "hreflang": {
+        "es": "https://www.room714.com/es/blog/category/tecnologia",
+        "en": "https://www.room714.com/en/blog/category/tech",
+        "x-default": "https://www.room714.com/en/blog/category/tech"
+      }
+    },
+    {
+      "clave": "categoria:DESIGN",
+      "lang": "es",
+      "path": "/es/blog/category/diseno",
+      "enSitemap": true,
+      "status": 200,
+      "location": null,
+      "title": "Diseño UX&UI — Blog Room 714",
+      "description": "Diseño de producto y UI: design systems, diseño emocional, interfaces adaptativas y la frontera entre estética y función. La perspectiva de Room 714.",
+      "h1": [
+        "Diseño UX&UI"
+      ],
+      "canonical": "https://www.room714.com/es/blog/category/diseno",
+      "robots": "index, follow",
+      "hreflang": {
+        "es": "https://www.room714.com/es/blog/category/diseno",
+        "en": "https://www.room714.com/en/blog/category/design",
+        "x-default": "https://www.room714.com/en/blog/category/design"
+      }
+    },
+    {
+      "clave": "categoria:PRODUCT",
+      "lang": "es",
+      "path": "/es/blog/category/producto",
+      "enSitemap": true,
+      "status": 200,
+      "location": null,
+      "title": "Producto — Blog Room 714",
+      "description": "Estrategia de producto, Jobs-to-be-Done (JTBD), Product-Led Growth, y por qué la mayoría de productos con IA no la necesitan. Análisis crítico desde Room 714.",
+      "h1": [
+        "Producto"
+      ],
+      "canonical": "https://www.room714.com/es/blog/category/producto",
+      "robots": "index, follow",
+      "hreflang": {
+        "es": "https://www.room714.com/es/blog/category/producto",
+        "en": "https://www.room714.com/en/blog/category/product",
+        "x-default": "https://www.room714.com/en/blog/category/product"
+      }
+    },
+    {
+      "clave": "categoria:UX",
+      "lang": "es",
+      "path": "/es/blog/category/usabilidad",
+      "enSitemap": true,
+      "status": 200,
+      "location": null,
+      "title": "Experiencia de Usuario — Blog Room 714",
+      "description": "Usabilidad, experiencia de usuario y diseño cognitivo: cómo reducir fricción, evitar la fatiga cognitiva y diseñar para humanos. Artículos de Room 714.",
+      "h1": [
+        "Experiencia de Usuario"
+      ],
+      "canonical": "https://www.room714.com/es/blog/category/usabilidad",
+      "robots": "index, follow",
+      "hreflang": {
+        "es": "https://www.room714.com/es/blog/category/usabilidad",
+        "en": "https://www.room714.com/en/blog/category/ux",
+        "x-default": "https://www.room714.com/en/blog/category/ux"
+      }
+    },
+    {
+      "clave": "categoria:TECH",
+      "lang": "en",
+      "path": "/en/blog/category/tech",
+      "enSitemap": true,
+      "status": 200,
+      "location": null,
+      "title": "Tech Insights — Room 714 Blog",
+      "description": "Analysis and opinions on technology applied to digital product: AI, small language models (SLMs), architecture, MCP, RAG, and computational efficiency. Room 714's view.",
+      "h1": [
+        "Tech Insights"
+      ],
+      "canonical": "https://www.room714.com/en/blog/category/tech",
+      "robots": "index, follow",
+      "hreflang": {
+        "es": "https://www.room714.com/es/blog/category/tecnologia",
+        "en": "https://www.room714.com/en/blog/category/tech",
+        "x-default": "https://www.room714.com/en/blog/category/tech"
+      }
+    },
+    {
+      "clave": "categoria:DESIGN",
+      "lang": "en",
+      "path": "/en/blog/category/design",
+      "enSitemap": true,
+      "status": 200,
+      "location": null,
+      "title": "UX&UI Design — Room 714 Blog",
+      "description": "Product and UI design: design systems, emotional design, adaptive interfaces, and the line between aesthetics and function. Room 714's perspective.",
+      "h1": [
+        "UX&UI Design"
+      ],
+      "canonical": "https://www.room714.com/en/blog/category/design",
+      "robots": "index, follow",
+      "hreflang": {
+        "es": "https://www.room714.com/es/blog/category/diseno",
+        "en": "https://www.room714.com/en/blog/category/design",
+        "x-default": "https://www.room714.com/en/blog/category/design"
+      }
+    },
+    {
+      "clave": "categoria:PRODUCT",
+      "lang": "en",
+      "path": "/en/blog/category/product",
+      "enSitemap": true,
+      "status": 200,
+      "location": null,
+      "title": "Product Management — Room 714 Blog",
+      "description": "Product strategy, Jobs-to-be-Done (JTBD), Product-Led Growth, and why most AI-enabled products don't actually need AI. Critical analysis from Room 714.",
+      "h1": [
+        "Product Management"
+      ],
+      "canonical": "https://www.room714.com/en/blog/category/product",
+      "robots": "index, follow",
+      "hreflang": {
+        "es": "https://www.room714.com/es/blog/category/producto",
+        "en": "https://www.room714.com/en/blog/category/product",
+        "x-default": "https://www.room714.com/en/blog/category/product"
+      }
+    },
+    {
+      "clave": "categoria:UX",
+      "lang": "en",
+      "path": "/en/blog/category/ux",
+      "enSitemap": true,
+      "status": 200,
+      "location": null,
+      "title": "User Experience — Room 714 Blog",
+      "description": "Usability, user experience and cognitive design: how to reduce friction, avoid cognitive fatigue, and design for humans. Articles by Room 714.",
+      "h1": [
+        "User Experience"
+      ],
+      "canonical": "https://www.room714.com/en/blog/category/ux",
+      "robots": "index, follow",
+      "hreflang": {
+        "es": "https://www.room714.com/es/blog/category/usabilidad",
+        "en": "https://www.room714.com/en/blog/category/ux",
+        "x-default": "https://www.room714.com/en/blog/category/ux"
+      }
+    }
+  ]
+}
