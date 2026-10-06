@@ -17,6 +17,8 @@ import { backlinkOldPosts } from "./backlinker";
 import { slugify } from "@/app/lib/slug";
 import { computeOutboundLinksForPost } from "./internalLinker";
 import { sendDraftReadyEmail } from "@/app/lib/notifications/draftReady";
+import { clusterDelDia, elegirBusqueda } from "@/app/lib/seo/busquedasObjetivo";
+import { CLUSTERS, clusterHref } from "@/app/lib/seo/clusters";
 import {
   getMadridWeekday,
   madridDayRange,
@@ -50,7 +52,11 @@ async function ensureUniqueSlug(slug, lang) {
 export async function generateDraftForToday({ categoryOverride, sendEmail = true } = {}) {
   const today = new Date();
   const publishDate = nextMadridSlot(PUBLISH_HOUR_MADRID, PUBLISH_MINUTE_MADRID);
-  const category = categoryOverride ?? categoryForDate(today);
+  // Lunes y miércoles el día fija cluster y categoría
+  // (app/lib/seo/busquedasObjetivo.js). Una categoría forzada a mano, o un día
+  // sin cluster, sigue la rotación de categorías de siempre.
+  const dia = categoryOverride ? null : clusterDelDia(publishDate);
+  const category = categoryOverride ?? dia?.category ?? categoryForDate(today);
 
   if (!category) {
     return {
@@ -77,11 +83,18 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
     getPublishedTitles(),
   ]);
 
+  // La primera búsqueda del cluster que ningún título publicado cubre. Si no
+  // queda ninguna, el post se genera como antes y el correo lo avisa.
+  const objetivo = dia ? elegirBusqueda(dia.cluster, publishedCorpus) : null;
+  const sinBusquedas = Boolean(dia && !objetivo);
+
   const draft = await generatePostDraft({
     category,
     trending,
     recentPosts,
     publishedCorpus,
+    cluster: objetivo ? dia.cluster : undefined,
+    targetQuery: objetivo?.busqueda,
   });
 
   const datePrefix = today.toISOString().split("T")[0];
@@ -154,6 +167,10 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
     backlinks = { error: err.message };
   }
 
+  // El cuerpo tal y como queda guardado, para comprobar en el correo el enlace
+  // a la página del cluster.
+  let contenidoFinal = { es: translationEs.content, en: translationEn?.content ?? "" };
+
   // Enlaces salientes: el post nuevo enlaza a 2-3 posts relacionados de su
   // categoría para no salir huérfano. Best-effort — un fallo no rompe nada.
   let outboundLinks = { skipped: true };
@@ -179,6 +196,7 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
         },
       });
     }
+    if (out.added.length > 0) contenidoFinal = { es: out.contentEs, en: translationEn ? out.contentEn : "" };
     outboundLinks = { added: out.added.length, skippedCount: out.skipped.length };
   } catch (err) {
     console.error("Outbound links falló:", err.message);
@@ -187,6 +205,19 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
 
   const postUrl = `https://www.room714.com/es/blog/${translationEs.slug}`;
 
+  const cluster = draft.seo?.cluster;
+  const seoCorreo = {
+    cluster,
+    clusterName: CLUSTERS[cluster]?.name.es ?? null,
+    busqueda: draft.seo?.targetQuery?.es ?? null,
+    busquedaDeLaLista: objetivo,
+    sinBusquedas,
+    clusterDelDia: dia?.cluster ?? null,
+    sinEnlaceCluster: ["es", "en"].filter(
+      (lang) => cluster && !contenidoFinal[lang].includes(`href="${clusterHref(cluster, lang)}"`),
+    ),
+  };
+
   let emailResult = { skipped: true };
   if (sendEmail) {
     emailResult = await sendDraftReadyEmail({
@@ -194,6 +225,7 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
       translationEs,
       category,
       postUrl,
+      seo: seoCorreo,
     });
 
     // linkedinVariants no se pasa: a las 06:00 (cuando corre esta función)
@@ -218,6 +250,7 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
     // Cluster, búsqueda objetivo y avisos de las reglas de posicionamiento
     // (seo/posicionamiento.md), para la revisión manual.
     seo: draft.seo,
+    seoCorreo,
     email: emailResult,
     backlinks,
     outboundLinks,

@@ -38,8 +38,8 @@ export const CLUSTERS = {
     topic: { es: "Desarrollo de software de producto", en: "Product software development" },
     page: "productoEquipo",
     postQueries: {
-      es: ["desarrollo de back-office a medida", "migrar un sistema heredado sin parar la operación", "arquitectura de producto digital"],
-      en: ["custom back-office development", "legacy system migration", "digital product architecture"],
+      es: ["modernizar software interno", "desarrollo de back-office a medida", "migrar un sistema heredado sin parar la operación", "arquitectura de producto digital"],
+      en: ["internal software modernisation", "custom back-office development", "legacy system migration", "digital product architecture"],
     },
   },
   IA: {
@@ -95,7 +95,6 @@ export const RESERVED_QUERIES = {
     "experiencia de cliente producto digital",
     "de idea a producto digital",
     "rediseño de onboarding",
-    "modernizar software interno",
     "llevar un piloto de IA a producción",
   ],
   en: [
@@ -107,7 +106,6 @@ export const RESERVED_QUERIES = {
     "customer experience digital product",
     "from idea to digital product",
     "onboarding redesign",
-    "internal software modernisation",
     "ai pilot to production",
   ],
 };

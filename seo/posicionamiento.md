@@ -56,7 +56,7 @@ Sin datos de volumen (no se inventan). Son candidatas razonables por intención 
 | 2 · Diseño y CX | reducir el abandono en el alta | reduce sign-up drop-off | posts |
 | 2 · Diseño y CX | diseño del área de cliente | customer portal design | posts |
 | 2 · Diseño y CX | sistema de diseño multimarca | multi-brand design system | posts |
-| 3 · Desarrollo | modernizar software interno | internal software modernisation | página Producto para tu equipo |
+| 3 · Desarrollo | modernizar software interno | internal software modernisation | posts (desde 2026-10-06; antes reservada a la página Producto para tu equipo) |
 | 3 · Desarrollo | desarrollo de back-office a medida | custom back-office development | posts |
 | 3 · Desarrollo | migrar un sistema heredado sin parar la operación | legacy system migration | posts |
 | 3 · Desarrollo | arquitectura de producto digital | digital product architecture | posts |
