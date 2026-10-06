@@ -11,6 +11,7 @@ import {
   clusterHref,
   reservedQueriesIn,
 } from "../seo/clusters";
+import { respondeABusqueda } from "../seo/busquedasObjetivo";
 
 const POST_TOOL = {
   name: "create_blog_post",
@@ -126,14 +127,16 @@ export const META_DESCRIPTION_MAX = 155;
  * El bloque de posicionamiento del prompt de usuario: cluster sugerido,
  * búsquedas libres y prohibidas, URL de la página del cluster y casos.
  * Sale de app/lib/seo/clusters.js, que refleja seo/posicionamiento.md.
+ * Con `cluster` (el del día, app/lib/seo/busquedasObjetivo.js) el cluster
+ * deja de ser una sugerencia; con `targetQuery` la búsqueda objetivo también.
  * Exportada solo para poder probarla.
  */
-export function buildSeoBlock(category) {
-  const suggested = clusterForCategory(category);
+export function buildSeoBlock(category, { cluster, targetQuery } = {}) {
+  const suggested = cluster ?? clusterForCategory(category);
   const clusters = CLUSTERS_POSICIONAMIENTO.map((key) => [key, CLUSTERS[key]])
     .map(
       ([key, c]) =>
-        `- **${key}** — ${c.name.es}${key === suggested ? " ← SUGERIDO para hoy" : ""}\n` +
+        `- **${key}** — ${c.name.es}${key === suggested ? (cluster ? " ← CLUSTER DEL DÍA" : " ← SUGERIDO para hoy") : ""}\n` +
         `  - Página del cluster: ES \`${clusterHref(key, "es")}\` · EN \`${clusterHref(key, "en")}\`\n` +
         `  - Búsquedas libres para posts: ES ${c.postQueries.es.map((q) => `"${q}"`).join(", ")} · EN ${c.postQueries.en.map((q) => `"${q}"`).join(", ")}`,
     )
@@ -146,8 +149,12 @@ export function buildSeoBlock(category) {
 
   return `## POSICIONAMIENTO Y SEO (obligatorio)
 
-Categoría de hoy: ${category}. Cluster sugerido: **${suggested}**. Cámbialo solo si el tema encaja claramente en otro.
-
+${
+    cluster
+      ? `Categoría de hoy: ${category}. Cluster del día: **${cluster}**. Es obligatorio: no lo cambies.`
+      : `Categoría de hoy: ${category}. Cluster sugerido: **${suggested}**. Cámbialo solo si el tema encaja claramente en otro.`
+  }
+${targetQuery ? buildTargetQueryBlock(targetQuery) : ""}
 ### Clusters
 ${clusters}
 
@@ -159,11 +166,28 @@ ${clusters}
 ${cases}
 
 ### Qué tienes que entregar
-- \`cluster\`, \`target_query_es\`/\`target_query_en\` (una búsqueda libre o una variante long tail cercana; nunca una prohibida).
+${
+    targetQuery
+      ? `- \`cluster\` = ${suggested}; \`target_query_es\` = la búsqueda objetivo de hoy y \`target_query_en\` su equivalente en inglés.`
+      : "- `cluster`, `target_query_es`/`target_query_en` (una búsqueda libre o una variante long tail cercana; nunca una prohibida)."
+  }
 - \`title_es\`/\`title_en\` orientados a esa búsqueda, sin perder el tono punzante de la guía.
 - \`meta_title_es\`/\`meta_title_en\` de MÁXIMO ${META_TITLE_MAX} caracteres y \`meta_description_es\`/\`meta_description_en\` de 120-${META_DESCRIPTION_MAX}.
 - Exactamente UN enlace por idioma a la página del cluster elegido, con su URL literal, dentro de un <p> (normalmente en el cierre), con anclaje natural.
 - Ángulo: la experiencia de cliente primero.`;
+}
+
+// La búsqueda objetivo del día (app/lib/seo/busquedasObjetivo.js): fija el
+// tema del post y qué piezas tienen que responder a ella.
+function buildTargetQueryBlock(targetQuery) {
+  return `
+### Búsqueda objetivo de hoy (OBLIGATORIA)
+"${targetQuery}"
+
+- El post responde a esta búsqueda: escribe para quien la hace, contesta pronto a lo que pregunta y después aporta el criterio de Room 714.
+- \`target_query_es\` es exactamente esta búsqueda; \`target_query_en\`, su equivalente natural en inglés.
+- El título (\`title_es\`, que es el H1), la \`meta_description_es\` y el PRIMER párrafo de \`content_es\` responden a esta búsqueda y llevan sus palabras clave de forma natural. Lo mismo en inglés con \`target_query_en\`.
+`;
 }
 
 function buildCachedSystemBlocks() {
@@ -240,6 +264,8 @@ export function buildUserPrompt({
   trending,
   recentPosts,
   publishedCorpus,
+  cluster,
+  targetQuery,
 }) {
   const trendingText =
     trending.length > 0
@@ -262,7 +288,11 @@ export function buildUserPrompt({
 
 ## Tendencias actuales en varios medios (categoría ${category})
 
-Estos son los titulares y resúmenes de artículos que están sonando esta semana en Medium, dev.to, Hacker News, Nielsen Norman Group y/o Smashing Magazine para esta categoría. El campo "— Fuente" indica de dónde sale cada uno. ÚSALOS COMO INSPIRACIÓN TEMÁTICA, no como fuente. Identifica un tema o tensión recurrente (ojo: las ideas con más fuerza son las que aparecen en VARIOS medios) y escribe la opinión ORIGINAL de Room 714 sobre ese tema. NO copies frases, NO traduzcas artículos, NO atribuyas ideas concretas a Room 714 que sean de otros.
+Estos son los titulares y resúmenes de artículos que están sonando esta semana en Medium, dev.to, Hacker News, Nielsen Norman Group y/o Smashing Magazine para esta categoría. El campo "— Fuente" indica de dónde sale cada uno. ${
+    targetQuery
+      ? `HOY EL TEMA LO FIJA LA BÚSQUEDA OBJETIVO ("${targetQuery}", sección POSICIONAMIENTO Y SEO). Usa estas tendencias SOLO para el ángulo: si alguna aporta una tensión que encaje con la búsqueda, apóyate en ella; si ninguna encaja, ignóralas y escribe sin ellas.`
+      : "ÚSALOS COMO INSPIRACIÓN TEMÁTICA, no como fuente. Identifica un tema o tensión recurrente (ojo: las ideas con más fuerza son las que aparecen en VARIOS medios) y escribe la opinión ORIGINAL de Room 714 sobre ese tema."
+  } NO copies frases, NO traduzcas artículos, NO atribuyas ideas concretas a Room 714 que sean de otros.
 
 ${trendingText}
 
@@ -285,11 +315,15 @@ REGLAS CRÍTICAS:
 - 2 enlaces mínimo, 3 máximo. Si ninguno de los recientes encaja, NO fuerces el enlace.
 - En content_en usa SOLO slugs slug_en (NO slug_es).
 
-${buildSeoBlock(category)}
+${buildSeoBlock(category, { cluster, targetQuery })}
 
 ## Tu tarea
 
-1. Identifica una tensión, tendencia o malentendido recurrente en los titulares de arriba (categoría ${category}).
+${
+    targetQuery
+      ? `1. Escribe sobre la búsqueda objetivo de hoy ("${targetQuery}"). De las tendencias de arriba toma, como mucho, un ángulo que encaje; si ninguna encaja, prescinde de ellas.`
+      : `1. Identifica una tensión, tendencia o malentendido recurrente en los titulares de arriba (categoría ${category}).`
+  }
 2. Escribe un post original con la voz de Room 714, siguiendo la guía editorial y los ejemplos.
 3. Asegúrate de que el tema no se solapa con los posts recientes listados.
 4. Genera ambas versiones (ES y EN) coherentes pero NO traducción literal: cada una en su idioma nativo.
@@ -351,10 +385,13 @@ function cutAtWord(text, max) {
  * corregir sin reescribir el post y deja el resto en `seo.warnings`, que
  * sale en el resultado de la generación para la revisión manual.
  */
-function applySeoRules(data, category) {
+function applySeoRules(data, category, { cluster: clusterDelDia, targetQuery } = {}) {
   const warnings = [];
   let cluster = data.cluster;
-  if (!CLUSTERS_POSICIONAMIENTO.includes(cluster)) {
+  if (clusterDelDia && cluster !== clusterDelDia) {
+    warnings.push(`cluster "${cluster}" distinto del cluster del día; se usa ${clusterDelDia}`);
+    cluster = clusterDelDia;
+  } else if (!CLUSTERS_POSICIONAMIENTO.includes(cluster)) {
     warnings.push(`cluster "${cluster}" no válido; se usa el de la categoría`);
     cluster = clusterForCategory(category);
   }
@@ -404,6 +441,25 @@ function applySeoRules(data, category) {
     }
   }
 
+  if (targetQuery) {
+    if (data.target_query_es !== targetQuery) {
+      warnings.push(`target_query_es era "${data.target_query_es}"; se fija la búsqueda objetivo del día`);
+      data.target_query_es = targetQuery;
+    }
+    // El primer párrafo va con su HTML: las etiquetas solo añaden palabras, y
+    // aquí se comprueba que estén las de la búsqueda.
+    const primerParrafo = data.content_es.match(/<p>([\s\S]*?)<\/p>/)?.[1] ?? "";
+    for (const [campo, texto] of [
+      ["title_es", data.title_es],
+      ["meta_description_es", data.meta_description_es],
+      ["primer párrafo", primerParrafo],
+    ]) {
+      if (!respondeABusqueda(targetQuery, texto)) {
+        warnings.push(`es: ${campo} no recoge la búsqueda objetivo "${targetQuery}"`);
+      }
+    }
+  }
+
   data.cluster = cluster;
   data.seo = {
     cluster,
@@ -422,7 +478,7 @@ function countInternalLinks(html, lang) {
 }
 
 // Exportada solo para poder probarla.
-export function validateGenerated(data, { recentPosts = [], category } = {}) {
+export function validateGenerated(data, { recentPosts = [], category, cluster: clusterDelDia, targetQuery } = {}) {
   const required = [
     "title_es",
     "title_en",
@@ -464,7 +520,8 @@ export function validateGenerated(data, { recentPosts = [], category } = {}) {
   );
   // Páginas a las que el post puede enlazar además de a otros posts: la de
   // su cluster y los casos. Un cluster inválido lo corrige applySeoRules.
-  const cluster = CLUSTERS_POSICIONAMIENTO.includes(data.cluster) ? data.cluster : clusterForCategory(category);
+  const cluster =
+    clusterDelDia ?? (CLUSTERS_POSICIONAMIENTO.includes(data.cluster) ? data.cluster : clusterForCategory(category));
   const allowed = (lang) => new Set([clusterHref(cluster, lang), ...caseHrefs(lang)]);
   data.content_es = sanitizeInvalidLinks(data.content_es, validSlugsEs, "es", allowed("es"));
   data.content_en = sanitizeInvalidLinks(data.content_en, validSlugsEn, "en", allowed("en"));
@@ -473,7 +530,7 @@ export function validateGenerated(data, { recentPosts = [], category } = {}) {
     en: countInternalLinks(data.content_en, "en"),
   };
 
-  return applySeoRules(data, category);
+  return applySeoRules(data, category, { cluster: clusterDelDia, targetQuery });
 }
 
 function buildUserPromptFromIdea({ category, chosenIdea, trending, recentPosts }) {
@@ -548,7 +605,7 @@ const MAX_GENERATION_ATTEMPTS = 2;
 // Llama al tool create_blog_post con streaming (obligatorio por encima de ~16k
 // tokens para no chocar con el timeout HTTP del SDK), detecta el truncado por
 // max_tokens de forma explícita y reintenta si la generación no valida.
-async function generateViaCreateBlogPostTool({ userPrompt, recentPosts, category }) {
+async function generateViaCreateBlogPostTool({ userPrompt, recentPosts, category, cluster, targetQuery }) {
   const client = getAnthropicClient();
   let lastError;
 
@@ -596,7 +653,7 @@ async function generateViaCreateBlogPostTool({ userPrompt, recentPosts, category
     }
 
     try {
-      const validated = validateGenerated(toolUse.input, { recentPosts, category });
+      const validated = validateGenerated(toolUse.input, { recentPosts, category, cluster, targetQuery });
       return {
         ...validated,
         usage: {
@@ -619,19 +676,25 @@ async function generateViaCreateBlogPostTool({ userPrompt, recentPosts, category
   );
 }
 
+// `cluster` y `targetQuery` son opcionales: sin ellos, el generador elige
+// tema y cluster como antes (tendencias y categoría).
 export async function generatePostDraft({
   category,
   trending,
   recentPosts,
   publishedCorpus,
+  cluster,
+  targetQuery,
 }) {
   const userPrompt = buildUserPrompt({
     category,
     trending,
     recentPosts,
     publishedCorpus,
+    cluster,
+    targetQuery,
   });
-  return generateViaCreateBlogPostTool({ userPrompt, recentPosts, category });
+  return generateViaCreateBlogPostTool({ userPrompt, recentPosts, category, cluster, targetQuery });
 }
 
 export async function generatePostFromIdea({

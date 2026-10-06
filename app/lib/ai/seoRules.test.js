@@ -105,7 +105,63 @@ describe("validateGenerated · reglas de posicionamiento", () => {
   });
 });
 
+describe("validateGenerated · cluster y búsqueda del día", () => {
+  const busqueda = "cómo reducir el abandono en el alta";
+
+  it("fija el cluster del día aunque el modelo devuelva otro, y enlaza a su página", () => {
+    const out = validateGenerated(draft({ cluster: "C3" }), { category: "UX", cluster: "C2" });
+    expect(out.cluster).toBe("C2");
+    expect(out.seo.warnings.join()).toMatch(/distinto del cluster del día; se usa C2/);
+    expect(out.content_es).toContain('href="/es/producto-para-tus-clientes"');
+  });
+
+  it("fija la búsqueda objetivo en target_query_es", () => {
+    const out = validateGenerated(draft({ target_query_es: "otra cosa" }), { category: "UX", cluster: "C2", targetQuery: busqueda });
+    expect(out.target_query_es).toBe(busqueda);
+    expect(out.seo.targetQuery.es).toBe(busqueda);
+  });
+
+  it("sin avisos si título, meta description y primer párrafo responden a la búsqueda", () => {
+    const out = validateGenerated(
+      draft({
+        target_query_es: busqueda,
+        meta_description_es: "Cómo reducir el abandono en el alta de un producto digital, paso a paso y con métricas.",
+        content_es:
+          '<p>Reducir el abandono en el alta empieza por medirlo.</p><h2>Sección: idea</h2><p>Cierre, <a href="/es/producto-para-tus-clientes">rediseñamos el alta</a>.</p>',
+      }),
+      { category: "UX", cluster: "C2", targetQuery: busqueda },
+    );
+    expect(out.seo.warnings).toEqual([]);
+  });
+
+  it("avisa de cada pieza que no responde a la búsqueda", () => {
+    const out = validateGenerated(draft({ title_es: "Un título que va de otra cosa", target_query_es: busqueda }), {
+      category: "UX",
+      cluster: "C2",
+      targetQuery: busqueda,
+    });
+    const avisos = out.seo.warnings.join("\n");
+    expect(avisos).toMatch(/title_es no recoge la búsqueda objetivo/);
+    expect(avisos).toMatch(/meta_description_es no recoge la búsqueda objetivo/);
+    expect(avisos).toMatch(/primer párrafo no recoge la búsqueda objetivo/);
+  });
+});
+
 describe("buildSeoBlock", () => {
+  it("con cluster y búsqueda del día, los da como obligatorios", () => {
+    const block = buildSeoBlock("PRODUCT", { cluster: "C1", targetQuery: "qué es el discovery de producto digital" });
+    expect(block).toContain("Cluster del día: **C1**. Es obligatorio");
+    expect(block).toContain("**C1** — Ideación y discovery de producto digital ← CLUSTER DEL DÍA");
+    expect(block).toContain('### Búsqueda objetivo de hoy (OBLIGATORIA)\n"qué es el discovery de producto digital"');
+    expect(block).toContain("el PRIMER párrafo de `content_es` responden a esta búsqueda");
+  });
+
+  it("sin búsqueda, el cluster sigue siendo una sugerencia como antes", () => {
+    const block = buildSeoBlock("PRODUCT");
+    expect(block).toContain("Cluster sugerido: **C1**");
+    expect(block).not.toContain("Búsqueda objetivo de hoy");
+  });
+
   it("sugiere el cluster de la categoría y lista búsquedas prohibidas y URLs", () => {
     const block = buildSeoBlock("TECH");
     expect(block).toContain("Cluster sugerido: **C3**");

@@ -1,12 +1,46 @@
 import { Resend } from "resend";
 import { buildLinkedInVariantsSection } from "@/app/lib/notifications/linkedinManual";
 
+const escapar = (t) =>
+  String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+
+const AVISO = "background:#fff4e5;border-left:4px solid #f59e0b;padding:10px 12px;margin:8px 0;";
+
+/**
+ * Sección de posicionamiento del correo: cluster, búsqueda objetivo y avisos
+ * (sin búsquedas libres en el cluster, sin enlace a la página del cluster).
+ * Pura para poder probarla sin enviar nada. `seo` lo arma el orquestador.
+ */
+export function buildSeoSection(seo) {
+  if (!seo) return "";
+  const avisos = [];
+  if (seo.sinBusquedas) {
+    avisos.push(
+      `No quedan búsquedas sin cubrir en la lista de ${escapar(seo.clusterDelDia)}: este post se ha generado como antes, con el tema de las tendencias. Hay que ampliar la lista (app/lib/seo/busquedasObjetivo.js).`,
+    );
+  }
+  if (seo.sinEnlaceCluster?.length) {
+    avisos.push(
+      `El post no enlaza a la página de su cluster en ${seo.sinEnlaceCluster.map((l) => l.toUpperCase()).join(" ni en ")}. Añade el enlace antes de las 08:30.`,
+    );
+  }
+  const lista = seo.busquedaDeLaLista;
+  const busqueda = seo.busqueda
+    ? `"${escapar(seo.busqueda)}"${lista ? ` <span style="color:#666;">(n.º ${lista.posicion} de ${lista.total} de la lista)</span>` : ` <span style="color:#666;">(elegida por la IA, no de la lista)</span>`}`
+    : "—";
+  return `
+  <p><strong>Cluster:</strong> ${seo.cluster ? `${escapar(seo.cluster)} · ${escapar(seo.clusterName ?? "")}` : "—"}</p>
+  <p><strong>Búsqueda objetivo:</strong> ${busqueda}</p>
+  ${avisos.map((a) => `<p style="${AVISO}">⚠ ${a}</p>`).join("\n  ")}`;
+}
+
 export async function sendDraftReadyEmail({
   post,
   translationEs,
   category,
   linkedinVariants = [],
   postUrl,
+  seo = null,
 }) {
   const apiKey = process.env.RESEND_API_KEY;
   const to = process.env.DRAFT_REVIEW_EMAIL || "joseantonio.cesfranjo@room714.com";
@@ -39,6 +73,7 @@ export async function sendDraftReadyEmail({
   <p><strong>Categoría:</strong> ${category}</p>
   <p><strong>Título:</strong> ${translationEs.title}</p>
   <p><strong>Tags:</strong> ${translationEs.tags.join(", ")}</p>
+  ${buildSeoSection(seo)}
   <p style="margin-top: 20px;">
     <a href="${adminUrl}" style="background:#000;color:#fff;padding:12px 20px;text-decoration:none;border-radius:8px;font-weight:bold;display:inline-block;">
       Revisar / editar / rechazar
