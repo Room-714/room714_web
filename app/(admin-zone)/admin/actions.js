@@ -2,6 +2,7 @@
 
 import { prisma } from "@/app/lib/prisma";
 import { revalidatePath } from "next/cache";
+import { resolverMeta } from "@/app/lib/postMeta";
 
 /**
  * Genera un slug amigable para URL
@@ -102,7 +103,16 @@ export async function savePost(data) {
       title_en,
       tags_en,
       content_en,
+      metaTitle_es,
+      metaDescription_es,
+      metaTitle_en,
+      metaDescription_en,
     } = data;
+    // Lo que trae el formulario para cada idioma; undefined = no se tocó.
+    const metaEnviada = {
+      es: { metaTitle: metaTitle_es, metaDescription: metaDescription_es },
+      en: { metaTitle: metaTitle_en, metaDescription: metaDescription_en },
+    };
 
     const translationsData = [
       {
@@ -149,10 +159,11 @@ export async function savePost(data) {
         if (prev) {
           t.linkedinPost = prev.linkedinPost;
           t.linkedinHashtags = prev.linkedinHashtags ?? [];
-          t.metaDescription = prev.metaDescription;
-          // Las traducciones se borran y se recrean al guardar: sin esto, editar
-          // un post desde el admin le quitaba el metaTitle.
-          t.metaTitle = prev.metaTitle;
+          // Las traducciones se borran y se recrean al guardar: lo que no
+          // venga del formulario se conserva (antes, editar un post le quitaba
+          // el metaTitle).
+          t.metaDescription = resolverMeta(metaEnviada[t.lang].metaDescription, prev.metaDescription);
+          t.metaTitle = resolverMeta(metaEnviada[t.lang].metaTitle, prev.metaTitle);
           // Congelamos el slug de un post ya publicado: cambiar su URL
           // rompería enlaces existentes (web, LinkedIn, Google). Los
           // borradores sí regeneran el slug desde el título.
@@ -160,6 +171,14 @@ export async function savePost(data) {
             t.slug = prev.slug;
           }
         }
+      }
+    }
+
+    // Post nuevo: los metadatos que se hayan escrito en el formulario.
+    if (!id) {
+      for (const t of translationsData) {
+        t.metaDescription = resolverMeta(metaEnviada[t.lang].metaDescription, null);
+        t.metaTitle = resolverMeta(metaEnviada[t.lang].metaTitle, null);
       }
     }
 
