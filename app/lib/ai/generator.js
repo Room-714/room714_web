@@ -370,12 +370,66 @@ function appendToLastParagraph(html, sentenceHtml) {
   return `${html.slice(0, i).replace(/\s+$/, "")} ${sentenceHtml}${html.slice(i)}`;
 }
 
-/** Corta en el último espacio antes de `max` y quita la puntuación colgante. */
-function cutAtWord(text, max) {
-  const t = text.trim();
+// Palabras que no pueden cerrar un texto recortado: dejarían la frase colgando
+// ("…de forma que", "…con el").
+const COLGANTES = new Set(
+  (
+    "a al como con cuando de del donde e el en entre la las lo los ni o para pero por que se si sin su sus u un una y " +
+    "a an and as at by for from in into of on or so than that the to which while with"
+  ).split(" "),
+);
+
+/**
+ * Recorta una meta description a `max` caracteres sin dejarla a medias: acaba
+ * en la última frase completa si así conserva al menos dos tercios del
+ * límite; si no, corta por palabra, quita las palabras colgantes y cierra con
+ * "…". Es la red: lo normal es que reescribirDescripcion la deje en su sitio.
+ */
+export function recortarDescripcion(text, max = META_DESCRIPTION_MAX) {
+  const t = String(text).trim().replace(/\s+/g, " ");
   if ([...t].length <= max) return t;
-  const cut = [...t].slice(0, max).join("");
-  return cut.slice(0, cut.lastIndexOf(" ")).replace(/[\s,;:.–—-]+$/, "");
+  const cabe = [...t].slice(0, max).join("");
+
+  const finesDeFrase = [...cabe.matchAll(/[.!?…](?=\s|$)/g)].map((m) => m.index + 1);
+  const ultimaFrase = finesDeFrase.at(-1);
+  if (ultimaFrase && [...cabe.slice(0, ultimaFrase)].length >= Math.round((max * 2) / 3)) return cabe.slice(0, ultimaFrase);
+
+  // Un carácter menos para el "…".
+  const palabras = [...cabe].slice(0, max - 1).join("").split(" ");
+  palabras.pop(); // la última puede estar partida
+  while (palabras.length > 1 && COLGANTES.has(palabras.at(-1).toLowerCase().replace(/[^\p{L}]/gu, ""))) palabras.pop();
+  return palabras.join(" ").replace(/[\s,;:.–—-]+$/, "") + "…";
+}
+
+/**
+ * Pide a la IA que reescriba una meta description que se pasó de largo, en
+ * vez de recortarla. Devuelve el texto nuevo, o null si falla, si se vuelve a
+ * pasar o si queda demasiado corto (entonces se queda el recorte).
+ * `client` se inyecta para poder probarla sin llamar a la API.
+ */
+export async function reescribirDescripcion({ client, texto, busqueda, lang, max = META_DESCRIPTION_MAX }) {
+  const objetivo = max - 10;
+  const peticion =
+    lang === "en"
+      ? `Rewrite this meta description so it is at most ${objetivo} characters long (spaces included), one or two complete sentences, keeping the search query "${busqueda}" and the tone. Return only the text, without quotes.\n\n${texto}`
+      : `Reescribe esta meta description para que tenga como máximo ${objetivo} caracteres (con espacios), en una o dos frases completas, conservando la búsqueda "${busqueda}" y el tono. Devuelve solo el texto, sin comillas.\n\n${texto}`;
+  try {
+    const res = await client.messages.create({
+      model: MODEL,
+      max_tokens: 300,
+      messages: [{ role: "user", content: peticion }],
+    });
+    const nueva = res.content
+      ?.find((b) => b.type === "text")
+      ?.text.trim()
+      .replace(/^["«“]+|["»”]+$/g, "")
+      .trim();
+    const largo = nueva ? [...nueva].length : 0;
+    return largo >= 70 && largo <= max ? nueva : null;
+  } catch (err) {
+    console.error(`reescribirDescripcion (${lang}) falló: ${err.message}`);
+    return null;
+  }
 }
 
 /**
@@ -387,6 +441,9 @@ function cutAtWord(text, max) {
  */
 function applySeoRules(data, category, { cluster: clusterDelDia, targetQuery } = {}) {
   const warnings = [];
+  // Las descripciones que se pasaron de largo, enteras, para que
+  // generateViaCreateBlogPostTool intente reescribirlas en vez de recortarlas.
+  const descripcionesLargas = {};
   let cluster = data.cluster;
   if (clusterDelDia && cluster !== clusterDelDia) {
     warnings.push(`cluster "${cluster}" distinto del cluster del día; se usa ${clusterDelDia}`);
@@ -431,7 +488,8 @@ function applySeoRules(data, category, { cluster: clusterDelDia, targetQuery } =
     const desc = data[`meta_description_${lang}`];
     if ([...desc.trim()].length > META_DESCRIPTION_MAX) {
       warnings.push(`${lang}: meta_description de ${[...desc.trim()].length} caracteres; se recorta`);
-      data[`meta_description_${lang}`] = cutAtWord(desc, META_DESCRIPTION_MAX);
+      descripcionesLargas[lang] = desc.trim();
+      data[`meta_description_${lang}`] = recortarDescripcion(desc, META_DESCRIPTION_MAX);
     }
 
     for (const field of [`title_${lang}`, `meta_title_${lang}`, `target_query_${lang}`]) {
@@ -465,6 +523,7 @@ function applySeoRules(data, category, { cluster: clusterDelDia, targetQuery } =
     cluster,
     targetQuery: { es: data.target_query_es, en: data.target_query_en },
     warnings,
+    descripcionesLargas,
   };
   if (warnings.length) console.warn("Reglas SEO del borrador:", warnings);
   return data;
@@ -605,6 +664,24 @@ const MAX_GENERATION_ATTEMPTS = 2;
 // Llama al tool create_blog_post con streaming (obligatorio por encima de ~16k
 // tokens para no chocar con el timeout HTTP del SDK), detecta el truncado por
 // max_tokens de forma explícita y reintenta si la generación no valida.
+/**
+ * Una description que se pasó de 155 sale de applySeoRules ya recortada; aquí
+ * se intenta que la IA la reescriba entera. Si no lo consigue, se queda el
+ * recorte. Nunca tira la generación.
+ */
+export async function reescribirDescripcionesLargas(data, client) {
+  for (const [lang, texto] of Object.entries(data.seo?.descripcionesLargas ?? {})) {
+    const nueva = await reescribirDescripcion({ client, texto, busqueda: data[`target_query_${lang}`], lang });
+    if (nueva) {
+      data[`meta_description_${lang}`] = nueva;
+      data.seo.warnings.push(`${lang}: meta_description reescrita por la IA (${[...nueva].length} caracteres)`);
+    } else {
+      data.seo.warnings.push(`${lang}: no se pudo reescribir la meta_description; se queda recortada`);
+    }
+  }
+  return data;
+}
+
 async function generateViaCreateBlogPostTool({ userPrompt, recentPosts, category, cluster, targetQuery }) {
   const client = getAnthropicClient();
   let lastError;
@@ -654,6 +731,7 @@ async function generateViaCreateBlogPostTool({ userPrompt, recentPosts, category
 
     try {
       const validated = validateGenerated(toolUse.input, { recentPosts, category, cluster, targetQuery });
+      await reescribirDescripcionesLargas(validated, client);
       return {
         ...validated,
         usage: {

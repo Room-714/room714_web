@@ -10,6 +10,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import ImageUploader from "./components/ImageUploader";
+import MetaFields from "./components/MetaFields";
 import { signOut } from "next-auth/react";
 import { CATEGORY_IDS, CATEGORY_LABELS } from "@/app/data/BlogCategories";
 import PublishWorkflowModal from "./components/PublishWorkflowModal";
@@ -38,6 +39,10 @@ export default function AdminPage() {
     title_en: "",
     tags_en: "",
     content_en: "",
+    metaTitle_es: "",
+    metaDescription_es: "",
+    metaTitle_en: "",
+    metaDescription_en: "",
   });
 
   const loadPosts = useCallback(async () => {
@@ -93,6 +98,10 @@ export default function AdminPage() {
       title_en: en.title || "",
       tags_en: en.tags?.join(", ") || "",
       content_en: en.content || "",
+      metaTitle_es: es.metaTitle || "",
+      metaDescription_es: es.metaDescription || "",
+      metaTitle_en: en.metaTitle || "",
+      metaDescription_en: en.metaDescription || "",
     });
   };
 
@@ -215,6 +224,10 @@ export default function AdminPage() {
       title_en: "",
       tags_en: "",
       content_en: "",
+      metaTitle_es: "",
+      metaDescription_es: "",
+      metaTitle_en: "",
+      metaDescription_en: "",
     });
 
   const editingLivePost = isLivePost(formData);
@@ -491,6 +504,7 @@ export default function AdminPage() {
                     value={formData.title_es}
                     onChange={handleChange}
                   />
+                  <MetaFields lang="es" formData={formData} onChange={handleChange} />
                   <RichTextEditor
                     content={formData.content_es}
                     onChange={(html) =>
@@ -512,6 +526,7 @@ export default function AdminPage() {
                     value={formData.title_en}
                     onChange={handleChange}
                   />
+                  <MetaFields lang="en" formData={formData} onChange={handleChange} />
                   <RichTextEditor
                     content={formData.content_en}
                     onChange={(html) =>

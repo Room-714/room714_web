@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { buildSeoBlock, validateGenerated } from "./generator";
+import {
+  buildSeoBlock,
+  recortarDescripcion,
+  reescribirDescripcion,
+  reescribirDescripcionesLargas,
+  validateGenerated,
+} from "./generator";
 import { insertLinkAroundPhrase } from "./backlinker";
 
 // Borrador mínimo que pasa la validación estructural; cada test cambia lo
@@ -68,7 +74,7 @@ describe("validateGenerated · reglas de posicionamiento", () => {
     expect(out.content_es).not.toContain('href="/es/casos/ia-ecommerce-sin-tocar-la-tienda"');
   });
 
-  it("descarta un meta title largo y recorta una description larga por palabra", () => {
+  it("descarta un meta title largo y recorta una description larga sin dejarla a medias", () => {
     const out = validateGenerated(
       draft({
         meta_title_es: "Un meta title que se pasa claramente de cuarenta y nueve caracteres",
@@ -78,7 +84,8 @@ describe("validateGenerated · reglas de posicionamiento", () => {
     );
     expect(out.meta_title_es).toBeNull();
     expect([...out.meta_description_es].length).toBeLessThanOrEqual(155);
-    expect(out.meta_description_es.endsWith("palabra")).toBe(true);
+    expect(out.meta_description_es.endsWith("palabra…")).toBe(true);
+    expect(out.seo.descripcionesLargas.es).toBe("palabra ".repeat(30).trim());
   });
 
   it("avisa si el título persigue una búsqueda reservada a una página", () => {
@@ -144,6 +151,71 @@ describe("validateGenerated · cluster y búsqueda del día", () => {
     expect(avisos).toMatch(/title_es no recoge la búsqueda objetivo/);
     expect(avisos).toMatch(/meta_description_es no recoge la búsqueda objetivo/);
     expect(avisos).toMatch(/primer párrafo no recoge la búsqueda objetivo/);
+  });
+});
+
+// La del post del 07/10/2026 ("Cómo medir la experiencia de cliente…"), que
+// salió cortada en "de forma que". El final es una reconstrucción plausible.
+const LARGA_07_10 =
+  "NPS, CSAT, tiempo en sesión: métricas que tranquilizan pero no informan. Así se mide la experiencia de cliente en un producto digital de forma que el equipo sepa qué cambiar.";
+
+describe("recortarDescripcion", () => {
+  it("no toca una description que cabe", () => {
+    expect(recortarDescripcion("Corta y completa.", 155)).toBe("Corta y completa.");
+  });
+
+  it("acaba en la última frase completa si conserva dos tercios del límite", () => {
+    const texto = "Primera frase que ocupa bastante sitio para llegar lejos en la description. Segunda frase que también es larga. Tercera que ya no cabe entera en el límite.";
+    const out = recortarDescripcion(texto, 120);
+    expect(out).toBe("Primera frase que ocupa bastante sitio para llegar lejos en la description. Segunda frase que también es larga.");
+  });
+
+  it("sin frase completa útil, corta por palabra, quita las colgantes y cierra con …", () => {
+    const out = recortarDescripcion(LARGA_07_10, 155);
+    expect([...out].length).toBeLessThanOrEqual(155);
+    expect(out.endsWith("…")).toBe(true);
+    expect(out).not.toMatch(/\b(que|de|el|con)…$/);
+  });
+});
+
+describe("reescribirDescripcion", () => {
+  const cliente = (texto) => ({ messages: { create: async () => ({ content: [{ type: "text", text: texto }] }) } });
+  const busqueda = "cómo medir la experiencia de cliente en un producto digital";
+
+  it("devuelve la reescritura de la IA si cabe", async () => {
+    const nueva = "NPS, CSAT, tiempo en sesión: métricas que tranquilizan pero no informan. Cómo medir la experiencia de cliente en un producto digital con datos útiles.";
+    expect(await reescribirDescripcion({ client: cliente(`"${nueva}"`), texto: LARGA_07_10, busqueda, lang: "es" })).toBe(nueva);
+  });
+
+  it("descarta una reescritura que se pasa o que se queda corta", async () => {
+    expect(await reescribirDescripcion({ client: cliente("x".repeat(160)), texto: LARGA_07_10, busqueda, lang: "es" })).toBeNull();
+    expect(await reescribirDescripcion({ client: cliente("Muy corta."), texto: LARGA_07_10, busqueda, lang: "es" })).toBeNull();
+  });
+
+  it("si la API falla, devuelve null sin romper nada", async () => {
+    const roto = { messages: { create: async () => { throw new Error("529 overloaded"); } } };
+    expect(await reescribirDescripcion({ client: roto, texto: LARGA_07_10, busqueda, lang: "es" })).toBeNull();
+  });
+});
+
+describe("reescribirDescripcionesLargas", () => {
+  it("sustituye el recorte por la reescritura y lo deja en los avisos", async () => {
+    const out = validateGenerated(draft({ meta_description_es: LARGA_07_10 }), { category: "UX" });
+    expect(out.meta_description_es.endsWith("…")).toBe(true);
+    const nueva = "NPS, CSAT, tiempo en sesión: métricas que tranquilizan pero no informan. Cómo medir la experiencia de cliente en un producto digital con datos útiles.";
+    const client = { messages: { create: async () => ({ content: [{ type: "text", text: nueva }] }) } };
+    await reescribirDescripcionesLargas(out, client);
+    expect(out.meta_description_es).toBe(nueva);
+    expect(out.seo.warnings.join()).toMatch(/meta_description reescrita por la IA/);
+  });
+
+  it("si no puede reescribirla, se queda el recorte", async () => {
+    const out = validateGenerated(draft({ meta_description_es: LARGA_07_10 }), { category: "UX" });
+    const recorte = out.meta_description_es;
+    const roto = { messages: { create: async () => { throw new Error("caída"); } } };
+    await reescribirDescripcionesLargas(out, roto);
+    expect(out.meta_description_es).toBe(recorte);
+    expect(out.seo.warnings.join()).toMatch(/se queda recortada/);
   });
 });
 
