@@ -9,6 +9,7 @@ import {
   List,
   Link as LinkIcon,
   Heading2,
+  Heading3,
   Quote,
 } from "lucide-react";
 
@@ -91,6 +92,15 @@ export default function RichTextEditor({ content, onChange }) {
           isActive={editor.isActive("heading", { level: 2 })}
         >
           <Heading2 size={16} strokeWidth={3} />
+        </MenuButton>
+
+        <MenuButton
+          onClick={() =>
+            editor.chain().focus().toggleHeading({ level: 3 }).run()
+          }
+          isActive={editor.isActive("heading", { level: 3 })}
+        >
+          <Heading3 size={16} strokeWidth={3} />
         </MenuButton>
 
         <MenuButton
