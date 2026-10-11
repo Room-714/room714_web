@@ -50,17 +50,28 @@ export default async function ComoTrabajamosPage({ params }) {
             señalaba a nada en ninguna anchura. El gesto lo dan ahora las dos
             alineaciones, titular a la izquierda y entradilla a la derecha. */}
         <section className={`w-full ${CANAL} py-16 bg-white flex flex-col`}>
-          {/* Una frase por línea. El titular son dos frases cortas y
-              partirlas por donde caiga el ancho las deja a media idea. */}
+          {/* Una frase por línea. La primera es el titular; la segunda va en
+              la letra manuscrita roja, como el "…y así de bien solemos
+              terminar" de Casos. Sigue dentro del h1 a propósito: "estudio de
+              producto digital" es la búsqueda de esta página. */}
           <h1 className="font-body font-extrabold text-3xl md:text-5xl lg:text-7xl leading-tight text-black text-left mb-8">
             {t.hero.title
               .split(". ")
               .filter(Boolean)
-              .map((frase, i, todas) => (
-                <span key={frase} className="block">
-                  {i < todas.length - 1 ? `${frase}.` : frase}
-                </span>
-              ))}
+              .map((frase, i, todas) =>
+                i === 0 ? (
+                  <span key={frase} className="block">
+                    {todas.length > 1 ? `${frase}.` : frase}
+                  </span>
+                ) : (
+                  <span
+                    key={frase}
+                    className="block font-hand font-normal text-red-500 text-3xl md:text-4xl lg:text-5xl leading-[1.45] mt-4"
+                  >
+                    {i < todas.length - 1 ? `${frase}.` : frase}
+                  </span>
+                ),
+              )}
           </h1>
 
           <p className="font-hand text-xl md:text-3xl lg:text-4xl text-red-500 text-right w-full md:w-[60%] md:ml-auto leading-[1.45]">
