@@ -1,4 +1,9 @@
 import { put } from "@vercel/blob";
+import { MAX_IMAGEN_MS } from "@/app/lib/ai/tiempos";
+
+// Cada petición a Unsplash con su límite: sin él, una búsqueda colgada dejaba
+// la generación esperando hasta que Vercel la cortaba a los 300 s.
+const conLimite = () => AbortSignal.timeout(MAX_IMAGEN_MS);
 
 async function searchUnsplash(query) {
   const key = process.env.UNSPLASH_ACCESS_KEY;
@@ -12,6 +17,7 @@ async function searchUnsplash(query) {
 
   const res = await fetch(url, {
     headers: { Authorization: `Client-ID ${key}` },
+    signal: conLimite(),
   });
   if (!res.ok) throw new Error(`Unsplash search ${res.status}`);
   const data = await res.json();
@@ -19,7 +25,7 @@ async function searchUnsplash(query) {
 }
 
 async function downloadImage(imageUrl) {
-  const res = await fetch(imageUrl);
+  const res = await fetch(imageUrl, { signal: conLimite() });
   if (!res.ok) throw new Error(`Descarga imagen ${res.status}`);
   const arrayBuffer = await res.arrayBuffer();
   return Buffer.from(arrayBuffer);
@@ -31,6 +37,7 @@ async function triggerDownloadTracking(downloadLocation) {
   try {
     await fetch(downloadLocation, {
       headers: { Authorization: `Client-ID ${key}` },
+      signal: conLimite(),
     });
   } catch (err) {
     console.warn("Unsplash download tracking falló:", err.message);

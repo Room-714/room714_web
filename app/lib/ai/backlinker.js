@@ -1,5 +1,6 @@
 import { prisma } from "@/app/lib/prisma";
 import { getAnthropicClient, MODEL } from "./anthropic";
+import { opcionesDeTiempo } from "./tiempos";
 
 const ELIGIBLE_DAYS = 30;
 const CANDIDATE_LIMIT = 20;
@@ -94,6 +95,9 @@ export async function backlinkOldPosts({
   newSlugEs,
   newSlugEn,
   newContentEs,
+  // Límite de la llamada al modelo (lo pone el orquestador según el
+  // presupuesto que quede). Sin él, el del SDK.
+  timeoutMs,
 }) {
   const cutoff = new Date(Date.now() - ELIGIBLE_DAYS * 24 * 60 * 60 * 1000);
 
@@ -166,13 +170,16 @@ ${candidatesForPrompt
 Llama al tool select_backlinks con tus selecciones.`;
 
   const client = getAnthropicClient();
-  const response = await client.messages.create({
-    model: MODEL,
-    max_tokens: 1500,
-    tools: [SELECTION_TOOL],
-    tool_choice: { type: "tool", name: "select_backlinks" },
-    messages: [{ role: "user", content: userPrompt }],
-  });
+  const response = await client.messages.create(
+    {
+      model: MODEL,
+      max_tokens: 1500,
+      tools: [SELECTION_TOOL],
+      tool_choice: { type: "tool", name: "select_backlinks" },
+      messages: [{ role: "user", content: userPrompt }],
+    },
+    timeoutMs ? opcionesDeTiempo(timeoutMs) : undefined,
+  );
 
   const toolUse = response.content.find((b) => b.type === "tool_use");
   if (!toolUse) {

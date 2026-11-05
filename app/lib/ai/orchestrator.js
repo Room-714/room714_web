@@ -11,6 +11,7 @@ import {
   titulosExistentes,
 } from "./duplicados";
 import { planificarTema } from "./planificador";
+import { MAX_ENLAZADO_MS, MAX_PLANIFICADOR_MS, RESERVA_TRAS_GENERAR_MS, crearReloj } from "./tiempos";
 import {
   getCrossSourceTrending,
   summarizeSources,
@@ -109,6 +110,10 @@ export async function generateDraftForToday({
   alDuplicar = "avisar",
   preview = false,
 } = {}) {
+  // Presupuesto de toda la generación (tiempos.js): cada llamada al modelo se
+  // lleva su parte y nada puede dejar la petición colgada hasta el corte de
+  // Vercel a los 300 s.
+  const reloj = crearReloj();
   const today = new Date();
   const publishDate = nextMadridSlot(PUBLISH_HOUR_MADRID, PUBLISH_MINUTE_MADRID);
   // Lunes y miércoles el día fija cluster y categoría
@@ -166,6 +171,8 @@ export async function generateDraftForToday({
       trending,
       existentes,
       evitar: rechazados,
+      // Lo que no se lleve el planificador tiene que bastar para generar.
+      timeoutMs: reloj.tope(MAX_PLANIFICADOR_MS, RESERVA_TRAS_GENERAR_MS + 60_000),
     });
 
     const duplicado = decidirDuplicado(plan, corpus);
@@ -219,6 +226,7 @@ export async function generateDraftForToday({
     tema: plan.tema_es,
     angulo: plan.angulo_es,
     corpus,
+    reloj,
   });
 
   // El generador ya lo comprueba (y reintenta); esto es la última barrera
@@ -283,16 +291,24 @@ export async function generateDraftForToday({
 
   // Backlink bidireccional: edita 2-3 posts antiguos para que enlacen al
   // nuevo. Best-effort — un fallo aquí no rompe la publicación.
+  // El post ya está guardado: si no queda tiempo para el enlazado, se salta
+  // en vez de arriesgar el corte de Vercel (la respuesta tiene que llegar).
   let backlinks = { skipped: true };
+  const tiempoBacklinks = reloj.tope(MAX_ENLAZADO_MS, 5_000);
   try {
-    backlinks = await backlinkOldPosts({
-      newPostId: post.id,
-      newPostCategory: category,
-      newPostTitle: translationEs.title,
-      newSlugEs: translationEs.slug,
-      newSlugEn: translationEn?.slug || translationEs.slug,
-      newContentEs: translationEs.content,
-    });
+    if (tiempoBacklinks < 8_000) {
+      backlinks = { skipped: true, reason: "sin tiempo en el presupuesto" };
+    } else {
+      backlinks = await backlinkOldPosts({
+        newPostId: post.id,
+        newPostCategory: category,
+        newPostTitle: translationEs.title,
+        newSlugEs: translationEs.slug,
+        newSlugEn: translationEn?.slug || translationEs.slug,
+        newContentEs: translationEs.content,
+        timeoutMs: tiempoBacklinks,
+      });
+    }
   } catch (err) {
     console.error("Backlink falló:", err.message);
     backlinks = { error: err.message };
@@ -305,12 +321,15 @@ export async function generateDraftForToday({
   // Enlaces salientes: el post nuevo enlaza a 2-3 posts relacionados de su
   // categoría para no salir huérfano. Best-effort — un fallo no rompe nada.
   let outboundLinks = { skipped: true };
+  const tiempoSalientes = reloj.tope(MAX_ENLAZADO_MS, 5_000);
   try {
+    if (tiempoSalientes < 8_000) throw new Error("sin tiempo en el presupuesto");
     const out = await computeOutboundLinksForPost({
       postId: post.id,
       category,
       contentEs: translationEs.content,
       contentEn: translationEn?.content || "",
+      timeoutMs: tiempoSalientes,
     });
     if (out.added.length > 0) {
       await prisma.post.update({

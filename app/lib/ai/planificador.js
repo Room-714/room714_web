@@ -13,6 +13,7 @@
 
 import { getAnthropicClient, MODEL } from "./anthropic";
 import { CLUSTERS, CLUSTERS_POSICIONAMIENTO, RESERVED_QUERIES } from "../seo/clusters";
+import { MAX_PLANIFICADOR_MS, esTimeout, opcionesDeTiempo, segundos } from "./tiempos";
 
 export const SIN_CLUSTER = "NINGUNO";
 
@@ -131,21 +132,45 @@ export function interpretarPlan(input, existentes, { temaFijo } = {}) {
   };
 }
 
-/** Una sola llamada al modelo. Lanza si el modelo no usa la herramienta. */
-export async function planificarTema({ category, clusterSugerido, temaFijo, trending, existentes, evitar }) {
+/**
+ * Una sola llamada al modelo, con límite de tiempo (`timeoutMs`) y sin
+ * reintentos. Lanza si el modelo no usa la herramienta o no responde a tiempo.
+ */
+export async function planificarTema({
+  category,
+  clusterSugerido,
+  temaFijo,
+  trending,
+  existentes,
+  evitar,
+  timeoutMs = MAX_PLANIFICADOR_MS,
+}) {
   const client = getAnthropicClient();
-  const response = await client.messages.create({
-    model: MODEL,
-    max_tokens: 1500,
-    tools: [PLAN_TOOL],
-    tool_choice: { type: "tool", name: PLAN_TOOL.name },
-    messages: [
+  let response;
+  try {
+    response = await client.messages.create(
       {
-        role: "user",
-        content: buildPlanPrompt({ category, clusterSugerido, temaFijo, trending, existentes, evitar }),
+        model: MODEL,
+        max_tokens: 1500,
+        tools: [PLAN_TOOL],
+        tool_choice: { type: "tool", name: PLAN_TOOL.name },
+        messages: [
+          {
+            role: "user",
+            content: buildPlanPrompt({ category, clusterSugerido, temaFijo, trending, existentes, evitar }),
+          },
+        ],
       },
-    ],
-  });
+      opcionesDeTiempo(timeoutMs),
+    );
+  } catch (err) {
+    if (esTimeout(err)) {
+      throw new Error(
+        `El planificador no respondió en ${segundos(timeoutMs)}; no se ha generado nada. Vuelve a intentarlo en unos minutos.`,
+      );
+    }
+    throw err;
+  }
   const toolUse = response.content.find((b) => b.type === "tool_use");
   if (!toolUse) throw new Error("El planificador no devolvió un plan");
   return {
