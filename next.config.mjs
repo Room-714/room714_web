@@ -1,9 +1,15 @@
 import { RENOMBRADAS, guardasDeIdioma } from "./app/lib/routes.mjs";
+import { redireccionesDePosts } from "./app/lib/seo/postsRedirigidos.mjs";
 
 // Las redirecciones del rediseño no se escriben a mano: salen del mapa de
 // rutas, así que añadir una página añade sus guardas sola y no hay forma de
-// que el menú apunte a una URL y la redirección a otra.
-const desdeElMapa = [...RENOMBRADAS, ...guardasDeIdioma()].map(({ de, a }) => ({
+// que el menú apunte a una URL y la redirección a otra. Los posts fusionados
+// salen de su propia lista, que el sitemap usa para omitirlos.
+const desdeElMapa = [
+  ...RENOMBRADAS,
+  ...guardasDeIdioma(),
+  ...redireccionesDePosts(),
+].map(({ de, a }) => ({
   source: de,
   destination: a,
   statusCode: 301,
