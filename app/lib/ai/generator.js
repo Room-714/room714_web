@@ -12,6 +12,7 @@ import {
   reservedQueriesIn,
 } from "../seo/clusters";
 import { respondeABusqueda } from "../seo/busquedasObjetivo";
+import { metasRepetidas } from "./duplicados";
 
 const POST_TOOL = {
   name: "create_blog_post",
@@ -240,7 +241,9 @@ function buildPublishedCorpusBlock(publishedCorpus) {
     const list = byCategory.get(post.category) || [];
     const title = post.title_es || post.title_en || "(sin título)";
     const tags = post.tags?.length ? ` [${post.tags.join(", ")}]` : "";
-    list.push(`- "${title}" (${post.date})${tags}`);
+    // Los programados y borradores también cuentan: también se pisan.
+    const estado = post.estado && post.estado !== "publicado" ? `, ${post.estado}` : "";
+    list.push(`- "${title}" (${post.date}${estado})${tags}`);
     byCategory.set(post.category, list);
   }
 
@@ -250,9 +253,9 @@ function buildPublishedCorpusBlock(publishedCorpus) {
 
   return `
 
-## Corpus ya publicado — NO repitas ninguno de estos ángulos
+## Corpus ya existente — NO repitas ninguno de estos temas ni ángulos
 
-Estos son TODOS los artículos que Room714 ya ha publicado. Antes de elegir tu tema, compruébalo contra esta lista. Si tu idea comparte la tesis central con cualquiera de ellos, descártala y elige otra, aunque el enfoque o el título sean distintos. Reescribir un ángulo ya publicado hace que Google trate ambos como duplicados y no indexe ninguno.
+Estos son TODOS los artículos de Room714: publicados, programados y borradores. Antes de escribir, compruébalo contra esta lista. NO repitas un tema ya cubierto: si tu idea comparte la pregunta o la tesis central con cualquiera de ellos, aunque el enfoque o el título sean distintos, no la escribas así. Propón un ángulo NUEVO, que ninguno de estos artículos tenga. Reescribir un tema ya cubierto hace que Google trate ambos como duplicados y no indexe ninguno. Tampoco reutilices sus títulos ni sus meta descriptions.
 
 ${sections}`;
 }
@@ -266,7 +269,21 @@ export function buildUserPrompt({
   publishedCorpus,
   cluster,
   targetQuery,
+  tema,
+  angulo,
 }) {
+  // El tema y el ángulo los fija antes el planificador (planificador.js), que
+  // ya los ha comprobado contra los posts existentes.
+  const temaAprobado = tema
+    ? `## TEMA Y ÁNGULO APROBADOS
+
+- Tema: **${tema}**
+${angulo ? `- Ángulo: ${angulo}\n` : ""}
+Ya se ha comprobado que ningún post existente cubre este tema con este ángulo. Escribe sobre esto y no cambies de tema.
+
+`
+    : "";
+
   const trendingText =
     trending.length > 0
       ? trending.slice(0, 18).map(formatTrendingItem).join("\n\n")
@@ -286,7 +303,7 @@ export function buildUserPrompt({
 
   return `Hoy toca generar un post para la categoría: **${category}**
 
-## Tendencias actuales en varios medios (categoría ${category})
+${temaAprobado}## Tendencias actuales en varios medios (categoría ${category})
 
 Estos son los titulares y resúmenes de artículos que están sonando esta semana en Medium, dev.to, Hacker News, Nielsen Norman Group y/o Smashing Magazine para esta categoría. El campo "— Fuente" indica de dónde sale cada uno. ${
     targetQuery
@@ -322,7 +339,9 @@ ${buildSeoBlock(category, { cluster, targetQuery })}
 ${
     targetQuery
       ? `1. Escribe sobre la búsqueda objetivo de hoy ("${targetQuery}"). De las tendencias de arriba toma, como mucho, un ángulo que encaje; si ninguna encaja, prescinde de ellas.`
-      : `1. Identifica una tensión, tendencia o malentendido recurrente en los titulares de arriba (categoría ${category}).`
+      : tema
+        ? `1. Escribe sobre el tema aprobado ("${tema}"), con su ángulo. Las tendencias solo sirven de apoyo.`
+        : `1. Identifica una tensión, tendencia o malentendido recurrente en los titulares de arriba (categoría ${category}).`
   }
 2. Escribe un post original con la voz de Room 714, siguiendo la guía editorial y los ejemplos.
 3. Asegúrate de que el tema no se solapa con los posts recientes listados.
@@ -682,9 +701,28 @@ export async function reescribirDescripcionesLargas(data, client) {
   return data;
 }
 
-async function generateViaCreateBlogPostTool({ userPrompt, recentPosts, category, cluster, targetQuery }) {
+/**
+ * Lanza si el metaTitle o la metaDescription del borrador ya los usa otro
+ * post. Va después de reescribirDescripcionesLargas, que puede cambiar la
+ * description. `corpus` es el de duplicados.js; sin él no se comprueba.
+ */
+export function comprobarMetasUnicas(data, corpus) {
+  if (!corpus) return;
+  const repetidas = metasRepetidas(data, corpus);
+  if (repetidas.length) {
+    const detalle = repetidas.map((r) => `${r.campo} "${r.valor}" (ya lo usa el post ${r.postId})`).join("; ");
+    const err = new Error(`Metadatos repetidos: ${detalle}`);
+    err.metasRepetidas = repetidas;
+    throw err;
+  }
+}
+
+async function generateViaCreateBlogPostTool({ userPrompt, recentPosts, category, cluster, targetQuery, corpus }) {
   const client = getAnthropicClient();
   let lastError;
+  // Si un intento falla por metadatos repetidos, el siguiente lo sabe: sin
+  // esto, el reintento recibe el mismo prompt y puede repetir lo mismo.
+  let aviso = "";
 
   for (let attempt = 1; attempt <= MAX_GENERATION_ATTEMPTS; attempt += 1) {
     let response;
@@ -695,7 +733,7 @@ async function generateViaCreateBlogPostTool({ userPrompt, recentPosts, category
         system: buildCachedSystemBlocks(),
         tools: [POST_TOOL],
         tool_choice: { type: "tool", name: "create_blog_post" },
-        messages: [{ role: "user", content: userPrompt }],
+        messages: [{ role: "user", content: userPrompt + aviso }],
       });
       response = await stream.finalMessage();
     } catch (err) {
@@ -732,6 +770,7 @@ async function generateViaCreateBlogPostTool({ userPrompt, recentPosts, category
     try {
       const validated = validateGenerated(toolUse.input, { recentPosts, category, cluster, targetQuery });
       await reescribirDescripcionesLargas(validated, client);
+      comprobarMetasUnicas(validated, corpus);
       return {
         ...validated,
         usage: {
@@ -743,6 +782,9 @@ async function generateViaCreateBlogPostTool({ userPrompt, recentPosts, category
       };
     } catch (err) {
       lastError = err;
+      if (err.metasRepetidas) {
+        aviso = `\n\n## AVISO DEL INTENTO ANTERIOR\n\nEstos metadatos ya los usa otro post y no se pueden repetir; escribe otros distintos:\n${err.metasRepetidas.map((r) => `- ${r.campo}: "${r.valor}"`).join("\n")}`;
+      }
       console.error(
         `generatePost intento ${attempt}/${MAX_GENERATION_ATTEMPTS} — validación falló: ${err.message}`,
       );
@@ -755,7 +797,9 @@ async function generateViaCreateBlogPostTool({ userPrompt, recentPosts, category
 }
 
 // `cluster` y `targetQuery` son opcionales: sin ellos, el generador elige
-// tema y cluster como antes (tendencias y categoría).
+// tema y cluster como antes (tendencias y categoría). `tema` y `angulo` los
+// fija el planificador; `corpus` (duplicados.js) activa la comprobación de
+// metadatos únicos.
 export async function generatePostDraft({
   category,
   trending,
@@ -763,6 +807,9 @@ export async function generatePostDraft({
   publishedCorpus,
   cluster,
   targetQuery,
+  tema,
+  angulo,
+  corpus,
 }) {
   const userPrompt = buildUserPrompt({
     category,
@@ -771,8 +818,10 @@ export async function generatePostDraft({
     publishedCorpus,
     cluster,
     targetQuery,
+    tema,
+    angulo,
   });
-  return generateViaCreateBlogPostTool({ userPrompt, recentPosts, category, cluster, targetQuery });
+  return generateViaCreateBlogPostTool({ userPrompt, recentPosts, category, cluster, targetQuery, corpus });
 }
 
 export async function generatePostFromIdea({

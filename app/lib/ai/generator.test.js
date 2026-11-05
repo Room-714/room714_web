@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   buildUserPrompt,
   buildTakesPrompt,
+  comprobarMetasUnicas,
   validateTakes,
   generateLinkedInTakes,
 } from "./generator";
@@ -74,13 +75,14 @@ describe("buildUserPrompt — corpus publicado", () => {
 
   it("lleva la instrucción explícita de no repetir ángulos", () => {
     const out = prompt({ publishedCorpus: CORPUS });
-    expect(out).toContain("NO repitas ninguno de estos ángulos");
+    expect(out).toContain("NO repitas ninguno de estos temas ni ángulos");
+    expect(out).toContain("Propón un ángulo NUEVO");
     expect(out).toContain("Google trate ambos como duplicados");
   });
 
   it("cae en silencio si no hay corpus", () => {
-    expect(prompt({ publishedCorpus: [] })).not.toContain("Corpus ya publicado");
-    expect(prompt()).not.toContain("Corpus ya publicado");
+    expect(prompt({ publishedCorpus: [] })).not.toContain("Corpus ya existente");
+    expect(prompt()).not.toContain("Corpus ya existente");
   });
 
   it("mantiene intacta la sección de posts recientes con sus slugs", () => {
@@ -104,6 +106,46 @@ describe("buildUserPrompt — corpus publicado", () => {
       ],
     });
     expect(out).toContain("Only english title");
+  });
+});
+
+describe("buildUserPrompt — tema del planificador", () => {
+  it("marca los programados y borradores en el corpus", () => {
+    const out = prompt({ publishedCorpus: [{ ...CORPUS[0], estado: "borrador" }] });
+    expect(out).toContain("(2026-06-01, borrador)");
+  });
+
+  it("lleva el tema y el ángulo aprobados y pide no cambiar de tema", () => {
+    const out = prompt({ tema: "cómo priorizar funcionalidades", angulo: "Priorizar por coste de retraso" });
+    expect(out).toContain("## TEMA Y ÁNGULO APROBADOS");
+    expect(out).toContain("- Tema: **cómo priorizar funcionalidades**");
+    expect(out).toContain("- Ángulo: Priorizar por coste de retraso");
+    expect(out).toContain('1. Escribe sobre el tema aprobado ("cómo priorizar funcionalidades")');
+  });
+
+  it("sin tema, el prompt es el de siempre", () => {
+    expect(prompt()).not.toContain("TEMA Y ÁNGULO APROBADOS");
+  });
+});
+
+describe("comprobarMetasUnicas", () => {
+  const corpus = [
+    { id: 7, es: { metaTitle: "Diseño de producto vs. UX", metaDescription: "Desc" }, en: null },
+  ];
+  const borrador = { meta_title_es: "Nuevo", meta_title_en: "New", meta_description_es: "Nueva", meta_description_en: "New one" };
+
+  it("deja pasar metadatos nuevos", () => {
+    expect(() => comprobarMetasUnicas(borrador, corpus)).not.toThrow();
+  });
+
+  it("lanza con el detalle si un metaTitle ya existe", () => {
+    expect(() => comprobarMetasUnicas({ ...borrador, meta_title_es: "diseño de producto vs ux" }, corpus)).toThrow(
+      "ya lo usa el post 7",
+    );
+  });
+
+  it("sin corpus no comprueba (generatePostFromIdea)", () => {
+    expect(() => comprobarMetasUnicas(borrador, undefined)).not.toThrow();
   });
 });
 

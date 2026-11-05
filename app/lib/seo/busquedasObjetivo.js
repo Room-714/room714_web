@@ -119,14 +119,25 @@ export function respondeABusqueda(busqueda, texto) {
 }
 
 /**
- * La primera búsqueda del cluster que ningún título publicado (en español)
+ * La primera búsqueda del cluster que ningún post existente (en español)
  * cubre todavía, o null si ya están todas cubiertas.
- * `publicados` es la lista de títulos que ya recibe el generador
- * (getPublishedTitles: { title_es, title_en, ... }).
+ * `publicados` es la lista que ya recibe el generador (titulosExistentes en
+ * app/lib/ai/duplicados.js: { title_es, metaTitle_es, slug_es, ... }).
+ *
+ * Mira el título, el metaTitle y el slug. Mirar solo el título hizo que
+ * "diferencia entre diseño de producto y diseño UX" se diera por libre cuatro
+ * miércoles seguidos: ningún título decía "diferencia", pero el slug del
+ * primer post sí. `evitar` son búsquedas descartadas a mano ("Elegir otro
+ * ángulo" en el panel).
  */
-export function elegirBusqueda(cluster, publicados, lista = BUSQUEDAS_OBJETIVO) {
+export function elegirBusqueda(cluster, publicados, lista = BUSQUEDAS_OBJETIVO, evitar = []) {
   const busquedas = lista[cluster] || [];
-  const titulos = (publicados || []).map((p) => p.title_es).filter(Boolean);
-  const posicion = busquedas.findIndex((b) => !titulos.some((t) => respondeABusqueda(b, t)));
+  const textos = (publicados || [])
+    .flatMap((p) => [p.title_es, p.metaTitle_es, p.slug_es?.replace(/-/g, " ")])
+    .filter(Boolean);
+  const descartadas = new Set(evitar.map((t) => String(t).trim().toLowerCase()));
+  const posicion = busquedas.findIndex(
+    (b) => !descartadas.has(b.toLowerCase()) && !textos.some((t) => respondeABusqueda(b, t)),
+  );
   return posicion === -1 ? null : { busqueda: busquedas[posicion], posicion: posicion + 1, total: busquedas.length };
 }

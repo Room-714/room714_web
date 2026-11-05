@@ -27,12 +27,16 @@ export async function GET(request) {
   }
 
   try {
-    const result = await generateDraftForToday();
+    // Sin nadie delante que elija: si el tema del día duplica un post, se
+    // descarta y se prueba otro una vez. Si también duplica, no se genera
+    // (el briefing de las 08:50 avisa de que no hay artículo).
+    const result = await generateDraftForToday({ alDuplicar: "otroAngulo" });
 
     if (result.skipped) {
       return NextResponse.json({
         message: "Generación saltada",
         reason: result.reason,
+        duplicado: result.duplicado ?? null,
       });
     }
 
