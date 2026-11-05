@@ -15,6 +15,16 @@ import { signOut } from "next-auth/react";
 import { CATEGORY_IDS, CATEGORY_LABELS } from "@/app/data/BlogCategories";
 import PublishWorkflowModal from "./components/PublishWorkflowModal";
 import RegenerateModal from "./components/RegenerateModal";
+import { CLUSTERS, clusterOfContent } from "@/app/lib/seo/clusters";
+
+// Etiqueta corta del cluster en el listado. El cluster no tiene columna: se
+// deduce del enlace a la página del cluster en el cuerpo del post.
+const ETIQUETA_CLUSTER = {
+  C1: "Ideación",
+  C2: "Diseño y CX",
+  C3: "Desarrollo",
+  IA: "IA",
+};
 
 export default function AdminPage() {
   const [posts, setPosts] = useState([]);
@@ -26,6 +36,8 @@ export default function AdminPage() {
   const [mobileView, setMobileView] = useState("list");
   const [isGenerating, setIsGenerating] = useState(false);
   const [savedNotice, setSavedNotice] = useState(false);
+  // Aviso de "Generar post IA" cuando no se genera: duplicado o sin cluster.
+  const [avisoGeneracion, setAvisoGeneracion] = useState(null);
 
   const [formData, setFormData] = useState({
     id: null,
@@ -177,21 +189,23 @@ export default function AdminPage() {
     loadPosts();
   };
 
-  const handleGenerateAi = async () => {
-    const confirmed = window.confirm(
-      "¿Generar un post automático con IA ahora?\n\nTarda hasta 2 minutos y consume tokens. Se creará como publicado en la próxima franja de 07:30 (Madrid) y aparecerá en 'Próximamente' para que lo valides.",
-    );
-    if (!confirmed) return;
+  // `evitar`: temas ya descartados con "Elegir otro ángulo".
+  const generarPostIa = async (evitar = []) => {
+    setAvisoGeneracion(null);
     setIsGenerating(true);
     try {
       const res = await fetch("/api/admin/generate-draft", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sendEmail: false }),
+        body: JSON.stringify({ sendEmail: false, evitar }),
       });
       const data = await res.json();
       if (!res.ok) {
         alert(`Error generando post: ${data.error || res.statusText}`);
+        return;
+      }
+      if (data.duplicado || data.sinCluster) {
+        setAvisoGeneracion(data);
         return;
       }
       if (data.skipped) {
@@ -209,6 +223,32 @@ export default function AdminPage() {
     } finally {
       setIsGenerating(false);
     }
+  };
+
+  const handleGenerateAi = () => {
+    const confirmed = window.confirm(
+      "¿Generar un post automático con IA ahora?\n\nTarda hasta 2 minutos y consume tokens. Se creará como publicado en la próxima franja de 07:30 (Madrid) y aparecerá en 'Próximamente' para que lo valides.",
+    );
+    if (!confirmed) return;
+    generarPostIa([]);
+  };
+
+  // "Ampliar el existente": abre el post parecido en el editor. No genera nada.
+  const ampliarExistente = () => {
+    const existente = posts.find(
+      (p) => p.id === avisoGeneracion?.duplicado?.existente?.id,
+    );
+    setAvisoGeneracion(null);
+    if (existente) handleEdit(existente);
+  };
+
+  // "Elegir otro ángulo": vuelve a generar descartando el tema rechazado.
+  const elegirOtroAngulo = () => {
+    const evitar = [
+      ...(avisoGeneracion?.evitar || []),
+      avisoGeneracion?.duplicado?.tema ?? avisoGeneracion?.tema,
+    ].filter(Boolean);
+    generarPostIa(evitar);
   };
 
   const resetForm = () =>
@@ -247,6 +287,10 @@ export default function AdminPage() {
   const renderPostButton = (post, extraClasses = "") => {
     const isFuture = new Date(post.date) > new Date();
     const publishTime = post.source === "AUTO" ? "07:30" : "17:00";
+    const cluster = clusterOfContent(
+      post.translations?.find((t) => t.lang === "es")?.content,
+      "es",
+    );
     return (
       <button
         key={post.id}
@@ -262,6 +306,14 @@ export default function AdminPage() {
         >
           {new Date(post.date).toLocaleDateString()}
           {isFuture && post.published && ` • ${publishTime}`}
+          {cluster && (
+            <span
+              title={CLUSTERS[cluster]?.name.es}
+              className="ml-2 inline-block px-1.5 rounded border border-gray-300 text-[10px] font-sans font-bold uppercase text-gray-600"
+            >
+              {cluster} · {ETIQUETA_CLUSTER[cluster]}
+            </span>
+          )}
         </p>
         <p className="font-bold text-sm truncate">
           {post.translations?.find((t) => t.lang === "es")?.title ||
@@ -357,6 +409,84 @@ export default function AdminPage() {
             >
               {isGenerating ? "Generando…" : "Generar post IA"}
             </button>
+            {avisoGeneracion && (
+              <div
+                role="alert"
+                className="bg-white border-2 border-red-500 rounded-2xl p-4 text-sm"
+              >
+                {avisoGeneracion.duplicado ? (
+                  <>
+                    <p className="font-bold mb-1">
+                      No se ha generado: ya hay un post muy parecido
+                    </p>
+                    <p className="text-gray-600 mb-2">
+                      Tema propuesto: «{avisoGeneracion.duplicado.tema}»
+                    </p>
+                    <p className="mb-1">
+                      {avisoGeneracion.duplicado.existente.url ? (
+                        <a
+                          href={avisoGeneracion.duplicado.existente.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-bold underline"
+                        >
+                          {avisoGeneracion.duplicado.existente.title}
+                        </a>
+                      ) : (
+                        <span className="font-bold">
+                          {avisoGeneracion.duplicado.existente.title}
+                        </span>
+                      )}{" "}
+                      <span className="text-gray-500">
+                        (
+                        {avisoGeneracion.duplicado.existente.estado}
+                        )
+                      </span>
+                    </p>
+                    <p className="text-gray-500 text-xs mb-3">
+                      {avisoGeneracion.duplicado.motivo}
+                    </p>
+                    <div className="flex flex-col gap-2">
+                      <button
+                        onClick={ampliarExistente}
+                        className="bg-black text-white px-2 py-2 rounded-xl hover:bg-red-500 font-bold transition-colors"
+                      >
+                        Ampliar el existente
+                      </button>
+                      <button
+                        onClick={elegirOtroAngulo}
+                        disabled={isGenerating}
+                        className="border-2 border-black px-2 py-2 rounded-xl hover:bg-black hover:text-white font-bold transition-colors disabled:opacity-50"
+                      >
+                        Elegir otro ángulo
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <p className="font-bold mb-1">
+                      No se ha generado: el tema no encaja en ningún cluster
+                    </p>
+                    <p className="text-gray-600 text-xs mb-3">
+                      {avisoGeneracion.reason}
+                    </p>
+                    <button
+                      onClick={elegirOtroAngulo}
+                      disabled={isGenerating}
+                      className="w-full border-2 border-black px-2 py-2 rounded-xl hover:bg-black hover:text-white font-bold transition-colors disabled:opacity-50"
+                    >
+                      Elegir otro ángulo
+                    </button>
+                  </>
+                )}
+                <button
+                  onClick={() => setAvisoGeneracion(null)}
+                  className="mt-2 w-full text-xs text-gray-500 underline"
+                >
+                  Cerrar
+                </button>
+              </div>
+            )}
             <Link
               href="/admin/candidates"
               className="bg-white border-2 border-black text-black px-2 py-4 rounded-2xl hover:bg-black hover:text-white font-bold transition-colors uppercase text-center"

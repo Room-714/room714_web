@@ -1,9 +1,16 @@
 import { prisma } from "@/app/lib/prisma";
+import { categoryForDate } from "./topicRotation";
 import {
-  categoryForDate,
-  getPublishedTitles,
-  getRecentPosts,
-} from "./topicRotation";
+  buscarParecidos,
+  cargarCorpus,
+  metasRepetidas,
+  postsRecientes,
+  resumenPost,
+  slugUnico,
+  slugsOcupados,
+  titulosExistentes,
+} from "./duplicados";
+import { planificarTema } from "./planificador";
 import {
   getCrossSourceTrending,
   summarizeSources,
@@ -17,8 +24,13 @@ import { backlinkOldPosts } from "./backlinker";
 import { slugify } from "@/app/lib/slug";
 import { computeOutboundLinksForPost } from "./internalLinker";
 import { sendDraftReadyEmail } from "@/app/lib/notifications/draftReady";
-import { clusterDelDia, elegirBusqueda } from "@/app/lib/seo/busquedasObjetivo";
-import { CLUSTERS, clusterHref } from "@/app/lib/seo/clusters";
+import {
+  BUSQUEDAS_OBJETIVO,
+  CATEGORIA_DEL_CLUSTER,
+  clusterDelDia,
+  elegirBusqueda,
+} from "@/app/lib/seo/busquedasObjetivo";
+import { CATEGORY_CLUSTER, CLUSTERS, clusterForCategory, clusterHref } from "@/app/lib/seo/clusters";
 import {
   getMadridWeekday,
   madridDayRange,
@@ -38,27 +50,74 @@ import {
 const PUBLISH_HOUR_MADRID = 7;
 const PUBLISH_MINUTE_MADRID = 30;
 
-async function ensureUniqueSlug(slug, lang) {
-  let candidate = slug;
-  let i = 2;
-  while (await prisma.postTranslation.findUnique({ where: { slug: candidate } })) {
-    candidate = `${slug}-${i}`;
-    i += 1;
-    if (i > 50) throw new Error(`No se pudo generar slug único para ${slug}`);
+/**
+ * El duplicado que impide generar, o null. Manda la comprobación léxica
+ * (determinista); si no encuentra nada, la semántica del planificador.
+ * Pura y exportada para probarla.
+ */
+export function decidirDuplicado(plan, corpus, ahora = new Date()) {
+  const lexico = buscarParecidos({ es: plan.tema_es, en: plan.tema_en }, corpus)[0];
+  if (lexico) {
+    return {
+      tema: plan.tema_es,
+      fuente: "léxica",
+      motivo: `Comparte los términos clave (${lexico.comunes.join(", ")}) con su ${lexico.campo === "slug" ? "slug" : lexico.campo === "metaTitle" ? "metaTitle" : "título"} (parecido ${Math.round(lexico.puntuacion * 100)} %).`,
+      existente: resumenPost(lexico.post, ahora),
+    };
   }
-  return candidate;
+  if (plan.duplicadoDe) {
+    const post = corpus.find((p) => p.id === plan.duplicadoDe.id);
+    if (post) {
+      return {
+        tema: plan.tema_es,
+        fuente: "semántica",
+        motivo: plan.motivo || "El modelo considera que ya cubre este tema.",
+        existente: resumenPost(post, ahora),
+      };
+    }
+  }
+  return null;
 }
 
-export async function generateDraftForToday({ categoryOverride, sendEmail = true } = {}) {
+/**
+ * Categoría con la que se guarda un post de `cluster`. El cluster no tiene
+ * columna propia (seo/posicionamiento.md): queda en el enlace a la página del
+ * cluster y en la categoría, así que las dos tienen que coincidir. Si la
+ * categoría del día ya es del cluster (DESIGN también es C2) se respeta.
+ */
+export function categoriaParaCluster(category, cluster) {
+  if (category && CATEGORY_CLUSTER[category] === cluster) return category;
+  return CATEGORIA_DEL_CLUSTER[cluster];
+}
+
+/**
+ * Genera el post de la próxima franja de las 07:30.
+ *
+ * - `tema`: un tema pedido a mano (API). Sin él, lo fija la búsqueda objetivo
+ *   del día o lo propone el planificador.
+ * - `evitar`: temas descartados ("Elegir otro ángulo" en el panel).
+ * - `alDuplicar`: "avisar" (panel: no genera y devuelve el duplicado) u
+ *   "otroAngulo" (cron: descarta el tema y lo intenta una vez más).
+ * - `preview`: hace la consulta, la planificación y las comprobaciones, y
+ *   devuelve la decisión sin generar ni escribir nada.
+ */
+export async function generateDraftForToday({
+  categoryOverride,
+  sendEmail = true,
+  tema: temaManual,
+  evitar = [],
+  alDuplicar = "avisar",
+  preview = false,
+} = {}) {
   const today = new Date();
   const publishDate = nextMadridSlot(PUBLISH_HOUR_MADRID, PUBLISH_MINUTE_MADRID);
   // Lunes y miércoles el día fija cluster y categoría
-  // (app/lib/seo/busquedasObjetivo.js). Una categoría forzada a mano, o un día
-  // sin cluster, sigue la rotación de categorías de siempre.
-  const dia = categoryOverride ? null : clusterDelDia(publishDate);
-  const category = categoryOverride ?? dia?.category ?? categoryForDate(today);
+  // (app/lib/seo/busquedasObjetivo.js). Una categoría forzada a mano, un tema
+  // pedido a mano o un día sin cluster siguen la rotación de categorías.
+  const dia = categoryOverride || temaManual ? null : clusterDelDia(publishDate);
+  let category = categoryOverride ?? dia?.category ?? categoryForDate(today);
 
-  if (!category) {
+  if (!category && !temaManual) {
     return {
       skipped: true,
       reason: "No es día laborable (sin rotación de categoría)",
@@ -77,39 +136,111 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
     );
   }
 
-  const [trending, recentPosts, publishedCorpus] = await Promise.all([
-    getCrossSourceTrending(category),
-    getRecentPosts(10),
-    getPublishedTitles(),
-  ]);
+  // La ÚNICA lectura de la BD antes de guardar: títulos, metaTitle,
+  // metaDescription y slugs de todos los posts (publicados, programados y
+  // borradores). De aquí salen la comprobación de duplicados, la búsqueda
+  // objetivo, los posts recientes del enlazado interno, los metadatos ya
+  // usados y los slugs ocupados. Antes eran dos consultas en paralelo más un
+  // findUnique por cada slug probado.
+  const corpus = await cargarCorpus();
+  const existentes = titulosExistentes(corpus);
 
-  // La primera búsqueda del cluster que ningún título publicado cubre. Si no
-  // queda ninguna, el post se genera como antes y el correo lo avisa.
-  const objetivo = dia ? elegirBusqueda(dia.cluster, publishedCorpus) : null;
+  // Las tendencias son HTTP externo, no BD. Con un tema pedido a mano no hacen falta.
+  const trending = temaManual ? [] : await getCrossSourceTrending(category);
+
+  // Planificar → comprobar → (en el cron) un intento más con otro tema.
+  const rechazados = [...evitar];
+  const intentos = alDuplicar === "otroAngulo" ? 2 : 1;
+  let objetivo = null;
+  let plan;
+  for (let intento = 1; ; intento += 1) {
+    // La primera búsqueda del cluster que ningún post existente cubre. Si no
+    // queda ninguna, el planificador propone tema y el correo lo avisa.
+    objetivo = dia ? elegirBusqueda(dia.cluster, existentes, BUSQUEDAS_OBJETIVO, rechazados) : null;
+    const temaFijo = temaManual ?? objetivo?.busqueda ?? null;
+
+    plan = await planificarTema({
+      category,
+      clusterSugerido: dia?.cluster ?? (category ? clusterForCategory(category) : null),
+      temaFijo,
+      trending,
+      existentes,
+      evitar: rechazados,
+    });
+
+    const duplicado = decidirDuplicado(plan, corpus);
+    if (!duplicado) break;
+
+    if (intento >= intentos) {
+      return {
+        skipped: true,
+        reason: `Ya existe un post muy parecido a "${duplicado.tema}": "${duplicado.existente.title}" (${duplicado.existente.estado}). ${duplicado.motivo}`,
+        duplicado,
+        evitar: rechazados,
+      };
+    }
+    console.warn(`generateDraftForToday: "${duplicado.tema}" duplica el post ${duplicado.existente.id}; se prueba otro tema`);
+    rechazados.push(duplicado.tema);
+  }
   const sinBusquedas = Boolean(dia && !objetivo);
+
+  // Cluster: el del día si hay búsqueda objetivo (la lista es por cluster);
+  // si no, el que asigna el planificador. Sin cluster no se genera.
+  const cluster = objetivo ? dia.cluster : plan.cluster;
+  if (!cluster) {
+    return {
+      skipped: true,
+      sinCluster: true,
+      tema: plan.tema_es,
+      reason: `El tema "${plan.tema_es}" no encaja en ningún cluster (ideación/discovery, diseño de producto y experiencia de cliente, desarrollo de software de producto). ${plan.motivo}`.trim(),
+      evitar: rechazados,
+    };
+  }
+  if (!categoryOverride) category = categoriaParaCluster(category, cluster);
+
+  const planResumen = {
+    tema: plan.tema_es,
+    angulo: plan.angulo_es,
+    cluster,
+    clusterName: CLUSTERS[cluster].name.es,
+    category,
+    busquedaObjetivo: objetivo?.busqueda ?? null,
+    usage: plan.usage,
+  };
+  if (preview) return { preview: true, skipped: false, plan: planResumen };
 
   const draft = await generatePostDraft({
     category,
     trending,
-    recentPosts,
-    publishedCorpus,
-    cluster: objetivo ? dia.cluster : undefined,
+    recentPosts: postsRecientes(corpus, 10),
+    publishedCorpus: existentes,
+    cluster,
     targetQuery: objetivo?.busqueda,
+    tema: plan.tema_es,
+    angulo: plan.angulo_es,
+    corpus,
   });
+
+  // El generador ya lo comprueba (y reintenta); esto es la última barrera
+  // antes del INSERT.
+  const repetidas = metasRepetidas(draft, corpus);
+  if (repetidas.length) {
+    throw new Error(
+      `No se guarda: metadatos que ya usa otro post (${repetidas.map((r) => `${r.campo} → post ${r.postId}`).join(", ")})`,
+    );
+  }
 
   const datePrefix = today.toISOString().split("T")[0];
   const cover = await fetchAndStoreCoverImage(draft.image_query, datePrefix, {
     fallbackQuery: fallbackQueryForCategory(category),
   });
 
-  const slugEs = await ensureUniqueSlug(
-    slugify(draft.slug_es || draft.title_es),
-    "es",
-  );
-  const slugEn = await ensureUniqueSlug(
-    slugify(draft.slug_en || draft.title_en),
-    "en",
-  );
+  // Slugs únicos sin consultar: los ocupados vienen en el corpus. Si otra
+  // escritura se cuela entre medias, el @unique del slug hace fallar el INSERT.
+  const ocupados = slugsOcupados(corpus);
+  const slugEs = slugUnico(slugify(draft.slug_es || draft.title_es), ocupados);
+  ocupados.add(slugEs);
+  const slugEn = slugUnico(slugify(draft.slug_en || draft.title_en), ocupados);
 
   const post = await prisma.post.create({
     data: {
@@ -205,7 +336,8 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
 
   const postUrl = `https://www.room714.com/es/blog/${translationEs.slug}`;
 
-  const cluster = draft.seo?.cluster;
+  // El generador recibe el cluster como obligatorio (applySeoRules lo fuerza),
+  // así que draft.seo.cluster coincide con el del plan.
   const seoCorreo = {
     cluster,
     clusterName: CLUSTERS[cluster]?.name.es ?? null,
@@ -238,6 +370,9 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
     skipped: false,
     postId: post.id,
     category,
+    cluster,
+    clusterName: CLUSTERS[cluster].name.es,
+    plan: planResumen,
     title_es: translationEs.title,
     slug_es: translationEs.slug,
     image: cover.url,
@@ -245,7 +380,7 @@ export async function generateDraftForToday({ categoryOverride, sendEmail = true
     scheduledFor: publishDate.toISOString(),
     trendingItemsUsed: trending.length,
     trendingBySources: summarizeSources(trending),
-    recentPostsConsidered: recentPosts.length,
+    recentPostsConsidered: Math.min(corpus.length, 10),
     usage: draft.usage,
     // Cluster, búsqueda objetivo y avisos de las reglas de posicionamiento
     // (seo/posicionamiento.md), para la revisión manual.

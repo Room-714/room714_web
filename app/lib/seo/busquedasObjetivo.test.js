@@ -86,6 +86,25 @@ describe("elegirBusqueda", () => {
     expect(elegirBusqueda("C1", soloIngles, lista)?.posicion).toBe(1);
   });
 
+  it("da por cubierta una búsqueda que solo recoge el slug (el fallo de octubre)", () => {
+    const listaC2 = { C2: ["diferencia entre diseño de producto y diseño UX", "customer journey de un producto digital"] };
+    const existentes = [
+      {
+        title_es: "Diseño de Producto vs. Diseño UX: La Distinción que Tu Equipo Necesita Entender Ya",
+        slug_es: "diferencia-entre-diseno-de-producto-y-diseno-ux",
+      },
+    ];
+    expect(elegirBusqueda("C2", existentes, listaC2)?.busqueda).toBe("customer journey de un producto digital");
+  });
+
+  it("también mira el metaTitle", () => {
+    expect(elegirBusqueda("C1", [{ title_es: "Otra cosa", metaTitle_es: "Cómo validar una idea de producto digital" }], lista)?.posicion).toBe(2);
+  });
+
+  it("salta las búsquedas descartadas a mano", () => {
+    expect(elegirBusqueda("C1", [], lista, ["Cómo validar una idea de producto digital"])?.posicion).toBe(2);
+  });
+
   it("si todas están cubiertas, devuelve null (el generador vuelve al comportamiento anterior)", () => {
     const publicados = [
       { title_es: "Validar una idea de producto digital" },
