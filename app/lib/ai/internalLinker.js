@@ -1,5 +1,6 @@
 import { prisma } from "@/app/lib/prisma";
 import { getAnthropicClient, MODEL } from "./anthropic";
+import { opcionesDeTiempo } from "./tiempos";
 import { htmlSnippet, insertLinkAroundPhrase } from "./backlinker";
 
 const CANDIDATE_LIMIT = 12;
@@ -64,6 +65,8 @@ export async function computeOutboundLinksForPost({
   category,
   contentEs,
   contentEn,
+  // Límite de la llamada al modelo (lo pone el orquestador). Sin él, el del SDK.
+  timeoutMs,
 }) {
   const candidates = await prisma.post.findMany({
     where: {
@@ -121,13 +124,16 @@ ${forPrompt
 Llama a select_outbound_links con tus selecciones.`;
 
   const client = getAnthropicClient();
-  const response = await client.messages.create({
-    model: MODEL,
-    max_tokens: 1200,
-    tools: [SELECTION_TOOL],
-    tool_choice: { type: "tool", name: "select_outbound_links" },
-    messages: [{ role: "user", content: userPrompt }],
-  });
+  const response = await client.messages.create(
+    {
+      model: MODEL,
+      max_tokens: 1200,
+      tools: [SELECTION_TOOL],
+      tool_choice: { type: "tool", name: "select_outbound_links" },
+      messages: [{ role: "user", content: userPrompt }],
+    },
+    timeoutMs ? opcionesDeTiempo(timeoutMs) : undefined,
+  );
 
   const toolUse = response.content.find((b) => b.type === "tool_use");
   const selections = toolUse?.input?.selections || [];

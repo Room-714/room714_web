@@ -16,6 +16,7 @@ import { CATEGORY_IDS, CATEGORY_LABELS } from "@/app/data/BlogCategories";
 import PublishWorkflowModal from "./components/PublishWorkflowModal";
 import RegenerateModal from "./components/RegenerateModal";
 import { CLUSTERS, clusterOfContent } from "@/app/lib/seo/clusters";
+import { pedirGeneracion } from "./generacionIa";
 
 // Etiqueta corta del cluster en el listado. El cluster no tiene columna: se
 // deduce del enlace a la página del cluster en el cuerpo del post.
@@ -36,8 +37,11 @@ export default function AdminPage() {
   const [mobileView, setMobileView] = useState("list");
   const [isGenerating, setIsGenerating] = useState(false);
   const [savedNotice, setSavedNotice] = useState(false);
-  // Aviso de "Generar post IA" cuando no se genera: duplicado o sin cluster.
+  // Aviso de "Generar post IA" cuando no se genera: duplicado, sin cluster o
+  // error ({ error: mensaje }).
   const [avisoGeneracion, setAvisoGeneracion] = useState(null);
+  // Tema opcional para "Generar post IA". Vacío: lo elige el generador.
+  const [temaIa, setTemaIa] = useState("");
 
   const [formData, setFormData] = useState({
     id: null,
@@ -189,48 +193,49 @@ export default function AdminPage() {
     loadPosts();
   };
 
-  // `evitar`: temas ya descartados con "Elegir otro ángulo".
-  const generarPostIa = async (evitar = []) => {
+  // `tema`: el del campo (vacío = lo elige el generador). `evitar`: temas ya
+  // descartados con "Elegir otro ángulo". Las dos cosas pasan por la misma
+  // comprobación de duplicados y de cluster en el servidor.
+  const generarPostIa = async ({ tema = "", evitar = [] } = {}) => {
     setAvisoGeneracion(null);
     setIsGenerating(true);
     try {
-      const res = await fetch("/api/admin/generate-draft", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sendEmail: false, evitar }),
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        alert(`Error generando post: ${data.error || res.statusText}`);
+      // Con límite de espera y sin alert(): un alert nativo bloquea la
+      // página y deja "Generando…" puesto hasta que alguien lo cierra.
+      const r = await pedirGeneracion({ tema, evitar });
+      if (r.tipo === "aviso") {
+        setAvisoGeneracion(r.data);
         return;
       }
-      if (data.duplicado || data.sinCluster) {
-        setAvisoGeneracion(data);
-        return;
-      }
-      if (data.skipped) {
-        alert(`No se generó: ${data.reason}`);
+      if (r.tipo === "error") {
+        setAvisoGeneracion({ error: r.mensaje });
+        // Si el servidor pudo terminar, el post nuevo aparece en la lista.
+        if (r.puedeHaberseCreado) await loadPosts();
         return;
       }
       const refreshed = await getPostsList();
       if (refreshed?.success) {
         setPosts(refreshed.posts || []);
-        const newPost = refreshed.posts.find((p) => p.id === data.postId);
+        const newPost = refreshed.posts.find((p) => p.id === r.data.postId);
         if (newPost) handleEdit(newPost);
       }
+      setTemaIa("");
     } catch (error) {
-      alert(`Error generando post: ${error.message}`);
+      setAvisoGeneracion({
+        error: `El post se generó, pero no se pudo abrir en el editor: ${error.message}. Recarga la página.`,
+      });
     } finally {
       setIsGenerating(false);
     }
   };
 
   const handleGenerateAi = () => {
+    const tema = temaIa.trim();
     const confirmed = window.confirm(
-      "¿Generar un post automático con IA ahora?\n\nTarda hasta 2 minutos y consume tokens. Se creará como publicado en la próxima franja de 07:30 (Madrid) y aparecerá en 'Próximamente' para que lo valides.",
+      `${tema ? `¿Generar un post con IA sobre «${tema}»?` : "¿Generar un post con IA? El tema lo elegirá el generador."}\n\nAntes de escribirlo se comprueba que no duplique un post existente y que encaje en un cluster. Tarda hasta 5 minutos y consume tokens. Se creará como publicado en la próxima franja de 07:30 (Madrid) y aparecerá en 'Próximamente' para que lo valides.`,
     );
     if (!confirmed) return;
-    generarPostIa([]);
+    generarPostIa({ tema });
   };
 
   // "Ampliar el existente": abre el post parecido en el editor. No genera nada.
@@ -242,13 +247,15 @@ export default function AdminPage() {
     if (existente) handleEdit(existente);
   };
 
-  // "Elegir otro ángulo": vuelve a generar descartando el tema rechazado.
+  // "Elegir otro ángulo": vuelve a generar descartando el tema rechazado. Se
+  // vacía el campo Tema: si no, se volvería a pedir el mismo tema.
   const elegirOtroAngulo = () => {
     const evitar = [
       ...(avisoGeneracion?.evitar || []),
       avisoGeneracion?.duplicado?.tema ?? avisoGeneracion?.tema,
     ].filter(Boolean);
-    generarPostIa(evitar);
+    setTemaIa("");
+    generarPostIa({ evitar });
   };
 
   const resetForm = () =>
@@ -402,6 +409,18 @@ export default function AdminPage() {
             >
               + nuevo post
             </button>
+            <label className="block">
+              <span className="sr-only">Tema del post IA (opcional)</span>
+              <input
+                name="temaIa"
+                value={temaIa}
+                onChange={(e) => setTemaIa(e.target.value)}
+                disabled={isGenerating}
+                maxLength={200}
+                placeholder="Tema (opcional): vacío, lo elige el generador"
+                className="w-full bg-white border-2 border-black rounded-2xl px-4 py-3 text-sm outline-none focus:border-red-500 disabled:opacity-50"
+              />
+            </label>
             <button
               onClick={handleGenerateAi}
               disabled={isGenerating}
@@ -414,7 +433,14 @@ export default function AdminPage() {
                 role="alert"
                 className="bg-white border-2 border-red-500 rounded-2xl p-4 text-sm"
               >
-                {avisoGeneracion.duplicado ? (
+                {avisoGeneracion.error ? (
+                  <>
+                    <p className="font-bold mb-1">La generación ha fallado</p>
+                    <p className="text-gray-600 text-xs">
+                      {avisoGeneracion.error}
+                    </p>
+                  </>
+                ) : avisoGeneracion.duplicado ? (
                   <>
                     <p className="font-bold mb-1">
                       No se ha generado: ya hay un post muy parecido

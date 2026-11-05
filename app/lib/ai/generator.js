@@ -13,6 +13,16 @@ import {
 } from "../seo/clusters";
 import { respondeABusqueda } from "../seo/busquedasObjetivo";
 import { metasRepetidas } from "./duplicados";
+import {
+  MAX_GENERACION_MS,
+  MAX_REESCRITURA_MS,
+  MIN_INTENTO_GENERACION_MS,
+  RESERVA_TRAS_GENERAR_MS,
+  crearReloj,
+  esTimeout,
+  opcionesDeTiempo,
+  segundos,
+} from "./tiempos";
 
 const POST_TOOL = {
   name: "create_blog_post",
@@ -433,11 +443,15 @@ export async function reescribirDescripcion({ client, texto, busqueda, lang, max
       ? `Rewrite this meta description so it is at most ${objetivo} characters long (spaces included), one or two complete sentences, keeping the search query "${busqueda}" and the tone. Return only the text, without quotes.\n\n${texto}`
       : `Reescribe esta meta description para que tenga como máximo ${objetivo} caracteres (con espacios), en una o dos frases completas, conservando la búsqueda "${busqueda}" y el tono. Devuelve solo el texto, sin comillas.\n\n${texto}`;
   try {
-    const res = await client.messages.create({
-      model: MODEL,
-      max_tokens: 300,
-      messages: [{ role: "user", content: peticion }],
-    });
+    // Con límite propio: si no llega a tiempo, se queda el recorte.
+    const res = await client.messages.create(
+      {
+        model: MODEL,
+        max_tokens: 300,
+        messages: [{ role: "user", content: peticion }],
+      },
+      opcionesDeTiempo(MAX_REESCRITURA_MS),
+    );
     const nueva = res.content
       ?.find((b) => b.type === "text")
       ?.text.trim()
@@ -717,29 +731,58 @@ export function comprobarMetasUnicas(data, corpus) {
   }
 }
 
-async function generateViaCreateBlogPostTool({ userPrompt, recentPosts, category, cluster, targetQuery, corpus }) {
+// `reloj` (tiempos.js) acota cada intento al presupuesto de la generación.
+// Sin él (regenerar desde una idea) cada intento lleva el máximo por llamada.
+async function generateViaCreateBlogPostTool({
+  userPrompt,
+  recentPosts,
+  category,
+  cluster,
+  targetQuery,
+  corpus,
+  reloj = crearReloj(),
+}) {
   const client = getAnthropicClient();
   let lastError;
+  let intentos = 0;
   // Si un intento falla por metadatos repetidos, el siguiente lo sabe: sin
   // esto, el reintento recibe el mismo prompt y puede repetir lo mismo.
   let aviso = "";
 
   for (let attempt = 1; attempt <= MAX_GENERATION_ATTEMPTS; attempt += 1) {
+    // Lo que queda, descontando lo que hace falta después de generar.
+    const tope = reloj.tope(MAX_GENERACION_MS, RESERVA_TRAS_GENERAR_MS);
+    if (attempt > 1 && tope < MIN_INTENTO_GENERACION_MS) {
+      console.error(`generatePost: sin tiempo para el intento ${attempt} (quedan ${segundos(tope)})`);
+      break;
+    }
+    if (attempt === 1 && tope < 30_000) {
+      throw new Error(
+        `No queda tiempo para generar el post (quedan ${segundos(tope)} del presupuesto). No se ha guardado ningún post.`,
+      );
+    }
+    intentos = attempt;
+
     let response;
     try {
-      const stream = client.messages.stream({
-        model: MODEL,
-        max_tokens: MAX_OUTPUT_TOKENS,
-        system: buildCachedSystemBlocks(),
-        tools: [POST_TOOL],
-        tool_choice: { type: "tool", name: "create_blog_post" },
-        messages: [{ role: "user", content: userPrompt + aviso }],
-      });
+      const stream = client.messages.stream(
+        {
+          model: MODEL,
+          max_tokens: MAX_OUTPUT_TOKENS,
+          system: buildCachedSystemBlocks(),
+          tools: [POST_TOOL],
+          tool_choice: { type: "tool", name: "create_blog_post" },
+          messages: [{ role: "user", content: userPrompt + aviso }],
+        },
+        opcionesDeTiempo(tope),
+      );
       response = await stream.finalMessage();
     } catch (err) {
-      lastError = err;
+      lastError = esTimeout(err)
+        ? Object.assign(new Error(`el modelo no respondió en ${segundos(tope)}`), { timeout: true })
+        : err;
       console.error(
-        `generatePost intento ${attempt}/${MAX_GENERATION_ATTEMPTS} — error de API: ${err.message}`,
+        `generatePost intento ${attempt}/${MAX_GENERATION_ATTEMPTS} — error de API: ${lastError.message}`,
       );
       continue;
     }
@@ -792,7 +835,7 @@ async function generateViaCreateBlogPostTool({ userPrompt, recentPosts, category
   }
 
   throw new Error(
-    `No se pudo generar un borrador válido tras ${MAX_GENERATION_ATTEMPTS} intentos: ${lastError?.message}`,
+    `No se pudo generar un borrador válido tras ${intentos} ${intentos === 1 ? "intento" : "intentos"}: ${lastError?.message}. No se ha guardado ningún post.`,
   );
 }
 
@@ -810,6 +853,7 @@ export async function generatePostDraft({
   tema,
   angulo,
   corpus,
+  reloj,
 }) {
   const userPrompt = buildUserPrompt({
     category,
@@ -821,7 +865,7 @@ export async function generatePostDraft({
     tema,
     angulo,
   });
-  return generateViaCreateBlogPostTool({ userPrompt, recentPosts, category, cluster, targetQuery, corpus });
+  return generateViaCreateBlogPostTool({ userPrompt, recentPosts, category, cluster, targetQuery, corpus, reloj });
 }
 
 export async function generatePostFromIdea({
