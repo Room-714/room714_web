@@ -42,6 +42,8 @@ export default function AdminPage() {
   const [avisoGeneracion, setAvisoGeneracion] = useState(null);
   // Tema opcional para "Generar post IA". Vacío: lo elige el generador.
   const [temaIa, setTemaIa] = useState("");
+  // Paso de confirmación de "Generar post IA", dentro de la página.
+  const [confirmandoGeneracion, setConfirmandoGeneracion] = useState(false);
 
   const [formData, setFormData] = useState({
     id: null,
@@ -229,13 +231,17 @@ export default function AdminPage() {
     }
   };
 
+  // Sin window.confirm(): un diálogo nativo bloquea la página mientras está
+  // abierto. La confirmación es un aviso más, en el mismo recuadro.
   const handleGenerateAi = () => {
-    const tema = temaIa.trim();
-    const confirmed = window.confirm(
-      `${tema ? `¿Generar un post con IA sobre «${tema}»?` : "¿Generar un post con IA? El tema lo elegirá el generador."}\n\nAntes de escribirlo se comprueba que no duplique un post existente y que encaje en un cluster. Tarda hasta 5 minutos y consume tokens. Se creará como publicado en la próxima franja de 07:30 (Madrid) y aparecerá en 'Próximamente' para que lo valides.`,
-    );
-    if (!confirmed) return;
-    generarPostIa({ tema });
+    if (isGenerating) return;
+    setAvisoGeneracion(null);
+    setConfirmandoGeneracion(true);
+  };
+
+  const confirmarGeneracion = () => {
+    setConfirmandoGeneracion(false);
+    generarPostIa({ tema: temaIa.trim() });
   };
 
   // "Ampliar el existente": abre el post parecido en el editor. No genera nada.
@@ -428,6 +434,41 @@ export default function AdminPage() {
             >
               {isGenerating ? "Generando…" : "Generar post IA"}
             </button>
+            {confirmandoGeneracion && !isGenerating && (
+              <div
+                role="alertdialog"
+                aria-labelledby="confirmar-ia-titulo"
+                aria-describedby="confirmar-ia-detalle"
+                className="bg-white border-2 border-black rounded-2xl p-4 text-sm"
+              >
+                <p id="confirmar-ia-titulo" className="font-bold mb-1">
+                  {temaIa.trim()
+                    ? `¿Generar un post con IA sobre «${temaIa.trim()}»?`
+                    : "¿Generar un post con IA? El tema lo elegirá el generador."}
+                </p>
+                <p id="confirmar-ia-detalle" className="text-gray-600 text-xs mb-3">
+                  Antes de escribirlo se comprueba que no duplique un post
+                  existente y que encaje en un cluster. Tarda hasta 5 minutos y
+                  consume tokens. Se creará como publicado en la próxima franja
+                  de 07:30 (Madrid) y aparecerá en «Próximamente» para que lo
+                  valides.
+                </p>
+                <div className="flex flex-col gap-2">
+                  <button
+                    onClick={confirmarGeneracion}
+                    className="bg-black text-white px-2 py-2 rounded-xl hover:bg-red-500 font-bold transition-colors"
+                  >
+                    Generar
+                  </button>
+                  <button
+                    onClick={() => setConfirmandoGeneracion(false)}
+                    className="border-2 border-black px-2 py-2 rounded-xl hover:bg-black hover:text-white font-bold transition-colors"
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </div>
+            )}
             {avisoGeneracion && (
               <div
                 role="alert"
