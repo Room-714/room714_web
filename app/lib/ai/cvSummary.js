@@ -1,4 +1,5 @@
 import { getAnthropicClient, MODEL } from "./anthropic";
+import { OFERTAS_POR_POSICION, textoOferta } from "@/app/data/ofertas";
 
 const SYSTEM_PROMPT = `Eres un analista de RRHH de Room 714, una consultora de producto digital, diseño, usabilidad y tecnología en España. Tu tarea es analizar un CV en PDF y producir un resumen ejecutivo conciso para el equipo de selección.
 
@@ -23,7 +24,14 @@ export async function summarizeCv({ pdfBase64, position }) {
       DEVELOPER: "Desarrollador / Developer",
       DESIGNER: "Diseñador / Designer",
       PRODUCT_MANAGER: "Product Manager",
+      AI_DATA_SPECIALIST: "Especialista Senior en IA y Data",
     }[position] || position;
+
+  // Si aplica a una oferta publicada, el encaje se valora contra su texto.
+  const oferta = OFERTAS_POR_POSICION[position];
+  const contextoOferta = oferta
+    ? `\n\nTexto de la oferta a la que aplica (valora el encaje contra estos requisitos):\n\n${textoOferta(oferta)}`
+    : "";
 
   const response = await client.messages.create({
     model: MODEL,
@@ -43,7 +51,7 @@ export async function summarizeCv({ pdfBase64, position }) {
           },
           {
             type: "text",
-            text: `Posición a la que aplica el candidato: **${positionLabel}**.\n\nProduce el resumen ejecutivo siguiendo la estructura definida en las instrucciones.`,
+            text: `Posición a la que aplica el candidato: **${positionLabel}**.${contextoOferta}\n\nProduce el resumen ejecutivo siguiendo la estructura definida en las instrucciones.`,
           },
         ],
       },

@@ -2,6 +2,7 @@ export const POSITION_LABEL = {
   DEVELOPER: "Desarrollador",
   DESIGNER: "Diseñador",
   PRODUCT_MANAGER: "Product Manager",
+  AI_DATA_SPECIALIST: "Especialista Senior en IA y Data",
 };
 
 export const EDUCATION_LABEL = {

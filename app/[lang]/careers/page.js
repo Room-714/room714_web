@@ -2,7 +2,14 @@ import { getDictionary } from "@/app/dictionaries";
 import Navbar from "@/app/components/Navbar";
 import CareersWizard from "@/app/components/CareersWizard";
 import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { SITE_URL, buildAlternates, samePath } from "@/app/lib/seo/urls";
+import { path } from "@/app/lib/routes.mjs";
+import { OFERTA_IA_DATA } from "@/app/data/ofertas";
+
+// Las ofertas con página propia, en el orden en que se enseñan.
+const OFERTAS_ABIERTAS = [OFERTA_IA_DATA];
 
 const baseUrl = SITE_URL;
 
@@ -53,6 +60,37 @@ export default async function CareersPage({ params }) {
             {t.hero.lead}
           </p>
         </header>
+
+        {/* Ofertas abiertas */}
+        {OFERTAS_ABIERTAS.length > 0 && (
+          <section className="w-full max-w-3xl mb-10">
+            <p className="font-hand text-red-500 text-lg md:text-xl mb-3">
+              {t.abiertas.label}
+            </p>
+            <ul className="space-y-3">
+              {OFERTAS_ABIERTAS.map((o) => (
+                <li key={o.ruta}>
+                  <Link
+                    href={path(o.ruta, lang)}
+                    className="group flex items-center justify-between gap-4 bg-white rounded-2xl p-5 md:p-6 hover:bg-red-50 transition-colors"
+                  >
+                    <span className="font-title font-black text-lg md:text-2xl text-black leading-tight">
+                      {o[lang].titulo}
+                    </span>
+                    <span className="flex-none inline-flex items-center gap-2 font-title font-bold uppercase tracking-wide text-sm text-red-600">
+                      {t.abiertas.cta}
+                      <ArrowRight
+                        size={18}
+                        strokeWidth={3}
+                        className="transform group-hover:translate-x-1 transition-transform"
+                      />
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
 
         {/* Disclaimer */}
         <aside className="w-full max-w-3xl mb-10 bg-white/5 border border-white/10 rounded-2xl p-5 md:p-6">

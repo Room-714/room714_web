@@ -789,6 +789,45 @@
       "subtitle": "Lo tenemos en nuestras manos.",
       "body": "Hemos recibido tu información. Si encajas en alguno de nuestros procesos abiertos o futuros, te escribiremos directamente. Mientras tanto, te invitamos a leer nuestro blog para conocer cómo pensamos.",
       "cta": "Volver al inicio"
+    },
+    "abiertas": {
+      "label": "Ofertas abiertas",
+      "cta": "Ver oferta"
+    },
+    "oferta": {
+      "volver": "Todas las ofertas",
+      "chat": {
+        "saludo": "¡Hola! Gracias por tu interés en la oferta. Antes de pedirte el CV, te hago tres preguntas rápidas. Contesta con tus palabras.",
+        "preguntas": {
+          "residencia": "Para empezar, ¿dónde resides ahora mismo?",
+          "formacion": "¿Qué has estudiado? Cuéntame tu formación y dónde la hiciste.",
+          "experiencia": "¿Cuántos años llevas trabajando con datos, machine learning o IA? Si quieres, cuéntame en qué tipo de proyectos."
+        },
+        "placeholder": "Escribe tu respuesta…",
+        "enviar": "Enviar",
+        "escribiendo": "Escribiendo…",
+        "cv": {
+          "pide": "¡Perfecto, gracias! Último paso: adjunta tu CV en PDF (máximo 5 MB).",
+          "adjuntar": "Adjuntar CV en PDF",
+          "cambiar": "Adjuntar otro PDF"
+        },
+        "consentimiento": {
+          "antes": "Recibido. Guardamos los datos un máximo de 1 mes para el proceso de selección y después se borran solos. Al enviar aceptas la",
+          "enlace": "política de privacidad",
+          "despues": ".",
+          "acepto": "Acepto y envío"
+        },
+        "fin": {
+          "gracias": "¡Listo, candidatura enviada! Revisamos cada una con calma y, si tu perfil encaja, te escribimos directamente.",
+          "blog": "Mientras tanto, en nuestro blog puedes ver cómo pensamos.",
+          "cta": "Leer el blog"
+        },
+        "errores": {
+          "noPdf": "Ese archivo no es un PDF. ¿Puedes adjuntarlo en PDF?",
+          "grande": "Ese PDF pesa más de 5 MB. ¿Tienes una versión más ligera?",
+          "envio": "Vaya, no se ha podido enviar. ¿Lo intentamos otra vez?"
+        }
+      }
     }
   },
   "footer": {
