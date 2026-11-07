@@ -33,6 +33,10 @@ export const ROUTES = {
 
   // Fuera del menú, enlazadas desde el footer. Conservan su URL.
   empleo: { es: "/careers", en: "/careers" },
+  ofertaIaData: {
+    es: "/careers/especialista-senior-ia-data",
+    en: "/careers/senior-ai-data-specialist",
+  },
   privacidad: { es: "/privacy", en: "/privacy" },
   terminos: { es: "/terms", en: "/terms" },
   cookies: { es: "/cookies", en: "/cookies" },
@@ -74,6 +78,7 @@ export const EN_SITEMAP = [
   "hablemos",
   "blog",
   "empleo",
+  "ofertaIaData",
   ...Object.keys(CASOS),
 ];
 

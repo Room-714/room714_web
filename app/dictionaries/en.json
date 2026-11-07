@@ -789,6 +789,45 @@
       "subtitle": "We’ve got it from here.",
       "body": "We received your information. If it fits one of our open or upcoming processes, we’ll reach out directly. In the meantime, our blog is the fastest way to see how we think.",
       "cta": "Back to home"
+    },
+    "abiertas": {
+      "label": "Open positions",
+      "cta": "See the role"
+    },
+    "oferta": {
+      "volver": "All openings",
+      "chat": {
+        "saludo": "Hi! Thanks for your interest in the role. Before asking for your CV, three quick questions. Answer in your own words.",
+        "preguntas": {
+          "residencia": "To start, where are you based right now?",
+          "formacion": "What did you study? Tell me about your education and where you did it.",
+          "experiencia": "How many years have you been working with data, machine learning or AI? Feel free to mention the kind of projects."
+        },
+        "placeholder": "Type your answer…",
+        "enviar": "Send",
+        "escribiendo": "Typing…",
+        "cv": {
+          "pide": "Great, thanks! Last step: attach your CV as a PDF (5 MB max).",
+          "adjuntar": "Attach CV (PDF)",
+          "cambiar": "Attach a different PDF"
+        },
+        "consentimiento": {
+          "antes": "Got it. We keep your data for a maximum of 1 month for the selection process, then it’s deleted automatically. By sending you accept the",
+          "enlace": "privacy policy",
+          "despues": ".",
+          "acepto": "Accept and send"
+        },
+        "fin": {
+          "gracias": "Done, your application is in! We review every one carefully and, if your profile fits, we’ll reach out directly.",
+          "blog": "In the meantime, our blog shows how we think.",
+          "cta": "Read the blog"
+        },
+        "errores": {
+          "noPdf": "That file isn’t a PDF. Could you attach it as a PDF?",
+          "grande": "That PDF is over 5 MB. Do you have a lighter version?",
+          "envio": "Oops, it couldn’t be sent. Shall we try again?"
+        }
+      }
     }
   },
   "footer": {

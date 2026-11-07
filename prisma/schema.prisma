@@ -93,6 +93,7 @@ enum CandidatePosition {
   DEVELOPER
   DESIGNER
   PRODUCT_MANAGER
+  AI_DATA_SPECIALIST
 }
 
 enum CandidateEducation {
