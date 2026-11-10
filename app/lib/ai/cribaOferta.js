@@ -9,12 +9,13 @@ import { getAnthropicClient, MODEL } from "./anthropic";
 //   1. reside en España;
 //   2. tiene un grado, máster o doctorado universitario de un campo
 //      relacionado con la oferta;
-//   3. tiene 3 años o más de experiencia en el campo.
+//   3. tiene 2 años o más de experiencia en el campo (la oferta pide 2-4;
+//      hasta el 2026-11-10 eran 3).
 //
 // Es ligera a propósito: se fía de lo que el candidato dice, no lo contrasta
 // con el CV.
 
-export const ANIOS_MINIMOS = 3;
+export const ANIOS_MINIMOS = 2;
 const TITULACIONES = ["GRADO", "MASTER", "DOCTORADO", "NINGUNA"];
 
 const HERRAMIENTA = {
