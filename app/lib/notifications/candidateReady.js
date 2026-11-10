@@ -1,15 +1,6 @@
 import { Resend } from "resend";
 import { POSITION_LABEL, EDUCATION_LABEL } from "@/app/lib/candidateLabels";
-
-function markdownToBasicHtml(md) {
-  return md
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
-    .replace(/\n\n/g, "</p><p>")
-    .replace(/\n/g, "<br>");
-}
+import { markdownToBasicHtml } from "./markdownEmail";
 
 export async function sendCandidateSummaryEmail({
   candidateId,
@@ -32,7 +23,7 @@ export async function sendCandidateSummaryEmail({
   const positionLabel = POSITION_LABEL[position] || position;
   const educationLabel = EDUCATION_LABEL[education] || education;
   const summaryHtml = aiSummary
-    ? `<p>${markdownToBasicHtml(aiSummary)}</p>`
+    ? markdownToBasicHtml(aiSummary)
     : "<p><em>No se pudo generar resumen automático.</em></p>";
 
   const baseUrl = process.env.NEXTAUTH_URL || "https://www.room714.com";
