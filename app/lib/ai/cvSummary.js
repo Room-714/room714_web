@@ -24,7 +24,7 @@ export async function summarizeCv({ pdfBase64, position }) {
       DEVELOPER: "Desarrollador / Developer",
       DESIGNER: "Diseñador / Designer",
       PRODUCT_MANAGER: "Product Manager",
-      AI_DATA_SPECIALIST: "Especialista Senior en IA y Data",
+      AI_DATA_SPECIALIST: "Especialista en IA y Data",
     }[position] || position;
 
   // Si aplica a una oferta publicada, el encaje se valora contra su texto.

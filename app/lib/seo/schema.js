@@ -180,3 +180,53 @@ export function jsonLdGraph(...nodes) {
     "@graph": nodes.filter(Boolean),
   };
 }
+
+const escaparHtml = (s) =>
+  s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+/**
+ * La descripción de una oferta en HTML, que es lo que Google Empleos pide en
+ * `description`: el mismo contenido que la página, en el mismo orden.
+ */
+export function descripcionOfertaHtml(t) {
+  const partes = [
+    `<p><strong>${escaparHtml(t.condiciones)}</strong></p>`,
+    `<p>${escaparHtml(t.entradilla)}</p>`,
+  ];
+  for (const s of t.secciones) {
+    partes.push(`<h2>${escaparHtml(s.titulo)}</h2>`);
+    if (s.enLinea) partes.push(`<p>${escaparHtml(s.enLinea.join(" · "))}.</p>`);
+    if (s.puntos) {
+      partes.push(`<ul>${s.puntos.map((p) => `<li>${escaparHtml(p)}</li>`).join("")}</ul>`);
+    }
+  }
+  partes.push(`<h2>${escaparHtml(t.postular.titulo)}</h2>`, `<p>${escaparHtml(t.postular.texto)}</p>`);
+  return partes.join("");
+}
+
+/**
+ * Oferta de empleo para Google Empleos. Remota: sin jobLocation, con
+ * jobLocationType TELECOMMUTE y el país desde el que se puede trabajar.
+ * Sin baseSalary: el salario es según valía.
+ */
+export function jobPostingSchema({ oferta, lang, url }) {
+  const t = oferta[lang];
+  return {
+    "@type": "JobPosting",
+    title: t.titulo,
+    description: descripcionOfertaHtml(t),
+    datePosted: oferta.datePosted,
+    validThrough: oferta.validThrough,
+    employmentType: oferta.employmentType,
+    url,
+    hiringOrganization: {
+      "@type": "Organization",
+      name: "Room 714",
+      sameAs: SITE_URL,
+      logo: `${SITE_URL}/logo.svg`,
+    },
+    jobLocationType: "TELECOMMUTE",
+    applicantLocationRequirements: { "@type": "Country", name: "ES" },
+    directApply: true,
+  };
+}

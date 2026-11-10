@@ -1,114 +1,154 @@
 // Ofertas de empleo publicadas. Cada una tiene su página (la ruta vive en
 // app/lib/routes.mjs) y su posición en el enum CandidatePosition, que es la
-// que el wizard manda al endpoint y la que decide los requisitos de la criba
-// (app/lib/careers/criba.js).
+// que el chat manda al endpoint (app/api/careers/oferta).
 //
-// El texto es el de la oferta tal cual. El castellano manda: es el que se lee
-// el resumen de IA del CV para valorar el encaje.
+// El texto es el de la oferta tal cual. El castellano manda: es el que leen
+// la criba de las respuestas del chat y el resumen de IA del CV.
+//
+// Cada sección lleva `puntos` (lista) o `enLinea` (elementos cortos que se
+// pintan en una sola línea separados por «·»).
 
 export const OFERTA_IA_DATA = {
   ruta: "ofertaIaData",
   position: "AI_DATA_SPECIALIST",
-  datePosted: "2026-11-07",
+  // JobPosting de Google Empleos.
+  datePosted: "2026-11-10",
+  validThrough: "2027-01-09", // datePosted + 60 días
+  employmentType: "FULL_TIME",
   es: {
-    titulo: "Especialista Senior en IA y Data",
+    titulo: "Especialista en IA y Data",
+    condiciones:
+      "100% remoto (España) · Jornada completa · Salario según valía del candidato/a",
     seo: {
-      title: "Empleo: Especialista Senior en IA y Data | Room 714",
+      title: "Empleo: Especialista en IA y Data (remoto) | Room 714",
       description:
-        "Buscamos un/a Senior AI & Data Specialist en España: ML, IA generativa (LLMs, RAG, agentes), pipelines de datos y MLOps. Mínimo 3 años de experiencia. Envía tu CV.",
+        "Únete a Room 714 como Especialista en IA y Data, 100% remoto en España. Machine Learning, IA generativa (LLMs, RAG, agentes) y pipelines de datos en producción.",
     },
     entradilla:
-      "Buscamos un/a Senior AI & Data Specialist para trabajar la estrategia, diseño e implementación de soluciones basadas en Inteligencia Artificial y analítica de datos. El objetivo es identificar oportunidades, optimizar procesos e impulsar la cultura data-driven, de modo que el dato sea la solución a un problema de negocio.",
+      "Buscamos a alguien que ya haya llevado algún proyecto de IA o datos más allá del notebook y quiera crecer construyendo soluciones que se usan de verdad. Trabajarás en proyectos de producto digital para empresas, donde el dato y la IA resuelven problemas de negocio concretos.",
     secciones: [
       {
-        titulo: "Funciones y responsabilidades",
+        titulo: "Qué harás",
         puntos: [
-          ["Estrategia y arquitectura de IA/Data", "diseñar y validar arquitecturas de datos e IA escalables y seguras, alineadas con las necesidades del negocio."],
-          ["Desarrollo de soluciones de IA", "implementar modelos de Machine Learning, Deep Learning e Inteligencia Artificial Generativa como LLMs, RAG o agentes conversacionales."],
-          ["Gestión y pipeline de datos", "supervisar y optimizar flujos de datos (ETL/ELT), asegurando la calidad, gobernanza y disponibilidad del dato para análisis e inferencia."],
-          ["Evaluación y selección tecnológica", "investigar, proponer y adoptar nuevas herramientas, frameworks y proveedores del ecosistema de IA y Data."],
-          ["Experiencia técnica", "mantener buenas prácticas de ingeniería de software, MLOps y CI/CD para datos."],
+          "Desarrollar soluciones con Machine Learning e IA generativa (LLMs, RAG, agentes).",
+          "Construir y mejorar pipelines de datos (ETL/ELT), cuidando la calidad y disponibilidad del dato.",
+          "Participar en el diseño de arquitecturas de datos e IA junto al equipo.",
+          "Probar y proponer nuevas herramientas y frameworks del ecosistema IA/Data.",
+          "Trabajar con buenas prácticas de ingeniería: Git, testing, CI/CD.",
         ],
       },
       {
-        titulo: "Requisitos del perfil",
+        titulo: "Qué buscamos",
         puntos: [
-          ["Formación universitaria", "en Ingeniería Informática, Matemáticas, Estadística o similares, y experiencia mínima de 3 años en roles de Data Science, Machine Learning Engineering o desarrollo de soluciones de IA en entornos de producción."],
-          ["Python", "dominio del lenguaje y de sus librerías de datos e IA (pandas, NumPy, scikit-learn, PyTorch o TensorFlow)."],
-          ["Bases de datos", "sólidos conocimientos en bases de datos SQL (PostgreSQL, MySQL) y NoSQL, así como conceptos de Data Warehousing (Snowflake, BigQuery, Redshift)."],
-          ["IA generativa y LLMs", "experiencia práctica en integración de APIs de IA (OpenAI, Anthropic, Hugging Face, etc.), arquitecturas RAG, bases de datos vectoriales y frameworks."],
-          ["Cloud y MLOps", "experiencia con al menos una plataforma cloud (AWS, GCP o Azure) y herramientas de MLOps."],
-          ["Control de versiones", "manejo fluido de Git."],
+          "Formación en Ingeniería Informática, Matemáticas, Estadística o similar.",
+          "2-4 años de experiencia en Data Science, ML Engineering o desarrollo de soluciones de IA.",
+          "Buen nivel de Python y su ecosistema de datos (pandas, NumPy, scikit-learn).",
+          "SQL con soltura (PostgreSQL, MySQL).",
+          "Experiencia práctica con APIs de IA (OpenAI, Anthropic, Hugging Face) y arquitecturas RAG.",
+          "Experiencia básica con al menos una plataforma cloud (AWS, GCP o Azure).",
+          "Manejo de Git.",
+          "Capacidad para explicar lo técnico a perfiles no técnicos.",
         ],
       },
       {
-        titulo: "Soft skills",
+        titulo: "Valorable",
+        enLinea: [
+          "PyTorch o TensorFlow",
+          "bases de datos vectoriales",
+          "NoSQL",
+          "BigQuery, Snowflake o Redshift",
+          "herramientas de MLOps",
+        ],
+      },
+      {
+        titulo: "Qué ofrecemos",
         puntos: [
-          [null, "Capacidad de comunicación técnica y no técnica."],
-          [null, "Pensamiento analítico, visión crítica y orientación a la resolución de problemas."],
-          [null, "Proactividad y capacidad de priorizar en diversos proyectos dinámicos."],
+          "Salario según valía del candidato/a.",
+          "100% remoto desde cualquier punto de España.",
+          "Proyectos reales de IA en producción, no pilotos que se quedan en demo.",
+          "Un equipo pequeño donde trabajas directamente con quien decide y aprendes rápido.",
+          "Recorrido para crecer hacia un rol senior.",
         ],
       },
     ],
-    aplicar: "Inscríbete",
-    aplicarLead:
-      "Tres preguntas rápidas y tu CV en PDF. Lo lee una persona del equipo, con ayuda de una IA.",
+    postular: {
+      titulo: "Cómo postular",
+      texto: "Rellena el formulario de candidatura de esta página.",
+    },
+    cta: "Postular a esta oferta",
   },
   en: {
-    titulo: "Senior AI & Data Specialist",
+    titulo: "AI & Data Specialist",
+    condiciones:
+      "100% remote (Spain) · Full-time · Salary based on the candidate’s experience and skills",
     seo: {
-      title: "Job: Senior AI & Data Specialist | Room 714",
+      title: "Job: AI & Data Specialist (remote) | Room 714",
       description:
-        "We're hiring a Senior AI & Data Specialist based in Spain: ML, generative AI (LLMs, RAG, agents), data pipelines and MLOps. 3+ years of experience. Send us your CV.",
+        "Join Room 714 as an AI & Data Specialist, 100% remote from Spain. Machine Learning, generative AI (LLMs, RAG, agents) and data pipelines in production.",
     },
     entradilla:
-      "We're looking for a Senior AI & Data Specialist to own the strategy, design and implementation of solutions built on Artificial Intelligence and data analytics. The goal is to spot opportunities, optimise processes and drive a data-driven culture, so that data becomes the answer to a business problem.",
+      "We're looking for someone who has already taken an AI or data project beyond the notebook and wants to grow by building solutions that people actually use. You'll work on digital product projects for companies, where data and AI solve concrete business problems.",
     secciones: [
       {
-        titulo: "Role and responsibilities",
+        titulo: "What you'll do",
         puntos: [
-          ["AI/Data strategy and architecture", "design and validate scalable, secure data and AI architectures aligned with business needs."],
-          ["AI solution development", "build Machine Learning, Deep Learning and Generative AI solutions such as LLMs, RAG or conversational agents."],
-          ["Data management and pipelines", "oversee and optimise data flows (ETL/ELT), ensuring data quality, governance and availability for analysis and inference."],
-          ["Technology evaluation and selection", "research, propose and adopt new tools, frameworks and vendors from the AI and Data ecosystem."],
-          ["Engineering practice", "uphold good software engineering, MLOps and CI/CD-for-data practices."],
+          "Build solutions with Machine Learning and generative AI (LLMs, RAG, agents).",
+          "Build and improve data pipelines (ETL/ELT), looking after data quality and availability.",
+          "Take part in designing data and AI architectures with the team.",
+          "Try out and propose new tools and frameworks from the AI/Data ecosystem.",
+          "Work with good engineering practices: Git, testing, CI/CD.",
         ],
       },
       {
         titulo: "What we're looking for",
         puntos: [
-          ["University degree", "in Computer Engineering, Mathematics, Statistics or similar, and at least 3 years in Data Science, Machine Learning Engineering or AI solution development roles in production environments."],
-          ["Python", "fluency in the language and its data and AI libraries (pandas, NumPy, scikit-learn, PyTorch or TensorFlow)."],
-          ["Databases", "solid knowledge of SQL (PostgreSQL, MySQL) and NoSQL databases, plus Data Warehousing concepts (Snowflake, BigQuery, Redshift)."],
-          ["Generative AI and LLMs", "hands-on experience integrating AI APIs (OpenAI, Anthropic, Hugging Face, etc.), RAG architectures, vector databases and frameworks."],
-          ["Cloud and MLOps", "experience with at least one cloud platform (AWS, GCP or Azure) and MLOps tooling."],
-          ["Version control", "fluent with Git."],
+          "A background in Computer Engineering, Mathematics, Statistics or similar.",
+          "2-4 years of experience in Data Science, ML Engineering or building AI solutions.",
+          "Good Python and its data ecosystem (pandas, NumPy, scikit-learn).",
+          "Comfortable with SQL (PostgreSQL, MySQL).",
+          "Hands-on experience with AI APIs (OpenAI, Anthropic, Hugging Face) and RAG architectures.",
+          "Basic experience with at least one cloud platform (AWS, GCP or Azure).",
+          "Git.",
+          "Able to explain technical topics to non-technical people.",
         ],
       },
       {
-        titulo: "Soft skills",
+        titulo: "Nice to have",
+        enLinea: [
+          "PyTorch or TensorFlow",
+          "vector databases",
+          "NoSQL",
+          "BigQuery, Snowflake or Redshift",
+          "MLOps tooling",
+        ],
+      },
+      {
+        titulo: "What we offer",
         puntos: [
-          [null, "Able to communicate with technical and non-technical audiences."],
-          [null, "Analytical thinking, a critical eye and a problem-solving mindset."],
-          [null, "Proactive, and able to prioritise across several fast-moving projects."],
+          "Salary based on the candidate’s experience and skills.",
+          "100% remote from anywhere in Spain.",
+          "Real AI projects in production, not pilots that never get past the demo.",
+          "A small team where you work directly with the people who decide, and learn fast.",
+          "A path to grow into a senior role.",
         ],
       },
     ],
-    aplicar: "Apply",
-    aplicarLead:
-      "Three quick questions and your CV as a PDF. A person on the team reads it, with help from an AI.",
+    postular: {
+      titulo: "How to apply",
+      texto: "Fill in the application form on this page.",
+    },
+    cta: "Apply for this role",
   },
 };
 
-/** El texto plano de la oferta, para dárselo al resumen de IA del CV. */
+/** El texto plano de la oferta (castellano), para la criba y el resumen IA. */
 export function textoOferta(oferta = OFERTA_IA_DATA) {
   const t = oferta.es;
-  const lineas = [t.titulo, "", t.entradilla];
+  const lineas = [t.titulo, t.condiciones, "", t.entradilla];
   for (const s of t.secciones) {
     lineas.push("", `${s.titulo}:`);
-    for (const [rotulo, texto] of s.puntos) {
-      lineas.push(`- ${rotulo ? `${rotulo}: ` : ""}${texto}`);
-    }
+    if (s.enLinea) lineas.push(s.enLinea.join(" · "));
+    for (const p of s.puntos ?? []) lineas.push(`- ${p}`);
   }
   return lineas.join("\n");
 }
