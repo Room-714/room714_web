@@ -5,7 +5,11 @@ import Navbar from "@/app/components/Navbar";
 import OfertaChat from "@/app/components/OfertaChat";
 import { SITE_URL, buildAlternates, langPaths } from "@/app/lib/seo/urls";
 import { socialMeta } from "@/app/lib/seo/social";
-import { breadcrumbSchema, jsonLdGraph } from "@/app/lib/seo/schema";
+import {
+  breadcrumbSchema,
+  jobPostingSchema,
+  jsonLdGraph,
+} from "@/app/lib/seo/schema";
 import { path, pathsOf } from "@/app/lib/routes.mjs";
 
 // Plantilla de una oferta de empleo: el texto de la oferta y, debajo, el
@@ -14,6 +18,8 @@ import { path, pathsOf } from "@/app/lib/routes.mjs";
 //
 // La página es el enlace que se comparte en LinkedIn, así que el botón de
 // arriba lleva directo al formulario: quien llega ya ha leído la oferta allí.
+// Lleva JobPosting para Google Empleos; la candidatura se hace aquí mismo
+// (directApply), sin email ni mailto.
 
 export function oferta(datos) {
   async function generateMetadata({ params }) {
@@ -41,6 +47,7 @@ export function oferta(datos) {
     const pageUrl = `${SITE_URL}${path(datos.ruta, lang)}`;
 
     const jsonLd = jsonLdGraph(
+      jobPostingSchema({ oferta: datos, lang, url: pageUrl }),
       breadcrumbSchema([
         { name: dict.nav.home, url: `${SITE_URL}${path("home", lang)}` },
         { name: dict.nav.careers, url: `${SITE_URL}${path("empleo", lang)}` },
@@ -52,7 +59,11 @@ export function oferta(datos) {
       <div className="flex flex-col bg-black min-h-screen">
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          // La descripción del JobPosting es HTML: se escapa «<» para que
+          // ningún «</script>» pueda cerrar la etiqueta.
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+          }}
         />
         <Navbar dict={dict} isDark={true} />
 
@@ -79,6 +90,9 @@ export function oferta(datos) {
               <h1 className="font-title font-black text-4xl md:text-6xl text-white leading-tight">
                 {t.titulo}
               </h1>
+              <p className="font-title font-bold text-base md:text-lg text-white mt-4">
+                {t.condiciones}
+              </p>
               <p className="font-body text-base md:text-lg lg:text-xl text-gray-300 mt-6 leading-relaxed">
                 {t.entradilla}
               </p>
@@ -86,7 +100,7 @@ export function oferta(datos) {
                 href="#inscribete"
                 className="mt-8 inline-flex items-center gap-2 bg-red-600 text-white font-title font-bold uppercase tracking-wide px-8 py-4 rounded-full hover:bg-red-700 transition-colors"
               >
-                <span>{t.aplicar}</span>
+                <span>{t.cta}</span>
                 <ArrowDown size={18} strokeWidth={3} />
               </a>
             </header>
@@ -96,23 +110,27 @@ export function oferta(datos) {
                 <h2 className="font-title font-black text-2xl md:text-3xl text-white mb-5">
                   {s.titulo}
                 </h2>
-                <ul className="space-y-3">
-                  {s.puntos.map(([rotulo, texto]) => (
-                    <li
-                      key={texto}
-                      className="relative pl-6 font-body text-base md:text-lg text-gray-300 leading-relaxed"
-                    >
-                      <span
-                        aria-hidden="true"
-                        className="absolute left-0 top-[0.7em] w-2 h-2 rounded-full bg-red-500"
-                      />
-                      {rotulo && (
-                        <strong className="text-white font-bold">{rotulo}: </strong>
-                      )}
-                      {texto}
-                    </li>
-                  ))}
-                </ul>
+                {s.enLinea && (
+                  <p className="font-body text-base md:text-lg text-gray-300 leading-relaxed">
+                    {s.enLinea.join(" · ")}.
+                  </p>
+                )}
+                {s.puntos && (
+                  <ul className="space-y-3">
+                    {s.puntos.map((texto) => (
+                      <li
+                        key={texto}
+                        className="relative pl-6 font-body text-base md:text-lg text-gray-300 leading-relaxed"
+                      >
+                        <span
+                          aria-hidden="true"
+                          className="absolute left-0 top-[0.7em] w-2 h-2 rounded-full bg-red-500"
+                        />
+                        {texto}
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </section>
             ))}
           </article>
@@ -120,10 +138,10 @@ export function oferta(datos) {
           <section id="inscribete" className="w-full scroll-mt-8 mt-4">
             <header className="w-full max-w-3xl mx-auto mb-8">
               <h2 className="font-title font-black text-3xl md:text-5xl text-white leading-tight">
-                {t.aplicar}
+                {t.postular.titulo}
               </h2>
               <p className="font-body text-base md:text-lg text-gray-300 mt-4 leading-relaxed">
-                {t.aplicarLead}
+                {t.postular.texto}
               </p>
             </header>
 

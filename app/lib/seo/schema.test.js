@@ -5,9 +5,11 @@ import {
   articleSchema,
   breadcrumbSchema,
   founderSchema,
+  jobPostingSchema,
   jsonLdGraph,
   organizationSchema,
 } from "@/app/lib/seo/schema";
+import { OFERTA_IA_DATA } from "@/app/data/ofertas";
 import { SITE_URL } from "@/app/lib/seo/urls";
 
 describe("organizationSchema", () => {
@@ -121,5 +123,50 @@ describe("jsonLdGraph", () => {
   it("descarta los nodos ausentes en lugar de meter null en el grafo", () => {
     const g = jsonLdGraph(organizationSchema("es"), null, undefined);
     expect(g["@graph"]).toHaveLength(1);
+  });
+});
+
+describe("jobPostingSchema", () => {
+  const url = `${SITE_URL}/es/careers/especialista-ia-data`;
+  const nodo = jobPostingSchema({ oferta: OFERTA_IA_DATA, lang: "es", url });
+
+  it("tiene lo que Google Empleos exige a una oferta remota", () => {
+    expect(nodo).toMatchObject({
+      "@type": "JobPosting",
+      title: "Especialista en IA y Data",
+      datePosted: "2026-11-10",
+      validThrough: "2027-01-09",
+      employmentType: "FULL_TIME",
+      jobLocationType: "TELECOMMUTE",
+      applicantLocationRequirements: { "@type": "Country", name: "ES" },
+      directApply: true,
+      hiringOrganization: {
+        "@type": "Organization",
+        name: "Room 714",
+        sameAs: SITE_URL,
+        logo: `${SITE_URL}/logo.svg`,
+      },
+    });
+    expect(nodo).not.toHaveProperty("baseSalary");
+    expect(nodo).not.toHaveProperty("jobLocation");
+  });
+
+  it("validThrough cae 60 días después de datePosted", () => {
+    const dias = (new Date(nodo.validThrough) - new Date(nodo.datePosted)) / 86400000;
+    expect(dias).toBe(60);
+  });
+
+  it("la descripción es HTML con todas las secciones de la oferta", () => {
+    for (const s of OFERTA_IA_DATA.es.secciones) {
+      expect(nodo.description).toContain(`<h2>${s.titulo}</h2>`);
+    }
+    expect(nodo.description).toContain("<li>Manejo de Git.</li>");
+    expect(nodo.description).toContain("<h2>Cómo postular</h2>");
+  });
+
+  it("ningún texto de la oferta dice «Senior»", () => {
+    for (const lang of ["es", "en"]) {
+      expect(JSON.stringify(OFERTA_IA_DATA[lang])).not.toMatch(/Senior/);
+    }
   });
 });

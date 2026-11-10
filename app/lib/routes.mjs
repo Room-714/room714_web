@@ -34,8 +34,8 @@ export const ROUTES = {
   // Fuera del menú, enlazadas desde el footer. Conservan su URL.
   empleo: { es: "/careers", en: "/careers" },
   ofertaIaData: {
-    es: "/careers/especialista-senior-ia-data",
-    en: "/careers/senior-ai-data-specialist",
+    es: "/careers/especialista-ia-data",
+    en: "/careers/ai-data-specialist",
   },
   privacidad: { es: "/privacy", en: "/privacy" },
   terminos: { es: "/terms", en: "/terms" },
@@ -107,6 +107,13 @@ export const RENOMBRADAS = [
   // caso?" hace ahora ese trabajo.
   { de: "/es/diagnostic", a: path("home", "es") },
   { de: "/en/diagnostic", a: path("home", "en") },
+  // La oferta de IA y Data dejó de ser «Senior» (2026-11-10). Las URLs
+  // viejas están publicadas en LinkedIn. Se cubren también los cruces de
+  // idioma de las viejas, que antes resolvían por las guardas.
+  { de: "/es/careers/especialista-senior-ia-data", a: path("ofertaIaData", "es") },
+  { de: "/en/careers/senior-ai-data-specialist", a: path("ofertaIaData", "en") },
+  { de: "/es/careers/senior-ai-data-specialist", a: path("ofertaIaData", "es") },
+  { de: "/en/careers/especialista-senior-ia-data", a: path("ofertaIaData", "en") },
 ];
 
 /**

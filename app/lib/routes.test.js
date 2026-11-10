@@ -75,8 +75,8 @@ describe("pathsOf", () => {
 });
 
 describe("RENOMBRADAS", () => {
-  it("cubre las URLs antiguas: las seis del menú viejo y el diagnóstico", () => {
-    expect(RENOMBRADAS).toHaveLength(8);
+  it("cubre las URLs antiguas: las seis del menú viejo, el diagnóstico y la oferta", () => {
+    expect(RENOMBRADAS).toHaveLength(12);
     const origenes = RENOMBRADAS.map((r) => r.de);
     // El diagnóstico automático se eliminó, pero su URL está indexada.
     expect(origenes).toContain("/es/diagnostic");
@@ -91,6 +91,17 @@ describe("RENOMBRADAS", () => {
     ]) {
       expect(origenes).toContain(vieja);
     }
+  });
+
+  it("la oferta de IA y Data con «Senior» redirige a la URL nueva", () => {
+    expect(RENOMBRADAS).toContainEqual({
+      de: "/es/careers/especialista-senior-ia-data",
+      a: "/es/careers/especialista-ia-data",
+    });
+    expect(RENOMBRADAS).toContainEqual({
+      de: "/en/careers/senior-ai-data-specialist",
+      a: "/en/careers/ai-data-specialist",
+    });
   });
 
   it("ningún destino es a su vez un origen: cero cadenas de redirección", () => {
