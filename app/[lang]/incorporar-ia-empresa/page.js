@@ -21,10 +21,10 @@ import { ANCLA_FORMULARIO, INCORPORAR_IA as T } from "@/app/data/incorporarIa";
 // Fuera del menú principal; se enlaza desde el footer.
 //
 // Bloques redondeados que se solapan y alternan fondo, como la portada:
-// negro (hero con el dibujo) → rojo (el problema) → negro (la propuesta:
-// los dos ejes y lo que consigues) → blanco (inventario, que enlaza con el
-// skyline). Un único objetivo: vender la colaboración. Tipografías, tarjetas
-// y botones son los del resto del sitio.
+// negro (hero con el dibujo, el problema en una caja roja y la propuesta) →
+// blanco (inventario, que enlaza con el skyline). Un único objetivo: vender
+// la colaboración. Tipografías, tarjetas y botones son los del resto del
+// sitio.
 
 const CLAVE = "incorporarIa";
 const URL_PAGINA = `${SITE_URL}${path(CLAVE, "es")}`;
@@ -108,20 +108,16 @@ export default async function IncorporarIaPage({ params }) {
         alternatePaths={{ es: path(CLAVE, "es"), en: path("home", "en") }}
       />
 
-      <main className={`${CANAL} pt-8 pb-28 lg:pb-32`}>
+      <main className={`${CANAL} pt-8 pb-16 lg:pb-24`}>
         {/* 1. Hero a dos columnas: el problema y la oferta a la izquierda, el
             dibujo (tus empleados con la IA desbocada) a la derecha. El
             titular es el H1; la búsqueda objetivo va en el title y la
             description. */}
-        <header className="grid lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] gap-10 lg:gap-12 items-center">
+        <header className="grid lg:grid-cols-[minmax(0,8fr)_minmax(0,4fr)] gap-10 lg:gap-12 items-center">
           <div>
-            {/* Una línea por elemento: así no queda una palabra huérfana */}
-            <h1 className="font-title font-black text-4xl md:text-5xl lg:text-[2.4rem] leading-tight text-white mb-6">
-              {T.hero.titular.map((frase) => (
-                <span key={frase} className="block">
-                  {frase}
-                </span>
-              ))}
+            {/* text-balance reparte las líneas: sin palabras huérfanas */}
+            <h1 className="font-title font-black text-4xl md:text-5xl leading-tight text-balance text-white mb-6">
+              {T.hero.titular}
             </h1>
             <p className="font-hand text-red-500 text-2xl md:text-3xl lg:text-4xl mb-8 leading-[1.45]">
               {T.hero.subtitulo}
@@ -139,51 +135,37 @@ export default async function IncorporarIaPage({ params }) {
         </header>
       </main>
 
-      {/* 2. El problema, en una banda roja redondeada (el recurso de «En
-          qué creemos»): el candado abierto a la izquierda y el texto alineado
-          a la derecha. */}
-      <section
-        className={`w-full bg-red-700 text-white rounded-t-[50px] -mt-10 relative z-1 ${CANAL} pt-16 pb-24 lg:pt-20 lg:pb-28`}
-      >
-        <div className="grid md:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] gap-10 lg:gap-16 items-center">
-          <CandadoAbierto className="w-44 md:w-full max-w-xs mx-auto" />
-          <div className="text-right">
-            <h2 className={`${H2} mb-8`}>{T.problema.titulo}</h2>
-            <p className={`${TEXTO} text-white/90 mb-8`}>
-              {T.problema.puntos.join(" ")}
-            </p>
-            <p className="font-hand text-white text-2xl md:text-3xl lg:text-4xl leading-[1.45]">
-              {T.problema.remate}
-            </p>
+      {/* 2 y 3, sobre el mismo negro del hero. El problema va en una caja
+          roja redondeada para que destaque: el candado abierto a la
+          izquierda y el texto alineado a la derecha. Después, la propuesta
+          en un solo bloque: los dos ejes y, continuando la frase, lo que
+          consigues; las cuatro tarjetas con el mismo formato. */}
+      <section className={`w-full bg-black text-white ${CANAL} pb-24 lg:pb-28`}>
+        <div className="rounded-[50px] bg-red-700 px-6 py-12 md:px-12 md:py-16 lg:px-16 lg:py-20 mb-16 lg:mb-24">
+          <div className="grid md:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] gap-10 lg:gap-16 items-center">
+            <CandadoAbierto className="w-44 md:w-full max-w-xs mx-auto" />
+            <div className="text-right">
+              <h2 className={`${H2} text-balance mb-8`}>{T.problema.titulo}</h2>
+              <p className={`${TEXTO} text-white/90 mb-8`}>
+                {T.problema.puntos.join(" ")}
+              </p>
+              <p className="font-hand text-white text-2xl md:text-3xl lg:text-4xl leading-[1.45] text-balance">
+                {T.problema.remate}
+              </p>
+            </div>
           </div>
         </div>
-      </section>
 
-      {/* 3. La propuesta en un solo bloque: los dos ejes y, continuando la
-          frase, lo que consigues; las cuatro tarjetas con el mismo formato.
-          Sobre negro, para que el bloque final (blanco) siga alternando. */}
-      <section
-        className={`w-full bg-black text-white rounded-t-[50px] -mt-10 relative z-2 ${CANAL} pt-16 pb-24 lg:pt-20 lg:pb-28`}
-      >
         <h2 className={`${H2} mb-10 max-w-4xl`}>{T.frentes.titulo}</h2>
         <Tarjetas bloques={T.frentes.bloques} />
         <h2 className={`${H2} mt-16 lg:mt-20 mb-10 max-w-4xl`}>{T.queda.titulo}</h2>
         <Tarjetas bloques={T.queda.bloques} />
-        <div className="mt-10">
-          <PrimaryButton
-            text={T.hero.cta}
-            isRed={true}
-            href={aFormulario}
-            track="cta_click"
-            trackPlacement="incorporar_ia_propuesta"
-          />
-        </div>
       </section>
 
       {/* 4. Hablemos: inventario de IA, sobre blanco: enlaza con el skyline */}
       <section
         id={ANCLA_FORMULARIO}
-        className={`w-full bg-white text-black rounded-t-[50px] -mt-10 relative z-3 scroll-mt-20 ${CANAL} pt-16 pb-20`}
+        className={`w-full bg-white text-black rounded-t-[50px] -mt-10 relative z-1 scroll-mt-20 ${CANAL} pt-16 pb-20`}
       >
         {/* En móvil: título → cuestionario → ficha, para que «Hablemos»
             lleve directo a las preguntas. En escritorio: título y ficha a la

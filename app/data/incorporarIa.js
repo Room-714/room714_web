@@ -28,8 +28,8 @@ export const INCORPORAR_IA = {
   footer: "IA en tu empresa",
 
   hero: {
-    // El titular es el H1 de la página; una línea por elemento.
-    titular: ["Tus empleados ya usan la IA, pero…", "¿están haciéndolo como deben?"],
+    // El titular es el H1 de la página.
+    titular: "Tus empleados ya usan la IA, pero… ¿están haciéndolo como deben?",
     subtitulo: "Sin normas, sin formación, sin control.",
     texto:
       "Room 714 tiene la solución para que la IA en tu empresa aporte el máximo valor y suponga el mínimo riesgo.",
@@ -49,7 +49,7 @@ export const INCORPORAR_IA = {
   // Los dos ejes de la oferta («Room 714 para Urgasa»): la plantilla y la
   // empresa (IT y dirección), en paralelo.
   frentes: {
-    titulo: "Te hacemos una propuesta con dos ejes…",
+    titulo: "En Room 714 te hacemos una propuesta con dos ejes…",
     bloques: [
       {
         titulo: "Que tus empleados sepan cómo usarla.",
