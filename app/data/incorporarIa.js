@@ -49,7 +49,7 @@ export const INCORPORAR_IA = {
   // Los dos ejes de la oferta («Room 714 para Urgasa»): la plantilla y la
   // empresa (IT y dirección), en paralelo.
   frentes: {
-    titulo: "Una propuesta con dos ejes.",
+    titulo: "Te hacemos una propuesta con dos ejes…",
     bloques: [
       {
         titulo: "Que tus empleados sepan cómo usarla.",
@@ -64,11 +64,20 @@ export const INCORPORAR_IA = {
     ],
   },
 
+  // Continúa la frase del título de `frentes`, en el mismo bloque.
   queda: {
-    titulo: "Al terminar, la IA deja de ser un riesgo y pasa a ser un plan.",
-    puntos: [
-      "Tus empleados son capaces de usar la IA con criterio en su día a día: saben qué herramientas usar, qué datos no deben compartir y cómo sacarle partido en su trabajo.",
-      "Tu empresa sabe en qué procesos le interesa aplicar la IA y qué coste supone, con un plan de proyectos ordenado por prioridad.",
+    titulo: "…para que la IA deje de ser un riesgo y pase a ser un plan.",
+    bloques: [
+      {
+        titulo: "Tus empleados la usan con criterio.",
+        texto:
+          "En su día a día saben qué herramientas usar, qué datos no deben compartir y cómo sacarle partido en su trabajo.",
+      },
+      {
+        titulo: "Tu empresa tiene un plan con prioridades y costes.",
+        texto:
+          "Sabe en qué procesos le interesa aplicar la IA y qué coste supone, con los proyectos ordenados por prioridad.",
+      },
     ],
   },
 

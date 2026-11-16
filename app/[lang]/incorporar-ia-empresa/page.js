@@ -21,11 +21,10 @@ import { ANCLA_FORMULARIO, INCORPORAR_IA as T } from "@/app/data/incorporarIa";
 // Fuera del menú principal; se enlaza desde el footer.
 //
 // Bloques redondeados que se solapan y alternan fondo, como la portada:
-// negro (hero con el dibujo) → rojo (el problema) → blanco (los dos frentes
-// de la colaboración) → negro (lo que te queda) → blanco (formulario, que
-// enlaza con el skyline). Un único objetivo: vender la colaboración; el
-// inventario de IA está aparcado. Tipografías, tarjetas y botones son los del
-// resto del sitio.
+// negro (hero con el dibujo) → rojo (el problema) → negro (la propuesta:
+// los dos ejes y lo que consigues) → blanco (inventario, que enlaza con el
+// skyline). Un único objetivo: vender la colaboración. Tipografías, tarjetas
+// y botones son los del resto del sitio.
 
 const CLAVE = "incorporarIa";
 const URL_PAGINA = `${SITE_URL}${path(CLAVE, "es")}`;
@@ -37,6 +36,24 @@ const TARJETA = `rounded-4xl bg-[#F2F2F2]
 
 const H2 = "font-title font-black text-2xl md:text-4xl lg:text-5xl leading-tight";
 const TEXTO = "font-body text-lg md:text-xl lg:text-2xl leading-normal";
+
+/** Dos tarjetas claras con título y texto, en dos columnas. */
+function Tarjetas({ bloques }) {
+  return (
+    <div className="grid md:grid-cols-2 gap-4">
+      {bloques.map((b) => (
+        <div key={b.titulo} className={TARJETA}>
+          <h3 className="font-title font-black text-xl md:text-2xl lg:text-3xl text-black mb-4 leading-tight">
+            {b.titulo}
+          </h3>
+          <p className="font-body text-base md:text-lg lg:text-xl text-gray-900 leading-normal">
+            {b.texto}
+          </p>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export async function generateMetadata({ params }) {
   const { lang } = await params;
@@ -142,56 +159,31 @@ export default async function IncorporarIaPage({ params }) {
         </div>
       </section>
 
-      {/* 3. La propuesta: los dos ejes, a la vez */}
+      {/* 3. La propuesta en un solo bloque: los dos ejes y, continuando la
+          frase, lo que consigues; las cuatro tarjetas con el mismo formato.
+          Sobre negro, para que el bloque final (blanco) siga alternando. */}
       <section
-        className={`w-full bg-white text-black rounded-t-[50px] -mt-10 relative z-2 ${CANAL} pt-16 pb-24 lg:pt-20 lg:pb-28`}
+        className={`w-full bg-black text-white rounded-t-[50px] -mt-10 relative z-2 ${CANAL} pt-16 pb-24 lg:pt-20 lg:pb-28`}
       >
         <h2 className={`${H2} mb-10 max-w-4xl`}>{T.frentes.titulo}</h2>
-        <div className="grid md:grid-cols-2 gap-4 mb-10">
-          {T.frentes.bloques.map((b) => (
-            <div key={b.titulo} className={`${TARJETA} flex flex-col`}>
-              <h3 className="font-title font-black text-xl md:text-2xl lg:text-3xl text-black mb-4 leading-tight">
-                {b.titulo}
-              </h3>
-              <p className="font-body text-base md:text-lg lg:text-xl text-gray-900 leading-normal">
-                {b.texto}
-              </p>
-            </div>
-          ))}
+        <Tarjetas bloques={T.frentes.bloques} />
+        <h2 className={`${H2} mt-16 lg:mt-20 mb-10 max-w-4xl`}>{T.queda.titulo}</h2>
+        <Tarjetas bloques={T.queda.bloques} />
+        <div className="mt-10">
+          <PrimaryButton
+            text={T.hero.cta}
+            isRed={true}
+            href={aFormulario}
+            track="cta_click"
+            trackPlacement="incorporar_ia_propuesta"
+          />
         </div>
-        <PrimaryButton
-          text={T.hero.cta}
-          isRed={true}
-          href={aFormulario}
-          track="cta_click"
-          trackPlacement="incorporar_ia_frentes"
-        />
       </section>
 
-      {/* 4. Lo que te queda */}
-      <section
-        className={`w-full bg-black text-white rounded-t-[50px] -mt-10 relative z-3 ${CANAL} pt-16 pb-24 lg:pt-20 lg:pb-28`}
-      >
-        <h2 className={`${H2} mb-10 max-w-4xl`}>{T.queda.titulo}</h2>
-        <ul className="grid md:grid-cols-2 gap-x-12">
-          {T.queda.puntos.map((p, i) => (
-            <li
-              key={p}
-              className="flex gap-5 items-baseline border-t border-white/20 py-6"
-            >
-              <span className="font-hand text-red-500 text-xl md:text-2xl leading-[1.45] shrink-0">
-                {`0${i + 1}`}
-              </span>
-              <span className={`${TEXTO} text-gray-200`}>{p}</span>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      {/* 5. Hablemos: inventario de IA, sobre blanco: enlaza con el skyline */}
+      {/* 4. Hablemos: inventario de IA, sobre blanco: enlaza con el skyline */}
       <section
         id={ANCLA_FORMULARIO}
-        className={`w-full bg-white text-black rounded-t-[50px] -mt-10 relative z-4 scroll-mt-20 ${CANAL} pt-16 pb-20`}
+        className={`w-full bg-white text-black rounded-t-[50px] -mt-10 relative z-3 scroll-mt-20 ${CANAL} pt-16 pb-20`}
       >
         {/* En móvil: título → cuestionario → ficha, para que «Hablemos»
             lleve directo a las preguntas. En escritorio: título y ficha a la
