@@ -23,9 +23,9 @@ import {
 // en routes.mjs) y, por si acaso, aquí cualquier otro idioma es un 404.
 // Fuera del menú principal; se enlaza desde el footer.
 //
-// Cinco bloques, con el ritmo de la portada (negro → blanco redondeado →
-// negro redondeado): hero, el problema con el inventario como comprobación,
-// lo que tienes en tres meses, cómo lo hacemos y el formulario. Tipografías,
+// Cinco bloques que alternan fondo como la portada: negro (hero, problema e
+// inventario) → blanco (lo que tienes) → negro (cómo) → blanco (formulario,
+// que enlaza con el skyline). Tipografías,
 // tarjetas, listas y botones son los del resto del sitio.
 
 const CLAVE = "formacionIa";
@@ -166,12 +166,12 @@ export default async function FormacionIaPage({ params }) {
         </section>
       </main>
 
-      {/* 3 y 4. Lo que tienes en tres meses y cómo lo hacemos */}
+      {/* 3. Lo que tienes en tres meses */}
       <section
         className={`w-full bg-white text-black rounded-t-[50px] relative z-10 ${CANAL} pt-16 pb-24 lg:pt-20 lg:pb-28`}
       >
         <h2 className={`${H2} mb-10 max-w-4xl`}>{T.resultados.titulo}</h2>
-        <div className="grid md:grid-cols-3 gap-4 mb-20 lg:mb-24">
+        <div className="grid md:grid-cols-3 gap-4">
           {T.resultados.tarjetas.map((c, i) => (
             <div key={c.titulo} className={TARJETA}>
               <span className="font-hand text-red-500 text-xl md:text-2xl leading-[1.45]">
@@ -186,25 +186,30 @@ export default async function FormacionIaPage({ params }) {
             </div>
           ))}
         </div>
+      </section>
 
+      {/* 4. Cómo lo hacemos */}
+      <section
+        className={`w-full bg-black text-white rounded-t-[50px] -mt-10 relative z-20 ${CANAL} pt-16 pb-24 lg:pt-20 lg:pb-28`}
+      >
         <h2 className={`${H2} mb-10 max-w-4xl`}>{T.como.titulo}</h2>
         <ol className="flex flex-col mb-8">
           {T.como.pasos.map((p) => (
             <li
               key={p.titulo}
-              className="grid md:grid-cols-[14rem_1fr] gap-1 md:gap-8 border-t border-black/15 py-6"
+              className="grid md:grid-cols-[14rem_1fr] gap-1 md:gap-8 border-t border-white/20 py-6"
             >
               <p className="font-hand text-red-500 text-xl md:text-2xl leading-[1.45]">
                 {p.cuando}
               </p>
-              <p className={`${TEXTO} text-gray-700`}>
-                <strong className="font-bold text-black">{p.titulo}</strong>{" "}
+              <p className={`${TEXTO} text-gray-300`}>
+                <strong className="font-bold text-white">{p.titulo}</strong>{" "}
                 {p.texto}
               </p>
             </li>
           ))}
         </ol>
-        <p className="font-body text-base md:text-lg lg:text-xl text-gray-600 leading-normal mb-10">
+        <p className="font-body text-base md:text-lg lg:text-xl text-gray-400 leading-normal mb-10">
           {T.como.remate}
         </p>
         <PrimaryButton
@@ -216,17 +221,17 @@ export default async function FormacionIaPage({ params }) {
         />
       </section>
 
-      {/* 5. Cierre y formulario */}
+      {/* 5. Cierre y formulario, sobre blanco: enlaza con el skyline */}
       <section
         id={ANCLA_FORMULARIO}
-        className={`w-full bg-black text-white rounded-t-[50px] -mt-10 relative z-20 scroll-mt-20 ${CANAL} pt-16 pb-20`}
+        className={`w-full bg-white text-black rounded-t-[50px] -mt-10 relative z-30 scroll-mt-20 ${CANAL} pt-16 pb-20`}
       >
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-16">
           <div>
             <h2 className="font-hand text-3xl md:text-4xl lg:text-5xl mb-6 leading-[1.45]">
               {T.cierre.titulo}
             </h2>
-            <p className={`${TEXTO} text-gray-300 mb-8`}>{T.cierre.texto}</p>
+            <p className={`${TEXTO} text-gray-700 mb-8`}>{T.cierre.texto}</p>
             <div className="flex items-center gap-4">
               <Image
                 src="/about/jose-antonio-ces.jpg"
@@ -235,7 +240,7 @@ export default async function FormacionIaPage({ params }) {
                 height={128}
                 className="rounded-full shrink-0 w-16 h-16 object-cover"
               />
-              <p className="font-body text-base md:text-lg text-gray-300 leading-normal">
+              <p className="font-body text-base md:text-lg text-gray-700 leading-normal">
                 {T.cierre.firma}
               </p>
             </div>

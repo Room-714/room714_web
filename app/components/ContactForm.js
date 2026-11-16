@@ -25,6 +25,9 @@ export default function ContactForm({
   producto = null,
   onProducto,
   onEnviado,
+  // Sobre fondo blanco (landing de formación en IA). Las etiquetas heredan
+  // el color del contenedor; aquí solo cambian las pastillas.
+  claro = false,
 }) {
   const params = useParams();
   const lang = params?.lang || "en";
@@ -123,8 +126,12 @@ export default function ContactForm({
               onClick={() => pastillas.elegir(item)}
               className={`px-6 py-1 border rounded-full text-xs sm:text-sm md:text-base lg:text-lg font-bold transition-all ${
                 pastillas.valor === item
-                  ? "bg-white text-black border-white"
-                  : "border-white hover:bg-white/10"
+                  ? claro
+                    ? "bg-black text-white border-black"
+                    : "bg-white text-black border-white"
+                  : claro
+                    ? "border-black hover:bg-black/5"
+                    : "border-white hover:bg-white/10"
               }`}
             >
               {item}
