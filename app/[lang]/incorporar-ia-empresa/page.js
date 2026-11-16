@@ -4,6 +4,7 @@ import Navbar from "@/app/components/Navbar";
 import PrimaryButton from "@/app/components/PrimaryButton";
 import CapturaCampana from "@/app/components/incorporarIa/CapturaCampana";
 import DibujoRobots from "@/app/components/incorporarIa/DibujoRobots";
+import SenalPeligro from "@/app/components/incorporarIa/SenalPeligro";
 import FormularioLanding from "@/app/components/incorporarIa/FormularioLanding";
 import InventarioIA from "@/app/components/incorporarIa/InventarioIA";
 import { getDictionary } from "@/app/dictionaries";
@@ -139,18 +140,24 @@ export default async function IncorporarIaPage({ params }) {
         </header>
       </main>
 
-      {/* 2. El problema, en una banda roja redondeada y centrada: el mismo
-          recurso de «En qué creemos» en Cómo trabajamos. */}
+      {/* 2. El problema, en una banda roja redondeada (el recurso de «En
+          qué creemos»): señal de peligro a la izquierda y el texto alineado a
+          la derecha. */}
       <section
-        className={`w-full bg-red-700 text-white rounded-t-[50px] -mt-10 relative z-1 ${CANAL} pt-16 pb-24 lg:pt-20 lg:pb-28 text-center`}
+        className={`w-full bg-red-700 text-white rounded-t-[50px] -mt-10 relative z-1 ${CANAL} pt-16 pb-24 lg:pt-20 lg:pb-28`}
       >
-        <h2 className={`${H2} mb-8 max-w-4xl mx-auto`}>{T.problema.titulo}</h2>
-        <p className={`${TEXTO} text-white/90 max-w-4xl mx-auto mb-8`}>
-          {T.problema.puntos.join(" ")}
-        </p>
-        <p className="font-hand text-white text-2xl md:text-3xl lg:text-4xl leading-[1.45] max-w-4xl mx-auto">
-          {T.problema.remate}
-        </p>
+        <div className="grid md:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] gap-10 lg:gap-16 items-center">
+          <SenalPeligro className="w-40 md:w-full max-w-xs mx-auto" />
+          <div className="text-right">
+            <h2 className={`${H2} mb-8`}>{T.problema.titulo}</h2>
+            <p className={`${TEXTO} text-white/90 mb-8`}>
+              {T.problema.puntos.join(" ")}
+            </p>
+            <p className="font-hand text-white text-2xl md:text-3xl lg:text-4xl leading-[1.45]">
+              {T.problema.remate}
+            </p>
+          </div>
+        </div>
       </section>
 
       {/* El inventario, como comprobación del problema */}
