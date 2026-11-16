@@ -1,96 +1,128 @@
 import { describe, expect, it } from "vitest";
 import {
-  PUNTOS,
-  calcularResultado,
-  encabezado,
+  NIVELES,
+  NORMATIVA,
+  PASOS,
+  diagnostico,
+  nivel,
+  pasos,
+  riesgos,
   validarRespuestas,
 } from "@/app/lib/inventarioIa";
 
-// Los tres recorridos que pide la verificación, más los bordes.
-const TODO_NOSE = {
-  herramientas: ["nose"],
-  quien: ["casiNadie"],
-  datos: ["nose"],
-  normas: ["ninguna"],
-  formacion: ["no"],
-};
-
-const SIN_PUNTOS = {
+// Una empresa ordenada: sin riesgos y con plan.
+const ORDENADA = {
   herramientas: ["chat", "ofimatica"],
   quien: ["equipos"],
   datos: ["documentos", "codigo"],
   normas: ["politica"],
   formacion: ["adaptada"],
+  cuentas: ["gestionadas"],
+  plan: ["plan"],
 };
 
-const MEZCLA = {
-  herramientas: ["chat", "gestion", "programacion"],
+const CRITICA = {
+  ...ORDENADA,
   quien: ["porSuCuenta"],
   datos: ["documentos", "clientes"],
-  normas: ["informales"],
-  formacion: ["adaptada"],
+  normas: ["ninguna"],
+  formacion: ["no"],
+  cuentas: ["personales"],
+  plan: ["no"],
 };
 
-describe("calcularResultado", () => {
-  it("todo «No lo sé con certeza»: visibilidad, política y formación", () => {
-    const r = calcularResultado(TODO_NOSE);
-    expect(r.herramientas).toBe(0);
-    expect(r.puntos).toEqual([PUNTOS.visibilidad, PUNTOS.politica, PUNTOS.formacion]);
-    expect(r.encabezado).toBe("0 tipos de herramienta en uso y 3 puntos a revisar.");
-    expect(r.buenaBase).toBe(false);
+describe("nivel de gravedad", () => {
+  it("crítico: datos sensibles, sin normas, sin formación y cuentas personales", () => {
+    expect(riesgos(CRITICA).puntos).toBe(10);
+    expect(nivel(CRITICA)).toBe("critico");
   });
 
-  it("respuestas sin puntos a revisar: buena base", () => {
-    const r = calcularResultado(SIN_PUNTOS);
-    expect(r.puntos).toEqual([]);
-    expect(r.buenaBase).toBe(true);
-    expect(r.encabezado).toBe("2 tipos de herramienta en uso y 0 puntos a revisar.");
+  it("sin datos sensibles nunca es crítico, aunque sume mucho", () => {
+    const r = { ...CRITICA, datos: ["documentos"], herramientas: ["nose"] };
+    expect(riesgos(r).puntos).toBeGreaterThanOrEqual(8);
+    expect(nivel(r)).toBe("alto");
   });
 
-  it("una mezcla: puntos en el orden fijado", () => {
-    const r = calcularResultado(MEZCLA);
-    expect(r.puntos).toEqual([PUNTOS.porSuCuenta, PUNTOS.sensible, PUNTOS.politica]);
-    expect(r.encabezado).toBe("3 tipos de herramienta en uso y 3 puntos a revisar.");
+  it("datos sensibles y sin normas: como mínimo alto", () => {
+    expect(nivel({ ...ORDENADA, datos: ["financiera"], normas: ["ninguna"] })).toBe("alto");
   });
 
-  it("«No lo sé» solo en la pregunta 3 también dispara la visibilidad", () => {
-    const r = calcularResultado({ ...SIN_PUNTOS, datos: ["nose"] });
-    expect(r.puntos).toEqual([PUNTOS.visibilidad]);
+  it("alto sin datos sensibles: no saber qué se usa, cuentas personales y normas informales", () => {
+    const r = { ...ORDENADA, herramientas: ["nose"], cuentas: ["personales"], normas: ["informales"] };
+    expect(riesgos(r).puntos).toBe(5);
+    expect(nivel(r)).toBe("alto");
   });
 
-  it("cualquiera de los tres datos sensibles dispara el punto", () => {
-    for (const id of ["clientes", "empleados", "financiera"]) {
-      expect(calcularResultado({ ...SIN_PUNTOS, datos: [id] }).puntos).toEqual([
-        PUNTOS.sensible,
-      ]);
-    }
+  it("moderado: normas informales y formación parcial", () => {
+    expect(nivel({ ...ORDENADA, normas: ["informales"], formacion: ["algunas"] })).toBe("moderado");
   });
 
-  it("«No lo sé» no cuenta como tipo de herramienta", () => {
-    expect(calcularResultado({ ...SIN_PUNTOS, herramientas: ["chat", "nose"] }).herramientas).toBe(1);
+  it("bajo: una empresa ordenada", () => {
+    expect(riesgos(ORDENADA).puntos).toBe(0);
+    expect(nivel(ORDENADA)).toBe("bajo");
   });
 });
 
-describe("encabezado", () => {
-  it("cuida el singular", () => {
-    expect(encabezado(1, 1)).toBe("1 tipo de herramienta en uso y 1 punto a revisar.");
-    expect(encabezado(5, 2)).toBe("5 tipos de herramienta en uso y 2 puntos a revisar.");
+describe("pasos", () => {
+  it("los tres más urgentes, en el orden fijado", () => {
+    expect(pasos(CRITICA)).toEqual(["datos", "cuentas", "normas"]);
+  });
+
+  it("sin datos sensibles empieza por lo siguiente que aplica", () => {
+    const r = { ...ORDENADA, herramientas: ["nose"], formacion: ["no"], plan: ["pruebas"] };
+    expect(pasos(r)).toEqual(["visibilidad", "formacion", "plan"]);
+  });
+
+  it("una empresa ordenada sin plan solo tiene el paso del plan", () => {
+    expect(pasos({ ...ORDENADA, plan: ["no"] })).toEqual(["plan"]);
+  });
+
+  it("una empresa ordenada con plan no tiene pasos", () => {
+    expect(pasos(ORDENADA)).toEqual([]);
+  });
+});
+
+describe("diagnostico", () => {
+  it("crítico con datos de clientes: artículo 4 y RGPD", () => {
+    const d = diagnostico(CRITICA);
+    expect(d.nivel).toBe("critico");
+    expect(d.titular).toBe(NIVELES.critico.titular);
+    expect(d.normativa).toEqual([NORMATIVA.articulo4, NORMATIVA.rgpd]);
+    expect(d.pasos).toEqual([PASOS.datos, PASOS.cuentas, PASOS.normas]);
+  });
+
+  it("con datos financieros pero no personales: solo el artículo 4", () => {
+    const d = diagnostico({ ...ORDENADA, datos: ["financiera"], normas: ["ninguna"] });
+    expect(d.normativa).toEqual([NORMATIVA.articulo4]);
+  });
+
+  it("en «Bajo» no se menciona la normativa", () => {
+    const d = diagnostico({ ...ORDENADA, plan: ["no"] });
+    expect(d.nivel).toBe("bajo");
+    expect(d.normativa).toEqual([]);
+  });
+
+  it("meter datos de empleados ya no es «Bajo» y trae el RGPD", () => {
+    const d = diagnostico({ ...ORDENADA, datos: ["empleados"] });
+    expect(d.nivel).toBe("moderado");
+    expect(d.normativa).toEqual([NORMATIVA.articulo4, NORMATIVA.rgpd]);
   });
 });
 
 describe("validarRespuestas", () => {
-  it("acepta respuestas correctas y las ordena como las opciones", () => {
-    expect(validarRespuestas({ ...SIN_PUNTOS, herramientas: ["ofimatica", "chat"] }).herramientas).toEqual([
-      "chat",
-      "ofimatica",
-    ]);
+  it("acepta respuestas completas y las ordena como las opciones", () => {
+    const v = validarRespuestas({ ...ORDENADA, herramientas: ["ofimatica", "chat"] });
+    expect(v.herramientas).toEqual(["chat", "ofimatica"]);
   });
 
-  it("rechaza preguntas sin responder, ids desconocidos y dobles en las únicas", () => {
-    expect(validarRespuestas({ ...SIN_PUNTOS, quien: [] })).toBeNull();
-    expect(validarRespuestas({ ...SIN_PUNTOS, datos: ["inventado"] })).toBeNull();
-    expect(validarRespuestas({ ...SIN_PUNTOS, normas: ["ninguna", "politica"] })).toBeNull();
-    expect(validarRespuestas({ herramientas: ["chat"] })).toBeNull();
-    expect(validarRespuestas(null)).toBeNull();
+  it("rechaza si falta una de las preguntas nuevas", () => {
+    const { cuentas, ...sinCuentas } = ORDENADA;
+    expect(cuentas).toBeDefined();
+    expect(validarRespuestas(sinCuentas)).toBeNull();
+  });
+
+  it("rechaza ids desconocidos y varias respuestas en una pregunta de respuesta única", () => {
+    expect(validarRespuestas({ ...ORDENADA, plan: ["quizas"] })).toBeNull();
+    expect(validarRespuestas({ ...ORDENADA, cuentas: ["personales", "gestionadas"] })).toBeNull();
   });
 });

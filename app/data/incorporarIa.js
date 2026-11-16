@@ -74,7 +74,7 @@ export const INCORPORAR_IA = {
   cierre: {
     titulo: "Hablemos de tu caso.",
     texto:
-      "Responde cinco preguntas sobre cómo se usa hoy la IA en tu empresa y te enviamos el resultado por correo.",
+      "Responde siete preguntas sobre cómo se usa hoy la IA en tu empresa y te decimos en qué situación está y qué hacer primero.",
     // Resumen de la bio de «Quién está detrás» (about.quien del
     // diccionario): no añade nada que no esté ya publicado allí.
     quien: {

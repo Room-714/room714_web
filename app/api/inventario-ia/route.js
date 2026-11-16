@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import {
-  PUNTOS,
-  calcularResultado,
+  diagnostico,
   respuestasLegibles,
   validarRespuestas,
 } from "@/app/lib/inventarioIa";
@@ -20,10 +19,10 @@ import {
 } from "@/app/lib/leads/emailInventario";
 import { ORIGENES } from "@/app/data/incorporarIa";
 
-// Recibe el inventario de IA cuando el usuario pide el resultado por email.
-// Es el primer momento en que las respuestas salen del navegador.
+// Recibe el cuestionario de IA cuando el usuario pide el diagnóstico completo
+// por email. Es el primer momento en que las respuestas salen del navegador.
 //
-// El resultado se recalcula aquí con las mismas reglas que el navegador, y el
+// El diagnóstico se recalcula aquí con las mismas reglas que el navegador, y el
 // email no lleva nada escrito por el cliente salvo su dirección: este
 // endpoint no sirve para mandar texto arbitrario a terceros.
 export async function POST(req) {
@@ -59,9 +58,8 @@ export async function POST(req) {
     return NextResponse.json({ error: "Email no configurado" }, { status: 500 });
   }
 
-  const resultado = calcularResultado(respuestas);
+  const d = diagnostico(respuestas);
   const campana = normalizarCampana(body.campana);
-  const puntos = resultado.buenaBase ? [PUNTOS.buenaBase] : resultado.puntos;
 
   // Se guarda antes de enviar; guardarLead nunca lanza.
   await guardarLead({
@@ -70,7 +68,7 @@ export async function POST(req) {
     respuestas: {
       respuestas,
       legibles: respuestasLegibles(respuestas),
-      resultado: { encabezado: resultado.encabezado, puntos },
+      diagnostico: { nivel: d.nivel, pasos: d.pasos },
     },
     campana,
   });
@@ -81,8 +79,8 @@ export async function POST(req) {
     to: [email],
     replyTo: BUZON_CONTACTO,
     subject: ASUNTO_INVENTARIO,
-    html: htmlInventario(resultado),
-    text: textoInventario(resultado),
+    html: htmlInventario(d),
+    text: textoInventario(d),
   });
 
   if (error) {
@@ -110,13 +108,14 @@ export async function POST(req) {
       from: REMITENTE,
       to: [BUZON_CONTACTO],
       replyTo: email,
-      subject: `Inventario de IA completado · ${email}`,
+      subject: `Inventario de IA · ${d.etiqueta} · ${email}`,
       html: `<div style="font-family:sans-serif;color:#333;max-width:600px;">
         <h2 style="border-bottom:1px solid #eee;padding-bottom:10px;">Inventario de IA completado</h2>
         <p><strong>Email:</strong> ${e(email)}</p>
         ${filaCampana}
-        <p><strong>${e(resultado.encabezado)}</strong></p>
-        <ul>${puntos.map((p) => `<li>${e(p)}</li>`).join("")}</ul>
+        <p><strong>Nivel ${e(d.etiqueta)}:</strong> ${e(d.titular)}</p>
+        <p><strong>Pasos que le hemos dado:</strong></p>
+        <ol>${d.pasos.map((p) => `<li>${e(p)}</li>`).join("")}</ol>
         <h3>Respuestas</h3>${filas}
       </div>`,
     });
