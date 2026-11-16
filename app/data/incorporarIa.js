@@ -11,6 +11,11 @@
 // incorporar la IA en la empresa. Las sesiones con la plantilla son un medio
 // dentro de ese programa, no el producto. Es UN solo programa: nada de esta
 // página puede sugerir paquetes, niveles ni precio.
+//
+// Cuarta revisión (2026-11-16): un único objetivo, vender la colaboración.
+// El inventario de IA queda aparcado: su componente y su lógica siguen en el
+// repositorio, pero la página no lo muestra y su API está desactivada
+// (app/api/_inventario-ia; quitar el guion bajo para reactivarla).
 
 export const INCORPORAR_IA = {
   seo: {
@@ -24,13 +29,11 @@ export const INCORPORAR_IA = {
 
   hero: {
     antetitulo: "Incorporar la IA en tu empresa",
-    titular: "Tus empleados usan la IA. ¿Sabes con qué datos?",
+    titular: "Tus empleados ya usan la IA. Falta que tu empresa la controle.",
     subtitulo: "Sin normas, sin formación y sin nadie que lo controle.",
     texto:
-      "Room 714 te ayuda a recuperar el control en tres meses: dejamos por escrito las reglas de uso, enseñamos a tu equipo a usarla bien y decidimos con IT dónde incorporarla para que aporte de verdad.",
-    ctaPrincipal: "Reservar sesión de diagnóstico",
-    ctaSecundario: "Hacer el inventario de IA",
-    nota: "Sesión de diagnóstico de 30 minutos. Te respondemos en 24 h laborables.",
+      "En tres meses, Room 714 enseña a tu equipo a usarla bien y decide contigo y con IT dónde incorporarla en tus procesos.",
+    cta: "Hablemos",
   },
 
   problema: {
@@ -43,61 +46,43 @@ export const INCORPORAR_IA = {
     remate: "Prohibirla no sirve: se sigue usando, solo que a escondidas.",
   },
 
-  inventario: {
-    titulo: "¿Y en tu empresa? Compruébalo en dos minutos.",
-    texto:
-      "Cinco preguntas. Al terminar ves los puntos a revisar y te enviamos dos plantillas: una política de uso de IA y la lista de comprobación del artículo 4.",
-  },
-
-  resultados: {
-    titulo: "En tres meses, la IA pasa de riesgo a herramienta.",
-    tarjetas: [
+  // Los dos bloques de la oferta («Room 714 para Urgasa»): la plantilla y
+  // la empresa (IT y dirección), en paralelo.
+  frentes: {
+    titulo:
+      "Dos frentes a la vez. Lo que aprende tu equipo alimenta el plan de tu empresa.",
+    bloques: [
       {
-        titulo: "Reglas claras.",
+        titulo: "Tu equipo aprende a usarla sin miedo.",
         texto:
-          "Una política de uso de una página: qué herramientas se usan, qué datos no se meten nunca y quién responde.",
+          "Cinco sesiones prácticas de dos horas, en remoto, con casos reales de su trabajo: documentos, datos, asistentes y agentes. En la última, cada persona resuelve con la IA un problema real suyo. No hace falta base técnica y no se para la actividad.",
+        resultado:
+          "Controlan las herramientas y ganan productividad, estén en el área que estén.",
       },
       {
-        titulo: "Una plantilla que sabe usarla.",
+        titulo: "Tu empresa decide dónde le aporta.",
         texto:
-          "Cinco sesiones prácticas de dos horas, en remoto, con casos de su propio trabajo. Con certificado de asistencia y la documentación para demostrar lo que pide el artículo 4 del Reglamento europeo de IA.",
-      },
-      {
-        titulo: "Un plan para lo siguiente.",
-        texto:
-          "Con IT y dirección decidimos en qué procesos aporta la IA y con qué proyectos, por orden de prioridad.",
+          "Primero, tu equipo de IT aprende a administrar el entorno corporativo de IA: licencias, accesos, conectores y auditoría. Después entrevistamos a IT y a las áreas, trazamos con dirección los caminos posibles y lo convertimos en un plan de proyectos por orden de prioridad, con resultados rápidos incluidos.",
+        resultado:
+          "En tres meses, un plan de acción claro para incorporar la IA en tus procesos.",
       },
     ],
   },
 
-  como: {
-    titulo: "Un solo programa: el equipo y la empresa, a la vez.",
-    pasos: [
-      {
-        cuando: "Semana 1",
-        titulo: "Arranque.",
-        texto: "Vemos qué se usa hoy y planificamos las sesiones y las entrevistas.",
-      },
-      {
-        cuando: "Semanas 2 a 10",
-        titulo: "Equipo.",
-        texto: "Cinco sesiones prácticas con toda la plantilla. No hace falta base técnica.",
-      },
-      {
-        cuando: "Semanas 2 a 12",
-        titulo: "Consultoría.",
-        texto:
-          "IT aprende a administrar el entorno corporativo de IA, entrevistamos a las áreas y cerramos el plan de proyectos.",
-      },
+  queda: {
+    titulo: "Al terminar, la IA deja de ser un riesgo y pasa a ser un plan.",
+    puntos: [
+      "Reglas de uso por escrito, que la plantilla conoce.",
+      "Un equipo que la usa con criterio, con certificado de asistencia y la documentación que pide el artículo 4.",
+      "Un equipo de IT que sabe administrar el entorno.",
+      "Un plan de proyectos de IA ordenado por prioridad.",
     ],
-    remate:
-      "No vendemos licencias: trabajamos con las herramientas que ya usáis o queréis adoptar.",
   },
 
   cierre: {
-    titulo: "Cuéntanos cómo se usa hoy la IA en tu empresa.",
+    titulo: "Hablemos de tu caso.",
     texto:
-      "En 30 minutos vemos qué se está usando, qué riesgos hay y por dónde empezar.",
+      "Cuéntanos cómo se usa hoy la IA en tu empresa y te decimos por dónde empezaríamos.",
     // Resumen de la bio de «Quién está detrás» (about.quien del
     // diccionario): no añade nada que no esté ya publicado allí.
     quien: {
@@ -137,4 +122,3 @@ export const DESCARGAS = {
 
 /** Ancla del formulario final, para los botones y el email. */
 export const ANCLA_FORMULARIO = "hablemos";
-export const ANCLA_INVENTARIO = "inventario";

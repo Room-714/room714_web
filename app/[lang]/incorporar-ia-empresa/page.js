@@ -4,20 +4,15 @@ import Navbar from "@/app/components/Navbar";
 import PrimaryButton from "@/app/components/PrimaryButton";
 import CapturaCampana from "@/app/components/incorporarIa/CapturaCampana";
 import DibujoRobots from "@/app/components/incorporarIa/DibujoRobots";
-import SenalPeligro from "@/app/components/incorporarIa/SenalPeligro";
+import CandadoAbierto from "@/app/components/incorporarIa/CandadoAbierto";
 import FormularioLanding from "@/app/components/incorporarIa/FormularioLanding";
-import InventarioIA from "@/app/components/incorporarIa/InventarioIA";
 import { getDictionary } from "@/app/dictionaries";
 import { SITE_URL } from "@/app/lib/seo/urls";
 import { socialMeta } from "@/app/lib/seo/social";
 import { jsonLdGraph, serviceSchema } from "@/app/lib/seo/schema";
 import { path } from "@/app/lib/routes.mjs";
 import { CANAL } from "@/app/lib/layout";
-import {
-  ANCLA_FORMULARIO,
-  ANCLA_INVENTARIO,
-  INCORPORAR_IA as T,
-} from "@/app/data/incorporarIa";
+import { ANCLA_FORMULARIO, INCORPORAR_IA as T } from "@/app/data/incorporarIa";
 
 // Landing de campaña «Incorporar la IA en tu empresa».
 //
@@ -26,10 +21,11 @@ import {
 // Fuera del menú principal; se enlaza desde el footer.
 //
 // Bloques redondeados que se solapan y alternan fondo, como la portada:
-// negro (hero con el dibujo) → rojo (el problema) → negro (inventario) →
-// blanco (lo que tienes) → negro (cómo) → blanco (formulario, que enlaza con
-// el skyline). Tipografías,
-// tarjetas, listas y botones son los del resto del sitio.
+// negro (hero con el dibujo) → rojo (el problema) → blanco (los dos frentes
+// de la colaboración) → negro (lo que te queda) → blanco (formulario, que
+// enlaza con el skyline). Un único objetivo: vender la colaboración; el
+// inventario de IA está aparcado. Tipografías, tarjetas y botones son los del
+// resto del sitio.
 
 const CLAVE = "incorporarIa";
 const URL_PAGINA = `${SITE_URL}${path(CLAVE, "es")}`;
@@ -106,7 +102,7 @@ export default async function IncorporarIaPage({ params }) {
               {T.hero.antetitulo}
             </h1>
             {/* Una frase por línea: así no se parte «la / IA.» */}
-            <p className="font-title font-black text-4xl md:text-5xl leading-tight text-white mb-6">
+            <p className="font-title font-black text-4xl md:text-5xl lg:text-[2.6rem] leading-tight text-white mb-6">
               {T.hero.titular.split(/(?<=\.)\s+/).map((frase) => (
                 <span key={frase} className="block">
                   {frase}
@@ -117,37 +113,26 @@ export default async function IncorporarIaPage({ params }) {
               {T.hero.subtitulo}
             </p>
             <p className={`${TEXTO} text-gray-300 mb-10`}>{T.hero.texto}</p>
-            <div className="flex flex-wrap gap-4">
-              <PrimaryButton
-                text={T.hero.ctaPrincipal}
-                isRed={true}
-                href={aFormulario}
-                track="cta_click"
-                trackPlacement="incorporar_ia_hero"
-              />
-              <PrimaryButton
-                text={T.hero.ctaSecundario}
-                href={`#${ANCLA_INVENTARIO}`}
-                track="cta_click"
-                trackPlacement="incorporar_ia_hero_inventario"
-              />
-            </div>
-            <p className="font-body text-sm md:text-base text-gray-400 leading-normal mt-6">
-              {T.hero.nota}
-            </p>
+            <PrimaryButton
+              text={T.hero.cta}
+              isRed={true}
+              href={aFormulario}
+              track="cta_click"
+              trackPlacement="incorporar_ia_hero"
+            />
           </div>
           <DibujoRobots className="w-full max-w-md mx-auto lg:max-w-none" />
         </header>
       </main>
 
       {/* 2. El problema, en una banda roja redondeada (el recurso de «En
-          qué creemos»): señal de peligro a la izquierda y el texto alineado a
-          la derecha. */}
+          qué creemos»): el candado abierto a la izquierda y el texto alineado
+          a la derecha. */}
       <section
         className={`w-full bg-red-700 text-white rounded-t-[50px] -mt-10 relative z-1 ${CANAL} pt-16 pb-24 lg:pt-20 lg:pb-28`}
       >
         <div className="grid md:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] gap-10 lg:gap-16 items-center">
-          <SenalPeligro className="w-40 md:w-full max-w-xs mx-auto" />
+          <CandadoAbierto className="w-44 md:w-full max-w-xs mx-auto" />
           <div className="text-right">
             <h2 className={`${H2} mb-8`}>{T.problema.titulo}</h2>
             <p className={`${TEXTO} text-white/90 mb-8`}>
@@ -160,77 +145,60 @@ export default async function IncorporarIaPage({ params }) {
         </div>
       </section>
 
-      {/* El inventario, como comprobación del problema */}
+      {/* 3. La colaboración: los dos frentes, a la vez */}
       <section
-        id={ANCLA_INVENTARIO}
-        className={`w-full bg-black text-white rounded-t-[50px] -mt-10 relative z-2 scroll-mt-20 ${CANAL} pt-16 pb-24 lg:pt-20 lg:pb-28`}
+        className={`w-full bg-white text-black rounded-t-[50px] -mt-10 relative z-2 ${CANAL} pt-16 pb-24 lg:pt-20 lg:pb-28`}
       >
-        <h2 className={`${H2} mb-4 max-w-4xl`}>{T.inventario.titulo}</h2>
-        <p className="font-body text-base md:text-lg lg:text-xl text-gray-300 leading-normal mb-8 max-w-4xl">
-          {T.inventario.texto}
-        </p>
-        <InventarioIA />
-      </section>
-
-      {/* 3. Lo que tienes en tres meses */}
-      <section
-        className={`w-full bg-white text-black rounded-t-[50px] -mt-10 relative z-3 ${CANAL} pt-16 pb-24 lg:pt-20 lg:pb-28`}
-      >
-        <h2 className={`${H2} mb-10 max-w-4xl`}>{T.resultados.titulo}</h2>
-        <div className="grid md:grid-cols-3 gap-4">
-          {T.resultados.tarjetas.map((c, i) => (
-            <div key={c.titulo} className={TARJETA}>
-              <span className="font-hand text-red-500 text-xl md:text-2xl leading-[1.45]">
-                {`0${i + 1}`}
-              </span>
-              <h3 className="font-title font-black text-xl md:text-2xl text-black mt-2 mb-3 leading-tight">
-                {c.titulo}
+        <h2 className={`${H2} mb-10 max-w-4xl`}>{T.frentes.titulo}</h2>
+        <div className="grid md:grid-cols-2 gap-4 mb-10">
+          {T.frentes.bloques.map((b) => (
+            <div key={b.titulo} className={`${TARJETA} flex flex-col`}>
+              <h3 className="font-title font-black text-xl md:text-2xl lg:text-3xl text-black mb-4 leading-tight">
+                {b.titulo}
               </h3>
-              <p className="font-body text-base md:text-lg text-gray-900 leading-normal">
-                {c.texto}
+              <p className="font-body text-base md:text-lg text-gray-900 leading-normal mb-6">
+                {b.texto}
+              </p>
+              <p className="font-body text-base md:text-lg text-black leading-normal mt-auto border-t border-black/15 pt-4">
+                <strong className="font-bold text-red-600">Resultado:</strong>{" "}
+                {b.resultado}
               </p>
             </div>
           ))}
         </div>
-      </section>
-
-      {/* 4. Cómo lo hacemos */}
-      <section
-        className={`w-full bg-black text-white rounded-t-[50px] -mt-10 relative z-4 ${CANAL} pt-16 pb-24 lg:pt-20 lg:pb-28`}
-      >
-        <h2 className={`${H2} mb-10 max-w-4xl`}>{T.como.titulo}</h2>
-        <ol className="flex flex-col mb-8">
-          {T.como.pasos.map((p) => (
-            <li
-              key={p.titulo}
-              className="grid md:grid-cols-[14rem_1fr] gap-1 md:gap-8 border-t border-white/20 py-6"
-            >
-              <p className="font-hand text-red-500 text-xl md:text-2xl leading-[1.45]">
-                {p.cuando}
-              </p>
-              <p className={`${TEXTO} text-gray-300`}>
-                <strong className="font-bold text-white">{p.titulo}</strong>{" "}
-                {p.texto}
-              </p>
-            </li>
-          ))}
-        </ol>
-        <p className="font-body text-base md:text-lg lg:text-xl text-gray-400 leading-normal mb-10">
-          {T.como.remate}
-        </p>
         <PrimaryButton
-          text={T.hero.ctaPrincipal}
+          text={T.hero.cta}
           isRed={true}
           href={aFormulario}
           track="cta_click"
-          trackPlacement="incorporar_ia_como"
+          trackPlacement="incorporar_ia_frentes"
         />
       </section>
 
-      {/* 5. Cierre y formulario, sobre blanco: enlaza con el skyline */}
+      {/* 4. Lo que te queda */}
+      <section
+        className={`w-full bg-black text-white rounded-t-[50px] -mt-10 relative z-3 ${CANAL} pt-16 pb-24 lg:pt-20 lg:pb-28`}
+      >
+        <h2 className={`${H2} mb-10 max-w-4xl`}>{T.queda.titulo}</h2>
+        <ul className="grid md:grid-cols-2 gap-x-12">
+          {T.queda.puntos.map((p, i) => (
+            <li
+              key={p}
+              className="flex gap-5 items-baseline border-t border-white/20 py-6"
+            >
+              <span className="font-hand text-red-500 text-xl md:text-2xl leading-[1.45] shrink-0">
+                {`0${i + 1}`}
+              </span>
+              <span className={`${TEXTO} text-gray-200`}>{p}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* 5. Formulario, sobre blanco: enlaza con el skyline */}
       <section
         id={ANCLA_FORMULARIO}
-        className={`w-full bg-white text-black rounded-t-[50px] -mt-10 relative z-5 scroll-mt-20 ${CANAL} pt-16 pb-20`}
+        className={`w-full bg-white text-black rounded-t-[50px] -mt-10 relative z-4 scroll-mt-20 ${CANAL} pt-16 pb-20`}
       >
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-16">
           <div>
