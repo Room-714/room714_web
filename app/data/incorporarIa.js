@@ -27,7 +27,7 @@ export const INCORPORAR_IA = {
     titular: "Tus empleados usan la IA. ¿Sabes con qué datos?",
     subtitulo: "Sin normas, sin formación y sin nadie que lo controle.",
     texto:
-      "En tres meses lo ponemos en orden: dejamos por escrito las reglas de uso, enseñamos al equipo a usarla bien y decidimos con IT dónde la IA sí aporta.",
+      "Room 714 te ayuda a recuperar el control en tres meses: dejamos por escrito las reglas de uso, enseñamos a tu equipo a usarla bien y decidimos con IT dónde incorporarla para que aporte de verdad.",
     ctaPrincipal: "Reservar sesión de diagnóstico",
     ctaSecundario: "Hacer el inventario de IA",
     nota: "Sesión de diagnóstico de 30 minutos. Te respondemos en 24 h laborables.",

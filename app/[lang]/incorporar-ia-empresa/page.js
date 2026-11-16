@@ -24,9 +24,10 @@ import {
 // en routes.mjs) y, por si acaso, aquí cualquier otro idioma es un 404.
 // Fuera del menú principal; se enlaza desde el footer.
 //
-// Cinco bloques que alternan fondo como la portada: negro (hero, problema e
-// inventario) → blanco (lo que tienes) → negro (cómo) → blanco (formulario,
-// que enlaza con el skyline). Tipografías,
+// Bloques redondeados que se solapan y alternan fondo, como la portada:
+// negro (hero con el dibujo) → rojo (el problema) → negro (inventario) →
+// blanco (lo que tienes) → negro (cómo) → blanco (formulario, que enlaza con
+// el skyline). Tipografías,
 // tarjetas, listas y botones son los del resto del sitio.
 
 const CLAVE = "incorporarIa";
@@ -93,71 +94,80 @@ export default async function IncorporarIaPage({ params }) {
         alternatePaths={{ es: path(CLAVE, "es"), en: path("home", "en") }}
       />
 
-      <main className={`${CANAL} pt-8 pb-24`}>
-        {/* 1. Hero. El H1 es el antetítulo (la búsqueda objetivo); el
-            titular grande es texto destacado, no un segundo H1. */}
-        <header className="max-w-5xl mb-16 lg:mb-24">
-          <h1 className="font-title font-bold text-base md:text-lg lg:text-xl uppercase text-gray-300 mb-4">
-            {T.hero.antetitulo}
-          </h1>
-          <p className="font-title font-black text-4xl md:text-6xl lg:text-7xl text-white leading-tight mb-6">
-            {T.hero.titular}
-          </p>
-          <p className="font-hand text-red-500 text-2xl md:text-3xl lg:text-4xl mb-8 leading-[1.45]">
-            {T.hero.subtitulo}
-          </p>
-          <p className={`${TEXTO} text-gray-300 max-w-4xl mb-10`}>
-            {T.hero.texto}
-          </p>
-          <div className="flex flex-wrap gap-4">
-            <PrimaryButton
-              text={T.hero.ctaPrincipal}
-              isRed={true}
-              href={aFormulario}
-              track="cta_click"
-              trackPlacement="incorporar_ia_hero"
-            />
-            <PrimaryButton
-              text={T.hero.ctaSecundario}
-              href={`#${ANCLA_INVENTARIO}`}
-              track="cta_click"
-              trackPlacement="incorporar_ia_hero_inventario"
-            />
+      <main className={`${CANAL} pt-8 pb-28 lg:pb-32`}>
+        {/* 1. Hero a dos columnas: el problema y la oferta a la izquierda, el
+            dibujo (tus empleados con la IA desbocada) a la derecha. El H1 es
+            el antetítulo (la búsqueda objetivo); el titular grande es texto
+            destacado, no un segundo H1. */}
+        <header className="grid lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] gap-10 lg:gap-12 items-center">
+          <div>
+            <h1 className="font-title font-bold text-base md:text-lg lg:text-xl uppercase text-gray-300 mb-4">
+              {T.hero.antetitulo}
+            </h1>
+            {/* Una frase por línea: así no se parte «la / IA.» */}
+            <p className="font-title font-black text-4xl md:text-5xl leading-tight text-white mb-6">
+              {T.hero.titular.split(/(?<=\.)\s+/).map((frase) => (
+                <span key={frase} className="block">
+                  {frase}
+                </span>
+              ))}
+            </p>
+            <p className="font-hand text-red-500 text-2xl md:text-3xl lg:text-4xl mb-8 leading-[1.45]">
+              {T.hero.subtitulo}
+            </p>
+            <p className={`${TEXTO} text-gray-300 mb-10`}>{T.hero.texto}</p>
+            <div className="flex flex-wrap gap-4">
+              <PrimaryButton
+                text={T.hero.ctaPrincipal}
+                isRed={true}
+                href={aFormulario}
+                track="cta_click"
+                trackPlacement="incorporar_ia_hero"
+              />
+              <PrimaryButton
+                text={T.hero.ctaSecundario}
+                href={`#${ANCLA_INVENTARIO}`}
+                track="cta_click"
+                trackPlacement="incorporar_ia_hero_inventario"
+              />
+            </div>
+            <p className="font-body text-sm md:text-base text-gray-400 leading-normal mt-6">
+              {T.hero.nota}
+            </p>
           </div>
-          <p className="font-body text-sm md:text-base text-gray-400 leading-normal mt-6">
-            {T.hero.nota}
-          </p>
+          <DibujoRobots className="w-full max-w-md mx-auto lg:max-w-none" />
         </header>
-
-        {/* 2. El problema: dibujo a la izquierda, texto alineado a la derecha */}
-        <section className="mb-12 lg:mb-16 grid lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] gap-8 lg:gap-12 items-center">
-          <DibujoRobots className="w-full max-w-sm mx-auto lg:max-w-none" />
-          <div className="text-right">
-            <h2 className={`${H2} text-white mb-8`}>{T.problema.titulo}</h2>
-            <p className={`${TEXTO} text-gray-300 mb-8`}>
-              {T.problema.puntos.join(" ")}
-            </p>
-            <p className="font-hand text-red-500 text-2xl md:text-3xl lg:text-4xl leading-[1.45]">
-              {T.problema.remate}
-            </p>
-          </div>
-        </section>
-
-        {/* El inventario, como comprobación del problema */}
-        <section id={ANCLA_INVENTARIO} className="scroll-mt-28">
-          <h2 className="font-title font-black text-xl md:text-2xl lg:text-3xl text-white mb-3 leading-tight">
-            {T.inventario.titulo}
-          </h2>
-          <p className="font-body text-base md:text-lg lg:text-xl text-gray-300 leading-normal mb-6 max-w-4xl">
-            {T.inventario.texto}
-          </p>
-          <InventarioIA />
-        </section>
       </main>
+
+      {/* 2. El problema, en una banda roja redondeada y centrada: el mismo
+          recurso de «En qué creemos» en Cómo trabajamos. */}
+      <section
+        className={`w-full bg-red-700 text-white rounded-t-[50px] -mt-10 relative z-1 ${CANAL} pt-16 pb-24 lg:pt-20 lg:pb-28 text-center`}
+      >
+        <h2 className={`${H2} mb-8 max-w-4xl mx-auto`}>{T.problema.titulo}</h2>
+        <p className={`${TEXTO} text-white/90 max-w-4xl mx-auto mb-8`}>
+          {T.problema.puntos.join(" ")}
+        </p>
+        <p className="font-hand text-white text-2xl md:text-3xl lg:text-4xl leading-[1.45] max-w-4xl mx-auto">
+          {T.problema.remate}
+        </p>
+      </section>
+
+      {/* El inventario, como comprobación del problema */}
+      <section
+        id={ANCLA_INVENTARIO}
+        className={`w-full bg-black text-white rounded-t-[50px] -mt-10 relative z-2 scroll-mt-20 ${CANAL} pt-16 pb-24 lg:pt-20 lg:pb-28`}
+      >
+        <h2 className={`${H2} mb-4 max-w-4xl`}>{T.inventario.titulo}</h2>
+        <p className="font-body text-base md:text-lg lg:text-xl text-gray-300 leading-normal mb-8 max-w-4xl">
+          {T.inventario.texto}
+        </p>
+        <InventarioIA />
+      </section>
 
       {/* 3. Lo que tienes en tres meses */}
       <section
-        className={`w-full bg-white text-black rounded-t-[50px] relative z-10 ${CANAL} pt-16 pb-24 lg:pt-20 lg:pb-28`}
+        className={`w-full bg-white text-black rounded-t-[50px] -mt-10 relative z-3 ${CANAL} pt-16 pb-24 lg:pt-20 lg:pb-28`}
       >
         <h2 className={`${H2} mb-10 max-w-4xl`}>{T.resultados.titulo}</h2>
         <div className="grid md:grid-cols-3 gap-4">
@@ -179,7 +189,7 @@ export default async function IncorporarIaPage({ params }) {
 
       {/* 4. Cómo lo hacemos */}
       <section
-        className={`w-full bg-black text-white rounded-t-[50px] -mt-10 relative z-20 ${CANAL} pt-16 pb-24 lg:pt-20 lg:pb-28`}
+        className={`w-full bg-black text-white rounded-t-[50px] -mt-10 relative z-4 ${CANAL} pt-16 pb-24 lg:pt-20 lg:pb-28`}
       >
         <h2 className={`${H2} mb-10 max-w-4xl`}>{T.como.titulo}</h2>
         <ol className="flex flex-col mb-8">
@@ -213,7 +223,7 @@ export default async function IncorporarIaPage({ params }) {
       {/* 5. Cierre y formulario, sobre blanco: enlaza con el skyline */}
       <section
         id={ANCLA_FORMULARIO}
-        className={`w-full bg-white text-black rounded-t-[50px] -mt-10 relative z-30 scroll-mt-20 ${CANAL} pt-16 pb-20`}
+        className={`w-full bg-white text-black rounded-t-[50px] -mt-10 relative z-5 scroll-mt-20 ${CANAL} pt-16 pb-20`}
       >
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-16">
           <div>
