@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Navbar from "@/app/components/Navbar";
 import PrimaryButton from "@/app/components/PrimaryButton";
 import CapturaCampana from "@/app/components/incorporarIa/CapturaCampana";
+import DibujoRobots from "@/app/components/incorporarIa/DibujoRobots";
 import FormularioLanding from "@/app/components/incorporarIa/FormularioLanding";
 import InventarioIA from "@/app/components/incorporarIa/InventarioIA";
 import { getDictionary } from "@/app/dictionaries";
@@ -128,27 +129,28 @@ export default async function IncorporarIaPage({ params }) {
           </p>
         </header>
 
-        {/* 2. El problema */}
-        <section className="mb-12 lg:mb-16">
-          <h2 className={`${H2} text-white mb-8 max-w-4xl`}>
-            {T.problema.titulo}
-          </h2>
-          <ul className="flex flex-col gap-5 mb-8">
-            {T.problema.puntos.map((linea) => (
-              <li key={linea} className="flex gap-4">
-                <span
-                  className="font-hand text-red-500 text-xl md:text-2xl shrink-0 leading-tight"
-                  aria-hidden="true"
-                >
-                  ·
-                </span>
-                <p className={`${TEXTO} text-gray-300`}>{linea}</p>
-              </li>
-            ))}
-          </ul>
-          <p className="font-hand text-red-500 text-2xl md:text-3xl lg:text-4xl leading-[1.45]">
-            {T.problema.remate}
-          </p>
+        {/* 2. El problema: dibujo a la izquierda, texto alineado a la derecha */}
+        <section className="mb-12 lg:mb-16 grid lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] gap-8 lg:gap-12 items-center">
+          <DibujoRobots className="w-full max-w-sm mx-auto lg:max-w-none" />
+          <div className="text-right">
+            <h2 className={`${H2} text-white mb-8`}>{T.problema.titulo}</h2>
+            <ul className="flex flex-col gap-5 mb-8">
+              {T.problema.puntos.map((linea) => (
+                <li key={linea} className="flex flex-row-reverse gap-4">
+                  <span
+                    className="font-hand text-red-500 text-xl md:text-2xl shrink-0 leading-tight"
+                    aria-hidden="true"
+                  >
+                    ·
+                  </span>
+                  <p className={`${TEXTO} text-gray-300`}>{linea}</p>
+                </li>
+              ))}
+            </ul>
+            <p className="font-hand text-red-500 text-2xl md:text-3xl lg:text-4xl leading-[1.45]">
+              {T.problema.remate}
+            </p>
+          </div>
         </section>
 
         {/* El inventario, como comprobación del problema */}
