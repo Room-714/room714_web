@@ -37,6 +37,19 @@ const TARJETA = `rounded-4xl bg-[#F2F2F2]
 const H2 = "font-title font-black text-2xl md:text-4xl lg:text-5xl leading-tight";
 const TEXTO = "font-body text-lg md:text-xl lg:text-2xl leading-normal";
 
+/** El texto con una parte en rojo (si la hay). */
+function Destacado({ texto, parte }) {
+  const i = parte ? texto.indexOf(parte) : -1;
+  if (i < 0) return texto;
+  return (
+    <>
+      {texto.slice(0, i)}
+      <span className="text-red-600">{parte}</span>
+      {texto.slice(i + parte.length)}
+    </>
+  );
+}
+
 /** Dos tarjetas claras con título y texto, en dos columnas. */
 function Tarjetas({ bloques }) {
   return (
@@ -44,7 +57,7 @@ function Tarjetas({ bloques }) {
       {bloques.map((b) => (
         <div key={b.titulo} className={TARJETA}>
           <h3 className="font-title font-black text-xl md:text-2xl lg:text-3xl text-black mb-4 leading-tight">
-            {b.titulo}
+            <Destacado texto={b.titulo} parte={b.destacado} />
           </h3>
           <p className="font-body text-base md:text-lg lg:text-xl text-gray-900 leading-normal">
             {b.texto}

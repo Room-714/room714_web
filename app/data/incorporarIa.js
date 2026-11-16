@@ -53,11 +53,13 @@ export const INCORPORAR_IA = {
     bloques: [
       {
         titulo: "Que tus empleados sepan cómo usarla.",
+        destacado: "tus empleados", // en rojo
         texto:
           "Formación práctica orientada al uso consciente de la IA: cinco sesiones de dos horas, en remoto, con casos reales de su propio trabajo y sin necesidad de base técnica.",
       },
       {
         titulo: "Que tu empresa sepa dónde aplicarla.",
+        destacado: "tu empresa", // en rojo
         texto:
           "Tres meses de consultoría junto a IT y dirección, en tres fases (situación actual, caminos de evolución y plan de proyectos), que fijan un plan estratégico para incorporar la IA en tus procesos.",
       },
