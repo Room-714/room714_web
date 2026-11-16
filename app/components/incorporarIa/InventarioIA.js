@@ -11,7 +11,7 @@ import { path } from "@/app/lib/routes.mjs";
 import { CIERRE, PREGUNTAS, diagnostico, respuestasVacias } from "@/app/lib/inventarioIa";
 
 // Cuestionario de IA: siete preguntas, una por pantalla. Al terminar enseña
-// el nivel de gravedad (titular y texto) y pide el email para enviar el
+// el nivel de criticidad (titular y texto) y pide el email para enviar el
 // diagnóstico completo: normativa y tres primeros pasos. El servidor lo
 // recalcula y guarda el contacto en Lead. Las opciones usan las
 // pastillas del formulario de Hablemos, los botones son PrimaryButton y el
@@ -140,7 +140,7 @@ export default function InventarioIA() {
     return (
       <div className={contenedor}>
         <p className={`font-body font-bold text-sm md:text-base uppercase tracking-wide mb-2 ${grave ? "text-red-600" : "text-gray-600"}`}>
-          {`Nivel de gravedad: ${d.etiqueta}`}
+          {d.etiqueta}
         </p>
         <p
           ref={titularRef}

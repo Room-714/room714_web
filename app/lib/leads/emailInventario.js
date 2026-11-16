@@ -4,7 +4,7 @@ import { SITE_URL } from "@/app/lib/seo/urls";
 import { path } from "@/app/lib/routes.mjs";
 
 // Email que recibe quien termina el cuestionario de IA: su diagnóstico
-// completo (nivel de gravedad, lo que dice la normativa y sus tres primeros
+// completo (nivel de criticidad, lo que dice la normativa y sus tres primeros
 // pasos) y el cierre con el enlace a Hablemos.
 // HTML de tablas y estilos en línea, que es lo que respetan los clientes de
 // correo. Sin logo en imagen: Gmail no pinta SVG.
@@ -49,7 +49,7 @@ export function htmlInventario(d) {
     Room 714
   </td></tr>
   <tr><td style="padding:32px;">
-    <p style="margin:0 0 8px;font-family:${FUENTE};font-size:14px;text-transform:uppercase;font-weight:700;color:#6B7280;">Tu diagnóstico de IA · Nivel <span style="color:${colorNivel(d.nivel)};">${e(d.etiqueta)}</span></p>
+    <p style="margin:0 0 8px;font-family:${FUENTE};font-size:14px;text-transform:uppercase;font-weight:700;color:#6B7280;">Tu diagnóstico de IA · <span style="color:${colorNivel(d.nivel)};">${e(d.etiqueta)}</span></p>
     <h1 style="margin:0 0 16px;font-family:${TITULAR};font-size:26px;line-height:1.25;font-weight:900;color:${colorNivel(d.nivel)};">${e(d.titular)}</h1>
     ${parrafo(e(d.texto))}
     ${normativa}
@@ -81,7 +81,7 @@ export function htmlInventario(d) {
 
 export function textoInventario(d) {
   return [
-    `Tu diagnóstico de IA · Nivel ${d.etiqueta}`,
+    `Tu diagnóstico de IA · ${d.etiqueta}`,
     "",
     d.titular,
     d.texto,
