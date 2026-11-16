@@ -29,7 +29,17 @@ const REVERTIR = process.argv.find((a) => a.startsWith("--revertir="))?.split("=
 const DATOS = path.join(process.cwd(), "seo", "enlaces-ia-empresa.data.json");
 const BACKUPS = path.join(process.cwd(), "scripts", "backups");
 
-const textoPlano = (html) => html.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
+/** Texto sin etiquetas, solo para comparar el inicio de un párrafo. Repite la
+ *  limpieza hasta que no cambia, para que no quede ninguna etiqueta a medias. */
+function textoPlano(html) {
+  let previo;
+  let texto = html;
+  do {
+    previo = texto;
+    texto = texto.replace(/<[^>]*>/g, "");
+  } while (texto !== previo);
+  return texto.replace(/[<>]/g, "").replace(/\s+/g, " ").trim();
+}
 
 /** Los <p>…</p> del cuerpo, con su posición. */
 function parrafos(html) {
