@@ -32,6 +32,7 @@ const PAGE_NAMES = {
     privacy: "Política de Privacidad",
     terms: "Términos",
     cookies: "Política de Cookies",
+    "incorporar-ia-empresa": "Incorporar la IA en tu empresa",
   },
 };
 

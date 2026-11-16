@@ -69,8 +69,10 @@ export async function proxy(request) {
 
 export default proxy;
 
+// Los .pdf y .docx (public/descargas) van sin prefijo de idioma: sin la
+// exclusión, /descargas/x.pdf se redirigía a /es/descargas/x.pdf, que es 404.
 export const config = {
   matcher: [
-    "/((?!api|llms\\.txt|robots\\.txt|sitemap\\.xml|_next/static|_next/image|favicon.ico|.*\\.svg$|.*\\.png$|.*\\.jpg$|.*\\.mp4$|.*\\.webm$|.*\\.ogg$).*)",
+    "/((?!api|llms\\.txt|robots\\.txt|sitemap\\.xml|_next/static|_next/image|favicon.ico|.*\\.svg$|.*\\.png$|.*\\.jpg$|.*\\.mp4$|.*\\.webm$|.*\\.ogg$|.*\\.pdf$|.*\\.docx$).*)",
   ],
 };

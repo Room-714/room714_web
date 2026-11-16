@@ -21,6 +21,7 @@ import {
 } from "@/app/lib/seo/schema";
 import { LINKEDIN_COMPANY, withUtm } from "@/app/lib/links";
 import { path } from "@/app/lib/routes.mjs";
+import { INCORPORAR_IA } from "@/app/data/incorporarIa";
 import AnalyticsEvents from "@/app/components/AnalyticsEvents";
 import KitConsultingFooter from "@/app/components/KitConsultingFooter";
 import { Analytics } from "@vercel/analytics/next";
@@ -243,8 +244,9 @@ export default async function RootLayout({ children, params }) {
             {/* LINKS PRIVACY, COOKIES AND TERMS */}
             {/* Diagnóstico y Empleo bajan aquí desde el menú: conservan su
                 URL y siguen accesibles, con el mismo estilo que los
-                legales. */}
-            <div className="flex justify-center items-center gap-x-3 md:gap-x-6 text-white text-sm sm:text-base md:text-xl lg:text-2xl font-light">
+                legales. Con el enlace de IA en tu empresa ya no caben en una
+                fila de móvil: flex-wrap los pasa a dos. */}
+            <div className="flex flex-wrap justify-center items-center gap-x-3 gap-y-3 md:gap-x-6 px-6 text-white text-sm sm:text-base md:text-xl lg:text-2xl font-light">
               <Link
                 href={path("empleo", lang)}
                 className="hover:text-red-500 transition-colors duration-300"
@@ -252,6 +254,18 @@ export default async function RootLayout({ children, params }) {
                 {dict.nav.careers}
               </Link>
               <span className="w-px h-5 bg-white" aria-hidden="true" />
+              {/* La landing de IA en tu empresa solo existe en castellano. */}
+              {lang === "es" && (
+                <>
+                  <Link
+                    href={path("incorporarIa", "es")}
+                    className="hover:text-red-500 transition-colors duration-300"
+                  >
+                    {INCORPORAR_IA.footer}
+                  </Link>
+                  <span className="w-px h-5 bg-white" aria-hidden="true" />
+                </>
+              )}
               <Link
                 href={path("privacidad", lang)}
                 className="hover:text-red-500 transition-colors duration-300"

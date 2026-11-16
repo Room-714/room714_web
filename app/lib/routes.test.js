@@ -4,8 +4,10 @@ import {
   EN_SITEMAP,
   ROUTES,
   RENOMBRADAS,
+  SOLO_ES,
   TODAS,
   guardasDeIdioma,
+  guardasSoloEs,
   path,
   pathsOf,
 } from "@/app/lib/routes.mjs";
@@ -177,5 +179,29 @@ describe("EN_SITEMAP", () => {
     ]) {
       expect(EN_SITEMAP).toContain(clave);
     }
+  });
+});
+
+describe("SOLO_ES", () => {
+  it("la landing de IA en tu empresa solo existe en castellano", () => {
+    expect(path("incorporarIa", "es")).toBe("/es/incorporar-ia-empresa");
+    expect(() => path("incorporarIa", "en")).toThrow(/castellano/);
+  });
+
+  it("no choca con ninguna ruta bilingüe", () => {
+    const rutasEs = new Set(Object.values(TODAS).map((r) => r.es));
+    for (const ruta of Object.values(SOLO_ES)) expect(rutasEs.has(ruta)).toBe(false);
+  });
+
+  it("su versión bajo /en va a la portada inglesa, sin cadenas", () => {
+    expect(guardasSoloEs()).toContainEqual({
+      de: "/en/incorporar-ia-empresa",
+      a: "/en",
+    });
+    const origenes = new Set([
+      ...guardasDeIdioma().map((g) => g.de),
+      ...RENOMBRADAS.map((r) => r.de),
+    ]);
+    expect(origenes.has("/en")).toBe(false);
   });
 });

@@ -82,6 +82,14 @@ export default async function PrivacyPage({ params }) {
             <p>{dict.privacy.cv_text}</p>
           </section>
 
+          {/* Formularios de contacto y cuestionario de IA */}
+          <section>
+            <h2 className="font-title text-xl font-bold mb-4 uppercase tracking-wider text-red-600">
+              5. {dict.privacy.forms_title}
+            </h2>
+            <p>{dict.privacy.forms_text}</p>
+          </section>
+
           <p className="text-base text-red-500 pt-10">
             <strong>{dict.privacy.last_update.text}:</strong>{" "}
             {dict.privacy.last_update.date}

@@ -126,6 +126,22 @@ export function situacion(clave) {
                   </div>
                 ))}
               </div>
+              {/* Enlace a una página hermana (hoy solo IA en el producto, en
+                  castellano, hacia «Incorporar la IA en tu empresa») */}
+              {t.verTambien && (
+                <p className="font-body text-base md:text-lg text-gray-400 leading-normal mt-8">
+                  {t.verTambien.antes}
+                  <Link
+                    href={path(t.verTambien.clave, lang)}
+                    data-track="cta_click"
+                    data-track-placement={`situacion_${clave}_ver_tambien`}
+                    className="text-white underline hover:text-red-500"
+                  >
+                    {t.verTambien.enlace}
+                  </Link>
+                  {t.verTambien.despues}
+                </p>
+              )}
             </Seccion>
 
             {/* Lo hemos hecho antes */}

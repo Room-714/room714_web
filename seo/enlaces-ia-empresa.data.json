@@ -1,0 +1,30 @@
+{
+  "nota": "Fase 4 de la landing «Incorporar la IA en tu empresa». Una frase al final del párrafo indicado (índice entre los <p> del cuerpo; se comprueba que empiece por `inicio`). Solo posts en castellano: la landing no tiene versión inglesa. Aprobado por José Antonio el 2026-11-16. Aplicar DESPUÉS de desplegar la landing.",
+  "href": "/es/incorporar-ia-empresa",
+  "posts": [
+    {
+      "slug": "orquestacion-herramientas-ia-problema-no-es-cuantas-usas",
+      "parrafo": 17,
+      "inicio": "Hay señales bastante claras de que un stack de herramientas de IA",
+      "fraseHtml": "Un buen punto de partida es hacer un <a href=\"/es/incorporar-ia-empresa\">inventario de la IA que se usa en la empresa</a>: qué herramientas, quién las usa y con qué datos."
+    },
+    {
+      "slug": "delegacion-ia-la-pregunta-de-gestion-mas-antigua-tiene-respuesta-nueva",
+      "parrafo": 25,
+      "inicio": "Hay una dimensión de la delegación en IA que no aparece",
+      "fraseHtml": "Por eso, cuando ayudamos a <a href=\"/es/incorporar-ia-empresa\">incorporar la IA en una empresa</a>, enseñamos a la plantilla a revisar lo que produce la IA, no solo a pedírselo."
+    },
+    {
+      "slug": "el-peligro-silencioso-de-la-ia-dejas-de-pensar",
+      "parrafo": 22,
+      "inicio": "Hay una salida práctica.",
+      "fraseHtml": "Es el enfoque con el que ayudamos a las empresas a <a href=\"/es/incorporar-ia-empresa\">incorporar la IA con orden</a>: no va de prohibir, sino de enseñar."
+    },
+    {
+      "slug": "business-first-intelligence-la-ia-como-estrategia-de-negocio",
+      "parrafo": 5,
+      "inicio": "En Room 714, creemos que la IA solo brilla",
+      "fraseHtml": "Es el trabajo que hacemos con dirección e IT para <a href=\"/es/incorporar-ia-empresa\">decidir dónde aplicar la IA en tus procesos</a> y con qué prioridad."
+    }
+  ]
+}

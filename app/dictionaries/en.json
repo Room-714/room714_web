@@ -532,7 +532,8 @@
       "link": "Back to home"
     },
     "buttons": {
-      "send": "get in touch"
+      "send": "get in touch",
+      "sending": "sending…"
     },
     "hero": {
       "title": "What is bugging you?",
@@ -884,17 +885,20 @@
     "purpose_title": "Why do we use your data?",
     "purpose_text": "We process the information you provide for the following purposes:",
     "purpose_items": [
-      "Responding to enquiries sent via contact email.",
+      "Responding to enquiries sent via email and our contact forms.",
+  "Sending you the result of the AI questionnaire and the templates that come with it, if you ask for them.",
       "Analysing website usage through cookies to improve user experience.",
       "Managing potential commercial and professional relationships."
     ],
     "rights_title": "Your Rights",
     "rights_text": "You can exercise your rights of access, rectification, deletion, and objection by sending an email to hello@room714.com.",
     "cv_title": "Job applications and CVs",
+    "forms_title": "Contact forms and AI questionnaire",
+    "forms_text": "When you write to us from «Let's talk» or answer the AI questionnaire on our Spanish page «Incorporar la IA en tu empresa», we store the data you give us (name, company, email, message, number of employees and, in the questionnaire, your answers), together with the campaign that brought you to the website, if any (utm and gclid parameters). We use them to reply to you, send you the questionnaire result and the templates, and manage a potential commercial relationship. We do not share them with third parties: only the providers that host the website, the database and our email sending have access to them.",
     "cv_text": "If you send us your CV through our Careers page, we retain the data it contains (including the PDF itself) for a maximum of 1 month for the sole purpose of evaluating you for current or future selection processes. After that period, the CV and all associated data are automatically deleted. You can request early deletion by writing to rrhh@room714.com.",
     "last_update": {
       "text": "Last updated",
-      "date": "June 2026"
+      "date": "November 2026"
     }
   },
   "terms": {

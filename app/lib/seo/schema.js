@@ -84,6 +84,11 @@ const SERVICES = {
     es: "Desarrollo de producto digital desde la idea",
     en: "Digital product development from the idea",
   },
+  // Landing de campaña, solo en castellano y solo para España.
+  incorporarIa: {
+    es: "Consultoría para incorporar la IA en la empresa",
+    areaServed: { "@type": "Country", name: "España" },
+  },
 };
 
 /**
@@ -102,6 +107,9 @@ export function serviceSchema({ clave, lang, url, description }) {
     description,
     url,
     provider: { "@id": ORGANIZATION_ID },
+    ...(SERVICES[clave].areaServed
+      ? { areaServed: SERVICES[clave].areaServed }
+      : {}),
   };
 }
 

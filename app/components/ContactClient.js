@@ -3,9 +3,8 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams, useSearchParams } from "next/navigation";
-import { Send, CheckCircle2, Loader2 } from "lucide-react";
-import PrimaryButton from "@/app/components/PrimaryButton";
-import { trackEvent } from "@/app/lib/analytics";
+import { CheckCircle2 } from "lucide-react";
+import ContactForm from "@/app/components/ContactForm";
 import { path } from "@/app/lib/routes.mjs";
 import { CLAVES_SITUACION } from "@/app/data/Situaciones";
 import { CANAL } from "@/app/lib/layout";
@@ -35,6 +34,8 @@ export default function ContactClient({ dict }) {
   const [status, setStatus] = useState("idle");
   // El valor inicial se deriva de la URL en lugar de fijarse en un efecto:
   // así la pastilla ya viene marcada en el HTML del servidor y no parpadea.
+  // El envío y los campos viven en ContactForm, que se reutiliza en la
+  // landing de IA en tu empresa.
   const [producto, setProducto] = useState(elegidaEnLaUrl);
 
   // El efecto es para cuando se llega por navegación de cliente, donde el
@@ -44,35 +45,6 @@ export default function ContactClient({ dict }) {
     if (elegida) setProducto(elegida);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [desdeDiagnostico]);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setStatus("loading");
-    const formData = new FormData(e.target);
-    const data = {
-      name: formData.get("name"),
-      email: formData.get("email"),
-      company: formData.get("company"),
-      message: formData.get("message"),
-      // El API espera un array; aquí solo puede haber una situación.
-      interests: producto ? [producto] : [],
-    };
-
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-
-      if (res.ok) {
-        setStatus("success");
-        trackEvent("contact_form_submit", { lang, producto: producto ?? "sin indicar" });
-      } else setStatus("error");
-    } catch (error) {
-      setStatus("error");
-    }
-  };
 
   return (
     <main className="bg-black text-white relative overflow-hidden flex flex-col">
@@ -172,112 +144,12 @@ export default function ContactClient({ dict }) {
                     {f.lead}
                   </p>
 
-                  <form
-                    onSubmit={handleSubmit}
-                    className="w-full flex flex-col gap-6"
-                  >
-                    {/* 1. Qué producto es */}
-                    <div className="flex flex-col gap-4">
-                      <p className="font-body font-bold text-sm sm:text-base md:text-lg lg:text-xl uppercase">
-                        {f.q1}
-                      </p>
-                      <div className="flex flex-wrap gap-3">
-                        {f.q1_opciones.map((item) => (
-                          <button
-                            key={item}
-                            type="button"
-                            aria-pressed={producto === item}
-                            onClick={() => setProducto(item)}
-                            className={`px-6 py-1 border rounded-full text-xs sm:text-sm md:text-base lg:text-lg font-bold transition-all ${
-                              producto === item
-                                ? "bg-white text-black border-white"
-                                : "border-white hover:bg-white/10"
-                            }`}
-                          >
-                            {item}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* 2. Qué no está funcionando */}
-                    <div className="flex flex-col gap-3">
-                      <label
-                        htmlFor="message"
-                        className="font-body font-bold text-sm sm:text-base md:text-lg lg:text-xl uppercase"
-                      >
-                        {f.q2}
-                      </label>
-                      <textarea
-                        id="message"
-                        name="message"
-                        required
-                        rows={4}
-                        placeholder={f.q2_ayuda}
-                        className="w-full bg-[#E5E5E5] text-gray-700 font-bold rounded-3xl px-6 py-4 outline-none placeholder:font-normal placeholder:text-gray-500"
-                      />
-                    </div>
-
-                    {/* 3. Quién eres y cómo te contactamos */}
-                    <div className="flex flex-col gap-3">
-                      <label
-                        htmlFor="name"
-                        className="font-body font-bold text-sm sm:text-base md:text-lg lg:text-xl uppercase"
-                      >
-                        {f.q3_nombre}
-                      </label>
-                      <input
-                        id="name"
-                        name="name"
-                        required
-                        type="text"
-                        className="w-full bg-[#E5E5E5] text-gray-700 font-bold rounded-full px-6 py-3 outline-none"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-3">
-                      <label
-                        htmlFor="company"
-                        className="font-body font-bold text-sm sm:text-base md:text-lg lg:text-xl uppercase"
-                      >
-                        {f.q3_empresa}
-                      </label>
-                      <input
-                        id="company"
-                        name="company"
-                        type="text"
-                        className="w-full bg-[#E5E5E5] text-gray-700 font-bold rounded-full px-6 py-3 outline-none"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-3">
-                      <label
-                        htmlFor="email"
-                        className="font-body font-bold text-sm sm:text-base md:text-lg lg:text-xl uppercase"
-                      >
-                        {f.q3_email}
-                      </label>
-                      <input
-                        id="email"
-                        name="email"
-                        required
-                        type="email"
-                        className="w-full bg-[#E5E5E5] text-gray-700 font-bold rounded-full px-6 py-3 outline-none"
-                      />
-                    </div>
-
-                    <div className="flex justify-center lg:justify-end mt-4">
-                      <PrimaryButton
-                        text={
-                          status === "loading" ? t.buttons.sending : f.enviar
-                        }
-                        isRed={true}
-                        icon={status === "loading" ? Loader2 : Send}
-                        type="submit"
-                        className={
-                          status === "loading" ? "opacity-70 pointer-events-none" : ""
-                        }
-                      />
-                    </div>
-                  </form>
+                  <ContactForm
+                    dict={dict}
+                    producto={producto}
+                    onProducto={setProducto}
+                    onEnviado={() => setStatus("success")}
+                  />
                 </div>
               </div>
             </div>

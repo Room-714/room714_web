@@ -116,3 +116,28 @@ model Candidate {
 
   @@index([expiresAt])
 }
+
+// Contactos que llegan desde la web: el formulario de Hablemos, el de la
+// landing de formación en IA y el inventario de IA. Antes no se guardaban en
+// ningún sitio: solo llegaba un email. `origen` dice de dónde vino.
+model Lead {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  origen      String
+  email       String
+  nombre      String?
+  empresa     String?
+  mensaje     String?  @db.Text
+  situacion   String?
+  empleados   String?
+  // Respuestas del inventario de IA y su resultado, tal como se vieron.
+  respuestas  Json?
+  utmSource   String?
+  utmMedium   String?
+  utmCampaign String?
+  utmTerm     String?
+  gclid       String?
+
+  @@index([createdAt])
+  @@index([origen])
+}
