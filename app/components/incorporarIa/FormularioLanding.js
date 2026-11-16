@@ -28,7 +28,7 @@ export default function FormularioLanding({ dict }) {
   return (
     <ContactForm
       dict={dict}
-      variante="formacionIa"
+      variante="incorporarIa"
       claro
       onEnviado={() => setEnviado(true)}
     />

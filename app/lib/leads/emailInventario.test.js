@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { htmlInventario, textoInventario, urlFormulario } from "@/app/lib/leads/emailInventario";
 import { PUNTOS, calcularResultado } from "@/app/lib/inventarioIa";
-import { DESCARGAS } from "@/app/data/formacionIa";
+import { DESCARGAS } from "@/app/data/incorporarIa";
 
 const base = {
   herramientas: ["chat"],
@@ -22,7 +22,7 @@ describe("email del inventario", () => {
       expect(html).toContain(`https://www.room714.com${d.docx}`);
     }
     expect(urlFormulario()).toBe(
-      "https://www.room714.com/es/formacion-consultoria-ia-empresas#hablemos",
+      "https://www.room714.com/es/incorporar-ia-empresa#hablemos",
     );
     expect(html).toContain(urlFormulario());
     expect(html).toContain("José Antonio Ces");

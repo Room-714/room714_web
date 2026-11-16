@@ -1,4 +1,4 @@
-// Inventario de IA de la landing de formación: preguntas y reglas del
+// Inventario de IA de la landing de IA en tu empresa: preguntas y reglas del
 // resultado. Módulo puro, sin React ni servidor, porque lo usan los dos: el
 // navegador para pintar el resultado y la API para recalcularlo (no se fía
 // del que mande el cliente) y escribir el email.

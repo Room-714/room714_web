@@ -1,6 +1,6 @@
 import { escaparHtml as e } from "@/app/lib/leads/email";
 import { NOTA_RESULTADO, PUNTOS } from "@/app/lib/inventarioIa";
-import { ANCLA_FORMULARIO, DESCARGAS } from "@/app/data/formacionIa";
+import { ANCLA_FORMULARIO, DESCARGAS } from "@/app/data/incorporarIa";
 import { SITE_URL } from "@/app/lib/seo/urls";
 import { path } from "@/app/lib/routes.mjs";
 
@@ -16,7 +16,7 @@ const FUENTE = "Gantari, Montserrat, Helvetica, Arial, sans-serif";
 const TITULAR = `Montserrat, ${FUENTE}`;
 
 export function urlFormulario() {
-  return `${SITE_URL}${path("formacionIa", "es")}#${ANCLA_FORMULARIO}`;
+  return `${SITE_URL}${path("incorporarIa", "es")}#${ANCLA_FORMULARIO}`;
 }
 
 const puntosDe = (resultado) =>

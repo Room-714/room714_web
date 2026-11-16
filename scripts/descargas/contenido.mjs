@@ -1,4 +1,4 @@
-// Texto de los dos documentos descargables de la landing de formación en IA.
+// Texto de los dos documentos descargables de la landing de IA en tu empresa.
 // Lo comparten la versión PDF y la DOCX (scripts/generar-descargas.mjs), así
 // que solo hay un sitio donde corregir una frase. Es el texto aprobado, tal
 // cual. Los textos entre corchetes son huecos que rellena la empresa: el

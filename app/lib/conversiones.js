@@ -3,7 +3,7 @@
 import { trackEvent } from "@/app/lib/analytics";
 
 /**
- * Las conversiones de la landing de formación en IA pasan todas por aquí:
+ * Las conversiones de la landing de IA en tu empresa pasan todas por aquí:
  * `inventario_terminado` y `diagnostico_solicitado`.
  *
  * ESTE es el único punto donde se añadirá la etiqueta de conversión de Google

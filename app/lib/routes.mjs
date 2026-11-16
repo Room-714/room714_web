@@ -66,7 +66,7 @@ export const TODAS = { ...ROUTES, ...CASOS };
  * hreflang, guardas) da por hecho que hay versión inglesa.
  */
 export const SOLO_ES = {
-  formacionIa: "/formacion-consultoria-ia-empresas",
+  incorporarIa: "/incorporar-ia-empresa",
 };
 
 export const IDIOMAS = ["es", "en"];

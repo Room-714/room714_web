@@ -183,9 +183,9 @@ describe("EN_SITEMAP", () => {
 });
 
 describe("SOLO_ES", () => {
-  it("la landing de formación en IA solo existe en castellano", () => {
-    expect(path("formacionIa", "es")).toBe("/es/formacion-consultoria-ia-empresas");
-    expect(() => path("formacionIa", "en")).toThrow(/castellano/);
+  it("la landing de IA en tu empresa solo existe en castellano", () => {
+    expect(path("incorporarIa", "es")).toBe("/es/incorporar-ia-empresa");
+    expect(() => path("incorporarIa", "en")).toThrow(/castellano/);
   });
 
   it("no choca con ninguna ruta bilingüe", () => {
@@ -195,7 +195,7 @@ describe("SOLO_ES", () => {
 
   it("su versión bajo /en va a la portada inglesa, sin cadenas", () => {
     expect(guardasSoloEs()).toContainEqual({
-      de: "/en/formacion-consultoria-ia-empresas",
+      de: "/en/incorporar-ia-empresa",
       a: "/en",
     });
     const origenes = new Set([

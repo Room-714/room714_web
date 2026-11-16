@@ -2,9 +2,9 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import Navbar from "@/app/components/Navbar";
 import PrimaryButton from "@/app/components/PrimaryButton";
-import CapturaCampana from "@/app/components/formacionIa/CapturaCampana";
-import FormularioLanding from "@/app/components/formacionIa/FormularioLanding";
-import InventarioIA from "@/app/components/formacionIa/InventarioIA";
+import CapturaCampana from "@/app/components/incorporarIa/CapturaCampana";
+import FormularioLanding from "@/app/components/incorporarIa/FormularioLanding";
+import InventarioIA from "@/app/components/incorporarIa/InventarioIA";
 import { getDictionary } from "@/app/dictionaries";
 import { SITE_URL } from "@/app/lib/seo/urls";
 import { socialMeta } from "@/app/lib/seo/social";
@@ -14,10 +14,10 @@ import { CANAL } from "@/app/lib/layout";
 import {
   ANCLA_FORMULARIO,
   ANCLA_INVENTARIO,
-  FORMACION_IA as T,
-} from "@/app/data/formacionIa";
+  INCORPORAR_IA as T,
+} from "@/app/data/incorporarIa";
 
-// Landing de campaña «Formación y consultoría de IA para empresas».
+// Landing de campaña «Incorporar la IA en tu empresa».
 //
 // Solo en castellano: /en/<ruta> redirige a la portada inglesa (guardasSoloEs
 // en routes.mjs) y, por si acaso, aquí cualquier otro idioma es un 404.
@@ -28,7 +28,7 @@ import {
 // que enlaza con el skyline). Tipografías,
 // tarjetas, listas y botones son los del resto del sitio.
 
-const CLAVE = "formacionIa";
+const CLAVE = "incorporarIa";
 const URL_PAGINA = `${SITE_URL}${path(CLAVE, "es")}`;
 
 // La tarjeta clara con cuadrícula de "Lo hemos hecho antes".
@@ -61,7 +61,7 @@ export async function generateMetadata({ params }) {
   };
 }
 
-export default async function FormacionIaPage({ params }) {
+export default async function IncorporarIaPage({ params }) {
   const { lang } = await params;
   if (lang !== "es") notFound();
 
@@ -114,13 +114,13 @@ export default async function FormacionIaPage({ params }) {
               isRed={true}
               href={aFormulario}
               track="cta_click"
-              trackPlacement="formacion_ia_hero"
+              trackPlacement="incorporar_ia_hero"
             />
             <PrimaryButton
               text={T.hero.ctaSecundario}
               href={`#${ANCLA_INVENTARIO}`}
               track="cta_click"
-              trackPlacement="formacion_ia_hero_inventario"
+              trackPlacement="incorporar_ia_hero_inventario"
             />
           </div>
           <p className="font-body text-sm md:text-base text-gray-400 leading-normal mt-6">
@@ -160,9 +160,6 @@ export default async function FormacionIaPage({ params }) {
             {T.inventario.texto}
           </p>
           <InventarioIA />
-          <p className="font-body text-sm md:text-base text-gray-400 leading-normal mt-4">
-            {T.inventario.nota}
-          </p>
         </section>
       </main>
 
@@ -217,7 +214,7 @@ export default async function FormacionIaPage({ params }) {
           isRed={true}
           href={aFormulario}
           track="cta_click"
-          trackPlacement="formacion_ia_como"
+          trackPlacement="incorporar_ia_como"
         />
       </section>
 

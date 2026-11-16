@@ -35,7 +35,7 @@ export default function ContactClient({ dict }) {
   // El valor inicial se deriva de la URL en lugar de fijarse en un efecto:
   // así la pastilla ya viene marcada en el HTML del servidor y no parpadea.
   // El envío y los campos viven en ContactForm, que se reutiliza en la
-  // landing de formación en IA.
+  // landing de IA en tu empresa.
   const [producto, setProducto] = useState(elegidaEnLaUrl);
 
   // El efecto es para cuando se llega por navegación de cliente, donde el

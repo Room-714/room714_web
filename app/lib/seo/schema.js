@@ -85,8 +85,8 @@ const SERVICES = {
     en: "Digital product development from the idea",
   },
   // Landing de campaña, solo en castellano y solo para España.
-  formacionIa: {
-    es: "Formación y consultoría de IA para empresas",
+  incorporarIa: {
+    es: "Consultoría para incorporar la IA en la empresa",
     areaServed: { "@type": "Country", name: "España" },
   },
 };

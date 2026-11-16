@@ -15,12 +15,13 @@ import {
   calcularResultado,
   respuestasVacias,
 } from "@/app/lib/inventarioIa";
-import { ANCLA_FORMULARIO } from "@/app/data/formacionIa";
+import { ANCLA_FORMULARIO } from "@/app/data/incorporarIa";
 
 // Inventario de IA: cinco preguntas, una por pantalla, resultado y envío por
 // email. Componente nuevo (no había nada parecido): las opciones usan las
 // pastillas del formulario de Hablemos, los botones son PrimaryButton y el
-// contenedor es el de los campos del formulario sobre fondo negro.
+// contenedor es el gris claro de las tarjetas del sitio, para que destaque
+// sobre el fondo negro de la sección.
 //
 // Las respuestas viven en el estado de este componente y no salen del
 // navegador hasta que se pide el resultado por email.
@@ -34,11 +35,11 @@ const TOTAL = PREGUNTAS.length;
 const PASO_RESULTADO = TOTAL;
 const PASO_HECHO = TOTAL + 1;
 
-const PASTILLA = `flex items-center gap-3 px-5 py-2 border border-white rounded-full
+const PASTILLA = `flex items-center gap-3 px-5 py-2 border border-black rounded-full
   text-sm md:text-base lg:text-lg font-bold cursor-pointer transition-all select-none
-  hover:bg-white/10
-  has-checked:bg-white has-checked:text-black
-  has-focus-visible:ring-2 has-focus-visible:ring-red-500 has-focus-visible:ring-offset-2 has-focus-visible:ring-offset-black`;
+  hover:bg-black/5
+  has-checked:bg-black has-checked:text-white
+  has-focus-visible:ring-2 has-focus-visible:ring-red-500 has-focus-visible:ring-offset-2 has-focus-visible:ring-offset-[#F2F2F2]`;
 
 export default function InventarioIA() {
   const [paso, setPaso] = useState(0);
@@ -105,9 +106,9 @@ export default function InventarioIA() {
   };
 
   const contenedor =
-    "rounded-4xl border border-white/30 p-6 md:p-8 lg:p-10 text-white";
+    "rounded-4xl bg-[#F2F2F2] p-6 md:p-8 lg:p-10 text-black";
   const titular =
-    "font-title font-black text-xl md:text-2xl lg:text-3xl text-white leading-tight outline-none";
+    "font-title font-black text-xl md:text-2xl lg:text-3xl text-black leading-tight outline-none";
 
   // --- Confirmación ---------------------------------------------------------
   if (paso === PASO_HECHO) {
@@ -116,7 +117,7 @@ export default function InventarioIA() {
         <p ref={titularRef} tabIndex={-1} className={`${titular} mb-4`}>
           Hecho. Revisa tu correo.
         </p>
-        <p className="font-body text-base md:text-lg lg:text-xl text-gray-300 leading-normal mb-8">
+        <p className="font-body text-base md:text-lg lg:text-xl text-gray-700 leading-normal mb-8">
           Te hemos enviado el resultado de tu inventario y las dos plantillas.
           Si quieres, lo repasamos contigo en la sesión de diagnóstico.
         </p>
@@ -125,7 +126,7 @@ export default function InventarioIA() {
           isRed={true}
           href={`#${ANCLA_FORMULARIO}`}
           track="cta_click"
-          trackPlacement="formacion_ia_inventario_hecho"
+          trackPlacement="incorporar_ia_inventario_hecho"
         />
       </div>
     );
@@ -149,13 +150,13 @@ export default function InventarioIA() {
               >
                 ·
               </span>
-              <p className="font-body text-base md:text-lg lg:text-xl text-gray-300 leading-normal">
+              <p className="font-body text-base md:text-lg lg:text-xl text-gray-800 leading-normal">
                 {p}
               </p>
             </li>
           ))}
         </ul>
-        <p className="font-body text-sm md:text-base text-gray-400 leading-normal mb-8">
+        <p className="font-body text-sm md:text-base text-gray-600 leading-normal mb-8">
           {NOTA_RESULTADO}
         </p>
 
@@ -173,7 +174,7 @@ export default function InventarioIA() {
               type="email"
               required
               autoComplete="email"
-              className="w-full bg-[#E5E5E5] text-gray-700 font-bold rounded-full px-6 py-3 outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+              className="w-full bg-white border border-black/15 text-gray-800 font-bold rounded-full px-6 py-3 outline-none focus-visible:ring-2 focus-visible:ring-red-500"
             />
           </div>
 
@@ -183,7 +184,7 @@ export default function InventarioIA() {
             <input id="inventario-web" name="web" type="text" tabIndex={-1} autoComplete="off" />
           </div>
 
-          <label className="flex items-start gap-3 font-body text-sm md:text-base text-gray-300 leading-normal cursor-pointer">
+          <label className="flex items-start gap-3 font-body text-sm md:text-base text-gray-700 leading-normal cursor-pointer">
             <input
               type="checkbox"
               name="acepta"
@@ -195,7 +196,7 @@ export default function InventarioIA() {
               <Link
                 href={path("privacidad", "es")}
                 target="_blank"
-                className="underline hover:text-red-500"
+                className="underline hover:text-red-600"
               >
                 política de privacidad
               </Link>
@@ -204,7 +205,7 @@ export default function InventarioIA() {
           </label>
 
           {envio === "error" && (
-            <p role="alert" className="font-body text-sm md:text-base text-red-400">
+            <p role="alert" className="font-body text-sm md:text-base text-red-700">
               No hemos podido enviarlo. Inténtalo de nuevo en unos minutos.
             </p>
           )}
@@ -244,7 +245,7 @@ export default function InventarioIA() {
           <span ref={titularRef} tabIndex={-1} className={`block ${titular}`}>
             {pregunta.texto}
           </span>
-          <span className="block font-body text-sm md:text-base text-gray-400 mt-2">
+          <span className="block font-body text-sm md:text-base text-gray-600 mt-2">
             {pregunta.multiple ? "Varias respuestas" : "Una respuesta"}
           </span>
         </legend>

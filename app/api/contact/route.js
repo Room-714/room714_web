@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { guardarLead, normalizarCampana } from "@/app/lib/leads/guardar";
 import { BUZON_CONTACTO, REMITENTE, escaparHtml } from "@/app/lib/leads/email";
-import { ORIGENES } from "@/app/data/formacionIa";
+import { ORIGENES } from "@/app/data/incorporarIa";
 
 const ORIGENES_VALIDOS = new Set([ORIGENES.hablemos, ORIGENES.landing]);
 
@@ -64,7 +64,7 @@ export async function POST(req) {
       replyTo: email,
       subject:
         origen === ORIGENES.landing
-          ? `New Project Inquiry from ${name} · Formación IA`
+          ? `New Project Inquiry from ${name} · IA en tu empresa`
           : `New Project Inquiry from ${name}`,
       html: `
         <div style="font-family: sans-serif; color: #333; max-width: 600px;">

@@ -18,7 +18,7 @@ import {
   htmlInventario,
   textoInventario,
 } from "@/app/lib/leads/emailInventario";
-import { ORIGENES } from "@/app/data/formacionIa";
+import { ORIGENES } from "@/app/data/incorporarIa";
 
 // Recibe el inventario de IA cuando el usuario pide el resultado por email.
 // Es el primer momento en que las respuestas salen del navegador.

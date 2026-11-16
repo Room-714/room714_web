@@ -171,16 +171,16 @@ describe("jobPostingSchema", () => {
   });
 });
 
-describe("serviceSchema de la landing de formación en IA", () => {
+describe("serviceSchema de la landing de IA en tu empresa", () => {
   it("lleva nombre, descripción, proveedor y área España", async () => {
     const { serviceSchema, ORGANIZATION_ID } = await import("./schema");
     const s = serviceSchema({
-      clave: "formacionIa",
+      clave: "incorporarIa",
       lang: "es",
-      url: "https://www.room714.com/es/formacion-consultoria-ia-empresas",
+      url: "https://www.room714.com/es/incorporar-ia-empresa",
       description: "desc",
     });
-    expect(s.name).toBe("Formación y consultoría de IA para empresas");
+    expect(s.name).toBe("Consultoría para incorporar la IA en la empresa");
     expect(s.description).toBe("desc");
     expect(s.provider).toEqual({ "@id": ORGANIZATION_ID });
     expect(s.areaServed).toEqual({ "@type": "Country", name: "España" });

@@ -6,11 +6,11 @@ import PrimaryButton from "@/app/components/PrimaryButton";
 import { trackEvent } from "@/app/lib/analytics";
 import { registrarConversion } from "@/app/lib/conversiones";
 import { leerCampana } from "@/app/lib/campana";
-import { FORMACION_IA, ORIGENES } from "@/app/data/formacionIa";
+import { INCORPORAR_IA, ORIGENES } from "@/app/data/incorporarIa";
 
 // El formulario de "Hablemos", sacado de ContactClient para poder usarlo
-// también en la landing de formación en IA. El marcado y los estilos son los
-// de siempre; lo único que cambia con `variante="formacionIa"`:
+// también en la landing de IA en tu empresa. El marcado y los estilos son los
+// de siempre; lo único que cambia con `variante="incorporarIa"`:
 //
 //   - La primera pregunta ("¿Qué producto es?") no aplica a esta landing y
 //     se sustituye por "Número de empleados", con las mismas pastillas.
@@ -25,7 +25,7 @@ export default function ContactForm({
   producto = null,
   onProducto,
   onEnviado,
-  // Sobre fondo blanco (landing de formación en IA). Las etiquetas heredan
+  // Sobre fondo blanco (landing de IA en tu empresa). Las etiquetas heredan
   // el color del contenedor; aquí solo cambian las pastillas.
   claro = false,
 }) {
@@ -33,8 +33,8 @@ export default function ContactForm({
   const lang = params?.lang || "en";
   const t = dict.contact;
   const f = t.formulario;
-  const esLanding = variante === "formacionIa";
-  const empleados = FORMACION_IA.cierre.empleados;
+  const esLanding = variante === "incorporarIa";
+  const empleados = INCORPORAR_IA.cierre.empleados;
 
   const [status, setStatus] = useState("idle");
   const [numEmpleados, setNumEmpleados] = useState(null);
@@ -70,7 +70,7 @@ export default function ContactForm({
         setStatus("success");
         trackEvent("contact_form_submit", {
           lang,
-          producto: esLanding ? "formacion_ia" : (producto ?? "sin indicar"),
+          producto: esLanding ? "incorporar_ia" : (producto ?? "sin indicar"),
         });
         if (esLanding) {
           registrarConversion("diagnostico_solicitado", {
@@ -146,7 +146,7 @@ export default function ContactForm({
           htmlFor={`${variante}-message`}
           className="font-body font-bold text-sm sm:text-base md:text-lg lg:text-xl uppercase"
         >
-          {esLanding ? FORMACION_IA.cierre.pregunta : f.q2}
+          {esLanding ? INCORPORAR_IA.cierre.pregunta : f.q2}
         </label>
         <textarea
           id={`${variante}-message`}

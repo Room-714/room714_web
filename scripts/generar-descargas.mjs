@@ -1,4 +1,4 @@
-// Genera los dos documentos descargables de la landing de formación en IA,
+// Genera los dos documentos descargables de la landing de IA en tu empresa,
 // cada uno en PDF (para leer) y DOCX (para editar), en public/descargas.
 //
 //   node scripts/generar-descargas.mjs

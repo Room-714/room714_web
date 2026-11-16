@@ -1,4 +1,4 @@
-// Landing de campaña «Formación y consultoría de IA para empresas».
+// Landing de campaña «Incorporar la IA en tu empresa».
 //
 // Solo existe en castellano (la ruta vive en SOLO_ES de app/lib/routes.mjs),
 // así que sus textos van aquí y no en los diccionarios, que son bilingües.
@@ -7,25 +7,27 @@
 // riesgo y el descontrol, en cinco bloques. Textos aprobados por José
 // Antonio; no se reescriben aquí.
 //
-// Formación y consultoría son UN solo producto. Nada de esta página puede
-// sugerir paquetes, niveles ni precio.
+// Tercera revisión (2026-11-16): Room 714 no vende formación en IA, ayuda a
+// incorporar la IA en la empresa. Las sesiones con la plantilla son un medio
+// dentro de ese programa, no el producto. Es UN solo programa: nada de esta
+// página puede sugerir paquetes, niveles ni precio.
 
-export const FORMACION_IA = {
+export const INCORPORAR_IA = {
   seo: {
-    title: "Formación y consultoría de IA para empresas | Room 714",
+    title: "Consultoría para incorporar la IA en tu empresa | Room 714",
     description:
-      "Tu plantilla ya usa IA sin normas. En tres meses la formamos, ponemos reglas por escrito y decidimos con IT dónde incorporarla. En remoto.",
+      "Tu plantilla ya usa IA sin normas. Te ayudamos a incorporarla con orden: reglas por escrito, un equipo que sabe usarla y un plan con IT. En remoto.",
   },
 
   // Texto del enlace del footer.
-  footer: "Formación en IA",
+  footer: "IA en tu empresa",
 
   hero: {
-    antetitulo: "Formación y consultoría de IA para empresas",
+    antetitulo: "Incorporar la IA en tu empresa",
     titular: "Tu plantilla ya usa IA. ¿Sabes con qué datos?",
     subtitulo: "Sin normas, sin formación y sin nadie que lo controle.",
     texto:
-      "En tres meses lo ponemos en orden: formamos a todo el equipo, dejamos por escrito las reglas de uso y decidimos con IT dónde la IA sí aporta.",
+      "En tres meses lo ponemos en orden: dejamos por escrito las reglas de uso, enseñamos al equipo a usarla bien y decidimos con IT dónde la IA sí aporta.",
     ctaPrincipal: "Reservar sesión de diagnóstico",
     ctaSecundario: "Hacer el inventario de IA",
     nota: "Sesión de diagnóstico de 30 minutos. Te respondemos en 24 h laborables.",
@@ -45,7 +47,6 @@ export const FORMACION_IA = {
     titulo: "¿Y en tu empresa? Compruébalo en dos minutos.",
     texto:
       "Cinco preguntas. Al terminar ves los puntos a revisar y te enviamos dos plantillas: una política de uso de IA y la lista de comprobación del artículo 4.",
-    nota: "Tus respuestas no salen de tu navegador hasta que pides el resultado por email.",
   },
 
   resultados: {
@@ -70,7 +71,7 @@ export const FORMACION_IA = {
   },
 
   como: {
-    titulo: "Un solo programa. Formación y consultoría a la vez.",
+    titulo: "Un solo programa: el equipo y la empresa, a la vez.",
     pasos: [
       {
         cuando: "Semana 1",
@@ -79,8 +80,8 @@ export const FORMACION_IA = {
       },
       {
         cuando: "Semanas 2 a 10",
-        titulo: "Formación.",
-        texto: "Cinco sesiones con toda la plantilla. No hace falta base técnica.",
+        titulo: "Equipo.",
+        texto: "Cinco sesiones prácticas con toda la plantilla. No hace falta base técnica.",
       },
       {
         cuando: "Semanas 2 a 12",
