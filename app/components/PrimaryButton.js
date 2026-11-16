@@ -9,6 +9,9 @@ export default function PrimaryButton({
   isRed = false,
   href = null, // Valor por defecto null para que sea opcional
   type = "button", // Útil para formularios
+  // Solo para el <button>: lo desactiva de verdad (teclado incluido) y lo
+  // atenúa. Sin él, el botón es exactamente el de siempre.
+  disabled = false,
   // Analítica: el nombre del evento y en qué parte de la web está el botón.
   // Van como atributos data- porque el clic lo recoge un único oyente
   // (AnalyticsEvents); así este componente sigue siendo de servidor y puede
@@ -22,7 +25,7 @@ export default function PrimaryButton({
     border-2 rounded-full 
     px-4 py-2 w-fit
     transition-all active:scale-95
-    cursor-pointer
+    ${disabled ? "opacity-40 cursor-not-allowed" : "cursor-pointer"}
     ${isRed ? "bg-red-600 border-red-600 hover:bg-red-700" : "bg-white border-black hover:bg-gray-50"}
     ${className}
   `;
@@ -58,6 +61,7 @@ export default function PrimaryButton({
     <button
       type={type}
       onClick={onClick}
+      disabled={disabled}
       className={sharedClasses}
       {...datosDeAnalitica}
     >
