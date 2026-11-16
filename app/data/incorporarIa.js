@@ -16,7 +16,7 @@ export const INCORPORAR_IA = {
   seo: {
     title: "Consultoría para incorporar la IA en tu empresa | Room 714",
     description:
-      "Tu plantilla ya usa IA sin normas. Te ayudamos a incorporarla con orden: reglas por escrito, un equipo que sabe usarla y un plan con IT. En remoto.",
+      "Tus empleados usan la IA sin normas. Te ayudamos a incorporarla con orden: reglas por escrito, un equipo que sabe usarla y un plan con IT. En remoto.",
   },
 
   // Texto del enlace del footer.
@@ -24,7 +24,7 @@ export const INCORPORAR_IA = {
 
   hero: {
     antetitulo: "Incorporar la IA en tu empresa",
-    titular: "Tu plantilla ya usa IA. ¿Sabes con qué datos?",
+    titular: "Tus empleados usan la IA. ¿Sabes con qué datos?",
     subtitulo: "Sin normas, sin formación y sin nadie que lo controle.",
     texto:
       "En tres meses lo ponemos en orden: dejamos por escrito las reglas de uso, enseñamos al equipo a usarla bien y decidimos con IT dónde la IA sí aporta.",
