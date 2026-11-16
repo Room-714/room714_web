@@ -1,36 +1,64 @@
 import { describe, expect, it } from "vitest";
-import { htmlInventario, textoInventario, urlFormulario } from "@/app/lib/leads/emailInventario";
-import { PUNTOS, calcularResultado } from "@/app/lib/inventarioIa";
-import { DESCARGAS } from "@/app/data/incorporarIa";
+import {
+  ASUNTO_INVENTARIO,
+  htmlInventario,
+  textoInventario,
+  urlFormulario,
+} from "@/app/lib/leads/emailInventario";
+import { CIERRE, NIVELES, NORMATIVA, PASOS, diagnostico } from "@/app/lib/inventarioIa";
 
-const base = {
+const CRITICA = {
+  herramientas: ["chat"],
+  quien: ["porSuCuenta"],
+  datos: ["clientes"],
+  normas: ["ninguna"],
+  formacion: ["no"],
+  cuentas: ["personales"],
+  plan: ["no"],
+};
+
+const ORDENADA = {
   herramientas: ["chat"],
   quien: ["equipos"],
   datos: ["documentos"],
   normas: ["politica"],
   formacion: ["adaptada"],
+  cuentas: ["gestionadas"],
+  plan: ["plan"],
 };
 
-describe("email del inventario", () => {
-  it("lleva el resumen, los cuatro enlaces y el enlace al formulario", () => {
-    const r = calcularResultado({ ...base, quien: ["porSuCuenta"] });
-    const html = htmlInventario(r);
-    expect(html).toContain("1 tipo de herramienta en uso y 1 punto a revisar.");
-    expect(html).toContain(PUNTOS.porSuCuenta);
-    for (const d of Object.values(DESCARGAS)) {
-      expect(html).toContain(`https://www.room714.com${d.pdf}`);
-      expect(html).toContain(`https://www.room714.com${d.docx}`);
+describe("email del diagnóstico", () => {
+  it("lleva el nivel, la normativa, los tres pasos y el cierre", () => {
+    const d = diagnostico(CRITICA);
+    const html = htmlInventario(d);
+    expect(ASUNTO_INVENTARIO).toBe("Tu diagnóstico de IA");
+    expect(html).toContain("Nivel <span");
+    expect(html).toContain(NIVELES.critico.etiqueta);
+    expect(html).toContain(NIVELES.critico.titular);
+    expect(html).toContain(NORMATIVA.articulo4.titulo);
+    expect(html).toContain(NORMATIVA.rgpd.titulo);
+    for (const p of [PASOS.datos, PASOS.cuentas, PASOS.normas]) {
+      expect(html).toContain(p);
     }
-    expect(urlFormulario()).toBe(
-      "https://www.room714.com/es/hablemos",
-    );
+    expect(html).toContain(CIERRE.titulo);
+    expect(urlFormulario()).toBe("https://www.room714.com/es/hablemos");
     expect(html).toContain(urlFormulario());
-    expect(html).toContain("José Antonio Ces");
+    expect(html).not.toContain("/descargas/");
   });
 
-  it("sin puntos a revisar muestra la buena base", () => {
-    const r = calcularResultado(base);
-    expect(htmlInventario(r)).toContain(PUNTOS.buenaBase);
-    expect(textoInventario(r)).toContain(PUNTOS.buenaBase);
+  it("en «Bajo» y sin pasos no pinta esas secciones", () => {
+    const d = diagnostico(ORDENADA);
+    const html = htmlInventario(d);
+    expect(html).toContain(NIVELES.bajo.titular);
+    expect(html).not.toContain("Lo que dice la normativa");
+    expect(html).not.toContain("primeros pasos");
+    expect(html).toContain(CIERRE.titulo);
+  });
+
+  it("la versión en texto plano lleva lo mismo", () => {
+    const texto = textoInventario(diagnostico(CRITICA));
+    expect(texto).toContain("Nivel Crítico");
+    expect(texto).toContain(`1. ${PASOS.datos}`);
+    expect(texto).toContain(urlFormulario());
   });
 });

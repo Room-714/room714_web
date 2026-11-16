@@ -8,16 +8,17 @@ import { trackEvent } from "@/app/lib/analytics";
 import { registrarConversion } from "@/app/lib/conversiones";
 import { leerCampana } from "@/app/lib/campana";
 import { path } from "@/app/lib/routes.mjs";
-import { PREGUNTAS, respuestasVacias } from "@/app/lib/inventarioIa";
+import { CIERRE, PREGUNTAS, diagnostico, respuestasVacias } from "@/app/lib/inventarioIa";
 
-// Inventario de IA: cinco preguntas, una por pantalla, y al terminar se pide
-// el correo para enviar el resultado (no se muestra en pantalla: llega por
-// email, calculado en el servidor, y el contacto se guarda en Lead). Componente nuevo (no había nada parecido): las opciones usan las
+// Cuestionario de IA: siete preguntas, una por pantalla. Al terminar enseña
+// el nivel de gravedad (titular y texto) y pide el email para enviar el
+// diagnóstico completo: normativa y tres primeros pasos. El servidor lo
+// recalcula y guarda el contacto en Lead. Las opciones usan las
 // pastillas del formulario de Hablemos, los botones son PrimaryButton y el
 // contenedor es el gris claro de las tarjetas del sitio.
 //
 // Las respuestas viven en el estado de este componente y no salen del
-// navegador hasta que se pide el resultado por email.
+// navegador hasta que se pide el diagnóstico por email.
 //
 // Accesibilidad: cada pregunta es un fieldset con su legend y con inputs
 // nativos (checkbox o radio), así que funciona con teclado y lector de
@@ -90,7 +91,7 @@ export default function InventarioIA() {
         }),
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      registrarConversion("inventario_terminado", {});
+      registrarConversion("inventario_terminado", { nivel: diagnostico(respuestas).nivel });
       setEnvio("idle");
       setPaso(PASO_HECHO);
     } catch {
@@ -103,30 +104,60 @@ export default function InventarioIA() {
   const titular =
     "font-title font-black text-xl md:text-2xl lg:text-3xl text-black leading-tight outline-none";
 
-  // --- Confirmación ---------------------------------------------------------
+  // --- Confirmación, con el cierre -----------------------------------------
   if (paso === PASO_HECHO) {
     return (
       <div className={contenedor} role="status">
         <p ref={titularRef} tabIndex={-1} className={`${titular} mb-4`}>
           Hecho. Revisa tu correo.
         </p>
-        <p className="font-body text-base md:text-lg lg:text-xl text-gray-700 leading-normal">
-          Te hemos enviado el resultado de tu inventario y las dos plantillas.
+        <p className="font-body text-base md:text-lg lg:text-xl text-gray-700 leading-normal mb-8">
+          Te hemos enviado tu diagnóstico completo.
         </p>
+        <div className="border-t border-black/15 pt-6">
+          <p className="font-title font-black text-lg md:text-xl lg:text-2xl text-black leading-tight mb-3">
+            {CIERRE.titulo}
+          </p>
+          <p className="font-body text-base md:text-lg text-gray-800 leading-normal mb-6">
+            {CIERRE.texto}
+          </p>
+          <PrimaryButton
+            text={CIERRE.cta}
+            isRed={true}
+            href={path("hablemos", "es")}
+            track="cta_click"
+            trackPlacement="incorporar_ia_diagnostico_hecho"
+          />
+        </div>
       </div>
     );
   }
 
   // --- Pedir el correo -----------------------------------------------------
   if (paso === PASO_RESULTADO) {
+    const d = diagnostico(respuestas);
+    const grave = d.nivel === "critico" || d.nivel === "alto";
     return (
       <div className={contenedor}>
-        <p ref={titularRef} tabIndex={-1} className={`${titular} mb-4`}>
-          Listo. ¿Dónde te enviamos el resultado?
+        <p className={`font-body font-bold text-sm md:text-base uppercase tracking-wide mb-2 ${grave ? "text-red-600" : "text-gray-600"}`}>
+          {`Nivel de gravedad: ${d.etiqueta}`}
         </p>
-        <p className="font-body text-base md:text-lg lg:text-xl text-gray-700 leading-normal mb-8">
-          Te lo enviamos por correo con los puntos a revisar y dos plantillas:
-          una política de uso de IA y la lista de comprobación del artículo 4.
+        <p
+          ref={titularRef}
+          tabIndex={-1}
+          className={`${titular} mb-4 ${grave ? "text-red-600!" : ""}`}
+        >
+          {d.titular}
+        </p>
+        <p className="font-body text-base md:text-lg lg:text-xl text-gray-800 leading-normal mb-8">
+          {d.texto}
+        </p>
+        <p className="font-body font-bold text-base md:text-lg lg:text-xl text-black leading-normal mb-6 border-t border-black/15 pt-6">
+          {d.pasos.length === 0
+            ? "Te enviamos el diagnóstico completo por correo."
+            : d.pasos.length === 1
+              ? "Te enviamos el diagnóstico completo con tu primer paso."
+              : `Te enviamos el diagnóstico completo con tus ${d.pasos.length === 3 ? "tres" : "dos"} primeros pasos.`}
         </p>
 
         <form onSubmit={enviar} className="flex flex-col gap-5 max-w-2xl">
@@ -181,7 +212,7 @@ export default function InventarioIA() {
 
           <div className="flex flex-wrap gap-4 mt-2">
             <PrimaryButton
-              text={envio === "loading" ? "Enviando…" : "Enviarme el resultado y las plantillas"}
+              text={envio === "loading" ? "Enviando…" : "Enviarme el diagnóstico"}
               isRed={true}
               type="submit"
               icon={envio === "loading" ? Loader2 : Send}

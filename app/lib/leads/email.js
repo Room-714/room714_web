@@ -1,12 +1,19 @@
 // Utilidades compartidas por los emails de contacto.
 
 /**
- * Remitente de los emails que salen hacia quien deja sus datos y de los
- * avisos internos. El dominio room714.com está verificado en Resend; la
- * dirección es la del fundador para que las respuestas le lleguen.
+ * Remitente de los avisos internos (formularios y cuestionario), que llegan
+ * al buzón del fundador. El dominio room714.com está verificado en Resend.
  */
 export const REMITENTE = "José Antonio Ces · Room 714 <joseantonio.cesfranjo@room714.com>";
 export const BUZON_CONTACTO = "joseantonio.cesfranjo@room714.com";
+
+/**
+ * Remitente y dirección de respuesta de los emails que recibe quien deja sus
+ * datos (hoy, el diagnóstico del cuestionario): la dirección de marca, no la
+ * personal. Es la misma que da la política de privacidad como contacto.
+ */
+export const REMITENTE_CLIENTES = "Room 714 <hello@room714.com>";
+export const RESPONDER_A = "hello@room714.com";
 
 /** Escapa un texto para meterlo en el HTML de un email. */
 export function escaparHtml(valor) {

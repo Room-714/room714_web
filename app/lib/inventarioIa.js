@@ -1,9 +1,9 @@
-// Inventario de IA de la landing de IA en tu empresa: preguntas y reglas del
-// resultado. Módulo puro, sin React ni servidor, porque lo usan los dos: el
-// navegador para pintar el resultado y la API para recalcularlo (no se fía
-// del que mande el cliente) y escribir el email.
+// Cuestionario de IA de la landing «Incorporar la IA en tu empresa»: preguntas
+// y reglas del diagnóstico. Módulo puro, sin React ni servidor, porque lo usan
+// los dos: el navegador para enseñar el nivel y la API para recalcularlo (no
+// se fía del que mande el cliente) y escribir el email.
 //
-// Los textos son los aprobados, tal cual.
+// Los textos son los aprobados por José Antonio (2026-11-16), tal cual.
 
 export const PREGUNTAS = [
   {
@@ -63,26 +63,88 @@ export const PREGUNTAS = [
       { id: "adaptada", texto: "Sí, adaptada a cada perfil" },
     ],
   },
+  {
+    id: "cuentas",
+    texto: "¿Con qué cuentas se usa la IA?",
+    multiple: false,
+    opciones: [
+      { id: "personales", texto: "Cada uno con su cuenta personal" },
+      { id: "sinGestion", texto: "Algunas cuentas de empresa, sin gestión centralizada" },
+      { id: "gestionadas", texto: "Cuentas de empresa gestionadas por IT" },
+    ],
+  },
+  {
+    id: "plan",
+    texto: "¿Habéis decidido en qué procesos aplicar la IA?",
+    multiple: false,
+    opciones: [
+      { id: "no", texto: "No" },
+      { id: "pruebas", texto: "Hay pruebas sueltas" },
+      { id: "plan", texto: "Sí, con un plan y prioridades" },
+    ],
+  },
 ];
 
-export const PUNTOS = {
-  visibilidad:
-    "No hay visibilidad completa de qué se usa ni con qué datos. El primer paso es cerrar este inventario con cada equipo.",
-  porSuCuenta:
-    "Hay uso por iniciativa propia. Conviene acordar qué herramientas están aprobadas.",
-  sensible:
-    "Se introduce información sensible. Conviene decidir qué datos pueden usarse y en qué herramientas.",
-  politica: "No hay una política de uso de IA escrita y comunicada.",
-  formacion:
-    "La formación no llega a toda la plantilla ni está adaptada a cada perfil.",
-  buenaBase:
-    "Tienes una buena base. El siguiente paso es decidir dónde incorporar la IA en tus procesos.",
+export const NIVELES = {
+  critico: {
+    etiqueta: "Crítico",
+    titular: "Tu empresa necesita actuar ya.",
+    texto:
+      "La IA se usa con datos sensibles, sin normas ni control. Si mañana hay una fuga o una reclamación, la empresa no podría explicar qué se subió ni dónde.",
+  },
+  alto: {
+    etiqueta: "Alto",
+    titular: "Tu empresa necesita poner orden pronto.",
+    texto:
+      "Hay uso real de la IA, pero sin las reglas ni la formación que exige la normativa. El riesgo crece cada semana que pasa.",
+  },
+  moderado: {
+    etiqueta: "Moderado",
+    titular: "Vas por buen camino, pero quedan huecos.",
+    texto: "Hay cierto control, pero faltan piezas para que el uso sea seguro y demostrable.",
+  },
+  bajo: {
+    etiqueta: "Bajo",
+    titular: "Tienes una buena base.",
+    texto: "El uso está ordenado. El siguiente paso es decidir dónde aporta la IA en tus procesos.",
+  },
 };
 
-export const NOTA_RESULTADO =
-  "Es una orientación a partir de cinco respuestas, no una valoración legal.";
+export const NORMATIVA = {
+  articulo4: {
+    titulo: "Reglamento europeo de IA (artículo 4)",
+    texto:
+      "Las empresas que usan IA deben tomar medidas para que su personal sepa utilizarla. No exige un certificado, pero conviene poder demostrar lo que se ha hecho.",
+  },
+  rgpd: {
+    titulo: "Protección de datos (RGPD)",
+    texto:
+      "Introducir datos de clientes o empleados en herramientas que la empresa no controla es un tratamiento de datos del que la empresa es responsable.",
+  },
+};
+
+// En este orden de prioridad; el diagnóstico se queda con los tres primeros
+// que apliquen.
+export const PASOS = {
+  datos: "Decide qué datos no se meten nunca en una IA y comunícalo a toda la plantilla.",
+  cuentas: "Pasa a cuentas de empresa gestionadas por IT: así sabes quién usa qué y con qué datos.",
+  normas: "Deja por escrito una política de uso de una página que conozca todo el equipo.",
+  visibilidad: "Haz inventario: qué herramientas se usan, quién las usa y para qué.",
+  formacion:
+    "Forma a la plantilla en un uso consciente, con casos de su propio trabajo, y deja constancia de ello.",
+  plan: "Decide con dirección en qué procesos aporta la IA y con qué prioridad.",
+};
+
+export const CIERRE = {
+  titulo: "Esto es exactamente lo que hacemos en Room 714.",
+  texto:
+    "En tres meses formamos a tu equipo y fijamos contigo un plan para incorporar la IA con orden. Cuéntanos tu caso y te decimos por dónde empezaríamos.",
+  cta: "Hablemos",
+};
 
 const DATOS_SENSIBLES = ["clientes", "empleados", "financiera"];
+const DATOS_PERSONALES = ["clientes", "empleados"];
+const MAX_PASOS = 3;
 
 /** Respuestas vacías: un array por pregunta. */
 export function respuestasVacias() {
@@ -111,42 +173,64 @@ export function validarRespuestas(entrada) {
   return salida;
 }
 
-/** Nº de tipos de herramienta marcados, sin contar "No lo sé con certeza". */
-export function contarHerramientas(respuestas) {
-  return (respuestas.herramientas || []).filter((id) => id !== "nose").length;
+/** Puntos de riesgo y señales de las respuestas. */
+export function riesgos(r) {
+  const sensibles = r.datos.some((id) => DATOS_SENSIBLES.includes(id));
+  const visibilidad = r.herramientas.includes("nose") || r.datos.includes("nose");
+  const sinNormas = r.normas.includes("ninguna");
+  const puntos =
+    (sensibles ? 3 : 0) +
+    (visibilidad ? 2 : 0) +
+    (r.cuentas.includes("personales") ? 2 : r.cuentas.includes("sinGestion") ? 1 : 0) +
+    (sinNormas ? 2 : r.normas.includes("informales") ? 1 : 0) +
+    (r.formacion.includes("no") ? 2 : r.formacion.includes("algunas") ? 1 : 0) +
+    (r.quien.includes("porSuCuenta") ? 1 : 0);
+  return { puntos, sensibles, visibilidad, sinNormas };
 }
 
 /**
- * Los puntos a revisar, en el orden fijado y solo los que aplican. Si no
- * aplica ninguno, `puntos` va vacío y `buenaBase` es true.
+ * El nivel de gravedad. «Crítico» exige datos sensibles (es lo que dice su
+ * texto); con datos sensibles y sin normas, el nivel es como mínimo «Alto».
  */
-export function calcularResultado(respuestas) {
-  const r = respuestas;
-  const puntos = [];
-  if (r.herramientas.includes("nose") || r.datos.includes("nose")) {
-    puntos.push(PUNTOS.visibilidad);
-  }
-  if (r.quien.includes("porSuCuenta")) puntos.push(PUNTOS.porSuCuenta);
-  if (r.datos.some((id) => DATOS_SENSIBLES.includes(id))) {
-    puntos.push(PUNTOS.sensible);
-  }
-  if (!r.normas.includes("politica")) puntos.push(PUNTOS.politica);
-  if (!r.formacion.includes("adaptada")) puntos.push(PUNTOS.formacion);
-
-  const herramientas = contarHerramientas(r);
-  return {
-    herramientas,
-    puntos,
-    buenaBase: puntos.length === 0,
-    encabezado: encabezado(herramientas, puntos.length),
-  };
+export function nivel(r) {
+  const { puntos, sensibles, sinNormas } = riesgos(r);
+  if (sensibles && puntos >= 8) return "critico";
+  if (puntos >= 5 || (sensibles && sinNormas)) return "alto";
+  if (puntos >= 2) return "moderado";
+  return "bajo";
 }
 
-/** "N tipos de herramienta en uso y M puntos a revisar.", con su singular. */
-export function encabezado(n, m) {
-  const tipos = n === 1 ? "tipo" : "tipos";
-  const puntos = m === 1 ? "punto" : "puntos";
-  return `${n} ${tipos} de herramienta en uso y ${m} ${puntos} a revisar.`;
+/** Los pasos que aplican, en orden de prioridad y como mucho tres. */
+export function pasos(r) {
+  const { sensibles, visibilidad } = riesgos(r);
+  const aplican = [
+    sensibles && "datos",
+    !r.cuentas.includes("gestionadas") && "cuentas",
+    !r.normas.includes("politica") && "normas",
+    visibilidad && "visibilidad",
+    !r.formacion.includes("adaptada") && "formacion",
+    !r.plan.includes("plan") && "plan",
+  ].filter(Boolean);
+  return aplican.slice(0, MAX_PASOS);
+}
+
+/** La normativa que se le menciona: nada en «Bajo». */
+export function normativa(r, idNivel) {
+  if (idNivel === "bajo") return [];
+  const claves = ["articulo4"];
+  if (r.datos.some((id) => DATOS_PERSONALES.includes(id))) claves.push("rgpd");
+  return claves;
+}
+
+/** El diagnóstico completo, con los textos ya resueltos. */
+export function diagnostico(respuestas) {
+  const idNivel = nivel(respuestas);
+  return {
+    nivel: idNivel,
+    ...NIVELES[idNivel],
+    normativa: normativa(respuestas, idNivel).map((k) => NORMATIVA[k]),
+    pasos: pasos(respuestas).map((k) => PASOS[k]),
+  };
 }
 
 /** Las respuestas con su texto, para guardarlas legibles con el contacto. */
