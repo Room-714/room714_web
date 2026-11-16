@@ -14,6 +14,7 @@ import { FORMACION_IA, ORIGENES } from "@/app/data/formacionIa";
 //
 //   - La primera pregunta ("¿Qué producto es?") no aplica a esta landing y
 //     se sustituye por "Número de empleados", con las mismas pastillas.
+//   - La pregunta de texto libre es "¿Qué te preocupa?".
 //   - Se manda el origen de la landing y los parámetros de campaña.
 //   - Al enviarse registra la conversión `diagnostico_solicitado`.
 export default function ContactForm({
@@ -138,7 +139,7 @@ export default function ContactForm({
           htmlFor={`${variante}-message`}
           className="font-body font-bold text-sm sm:text-base md:text-lg lg:text-xl uppercase"
         >
-          {f.q2}
+          {esLanding ? FORMACION_IA.cierre.pregunta : f.q2}
         </label>
         <textarea
           id={`${variante}-message`}
