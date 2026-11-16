@@ -11,6 +11,7 @@
     { "path": "/api/cron/publish-linkedin", "schedule": "*/5 5-7 * * 1-5" },
     { "path": "/api/cron/daily-briefing", "schedule": "50 6 * * 1-5" },
     { "path": "/api/cron/daily-briefing", "schedule": "50 7 * * 1-5" },
-    { "path": "/api/cron/cleanup-candidates", "schedule": "0 3 * * *" }
+    { "path": "/api/cron/cleanup-candidates", "schedule": "0 3 * * *" },
+    { "path": "/api/cron/cleanup-leads", "schedule": "15 3 * * *" }
   ]
 }
