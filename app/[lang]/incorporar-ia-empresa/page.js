@@ -158,8 +158,8 @@ export default async function IncorporarIaPage({ params }) {
 
         <h2 className={`${H2} mb-10 max-w-4xl`}>{T.frentes.titulo}</h2>
         <Tarjetas bloques={T.frentes.bloques} />
-        {/* Remate de la frase, alineado a la derecha */}
-        <h2 className={`${H2} text-right text-balance mt-10 lg:mt-12 ml-auto max-w-4xl`}>
+        {/* Remate de la frase, manuscrito y alineado a la derecha */}
+        <h2 className="font-hand text-white text-3xl md:text-4xl lg:text-5xl leading-[1.45] text-right text-balance mt-10 lg:mt-12 ml-auto max-w-4xl">
           {T.queda.titulo}
         </h2>
       </section>
@@ -175,7 +175,7 @@ export default async function IncorporarIaPage({ params }) {
         <div className="grid lg:grid-cols-2 lg:grid-rows-[auto_1fr] gap-x-16 gap-y-10">
           <div>
             <h2 className={`${H2} mb-6`}>{T.cierre.titulo}</h2>
-            <p className="font-hand text-red-500 text-2xl md:text-3xl leading-[1.45]">
+            <p className={`${TEXTO} text-black`}>
               {T.cierre.texto}
             </p>
           </div>

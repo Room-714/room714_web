@@ -74,16 +74,16 @@ export default function DibujoRobots({ className = "" }) {
       <path d="M205 300 L242 264 L276 252" />
 
       {/* robots encima */}
-      <Robot x={168} y={176} rotar={-12} escala={1.35} />
+      <Robot x={178} y={140} rotar={-12} escala={1.35} />
       <Robot x={292} y={240} rotar={22} escala={1.3} />
-      <Robot x={100} y={226} rotar={28} escala={1.3} piernas={false} />
-      <path d="M62 214 L78 218 M60 230 L76 231 M64 246 L78 243" strokeWidth="2" />
+      <Robot x={72} y={212} rotar={28} escala={1.3} piernas={false} />
+      <path d="M34 200 L50 204 M32 216 L48 217 M36 232 L50 229" strokeWidth="2" />
       {/* y otro que llega */}
       <Robot x={316} y={130} rotar={24} escala={1.1} piernas={false} />
       <path d="M348 112 L364 106 M352 128 L370 126 M348 144 L364 148" strokeWidth="2" />
 
       {/* golpes y chispas */}
-      <path d="M196 160 L206 150 M204 168 L218 166 M188 150 L190 138" strokeWidth="2.5" />
+      <path d="M206 124 L216 114 M214 132 L228 130 M198 114 L200 102" strokeWidth="2.5" />
       <path d="M262 214 L270 204 M270 222 L282 218" strokeWidth="2.5" />
     </svg>
   );
