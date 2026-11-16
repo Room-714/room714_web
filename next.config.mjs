@@ -94,6 +94,12 @@ const nextConfig = {
           },
         ],
       },
+      {
+        // Las plantillas descargables de la landing de formación en IA se
+        // envían por email: no deben aparecer en buscadores.
+        source: "/descargas/:path*",
+        headers: [{ key: "X-Robots-Tag", value: "noindex" }],
+      },
     ];
   },
 
