@@ -244,8 +244,9 @@ export default async function RootLayout({ children, params }) {
             {/* LINKS PRIVACY, COOKIES AND TERMS */}
             {/* Diagnóstico y Empleo bajan aquí desde el menú: conservan su
                 URL y siguen accesibles, con el mismo estilo que los
-                legales. */}
-            <div className="flex justify-center items-center gap-x-3 md:gap-x-6 text-white text-sm sm:text-base md:text-xl lg:text-2xl font-light">
+                legales. Con el enlace de Formación en IA ya no caben en una
+                fila de móvil: flex-wrap los pasa a dos. */}
+            <div className="flex flex-wrap justify-center items-center gap-x-3 gap-y-3 md:gap-x-6 px-6 text-white text-sm sm:text-base md:text-xl lg:text-2xl font-light">
               <Link
                 href={path("empleo", lang)}
                 className="hover:text-red-500 transition-colors duration-300"
