@@ -13,9 +13,9 @@
 // página puede sugerir paquetes, niveles ni precio.
 //
 // Cuarta revisión (2026-11-16): un único objetivo, vender la colaboración.
-// El inventario de IA queda aparcado: su componente y su lógica siguen en el
-// repositorio, pero la página no lo muestra y su API está desactivada
-// (app/api/_inventario-ia; quitar el guion bajo para reactivarla).
+// Quinta revisión: el inventario de IA vuelve y sustituye al formulario de
+// contacto al final de la página (el resultado se envía por correo y se
+// guarda en la tabla Lead).
 
 export const INCORPORAR_IA = {
   seo: {
@@ -28,43 +28,38 @@ export const INCORPORAR_IA = {
   footer: "IA en tu empresa",
 
   hero: {
-    antetitulo: "Incorporar la IA en tu empresa",
-    titular: "Tus empleados ya usan la IA. Falta que tu empresa la controle.",
-    subtitulo: "Sin normas, sin formación y sin nadie que lo controle.",
+    // El titular es el H1 de la página; una línea por elemento.
+    titular: ["Tus empleados ya usan la IA, pero…", "¿están haciéndolo como deben?"],
+    subtitulo: "Sin normas, sin formación, sin control.",
     texto:
-      "En tres meses, Room 714 enseña a tu equipo a usarla bien y decide contigo y con IT dónde incorporarla en tus procesos.",
+      "Room 714 tiene la solución para que la IA en tu empresa aporte el máximo valor y suponga el mínimo riesgo.",
     cta: "Hablemos",
   },
 
   problema: {
-    titulo: "Lo que ya está pasando en tu empresa, aunque nadie lo diga.",
+    titulo: "Lo que ya está pasando en tu empresa… aunque tú no lo sepas.",
     puntos: [
       "Cada uno usa la herramienta que le parece, muchas veces con su cuenta personal.",
       "Se pegan contratos, datos de clientes y documentos internos en chats que nadie ha aprobado.",
       "Si mañana hay una fuga, nadie sabría decir qué se subió ni dónde.",
     ],
-    remate: "Prohibirla no sirve: se sigue usando, solo que a escondidas.",
+    remate: "Esto no va de prohibir, sino de enseñar.",
   },
 
-  // Los dos bloques de la oferta («Room 714 para Urgasa»): la plantilla y
-  // la empresa (IT y dirección), en paralelo.
+  // Los dos ejes de la oferta («Room 714 para Urgasa»): la plantilla y la
+  // empresa (IT y dirección), en paralelo.
   frentes: {
-    titulo:
-      "Dos frentes a la vez. Lo que aprende tu equipo alimenta el plan de tu empresa.",
+    titulo: "Una propuesta con dos ejes.",
     bloques: [
       {
-        titulo: "Tu equipo aprende a usarla sin miedo.",
+        titulo: "Que tus empleados sepan cómo usarla.",
         texto:
-          "Cinco sesiones prácticas de dos horas, en remoto, con casos reales de su trabajo: documentos, datos, asistentes y agentes. En la última, cada persona resuelve con la IA un problema real suyo. No hace falta base técnica y no se para la actividad.",
-        resultado:
-          "Controlan las herramientas y ganan productividad, estén en el área que estén.",
+          "Formación práctica orientada al uso consciente de la IA: cinco sesiones de dos horas, en remoto, con casos reales de su propio trabajo y sin necesidad de base técnica.",
       },
       {
-        titulo: "Tu empresa decide dónde le aporta.",
+        titulo: "Que tu empresa sepa dónde aplicarla.",
         texto:
-          "Primero, tu equipo de IT aprende a administrar el entorno corporativo de IA: licencias, accesos, conectores y auditoría. Después entrevistamos a IT y a las áreas, trazamos con dirección los caminos posibles y lo convertimos en un plan de proyectos por orden de prioridad, con resultados rápidos incluidos.",
-        resultado:
-          "En tres meses, un plan de acción claro para incorporar la IA en tus procesos.",
+          "Tres meses de consultoría junto a IT y dirección, en tres fases (situación actual, caminos de evolución y plan de proyectos), que fijan un plan estratégico para incorporar la IA en tus procesos.",
       },
     ],
   },
@@ -72,17 +67,15 @@ export const INCORPORAR_IA = {
   queda: {
     titulo: "Al terminar, la IA deja de ser un riesgo y pasa a ser un plan.",
     puntos: [
-      "Reglas de uso por escrito, que la plantilla conoce.",
-      "Un equipo que la usa con criterio, con certificado de asistencia y la documentación que pide el artículo 4.",
-      "Un equipo de IT que sabe administrar el entorno.",
-      "Un plan de proyectos de IA ordenado por prioridad.",
+      "Tus empleados son capaces de usar la IA con criterio en su día a día: saben qué herramientas usar, qué datos no deben compartir y cómo sacarle partido en su trabajo.",
+      "Tu empresa sabe en qué procesos le interesa aplicar la IA y qué coste supone, con un plan de proyectos ordenado por prioridad.",
     ],
   },
 
   cierre: {
     titulo: "Hablemos de tu caso.",
     texto:
-      "Cuéntanos cómo se usa hoy la IA en tu empresa y te decimos por dónde empezaríamos.",
+      "Responde cinco preguntas sobre cómo se usa hoy la IA en tu empresa y te enviamos el resultado por correo.",
     // Resumen de la bio de «Quién está detrás» (about.quien del
     // diccionario): no añade nada que no esté ya publicado allí.
     quien: {
@@ -90,6 +83,10 @@ export const INCORPORAR_IA = {
       cargo: "Fundador y CEO de Room 714",
       bio: "Ingeniero de Telecomunicación con más de treinta años en producto B2B: de Ericsson y Telefónica a fundar Room 714 en 2016. Ha sido consultor senior de transformación digital para empresas como LaLiga, GMV o MasOrange.",
     },
+    // Segundo párrafo, sobre Room 714: sale de «Nosotros» (about.hero del
+    // diccionario) y de la frase de «Por qué Room 714» del encargo.
+    room714:
+      "Room 714 es un estudio de producto digital: un equipo de ingenieros especialistas en el diseño, la usabilidad y la arquitectura de producto. Diseñamos y desarrollamos software e IA para empresas, así que el plan de proyectos que te dejamos es uno que sabríamos ejecutar.",
     // Etiqueta de la pregunta de texto libre del formulario en esta landing.
     pregunta: "¿Qué te preocupa?",
     empleados: {

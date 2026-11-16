@@ -22,7 +22,7 @@ describe("email del inventario", () => {
       expect(html).toContain(`https://www.room714.com${d.docx}`);
     }
     expect(urlFormulario()).toBe(
-      "https://www.room714.com/es/incorporar-ia-empresa#hablemos",
+      "https://www.room714.com/es/hablemos",
     );
     expect(html).toContain(urlFormulario());
     expect(html).toContain("José Antonio Ces");

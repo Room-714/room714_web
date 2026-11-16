@@ -8,20 +8,13 @@ import { trackEvent } from "@/app/lib/analytics";
 import { registrarConversion } from "@/app/lib/conversiones";
 import { leerCampana } from "@/app/lib/campana";
 import { path } from "@/app/lib/routes.mjs";
-import {
-  NOTA_RESULTADO,
-  PREGUNTAS,
-  PUNTOS,
-  calcularResultado,
-  respuestasVacias,
-} from "@/app/lib/inventarioIa";
-import { ANCLA_FORMULARIO } from "@/app/data/incorporarIa";
+import { PREGUNTAS, respuestasVacias } from "@/app/lib/inventarioIa";
 
-// Inventario de IA: cinco preguntas, una por pantalla, resultado y envío por
-// email. Componente nuevo (no había nada parecido): las opciones usan las
+// Inventario de IA: cinco preguntas, una por pantalla, y al terminar se pide
+// el correo para enviar el resultado (no se muestra en pantalla: llega por
+// email, calculado en el servidor, y el contacto se guarda en Lead). Componente nuevo (no había nada parecido): las opciones usan las
 // pastillas del formulario de Hablemos, los botones son PrimaryButton y el
-// contenedor es el gris claro de las tarjetas del sitio, para que destaque
-// sobre el fondo negro de la sección.
+// contenedor es el gris claro de las tarjetas del sitio.
 //
 // Las respuestas viven en el estado de este componente y no salen del
 // navegador hasta que se pide el resultado por email.
@@ -117,47 +110,23 @@ export default function InventarioIA() {
         <p ref={titularRef} tabIndex={-1} className={`${titular} mb-4`}>
           Hecho. Revisa tu correo.
         </p>
-        <p className="font-body text-base md:text-lg lg:text-xl text-gray-700 leading-normal mb-8">
+        <p className="font-body text-base md:text-lg lg:text-xl text-gray-700 leading-normal">
           Te hemos enviado el resultado de tu inventario y las dos plantillas.
-          Si quieres, lo repasamos contigo en la sesión de diagnóstico.
         </p>
-        <PrimaryButton
-          text="Reservar sesión de diagnóstico"
-          isRed={true}
-          href={`#${ANCLA_FORMULARIO}`}
-          track="cta_click"
-          trackPlacement="incorporar_ia_inventario_hecho"
-        />
       </div>
     );
   }
 
-  // --- Resultado ------------------------------------------------------------
+  // --- Pedir el correo -----------------------------------------------------
   if (paso === PASO_RESULTADO) {
-    const r = calcularResultado(respuestas);
-    const puntos = r.buenaBase ? [PUNTOS.buenaBase] : r.puntos;
     return (
       <div className={contenedor}>
-        <p ref={titularRef} tabIndex={-1} className={`${titular} mb-6`}>
-          {r.encabezado}
+        <p ref={titularRef} tabIndex={-1} className={`${titular} mb-4`}>
+          Listo. ¿Dónde te enviamos el resultado?
         </p>
-        <ul className="flex flex-col gap-3 mb-6">
-          {puntos.map((p) => (
-            <li key={p} className="flex gap-4">
-              <span
-                className="font-hand text-red-500 text-xl md:text-2xl shrink-0 leading-tight"
-                aria-hidden="true"
-              >
-                ·
-              </span>
-              <p className="font-body text-base md:text-lg lg:text-xl text-gray-800 leading-normal">
-                {p}
-              </p>
-            </li>
-          ))}
-        </ul>
-        <p className="font-body text-sm md:text-base text-gray-600 leading-normal mb-8">
-          {NOTA_RESULTADO}
+        <p className="font-body text-base md:text-lg lg:text-xl text-gray-700 leading-normal mb-8">
+          Te lo enviamos por correo con los puntos a revisar y dos plantillas:
+          una política de uso de IA y la lista de comprobación del artículo 4.
         </p>
 
         <form onSubmit={enviar} className="flex flex-col gap-5 max-w-2xl">
@@ -275,7 +244,7 @@ export default function InventarioIA() {
           onClick={() => setPaso(paso - 1)}
         />
         <PrimaryButton
-          text={esUltima ? "Ver resultado" : "Siguiente"}
+          text={esUltima ? "Terminar" : "Siguiente"}
           isRed={true}
           icon={ChevronRight}
           disabled={marcadas.length === 0}

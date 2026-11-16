@@ -1,11 +1,11 @@
 import { escaparHtml as e } from "@/app/lib/leads/email";
 import { NOTA_RESULTADO, PUNTOS } from "@/app/lib/inventarioIa";
-import { ANCLA_FORMULARIO, DESCARGAS } from "@/app/data/incorporarIa";
+import { DESCARGAS } from "@/app/data/incorporarIa";
 import { SITE_URL } from "@/app/lib/seo/urls";
 import { path } from "@/app/lib/routes.mjs";
 
 // Email que recibe quien termina el inventario de IA: el resultado que vio
-// en pantalla, las dos plantillas y el enlace a la sesión de diagnóstico.
+// en pantalla, las dos plantillas y el enlace a Hablemos.
 // HTML de tablas y estilos en línea, que es lo que respetan los clientes de
 // correo. Sin logo en imagen: Gmail no pinta SVG.
 
@@ -16,7 +16,7 @@ const FUENTE = "Gantari, Montserrat, Helvetica, Arial, sans-serif";
 const TITULAR = `Montserrat, ${FUENTE}`;
 
 export function urlFormulario() {
-  return `${SITE_URL}${path("incorporarIa", "es")}#${ANCLA_FORMULARIO}`;
+  return `${SITE_URL}${path("hablemos", "es")}`;
 }
 
 const puntosDe = (resultado) =>
@@ -57,10 +57,10 @@ export function htmlInventario(resultado) {
       ${enlaceDoc(DESCARGAS.checklist)}
     </table>
 
-    <p style="margin:0 0 20px;font-family:${FUENTE};font-size:16px;line-height:1.5;color:#1A1A1A;">Si quieres, lo repasamos contigo en la sesión de diagnóstico.</p>
+    <p style="margin:0 0 20px;font-family:${FUENTE};font-size:16px;line-height:1.5;color:#1A1A1A;">Si quieres, lo repasamos contigo.</p>
     <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 32px;"><tr>
       <td style="background:${ROJO};border-radius:999px;">
-        <a href="${urlFormulario()}" style="display:inline-block;padding:12px 24px;font-family:${TITULAR};font-size:15px;font-weight:900;text-transform:uppercase;color:#FFFFFF;text-decoration:none;">Reservar sesión de diagnóstico</a>
+        <a href="${urlFormulario()}" style="display:inline-block;padding:12px 24px;font-family:${TITULAR};font-size:15px;font-weight:900;text-transform:uppercase;color:#FFFFFF;text-decoration:none;">Hablemos</a>
       </td>
     </tr></table>
 
@@ -90,7 +90,7 @@ export function textoInventario(resultado) {
     doc(DESCARGAS.politica),
     doc(DESCARGAS.checklist),
     "",
-    "Si quieres, lo repasamos contigo en la sesión de diagnóstico:",
+    "Si quieres, lo repasamos contigo:",
     urlFormulario(),
     "",
     "José Antonio Ces",

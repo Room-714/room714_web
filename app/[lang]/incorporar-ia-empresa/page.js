@@ -5,7 +5,7 @@ import PrimaryButton from "@/app/components/PrimaryButton";
 import CapturaCampana from "@/app/components/incorporarIa/CapturaCampana";
 import DibujoRobots from "@/app/components/incorporarIa/DibujoRobots";
 import CandadoAbierto from "@/app/components/incorporarIa/CandadoAbierto";
-import FormularioLanding from "@/app/components/incorporarIa/FormularioLanding";
+import InventarioIA from "@/app/components/incorporarIa/InventarioIA";
 import { getDictionary } from "@/app/dictionaries";
 import { SITE_URL } from "@/app/lib/seo/urls";
 import { socialMeta } from "@/app/lib/seo/social";
@@ -93,22 +93,19 @@ export default async function IncorporarIaPage({ params }) {
 
       <main className={`${CANAL} pt-8 pb-28 lg:pb-32`}>
         {/* 1. Hero a dos columnas: el problema y la oferta a la izquierda, el
-            dibujo (tus empleados con la IA desbocada) a la derecha. El H1 es
-            el antetítulo (la búsqueda objetivo); el titular grande es texto
-            destacado, no un segundo H1. */}
+            dibujo (tus empleados con la IA desbocada) a la derecha. El
+            titular es el H1; la búsqueda objetivo va en el title y la
+            description. */}
         <header className="grid lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] gap-10 lg:gap-12 items-center">
           <div>
-            <h1 className="font-title font-bold text-base md:text-lg lg:text-xl uppercase text-gray-300 mb-4">
-              {T.hero.antetitulo}
-            </h1>
-            {/* Una frase por línea: así no se parte «la / IA.» */}
-            <p className="font-title font-black text-4xl md:text-5xl lg:text-[2.6rem] leading-tight text-white mb-6">
-              {T.hero.titular.split(/(?<=\.)\s+/).map((frase) => (
+            {/* Una línea por elemento: así no queda una palabra huérfana */}
+            <h1 className="font-title font-black text-4xl md:text-5xl lg:text-[2.4rem] leading-tight text-white mb-6">
+              {T.hero.titular.map((frase) => (
                 <span key={frase} className="block">
                   {frase}
                 </span>
               ))}
-            </p>
+            </h1>
             <p className="font-hand text-red-500 text-2xl md:text-3xl lg:text-4xl mb-8 leading-[1.45]">
               {T.hero.subtitulo}
             </p>
@@ -145,7 +142,7 @@ export default async function IncorporarIaPage({ params }) {
         </div>
       </section>
 
-      {/* 3. La colaboración: los dos frentes, a la vez */}
+      {/* 3. La propuesta: los dos ejes, a la vez */}
       <section
         className={`w-full bg-white text-black rounded-t-[50px] -mt-10 relative z-2 ${CANAL} pt-16 pb-24 lg:pt-20 lg:pb-28`}
       >
@@ -156,12 +153,8 @@ export default async function IncorporarIaPage({ params }) {
               <h3 className="font-title font-black text-xl md:text-2xl lg:text-3xl text-black mb-4 leading-tight">
                 {b.titulo}
               </h3>
-              <p className="font-body text-base md:text-lg text-gray-900 leading-normal mb-6">
+              <p className="font-body text-base md:text-lg lg:text-xl text-gray-900 leading-normal">
                 {b.texto}
-              </p>
-              <p className="font-body text-base md:text-lg text-black leading-normal mt-auto border-t border-black/15 pt-4">
-                <strong className="font-bold text-red-600">Resultado:</strong>{" "}
-                {b.resultado}
               </p>
             </div>
           ))}
@@ -195,40 +188,48 @@ export default async function IncorporarIaPage({ params }) {
         </ul>
       </section>
 
-      {/* 5. Formulario, sobre blanco: enlaza con el skyline */}
+      {/* 5. Hablemos: inventario de IA, sobre blanco: enlaza con el skyline */}
       <section
         id={ANCLA_FORMULARIO}
         className={`w-full bg-white text-black rounded-t-[50px] -mt-10 relative z-4 scroll-mt-20 ${CANAL} pt-16 pb-20`}
       >
-        <div className="grid lg:grid-cols-2 gap-10 lg:gap-16">
+        {/* En móvil: título → cuestionario → ficha, para que «Hablemos»
+            lleve directo a las preguntas. En escritorio: título y ficha a la
+            izquierda, cuestionario a la derecha. */}
+        <div className="grid lg:grid-cols-2 lg:grid-rows-[auto_1fr] gap-x-16 gap-y-10">
           <div>
             <h2 className={`${H2} mb-6`}>{T.cierre.titulo}</h2>
-            <p className="font-hand text-red-500 text-2xl md:text-3xl leading-[1.45] mb-10">
+            <p className="font-hand text-red-500 text-2xl md:text-3xl leading-[1.45]">
               {T.cierre.texto}
             </p>
-            {/* Quién atiende la sesión, con la foto de «Quién está detrás» */}
-            <div className="flex flex-col sm:flex-row gap-6">
-              <Image
-                src="/about/jose-antonio-ces.jpg"
-                alt={T.cierre.quien.nombre}
-                width={320}
-                height={320}
-                className="rounded-full shrink-0 w-28 h-28 lg:w-32 lg:h-32 object-cover"
-              />
-              <div>
-                <p className="font-title font-bold text-xl md:text-2xl text-black mb-1">
-                  {T.cierre.quien.nombre}
-                </p>
-                <p className="font-hand text-lg md:text-xl text-red-500 mb-3">
-                  {T.cierre.quien.cargo}
-                </p>
-                <p className="font-body text-base md:text-lg text-gray-700 leading-normal">
-                  {T.cierre.quien.bio}
-                </p>
-              </div>
+          </div>
+          <div className="lg:col-start-2 lg:row-start-1 lg:row-span-2">
+            <InventarioIA />
+          </div>
+          {/* Quién está detrás, con la foto de «Nosotros», y Room 714 */}
+          <div className="flex flex-col sm:flex-row gap-6 lg:col-start-1">
+            <Image
+              src="/about/jose-antonio-ces.jpg"
+              alt={T.cierre.quien.nombre}
+              width={320}
+              height={320}
+              className="rounded-full shrink-0 w-28 h-28 lg:w-32 lg:h-32 object-cover"
+            />
+            <div>
+              <p className="font-title font-bold text-xl md:text-2xl text-black mb-1">
+                {T.cierre.quien.nombre}
+              </p>
+              <p className="font-hand text-lg md:text-xl text-red-500 mb-3">
+                {T.cierre.quien.cargo}
+              </p>
+              <p className="font-body text-base md:text-lg text-gray-700 leading-normal">
+                {T.cierre.quien.bio}
+              </p>
+              <p className="font-body text-base md:text-lg text-gray-700 leading-normal mt-4">
+                {T.cierre.room714}
+              </p>
             </div>
           </div>
-          <FormularioLanding dict={dict} />
         </div>
       </section>
 
