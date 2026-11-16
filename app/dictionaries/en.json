@@ -363,7 +363,7 @@
         }
       ],
       "otros": "operations dashboards with generative AI (−38% critical errors), private-cloud AI inference for an operator (in progress).",
-      "noHacemos": "We don't sell a model, a platform or hours of “AI consulting”. If your problem can be solved without AI, we will tell you; it will be cheaper.",
+      "noHacemos": "We don't sell a model or a platform. If your problem can be solved without AI, we will tell you; it will be cheaper.",
       "cierre": {
         "title": "Start with 30 minutes",
         "body": "Bring the pilot. We leave the session knowing what it needs in order to become a product."
@@ -894,7 +894,7 @@
     "rights_text": "You can exercise your rights of access, rectification, deletion, and objection by sending an email to hello@room714.com.",
     "cv_title": "Job applications and CVs",
     "forms_title": "Contact forms and AI questionnaire",
-    "forms_text": "When you write to us from «Let's talk» or answer the AI questionnaire on our Spanish page «Incorporar la IA en tu empresa», we store the data you give us (name, company, email, message, number of employees and, in the questionnaire, your answers), together with the campaign that brought you to the website, if any (utm and gclid parameters). We use them to reply to you, send you the questionnaire result and the templates, and manage a potential commercial relationship. We do not share them with third parties: only the providers that host the website, the database and our email sending have access to them.",
+    "forms_text": "When you write to us from «Let's talk» or answer the AI questionnaire on our Spanish page «Incorporar la IA en tu empresa», we store the data you give us (name, company, email, message, number of employees and, in the questionnaire, your answers), together with the campaign that brought you to the website, if any (utm and gclid parameters). We use them to reply to you, send you the questionnaire result and the templates, and manage a potential commercial relationship. We do not share them with third parties: only the providers that host the website, the database and our email sending have access to them. We keep them for a maximum of two years from your last message; after that they are deleted automatically. If we end up working together, the data from that relationship is governed by what we agree and by the periods required by law. You can ask us to delete them earlier by writing to hello@room714.com.",
     "cv_text": "If you send us your CV through our Careers page, we retain the data it contains (including the PDF itself) for a maximum of 1 month for the sole purpose of evaluating you for current or future selection processes. After that period, the CV and all associated data are automatically deleted. You can request early deletion by writing to rrhh@room714.com.",
     "last_update": {
       "text": "Last updated",
