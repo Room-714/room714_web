@@ -158,7 +158,7 @@ export default async function IncorporarIaPage({ params }) {
 
         <h2 className={`${H2} mb-10 max-w-4xl`}>{T.frentes.titulo}</h2>
         <Tarjetas bloques={T.frentes.bloques} />
-        <h2 className={`${H2} mt-16 lg:mt-20 mb-10 max-w-4xl`}>{T.queda.titulo}</h2>
+        <h2 className={`${H2} mt-10 lg:mt-12 mb-10 max-w-4xl`}>{T.queda.titulo}</h2>
         <Tarjetas bloques={T.queda.bloques} />
       </section>
 
