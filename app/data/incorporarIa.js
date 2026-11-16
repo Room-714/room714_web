@@ -67,18 +67,6 @@ export const INCORPORAR_IA = {
   // Continúa la frase del título de `frentes`, en el mismo bloque.
   queda: {
     titulo: "…para que la IA deje de ser un riesgo y pase a ser un plan.",
-    bloques: [
-      {
-        titulo: "Tus empleados la usan con criterio.",
-        texto:
-          "En su día a día saben qué herramientas usar, qué datos no deben compartir y cómo sacarle partido en su trabajo.",
-      },
-      {
-        titulo: "Tu empresa tiene un plan con prioridades y costes.",
-        texto:
-          "Sabe en qué procesos le interesa aplicar la IA y qué coste supone, con los proyectos ordenados por prioridad.",
-      },
-    ],
   },
 
   cierre: {

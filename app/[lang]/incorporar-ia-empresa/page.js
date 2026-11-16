@@ -138,8 +138,8 @@ export default async function IncorporarIaPage({ params }) {
       {/* 2 y 3, sobre el mismo negro del hero. El problema va en una caja
           roja redondeada para que destaque: el candado abierto a la
           izquierda y el texto alineado a la derecha. Después, la propuesta
-          en un solo bloque: los dos ejes y, continuando la frase, lo que
-          consigues; las cuatro tarjetas con el mismo formato. */}
+          en un solo bloque: los dos ejes y, continuando la frase, el remate
+          alineado a la derecha. */}
       <section className={`w-full bg-black text-white ${CANAL} pb-24 lg:pb-28`}>
         <div className="rounded-[50px] bg-red-700 px-6 py-12 md:px-12 md:py-16 lg:px-16 lg:py-20 mb-16 lg:mb-24">
           <div className="grid md:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] gap-10 lg:gap-16 items-center">
@@ -158,8 +158,10 @@ export default async function IncorporarIaPage({ params }) {
 
         <h2 className={`${H2} mb-10 max-w-4xl`}>{T.frentes.titulo}</h2>
         <Tarjetas bloques={T.frentes.bloques} />
-        <h2 className={`${H2} mt-10 lg:mt-12 mb-10 max-w-4xl`}>{T.queda.titulo}</h2>
-        <Tarjetas bloques={T.queda.bloques} />
+        {/* Remate de la frase, alineado a la derecha */}
+        <h2 className={`${H2} text-right text-balance mt-10 lg:mt-12 ml-auto max-w-4xl`}>
+          {T.queda.titulo}
+        </h2>
       </section>
 
       {/* 4. Hablemos: inventario de IA, sobre blanco: enlaza con el skyline */}
