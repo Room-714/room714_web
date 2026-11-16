@@ -97,8 +97,14 @@ export const INCORPORAR_IA = {
   cierre: {
     titulo: "Cuéntanos cómo se usa hoy la IA en tu empresa.",
     texto:
-      "En 30 minutos vemos qué se está usando, qué riesgos hay y por dónde empezar. No es una reunión comercial.",
-    firma: "Te atiende José Antonio Ces, fundador de Room 714.",
+      "En 30 minutos vemos qué se está usando, qué riesgos hay y por dónde empezar.",
+    // Resumen de la bio de «Quién está detrás» (about.quien del
+    // diccionario): no añade nada que no esté ya publicado allí.
+    quien: {
+      nombre: "José Antonio Ces",
+      cargo: "Fundador y CEO de Room 714",
+      bio: "Ingeniero de Telecomunicación con más de treinta años en producto B2B: de Ericsson y Telefónica a fundar Room 714 en 2016. Ha sido consultor senior de transformación digital para empresas como LaLiga, GMV o MasOrange.",
+    },
     // Etiqueta de la pregunta de texto libre del formulario en esta landing.
     pregunta: "¿Qué te preocupa?",
     empleados: {

@@ -217,21 +217,30 @@ export default async function IncorporarIaPage({ params }) {
       >
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-16">
           <div>
-            <h2 className="font-hand text-3xl md:text-4xl lg:text-5xl mb-6 leading-[1.45]">
-              {T.cierre.titulo}
-            </h2>
-            <p className={`${TEXTO} text-gray-700 mb-8`}>{T.cierre.texto}</p>
-            <div className="flex items-center gap-4">
+            <h2 className={`${H2} mb-6`}>{T.cierre.titulo}</h2>
+            <p className="font-hand text-red-500 text-2xl md:text-3xl leading-[1.45] mb-10">
+              {T.cierre.texto}
+            </p>
+            {/* Quién atiende la sesión, con la foto de «Quién está detrás» */}
+            <div className="flex flex-col sm:flex-row gap-6">
               <Image
                 src="/about/jose-antonio-ces.jpg"
-                alt=""
-                width={128}
-                height={128}
-                className="rounded-full shrink-0 w-16 h-16 object-cover"
+                alt={T.cierre.quien.nombre}
+                width={320}
+                height={320}
+                className="rounded-full shrink-0 w-28 h-28 lg:w-32 lg:h-32 object-cover"
               />
-              <p className="font-body text-base md:text-lg text-gray-700 leading-normal">
-                {T.cierre.firma}
-              </p>
+              <div>
+                <p className="font-title font-bold text-xl md:text-2xl text-black mb-1">
+                  {T.cierre.quien.nombre}
+                </p>
+                <p className="font-hand text-lg md:text-xl text-red-500 mb-3">
+                  {T.cierre.quien.cargo}
+                </p>
+                <p className="font-body text-base md:text-lg text-gray-700 leading-normal">
+                  {T.cierre.quien.bio}
+                </p>
+              </div>
             </div>
           </div>
           <FormularioLanding dict={dict} />
