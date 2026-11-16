@@ -60,6 +60,15 @@ export const CASOS = {
 
 export const TODAS = { ...ROUTES, ...CASOS };
 
+/**
+ * Páginas que solo existen en castellano: landings de campaña para el mercado
+ * español. Van aparte de ROUTES porque todo lo que sale de ROUTES (sitemap,
+ * hreflang, guardas) da por hecho que hay versión inglesa.
+ */
+export const SOLO_ES = {
+  formacionIa: "/formacion-consultoria-ia-empresas",
+};
+
 export const IDIOMAS = ["es", "en"];
 
 /**
@@ -84,6 +93,10 @@ export const EN_SITEMAP = [
 
 /** La ruta completa con idioma: path("casos", "es") → "/es/casos" */
 export function path(clave, lang) {
+  if (SOLO_ES[clave]) {
+    if (lang !== "es") throw new Error(`La ruta ${clave} solo existe en castellano`);
+    return `/es${SOLO_ES[clave]}`;
+  }
   const ruta = TODAS[clave];
   if (!ruta) throw new Error(`Ruta desconocida: ${clave}`);
   return `/${lang}${ruta[lang]}`;
@@ -134,4 +147,13 @@ export function guardasDeIdioma() {
     filas.push({ de: `/es${ruta.en}`, a: `/es${ruta.es}` });
   }
   return filas;
+}
+
+/**
+ * Las páginas solo en castellano no tienen equivalente inglesa. La carpeta
+ * vive bajo [lang], así que /en/<ruta> resolvería: se manda a la portada
+ * inglesa, que es también adonde lleva el selector de idioma desde ellas.
+ */
+export function guardasSoloEs() {
+  return Object.values(SOLO_ES).map((ruta) => ({ de: `/en${ruta}`, a: "/en" }));
 }

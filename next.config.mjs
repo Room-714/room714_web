@@ -1,4 +1,4 @@
-import { RENOMBRADAS, guardasDeIdioma } from "./app/lib/routes.mjs";
+import { RENOMBRADAS, guardasDeIdioma, guardasSoloEs } from "./app/lib/routes.mjs";
 import { redireccionesDePosts } from "./app/lib/seo/postsRedirigidos.mjs";
 
 // Las redirecciones del rediseño no se escriben a mano: salen del mapa de
@@ -8,6 +8,7 @@ import { redireccionesDePosts } from "./app/lib/seo/postsRedirigidos.mjs";
 const desdeElMapa = [
   ...RENOMBRADAS,
   ...guardasDeIdioma(),
+  ...guardasSoloEs(),
   ...redireccionesDePosts(),
 ].map(({ de, a }) => ({
   source: de,

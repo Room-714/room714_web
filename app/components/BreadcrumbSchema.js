@@ -32,6 +32,7 @@ const PAGE_NAMES = {
     privacy: "Política de Privacidad",
     terms: "Términos",
     cookies: "Política de Cookies",
+    "formacion-consultoria-ia-empresas": "Formación y consultoría de IA para empresas",
   },
 };
 

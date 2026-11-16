@@ -2,7 +2,7 @@ import { unstable_cache } from "next/cache";
 import { prisma } from "@/app/lib/prisma";
 import { listAllCategoryRoutes } from "@/app/lib/categoryRoutes";
 import { SITE_URL, blogUrl } from "@/app/lib/seo/urls";
-import { EN_SITEMAP, IDIOMAS, pathsOf } from "@/app/lib/routes.mjs";
+import { EN_SITEMAP, IDIOMAS, SOLO_ES, path, pathsOf } from "@/app/lib/routes.mjs";
 import { estaRedirigido } from "@/app/lib/seo/postsRedirigidos.mjs";
 
 // El sitemap se genera en cada petición, no en el build. Con
@@ -113,6 +113,14 @@ export default async function sitemap() {
     }),
   );
 
+  // 1a. Páginas solo en castellano: sin alternate inglés, porque no existe.
+  const soloEsRoutes = Object.keys(SOLO_ES).map((clave) => ({
+    url: `${baseUrl}${path(clave, "es")}`,
+    alternates: { languages: { es: `${baseUrl}${path(clave, "es")}` } },
+    changeFrequency: "monthly",
+    priority: 0.8,
+  }));
+
   // 1b. Páginas de categoría: cambian cuando hay post nuevo → lastmod del
   // contenido más reciente.
   const categoryRoutes = listAllCategoryRoutes().map((r) => {
@@ -145,5 +153,5 @@ export default async function sitemap() {
     ...enPosts.filter(anunciable("en")).map((p) => toRoute(p, "en")),
   ];
 
-  return [...routes, ...categoryRoutes, ...blogRoutes];
+  return [...routes, ...soloEsRoutes, ...categoryRoutes, ...blogRoutes];
 }

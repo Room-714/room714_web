@@ -532,7 +532,8 @@
       "link": "Back to home"
     },
     "buttons": {
-      "send": "get in touch"
+      "send": "get in touch",
+      "sending": "sending…"
     },
     "hero": {
       "title": "What is bugging you?",

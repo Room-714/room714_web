@@ -21,6 +21,7 @@ import {
 } from "@/app/lib/seo/schema";
 import { LINKEDIN_COMPANY, withUtm } from "@/app/lib/links";
 import { path } from "@/app/lib/routes.mjs";
+import { FORMACION_IA } from "@/app/data/formacionIa";
 import AnalyticsEvents from "@/app/components/AnalyticsEvents";
 import KitConsultingFooter from "@/app/components/KitConsultingFooter";
 import { Analytics } from "@vercel/analytics/next";
@@ -252,6 +253,18 @@ export default async function RootLayout({ children, params }) {
                 {dict.nav.careers}
               </Link>
               <span className="w-px h-5 bg-white" aria-hidden="true" />
+              {/* La landing de formación en IA solo existe en castellano. */}
+              {lang === "es" && (
+                <>
+                  <Link
+                    href={path("formacionIa", "es")}
+                    className="hover:text-red-500 transition-colors duration-300"
+                  >
+                    {FORMACION_IA.footer}
+                  </Link>
+                  <span className="w-px h-5 bg-white" aria-hidden="true" />
+                </>
+              )}
               <Link
                 href={path("privacidad", lang)}
                 className="hover:text-red-500 transition-colors duration-300"

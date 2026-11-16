@@ -532,7 +532,8 @@
       "link": "Volver al inicio"
     },
     "buttons": {
-      "send": "contactar"
+      "send": "contactar",
+      "sending": "enviando…"
     },
     "hero": {
       "title": "¿Qué te pica?",

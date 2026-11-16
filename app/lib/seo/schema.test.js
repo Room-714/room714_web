@@ -170,3 +170,25 @@ describe("jobPostingSchema", () => {
     }
   });
 });
+
+describe("serviceSchema de la landing de formación en IA", () => {
+  it("lleva nombre, descripción, proveedor y área España", async () => {
+    const { serviceSchema, ORGANIZATION_ID } = await import("./schema");
+    const s = serviceSchema({
+      clave: "formacionIa",
+      lang: "es",
+      url: "https://www.room714.com/es/formacion-consultoria-ia-empresas",
+      description: "desc",
+    });
+    expect(s.name).toBe("Formación y consultoría de IA para empresas");
+    expect(s.description).toBe("desc");
+    expect(s.provider).toEqual({ "@id": ORGANIZATION_ID });
+    expect(s.areaServed).toEqual({ "@type": "Country", name: "España" });
+  });
+
+  it("las demás páginas de servicio no cambian: sin areaServed", async () => {
+    const { serviceSchema } = await import("./schema");
+    const s = serviceSchema({ clave: "iaProducto", lang: "es", url: "u", description: "d" });
+    expect(s).not.toHaveProperty("areaServed");
+  });
+});
