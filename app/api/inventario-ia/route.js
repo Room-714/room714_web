@@ -9,6 +9,8 @@ import { guardarLead, normalizarCampana } from "@/app/lib/leads/guardar";
 import {
   BUZON_CONTACTO,
   REMITENTE,
+  REMITENTE_CLIENTES,
+  RESPONDER_A,
   emailValido,
   escaparHtml as e,
 } from "@/app/lib/leads/email";
@@ -75,9 +77,9 @@ export async function POST(req) {
 
   const resend = new Resend(apiKey);
   const { error } = await resend.emails.send({
-    from: REMITENTE,
+    from: REMITENTE_CLIENTES,
     to: [email],
-    replyTo: BUZON_CONTACTO,
+    replyTo: RESPONDER_A,
     subject: ASUNTO_INVENTARIO,
     html: htmlInventario(d),
     text: textoInventario(d),
