@@ -115,7 +115,7 @@ export async function POST(req) {
         <h2 style="border-bottom:1px solid #eee;padding-bottom:10px;">Inventario de IA completado</h2>
         <p><strong>Email:</strong> ${e(email)}</p>
         ${filaCampana}
-        <p><strong>Nivel ${e(d.etiqueta)}:</strong> ${e(d.titular)}</p>
+        <p><strong>${e(d.etiqueta)}:</strong> ${e(d.titular)}</p>
         <p><strong>Pasos que le hemos dado:</strong></p>
         <ol>${d.pasos.map((p) => `<li>${e(p)}</li>`).join("")}</ol>
         <h3>Respuestas</h3>${filas}

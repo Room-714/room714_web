@@ -87,24 +87,24 @@ export const PREGUNTAS = [
 
 export const NIVELES = {
   critico: {
-    etiqueta: "Crítico",
+    etiqueta: "Criticidad muy alta",
     titular: "Tu empresa necesita actuar ya.",
     texto:
       "La IA se usa con datos sensibles, sin normas ni control. Si mañana hay una fuga o una reclamación, la empresa no podría explicar qué se subió ni dónde.",
   },
   alto: {
-    etiqueta: "Alto",
+    etiqueta: "Criticidad alta",
     titular: "Tu empresa necesita poner orden pronto.",
     texto:
       "Hay uso real de la IA, pero sin las reglas ni la formación que exige la normativa. El riesgo crece cada semana que pasa.",
   },
   moderado: {
-    etiqueta: "Moderado",
+    etiqueta: "Criticidad moderada",
     titular: "Vas por buen camino, pero quedan huecos.",
     texto: "Hay cierto control, pero faltan piezas para que el uso sea seguro y demostrable.",
   },
   bajo: {
-    etiqueta: "Bajo",
+    etiqueta: "Criticidad baja",
     titular: "Tienes una buena base.",
     texto: "El uso está ordenado. El siguiente paso es decidir dónde aporta la IA en tus procesos.",
   },
@@ -189,8 +189,8 @@ export function riesgos(r) {
 }
 
 /**
- * El nivel de gravedad. «Crítico» exige datos sensibles (es lo que dice su
- * texto); con datos sensibles y sin normas, el nivel es como mínimo «Alto».
+ * El nivel de criticidad. «Muy alta» (critico) exige datos sensibles (es lo
+ * que dice su texto); con datos sensibles y sin normas, es como mínimo «Alta».
  */
 export function nivel(r) {
   const { puntos, sensibles, sinNormas } = riesgos(r);

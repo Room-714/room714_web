@@ -32,7 +32,7 @@ describe("email del diagnóstico", () => {
     const d = diagnostico(CRITICA);
     const html = htmlInventario(d);
     expect(ASUNTO_INVENTARIO).toBe("Tu diagnóstico de IA");
-    expect(html).toContain("Nivel <span");
+    expect(html).toContain("Criticidad muy alta");
     expect(html).toContain(NIVELES.critico.etiqueta);
     expect(html).toContain(NIVELES.critico.titular);
     expect(html).toContain(NORMATIVA.articulo4.titulo);
@@ -57,7 +57,7 @@ describe("email del diagnóstico", () => {
 
   it("la versión en texto plano lleva lo mismo", () => {
     const texto = textoInventario(diagnostico(CRITICA));
-    expect(texto).toContain("Nivel Crítico");
+    expect(texto).toContain("Tu diagnóstico de IA · Criticidad muy alta");
     expect(texto).toContain(`1. ${PASOS.datos}`);
     expect(texto).toContain(urlFormulario());
   });
