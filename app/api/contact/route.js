@@ -76,9 +76,9 @@ export async function POST(req) {
           ${origen === ORIGENES.landing ? `<p><strong>Employees:</strong> ${e(employees || "—")}</p>` : `<p><strong>Situation:</strong> ${e(formattedInterests)}</p>`}
           ${filaCampana}
           <p style="margin-top: 20px;"><strong>Message:</strong></p>
-          <div style="background: #f9f9f9; padding: 20px; border-radius: 12px; border: 1px solid #eee; line-height: 1.6; white-space: pre-wrap;">
-            ${e(message)}
-          </div>
+          <!-- pre-wrap respeta los saltos de línea del mensaje: el texto va
+               pegado a las etiquetas para que no herede la sangría de aquí. -->
+          <div style="background: #f9f9f9; padding: 20px; border-radius: 12px; border: 1px solid #eee; line-height: 1.6; white-space: pre-wrap;">${e(String(message ?? "").trim())}</div>
           <footer style="margin-top: 30px; font-size: 12px; color: #999;">
             This email was sent from the Room 714 contact form.
           </footer>
