@@ -837,6 +837,7 @@
     "terms": "Terms & Conditions",
     "privacy": "Privacy Policy",
     "cookies": "Cookie Policy",
+    "cookieSettings": "Cookie settings",
     "copyright": "Room 714. All rights reserved.",
     "kit_consulting": {
       "aria_label": "Kit Consulting Programme",
@@ -851,18 +852,18 @@
     }
   },
   "cookies": {
-    "title": "🍪 Cookies?",
-    "description": "We use cookies to improve your experience. By browsing, you accept our policy.",
-    "link": "Read more",
-    "accept": "Accept all",
-    "decline": "Necessary only"
+    "title": "Cookies",
+    "description": "We use analytics cookies (Google Analytics and Microsoft Clarity) and advertising cookies (Google Ads) to understand how the website is used and measure our campaigns. They are only activated if you accept them.",
+    "link": "Cookie policy",
+    "accept": "Accept",
+    "decline": "Reject"
   },
   "cookiePolicy": {
     "title": "Cookie Policy",
     "sec1_title": "What are cookies?",
     "sec1_text": "Cookies are small text files stored on your device by websites to ensure proper functionality, remember preferences, and analyse traffic.",
     "sec2_title": "How do we use them?",
-    "sec2_text": "At Room 714, we use technical (necessary) and third-party analytical cookies to understand how you interact with our site and improve our service.",
+    "sec2_text": "At Room 714, we use technical (necessary) cookies and third-party analytics and advertising cookies to understand how you interact with our site, improve our service and measure our campaigns. Analytics and advertising cookies are only activated if you accept them.",
     "sec3_title": "Which cookies do we use?",
     "table_name": "Name",
     "table_provider": "Provider",
@@ -870,11 +871,13 @@
     "table_duration": "Duration",
     "desc_consent": "Stores your consent preferences.",
     "desc_clarity": "Analyses user behaviour and sessions.",
+    "desc_ga": "Analytics: distinguishes visitors and measures how the website is used.",
+    "desc_ads": "Advertising: measures conversions from Google Ads campaigns.",
     "sec4_title": "Cookie management",
-    "sec4_text": "You can revoke your consent at any time by clearing your browser cookies or using the settings button on our website.",
+    "sec4_text": "You can change your decision at any time from «Cookie settings» in the footer. If you reject them after having accepted, we delete the analytics and advertising cookies.",
     "last_update": {
       "text": "Last updated",
-      "date": "January 2026"
+      "date": "November 2026"
     }
   },
   "privacy": {
