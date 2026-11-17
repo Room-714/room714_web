@@ -94,6 +94,26 @@ export default async function CookiesPage({ params }) {
                     </td>
                     <td className="p-4 border border-gray-100">1 year / 24h</td>
                   </tr>
+                  <tr>
+                    <td className="p-4 border border-gray-100 font-bold italic text-red-600">
+                      _ga / _ga_*
+                    </td>
+                    <td className="p-4 border border-gray-100">Google Analytics</td>
+                    <td className="p-4 border border-gray-100">
+                      {dict.cookiePolicy.desc_ga}
+                    </td>
+                    <td className="p-4 border border-gray-100">2 years</td>
+                  </tr>
+                  <tr>
+                    <td className="p-4 border border-gray-100 font-bold italic text-red-600">
+                      _gcl_au
+                    </td>
+                    <td className="p-4 border border-gray-100">Google Ads</td>
+                    <td className="p-4 border border-gray-100">
+                      {dict.cookiePolicy.desc_ads}
+                    </td>
+                    <td className="p-4 border border-gray-100">90 days</td>
+                  </tr>
                 </tbody>
               </table>
             </div>

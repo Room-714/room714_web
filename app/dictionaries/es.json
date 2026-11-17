@@ -843,6 +843,7 @@
     "terms": "Términos y condiciones",
     "privacy": "Política de Privacidad",
     "cookies": "Política de Cookies",
+    "cookieSettings": "Configurar cookies",
     "copyright": "Room 714. Todos los derechos reservados.",
     "kit_consulting": {
       "aria_label": "Programa Kit Consulting",
@@ -857,18 +858,18 @@
     }
   },
   "cookies": {
-    "title": "🍪 Cookies?",
-    "description": "Usamos cookies para mejorar tu experiencia. Al navegar, aceptas nuestra política.",
-    "link": "Leer más",
-    "accept": "Aceptar todo",
-    "decline": "Solo básicas"
+    "title": "Cookies",
+    "description": "Usamos cookies de análisis (Google Analytics y Microsoft Clarity) y de publicidad (Google Ads) para entender cómo se usa la web y medir nuestras campañas. Solo se activan si las aceptas.",
+    "link": "Política de cookies",
+    "accept": "Aceptar",
+    "decline": "Rechazar"
   },
   "cookiePolicy": {
     "title": "Política de Cookies",
     "sec1_title": "¿Qué son las cookies?",
     "sec1_text": "Las cookies son pequeños archivos de texto que los sitios web almacenan en su dispositivo para que el sitio funcione correctamente, recordar preferencias y analizar el tráfico.",
     "sec2_title": "¿Cómo las usamos?",
-    "sec2_text": "En Room 714 utilizamos cookies técnicas (necesarias) y analíticas de terceros para entender cómo interactúas con nuestra web y mejorar nuestro servicio.",
+    "sec2_text": "En Room 714 utilizamos cookies técnicas (necesarias), analíticas y de publicidad de terceros para entender cómo interactúas con nuestra web, mejorar nuestro servicio y medir nuestras campañas. Las analíticas y las de publicidad solo se activan si las aceptas.",
     "sec3_title": "¿Qué cookies utilizamos?",
     "table_name": "Nombre",
     "table_provider": "Proveedor",
@@ -876,11 +877,13 @@
     "table_duration": "Duración",
     "desc_consent": "Almacena tu preferencia de consentimiento.",
     "desc_clarity": "Analítica de comportamiento y sesiones de usuario.",
+    "desc_ga": "Analítica: distingue visitantes y mide cómo se usa la web.",
+    "desc_ads": "Publicidad: mide las conversiones de las campañas de Google Ads.",
     "sec4_title": "Gestión de cookies",
-    "sec4_text": "Puedes revocar tu consentimiento en cualquier momento borrando las cookies de tu navegador o utilizando el botón de configuración de nuestra web.",
+    "sec4_text": "Puedes cambiar tu decisión en cualquier momento desde «Configurar cookies», en el pie de página. Si las rechazas después de haberlas aceptado, borramos las cookies analíticas y de publicidad.",
     "last_update": {
       "text": "Última actualización",
-      "date": "Enero 2026"
+      "date": "Noviembre 2026"
     }
   },
   "privacy": {

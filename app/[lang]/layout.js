@@ -11,6 +11,7 @@ import {
 } from "next/font/google";
 import { GoogleTagManager } from "@next/third-parties/google";
 import CookieBanner from "@/app/components/CookieBanner";
+import ConfigurarCookies from "@/app/components/ConfigurarCookies";
 import BreadcrumbSchema from "@/app/components/BreadcrumbSchema";
 import { SITE_URL } from "@/app/lib/seo/urls";
 import { socialMeta } from "@/app/lib/seo/social";
@@ -119,6 +120,20 @@ export default async function RootLayout({ children, params }) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <BreadcrumbSchema />
+        {/* Modo de consentimiento v2, modalidad básica: GTM solo se carga si
+            hay consentimiento (más abajo), y antes de cargarlo se le dan a
+            Google las cuatro señales. Sin consentimiento no se carga nada,
+            así que no hay estado «denegado» que comunicar. */}
+        {hasConsent && (
+          <script
+            dangerouslySetInnerHTML={{
+              __html:
+                "window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}" +
+                "gtag('consent','default',{ad_storage:'denied',analytics_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'});" +
+                "gtag('consent','update',{ad_storage:'granted',analytics_storage:'granted',ad_user_data:'granted',ad_personalization:'granted'});",
+            }}
+          />
+        )}
       </head>
 
       {/* Solo cargamos tracking si hay consentimiento explícito */}
@@ -286,6 +301,11 @@ export default async function RootLayout({ children, params }) {
               >
                 {dict.footer.cookies}
               </Link>
+              <span className="w-px h-5 bg-white" aria-hidden="true" />
+              <ConfigurarCookies
+                texto={dict.footer.cookieSettings}
+                className="hover:text-red-500 transition-colors duration-300 cursor-pointer"
+              />
             </div>
 
             {/* KIT CONSULTING: publicidad obligatoria del programa */}
