@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from "react";
 import RichTextEditor from "./components/Editor";
 import { savePost, getPostsList, deletePost } from "./actions";
-import { marcarLinkedIn } from "./linkedinActions";
+import { configLinkedInPanel, marcarLinkedIn } from "./linkedinActions";
 import Image from "next/image";
 import Link from "next/link";
 import ImageUploader from "./components/ImageUploader";
@@ -41,6 +41,9 @@ export default function AdminPage() {
   const [mobileView, setMobileView] = useState("list");
   const [isGenerating, setIsGenerating] = useState(false);
   const [savedNotice, setSavedNotice] = useState(false);
+  // Flujo de aprobación de LinkedIn (LINKEDIN_APPROVAL_FLOW). Apagado por
+  // defecto: LinkedIn se publica solo y el panel no enseña nada de LinkedIn.
+  const [flujoLinkedIn, setFlujoLinkedIn] = useState(false);
   // Aviso de "Generar post IA" cuando no se genera: duplicado, sin cluster o
   // error ({ error: mensaje }).
   const [avisoGeneracion, setAvisoGeneracion] = useState(null);
@@ -79,6 +82,10 @@ export default function AdminPage() {
       console.error("Error al cargar posts:", error);
     }
   }, []); // Importante: Array vacío para que la función sea estable
+
+  useEffect(() => {
+    configLinkedInPanel().then((r) => setFlujoLinkedIn(r?.flujoAprobacion === true));
+  }, []);
 
   useEffect(() => {
     let isMounted = true;
@@ -196,7 +203,7 @@ export default function AdminPage() {
 
     // La casilla del modal solo marca o desmarca: nunca aprueba. Lo marcado
     // queda «Pendiente de aprobar para LinkedIn» hasta aprobarlo en el panel.
-    if (finalResult?.success && linkedIn !== linkedInInicial) {
+    if (flujoLinkedIn && finalResult?.success && linkedIn !== linkedInInicial) {
       await marcarLinkedIn(lastSavedPost.id, linkedIn);
     }
 
@@ -342,7 +349,7 @@ export default function AdminPage() {
           {post.translations?.find((t) => t.lang === "es")?.title ||
             "Sin título"}
         </p>
-        {MARCA_LINKEDIN[post.linkedinEstado] && (
+        {flujoLinkedIn && MARCA_LINKEDIN[post.linkedinEstado] && (
           <span
             className={`mt-1 inline-block px-1.5 rounded border text-[10px] font-bold ${MARCA_LINKEDIN[post.linkedinEstado].clase}`}
           >
@@ -361,6 +368,7 @@ export default function AdminPage() {
           post={lastSavedPost}
           onClose={() => setShowModal(false)}
           onConfirm={handleFinalAction}
+          mostrarLinkedIn={flujoLinkedIn}
         />
       )}
 
@@ -468,8 +476,10 @@ export default function AdminPage() {
                   existente y que encaje en un cluster. Tarda hasta 5 minutos y
                   consume tokens. Se creará como publicado en la web en la
                   próxima franja de 07:30 (Madrid) y aparecerá en «Próximamente»
-                  para que lo valides. A LinkedIn no sale: quedará pendiente de
-                  tu aprobación.
+                  para que lo valides.
+                  {flujoLinkedIn
+                    ? " A LinkedIn no sale: quedará pendiente de tu aprobación."
+                    : " LinkedIn lo publica solo, si es el elegido de la semana."}
                 </p>
                 <div className="flex flex-col gap-2">
                   <button
@@ -751,7 +761,7 @@ export default function AdminPage() {
                 </div>
               </div>
 
-              {formData.id && (
+              {flujoLinkedIn && formData.id && (
                 <LinkedInPanel
                   key={formData.id}
                   postId={formData.id}

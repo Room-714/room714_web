@@ -25,22 +25,6 @@ function button(href, label) {
 
 // Caja de texto literal. La etiqueta es obligatoria: sin ella, dos cajas con el
 // mismo aspecto (una URL para pegar y un texto sugerido) se confunden.
-function copyBox(label, text) {
-  return `
-    <div style="margin:10px 0;">
-      <div style="font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:#999;margin-bottom:4px;">${esc(label)}</div>
-      <pre style="white-space:pre-wrap;word-wrap:break-word;background:#f6f6f6;border-radius:6px;padding:12px;margin:0;font-family:inherit;font-size:14px;line-height:1.5;color:#222;">${esc(text)}</pre>
-    </div>`;
-}
-
-// Pasos numerados. Cada elemento puede llevar <strong> ya escrito, así que no
-// se escapa aquí: las cadenas son literales del código, no datos externos.
-function steps(items) {
-  return `<ol style="margin:10px 0 0;padding-left:22px;font-size:14px;line-height:1.65;color:#333;">${items
-    .map((s) => `<li style="margin-bottom:4px;">${s}</li>`)
-    .join("")}</ol>`;
-}
-
 function note(text) {
   return `<p style="margin:0;color:#666;font-size:13px;">${esc(text)}</p>`;
 }
@@ -61,97 +45,29 @@ function timing(task) {
 
 export function renderTaskHtml(task) {
   switch (task.kind) {
-    case "first_comment":
-      return block(`
-        ${eyebrow(timing(task))}
-        ${heading(task.title)}
-        ${note("El post sale sin enlace en el cuerpo a propósito: LinkedIn recorta el alcance de las publicaciones con enlaces externos. El enlace va en el primer comentario.")}
-        ${steps([
-          `Pulsa <strong>Ir al post</strong>: se abre tu publicación de hoy.`,
-          `Copia el enlace de abajo.`,
-          `Pégalo como <strong>primer comentario</strong> de tu propio post. Cuanto antes, mejor.`,
-        ])}
-        ${copyBox("Enlace del artículo", task.articleUrl)}
-        ${button(task.linkUrl, "Ir al post")}
-      `);
-
-    case "comment_personal":
-      return block(`
-        ${eyebrow(timing(task))}
-        ${heading(task.title)}
-        ${note(`Artículo: ${task.articleTitle}`)}
-        ${steps([
-          `Pulsa <strong>Ir al post</strong>: se abre la publicación de hoy de Room 714.`,
-          `<strong>Comprueba que comentas desde tu perfil personal</strong>, no como la página: al ser administrador, LinkedIn puede ponerte la identidad de Room 714 por defecto.`,
-          `Pega el texto de abajo, ajústalo a tu voz si quieres, y publícalo.`,
-        ])}
-        ${
-          task.suggestion
-            ? copyBox("Comentario sugerido", task.suggestion)
-            : `<p style="margin:10px 0;font-size:13px;color:#999;font-style:italic;">Sin sugerencia generada para esta variante — escríbelo a mano.</p>`
-        }
-        ${button(task.linkUrl, "Ir al post")}
-      `);
-
-    case "reshare_company":
-      return block(`
-        ${eyebrow(timing(task))}
-        ${heading(task.title)}
-        ${note(`Artículo: ${task.articleTitle}`)}
-        ${steps([
-          `Pulsa <strong>Ir al post</strong>: se abre tu publicación de hoy.`,
-          `Dale a <strong>Compartir</strong> → <strong>Compartir con tus comentarios</strong> (no el compartir simple).`,
-          `<strong>Arriba del cuadro de redacción, cambia la identidad de tu nombre a Room 714.</strong> Es el paso que se olvida: sin él lo recompartes como tú y no sirve de nada.`,
-          `Pega el texto de abajo como comentario de la recompartición y publica.`,
-        ])}
-        ${
-          task.suggestion
-            ? copyBox("Texto sugerido para la recompartición", task.suggestion)
-            : `<p style="margin:10px 0;font-size:13px;color:#999;font-style:italic;">Sin sugerencia generada para esta variante — escríbelo a mano.</p>`
-        }
-        ${button(task.linkUrl, "Ir al post")}
-      `);
-
     case "blog_review":
       return block(`
         ${eyebrow(timing(task))}
         ${heading(task.title)}
         <p style="margin:0 0 4px;font-size:15px;color:#111;"><strong>${esc(task.articleTitle)}</strong></p>
-        ${note(`Se publicó a las ${task.time}. Si lo editas ahora el cambio solo se ve en la web: las tomas de LinkedIn ya salieron a las 08:30 con el texto de entonces.`)}
+        ${note(`Se publicó a las ${task.time}.`)}
         ${button(task.articleUrl, "Ver artículo")}${button(task.adminUrl, "Editar en el admin")}
       `);
 
-    case "not_published":
-      return block(`
-        ${eyebrow(`Ayer a las ${task.time}`)}
-        ${heading(task.title)}
-        <p style="margin:0;color:#666;font-size:13px;">${esc(task.articleTitle)}. Revisa el escenario de Make o resetea la variante para que el cron la reintente.</p>
-      `);
-
-    // El cron de las 08:30 no llegó a generar las tomas (fallo o timeout) y,
-    // al no reintentar Vercel, nadie más lo detecta antes del viernes. El
-    // eyebrow no usa task.time: esa es la hora de publicación del artículo
-    // (07:30), y el fallo ocurre en el cron de las 08:30 — mezclarlas despista.
-    // No hay botón "Generar en el admin" porque no existe: no hay pantalla de
-    // admin que dispare la generación de tomas. Lo que sí existe es la propia
-    // ruta del cron, protegida por CRON_SECRET, con un ?force=1 (arreglo 4)
-    // pensado justo para esto: recuperar a mano una generación fallida sin
-    // esperar a que vuelva a tocarle su hora.
+    // Solo informan: desde noviembre de 2026 todo es automático y el correo
+    // no pide nada a mano. Dicen qué pasa solo, sin que nadie intervenga.
     case "no_takes":
       return block(`
         ${eyebrow("Hoy · cron de las 08:30")}
         ${heading(task.title)}
-        <p style="margin:0;color:#666;font-size:13px;">${esc(task.articleTitle)}. Revisa los logs del cron de las 08:30 en Vercel, o vuelve a lanzarlo a mano: GET /api/cron/generate-linkedin?force=1 con el header Authorization: Bearer CRON_SECRET.</p>
+        <p style="margin:0;color:#666;font-size:13px;">${esc(task.articleTitle)}. Si el viernes es el elegido para la página de empresa, saldrá con un resumen del artículo en vez de su toma.</p>
       `);
 
-    // El cron de las 06:00 no llegó a generar el artículo (fallo o timeout) y
-    // Vercel no reintenta. No hay post que enlazar —por eso no lleva botón—,
-    // así que la única acción posible es mirar los logs o generarlo a mano.
     case "no_article":
       return block(`
         ${eyebrow("Hoy · cron de las 06:00")}
         ${heading(task.title)}
-        <p style="margin:0;color:#666;font-size:13px;">Revisa los logs del cron de las 06:00 en Vercel, o genera el artículo a mano desde el admin (botón "Generar borrador").</p>
+        <p style="margin:0;color:#666;font-size:13px;">Esta semana habrá un artículo menos. El siguiente se genera a su hora, sin hacer nada.</p>
       `);
 
     default:
@@ -166,11 +82,11 @@ export function renderBriefingHtml({ tasks = [], incidents = [], dateLabel }) {
 
   return `
 <div style="font-family: sans-serif; color: #333; max-width: 640px;">
-  <h2 style="border-bottom:1px solid #eee;padding-bottom:10px;margin:0 0 6px;">Tus tareas de LinkedIn — ${esc(dateLabel)}</h2>
-  <p style="margin:0 0 20px;color:#666;font-size:13px;">${tasks.length} ${tasks.length === 1 ? "tarea" : "tareas"}. Todo lo que necesitas está en este correo.</p>
+  <h2 style="border-bottom:1px solid #eee;padding-bottom:10px;margin:0 0 6px;">Resumen del blog — ${esc(dateLabel)}</h2>
+  <p style="margin:0 0 20px;color:#666;font-size:13px;">Solo para que lo sepas: no tienes que hacer nada.</p>
   ${tasks.map(renderTaskHtml).join("")}
   ${incidentsHtml}
-  <p style="margin-top:28px;font-size:12px;color:#999;">Las publicaciones salen solas vía Make. Esto es solo lo que tienes que hacer tú.</p>
+  <p style="margin-top:28px;font-size:12px;color:#999;">El blog y LinkedIn (página de empresa y tu perfil) se publican solos.</p>
 </div>
   `.trim();
 }
@@ -193,7 +109,7 @@ export async function sendDailyBriefingEmail({ tasks, incidents, dateLabel }) {
     const { error } = await resend.emails.send({
       from: "Room 714 <onboarding@resend.dev>",
       to: [to],
-      subject: `Tus ${tasks.length} tareas de LinkedIn — ${dateLabel}`,
+      subject: `Resumen del blog — ${dateLabel}`,
       html: renderBriefingHtml({ tasks, incidents, dateLabel }),
     });
 

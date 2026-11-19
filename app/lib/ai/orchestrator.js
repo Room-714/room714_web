@@ -28,9 +28,10 @@ import { sendDraftReadyEmail } from "@/app/lib/notifications/draftReady";
 import {
   BUSQUEDAS_OBJETIVO,
   CATEGORIA_DEL_CLUSTER,
-  clusterDelDia,
+  clusterQueToca,
   elegirBusqueda,
 } from "@/app/lib/seo/busquedasObjetivo";
+import { flujoAprobacionActivo } from "@/app/lib/linkedin/config";
 import { CATEGORY_CLUSTER, CLUSTERS, clusterForCategory, clusterHref } from "@/app/lib/seo/clusters";
 import {
   getMadridWeekday,
@@ -116,10 +117,21 @@ export async function generateDraftForToday({
   const reloj = crearReloj();
   const today = new Date();
   const publishDate = nextMadridSlot(PUBLISH_HOUR_MADRID, PUBLISH_MINUTE_MADRID);
-  // Lunes y miércoles el día fija cluster y categoría
-  // (app/lib/seo/busquedasObjetivo.js). Una categoría forzada a mano, un tema
-  // pedido a mano o un día sin cluster siguen la rotación de categorías.
-  const dia = categoryOverride || temaManual ? null : clusterDelDia(publishDate);
+
+  // La ÚNICA lectura de la BD antes de guardar: títulos, metaTitle,
+  // metaDescription y slugs de todos los posts (publicados, programados y
+  // borradores). De aquí salen el cluster que toca, la comprobación de
+  // duplicados, la búsqueda objetivo, los posts recientes del enlazado
+  // interno, los metadatos ya usados y los slugs ocupados. Antes eran dos
+  // consultas en paralelo más un findUnique por cada slug probado.
+  const corpus = await cargarCorpus();
+  const existentes = titulosExistentes(corpus);
+
+  // Cada post pertenece a un cluster: rota entre C1, C2 y C3 empezando por el
+  // que lleva más tiempo sin post (app/lib/seo/busquedasObjetivo.js). Una
+  // categoría forzada a mano o un tema pedido a mano no rotan: el cluster lo
+  // asigna el planificador.
+  const dia = categoryOverride || temaManual ? null : clusterQueToca(corpus);
   let category = categoryOverride ?? dia?.category ?? categoryForDate(today);
 
   if (!category && !temaManual) {
@@ -132,7 +144,7 @@ export async function generateDraftForToday({
   // Dos formas de acabar sin tomas y en silencio: que el cron llegue tarde y
   // nextMadridSlot salte al siguiente día laborable, o que se genere a mano
   // (p. ej. desde /api/admin/generate-draft) en un día que sí es laborable
-  // pero no tiene plan de tomas (martes, jueves, viernes). En los dos casos
+  // pero no tiene plan de tomas (martes, miércoles, viernes). En los dos casos
   // generate-linkedin no recogerá el artículo esa semana. No lo impedimos
   // —publicar sin tomas es preferible a no publicar— pero que quede en el log.
   if (!PLANNED_WEEKDAYS.includes(getMadridWeekday(publishDate))) {
@@ -140,15 +152,6 @@ export async function generateDraftForToday({
       `generateDraftForToday: el artículo se fecha el ${publishDate.toISOString()}, un día sin plan de tomas; no lo recogerá el cron de las 08:30`,
     );
   }
-
-  // La ÚNICA lectura de la BD antes de guardar: títulos, metaTitle,
-  // metaDescription y slugs de todos los posts (publicados, programados y
-  // borradores). De aquí salen la comprobación de duplicados, la búsqueda
-  // objetivo, los posts recientes del enlazado interno, los metadatos ya
-  // usados y los slugs ocupados. Antes eran dos consultas en paralelo más un
-  // findUnique por cada slug probado.
-  const corpus = await cargarCorpus();
-  const existentes = titulosExistentes(corpus);
 
   // Las tendencias son HTTP externo, no BD. Con un tema pedido a mano no hacen falta.
   const trending = temaManual ? [] : await getCrossSourceTrending(category);
@@ -167,6 +170,7 @@ export async function generateDraftForToday({
     plan = await planificarTema({
       category,
       clusterSugerido: dia?.cluster ?? (category ? clusterForCategory(category) : null),
+      clusterFijo: dia?.cluster ?? null,
       temaFijo,
       trending,
       existentes,
@@ -176,9 +180,22 @@ export async function generateDraftForToday({
     });
 
     const duplicado = decidirDuplicado(plan, corpus);
-    if (!duplicado) break;
+    // Con cluster de rotación, un tema de otro cluster tampoco vale: en el
+    // cron se descarta y se prueba otro, como con un duplicado.
+    const fueraDeCluster =
+      !duplicado && dia && !objetivo && plan.cluster && plan.cluster !== dia.cluster;
+    if (!duplicado && !fueraDeCluster) break;
 
     if (intento >= intentos) {
+      if (fueraDeCluster) {
+        return {
+          skipped: true,
+          sinCluster: true,
+          tema: plan.tema_es,
+          reason: `El tema "${plan.tema_es}" es del cluster ${plan.cluster} y ahora toca ${dia.cluster} (${CLUSTERS[dia.cluster].name.es}), el que lleva más tiempo sin post.`,
+          evitar: [...rechazados, plan.tema_es],
+        };
+      }
       return {
         skipped: true,
         reason: `Ya existe un post muy parecido a "${duplicado.tema}": "${duplicado.existente.title}" (${duplicado.existente.estado}). ${duplicado.motivo}`,
@@ -186,8 +203,12 @@ export async function generateDraftForToday({
         evitar: rechazados,
       };
     }
-    console.warn(`generateDraftForToday: "${duplicado.tema}" duplica el post ${duplicado.existente.id}; se prueba otro tema`);
-    rechazados.push(duplicado.tema);
+    console.warn(
+      fueraDeCluster
+        ? `generateDraftForToday: "${plan.tema_es}" es de ${plan.cluster} y toca ${dia.cluster}; se prueba otro tema`
+        : `generateDraftForToday: "${duplicado.tema}" duplica el post ${duplicado.existente.id}; se prueba otro tema`,
+    );
+    rechazados.push(plan.tema_es);
   }
   const sinBusquedas = Boolean(dia && !objetivo);
 
@@ -258,8 +279,10 @@ export async function generateDraftForToday({
       published: true,
       published_sent: false,
       source: "AUTO",
-      // Sale en la web a su hora, pero a LinkedIn solo si se aprueba en el panel.
-      linkedinEstado: "PENDIENTE",
+      // Sale en la web a su hora. Con el flujo de aprobación (desactivado por
+      // defecto) queda pendiente de aprobar; sin él, LinkedIn lo decide el
+      // cron publish-linkedin (app/lib/linkedin/autopost.js).
+      linkedinEstado: flujoAprobacionActivo() ? "PENDIENTE" : "SOLO_WEB",
       translations: {
         create: [
           {
@@ -414,7 +437,7 @@ export async function generateDraftForToday({
 }
 
 /* ─── Tomas de LinkedIn del artículo de hoy ──────────────────────────────────
- * Corre a las 08:30 de lunes y miércoles, después de la ventana de revisión
+ * Corre a las 08:30 de lunes y jueves, después de la ventana de revisión
  * manual (08:00-08:30). Lee el artículo tal y como haya quedado en base de
  * datos: si se editó, las tomas salen del texto editado; si no se tocó, del
  * generado. Nada bloquea.

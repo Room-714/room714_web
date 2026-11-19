@@ -2,15 +2,14 @@ import { describe, expect, it } from "vitest";
 import {
   BUSQUEDAS_OBJETIVO,
   CATEGORIA_DEL_CLUSTER,
-  clusterDelDia,
+  clusterQueToca,
   elegirBusqueda,
   respondeABusqueda,
   semanaIso,
 } from "./busquedasObjetivo";
 import { CATEGORY_CLUSTER, RESERVED_QUERIES, reservedQueriesIn } from "./clusters";
 
-// 07:30 de Madrid en octubre (UTC+2) son las 05:30 UTC: la hora a la que se
-// publica el post y con la que el orquestador decide el cluster.
+// 07:30 de Madrid en octubre (UTC+2) son las 05:30 UTC.
 const publicacion = (dia) => new Date(`${dia}T05:30:00.000Z`);
 
 describe("semanaIso", () => {
@@ -23,32 +22,58 @@ describe("semanaIso", () => {
   });
 });
 
-describe("clusterDelDia", () => {
-  it("los miércoles toca C2, con la categoría de experiencia de usuario", () => {
-    expect(clusterDelDia(publicacion("2026-10-07"))).toEqual({ cluster: "C2", category: "UX" });
-    expect(clusterDelDia(publicacion("2026-10-14"))).toEqual({ cluster: "C2", category: "UX" });
+describe("clusterQueToca (rotación lunes y jueves)", () => {
+  const post = (category, dia, published = true) => ({ category, date: new Date(`${dia}T06:30:00Z`), published });
+
+  it("elige el cluster que lleva más tiempo sin post", () => {
+    const corpus = [
+      post("UX", "2026-11-16"), // C2, el lunes
+      post("TECH", "2026-11-12"), // C3, el jueves anterior
+      post("PRODUCT", "2026-11-05"), // C1, hace dos semanas
+    ];
+    expect(clusterQueToca(corpus)).toEqual({
+      cluster: "C1",
+      category: "PRODUCT",
+      ultimoPost: new Date("2026-11-05T06:30:00Z"),
+    });
   });
 
-  it("los lunes de semana ISO impar toca C1 (Producto) y los de semana par C3 (Tecnología)", () => {
-    expect(clusterDelDia(publicacion("2026-10-05"))).toEqual({ cluster: "C1", category: "PRODUCT" }); // semana 41
-    expect(clusterDelDia(publicacion("2026-10-12"))).toEqual({ cluster: "C3", category: "TECH" }); // semana 42
-    expect(clusterDelDia(publicacion("2026-10-19"))).toEqual({ cluster: "C1", category: "PRODUCT" }); // semana 43
+  it("un cluster sin ningún post va primero", () => {
+    const corpus = [post("UX", "2026-11-16"), post("PRODUCT", "2026-11-12")];
+    expect(clusterQueToca(corpus)).toMatchObject({ cluster: "C3", category: "TECH", ultimoPost: null });
   });
 
-  it("decide con el día de Madrid, no con el de UTC", () => {
-    // Domingo 22:30 UTC = lunes 00:30 en Madrid.
-    expect(clusterDelDia(new Date("2026-10-04T22:30:00Z"))?.cluster).toBe("C1");
-    // Miércoles 23:30 UTC = jueves 01:30 en Madrid: no toca nada.
-    expect(clusterDelDia(new Date("2026-10-07T23:30:00Z"))).toBeNull();
+  it("DESIGN cuenta como C2 y los borradores no cuentan", () => {
+    const corpus = [
+      post("DESIGN", "2026-11-16"),
+      post("PRODUCT", "2026-11-12"),
+      post("TECH", "2026-11-09"),
+      post("TECH", "2026-11-17", false), // borrador: no es un post publicado
+    ];
+    expect(clusterQueToca(corpus).cluster).toBe("C3");
   });
 
-  it("el resto de días no fija cluster", () => {
-    for (const dia of ["2026-10-06", "2026-10-08", "2026-10-09", "2026-10-10", "2026-10-11"]) {
-      expect(clusterDelDia(publicacion(dia))).toBeNull();
+  it("los programados sí cuentan: ya tienen fecha en el blog", () => {
+    const corpus = [post("TECH", "2026-11-26"), post("UX", "2026-11-16"), post("PRODUCT", "2026-11-12")];
+    expect(clusterQueToca(corpus).cluster).toBe("C1");
+  });
+
+  it("si empatan, desempata C2 > C1 > C3 (corpus vacío: C2)", () => {
+    expect(clusterQueToca([]).cluster).toBe("C2");
+  });
+
+  it("rota por los tres clusters en semanas seguidas", () => {
+    const corpus = [post("UX", "2026-11-02"), post("PRODUCT", "2026-11-05"), post("TECH", "2026-11-09")];
+    const elegidos = [];
+    for (const dia of ["2026-11-12", "2026-11-16", "2026-11-19", "2026-11-23"]) {
+      const { category } = clusterQueToca(corpus);
+      elegidos.push(category);
+      corpus.push(post(category, dia));
     }
+    expect(elegidos).toEqual(["UX", "PRODUCT", "TECH", "UX"]);
   });
 
-  it("la categoría de cada cluster es coherente con la que lo sugería antes", () => {
+  it("la categoría de cada cluster es coherente con su cluster", () => {
     for (const [cluster, categoria] of Object.entries(CATEGORIA_DEL_CLUSTER)) {
       expect(CATEGORY_CLUSTER[categoria]).toBe(cluster);
     }
