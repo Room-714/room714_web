@@ -1,5 +1,4 @@
 import { prisma } from "@/app/lib/prisma";
-import { triggerLinkedInNotification } from "@/app/(admin-zone)/admin/actions";
 import { getMadridHour } from "@/app/lib/time/madrid";
 import { notifyUrlUpdated, buildPostUrls } from "@/app/lib/seo/indexingApi";
 // IndexNow desactivado: Vercel aplica i18n auto-redirect a paths en raíz,
@@ -47,12 +46,21 @@ export async function GET(request) {
         source: sourceFilter,
         date: { lte: now },
       },
-      include: { translations: true, linkedinVariants: true },
+      include: { translations: true },
     });
 
     if (postsToProcess.length === 0) {
       return NextResponse.json({ message: "Nada que publicar por ahora." });
     }
+
+    // Este cron ya no publica nada en LinkedIn. Antes, los posts MANUAL sin
+    // tomas salían por un webhook directo a Make; ahora LinkedIn exige
+    // aprobación en el panel y lo envía /api/cron/publish-linkedin.
+    // Una sola escritura para todos, en vez de una por post.
+    await prisma.post.updateMany({
+      where: { id: { in: postsToProcess.map((p) => p.id) } },
+      data: { published_sent: true },
+    });
 
     const results = [];
 
@@ -60,60 +68,12 @@ export async function GET(request) {
       const esData =
         post.translations.find((t) => t.lang === "es") || post.translations[0];
       const enData = post.translations.find((t) => t.lang === "en");
-      const hasVariants = post.linkedinVariants.length > 0;
 
-      // Los AUTO nunca van por el webhook legacy: su LinkedIn son las tomas,
-      // que escribe /api/cron/generate-linkedin a las 08:30 y publica
-      // /api/cron/publish-linkedin a la hora de cada una. Este cron corre a las
-      // 07:30, antes de que existan, así que sin esta condición cada artículo
-      // se publicaría en LinkedIn como un resumen truncado del HTML.
-      if (hasVariants || post.source === "AUTO") {
-        await prisma.post.update({
-          where: { id: post.id },
-          data: { published_sent: true },
-        });
-        results.push(
-          `Post ID ${post.id} ("${esData.title}"): publicado (${
-            hasVariants
-              ? "variantes LinkedIn a su cron"
-              : "AUTO sin tomas todavía; las generará el cron de las 8:30"
-          }).`,
-        );
-      } else {
-        // Flujo legacy (MANUAL posts u otros sin variantes): disparamos el
-        // webhook de LinkedIn directo desde aquí.
-        const postData = {
-          title_es: esData.title,
-          slug_es: esData.slug,
-          content_es: esData.content,
-          tags_es: esData.tags.join(","),
-          date: post.date.toISOString().split("T")[0],
-          linkedin_post_es: esData.linkedinPost,
-          linkedin_hashtags_es: esData.linkedinHashtags,
-        };
+      results.push(
+        `Post ID ${post.id} ("${esData.title}"): publicado en la web (LinkedIn: ${post.linkedinEstado}).`,
+      );
 
-        const notification = await triggerLinkedInNotification(
-          postData,
-          post.image,
-        );
-
-        if (notification.success) {
-          await prisma.post.update({
-            where: { id: post.id },
-            data: { published_sent: true },
-          });
-          results.push(
-            `Post ID ${post.id} ("${esData.title}"): LinkedIn legacy enviado.`,
-          );
-        } else {
-          results.push(
-            `Post ID ${post.id}: Error en notificación (${notification.error})`,
-          );
-          continue;
-        }
-      }
-
-      // Notificar a Google Indexing API (para ambos flujos)
+      // Notificar a Google Indexing API
       const urls = buildPostUrls(esData.slug, enData?.slug);
       for (const url of urls) {
         try {

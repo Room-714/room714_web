@@ -327,3 +327,26 @@ describe("buildDailyTasks — incidencia de artículo ausente", () => {
     expect(incidents.map((i) => i.kind)).not.toContain("no_article");
   });
 });
+
+describe("buildDailyTasks con publicaciones aprobadas", () => {
+  it("una publicación de empresa deja la tarea de comentarla desde el perfil", () => {
+    const { tasks } = buildDailyTasks({
+      todayVariants: [
+        variante({
+          id: null,
+          canal: "empresa",
+          cross: "comment_personal",
+          scheduledFor: new Date("2026-07-27T05:05:00Z"),
+        }),
+      ],
+      siteUrl: SITE,
+    });
+    expect(tasks).toHaveLength(1);
+    expect(tasks[0]).toMatchObject({
+      kind: "comment_personal",
+      channel: "personal",
+      time: "07:05",
+      linkUrl: "https://www.linkedin.com/company/room-714/",
+    });
+  });
+});

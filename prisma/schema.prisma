@@ -19,6 +19,17 @@ enum PostSource {
   MANUAL
 }
 
+// SOLO_WEB: no va a LinkedIn (valor por defecto).
+// PENDIENTE: marcado para LinkedIn, esperando aprobación en el panel.
+// APROBADO: aprobado; el cron lo publica en cuanto el post está en la web.
+// PUBLICADO: ya salió en LinkedIn. No se vuelve a tocar.
+enum LinkedInEstado {
+  SOLO_WEB
+  PENDIENTE
+  APROBADO
+  PUBLICADO
+}
+
 model Post {
   id             Int        @id @default(autoincrement())
   image          String
@@ -29,6 +40,13 @@ model Post {
   source         PostSource @default(MANUAL)
   createdAt      DateTime   @default(now())
   updatedAt      DateTime   @updatedAt
+
+  // Publicación en la página de empresa de LinkedIn. Por defecto, solo web.
+  // Nada sale a LinkedIn sin pasar por APROBADO desde el panel (ver
+  // app/lib/linkedin/aprobacion.js).
+  linkedinEstado      LinkedInEstado @default(SOLO_WEB)
+  linkedinAprobadoAt  DateTime?
+  linkedinPublicadoAt DateTime?
 
   translations     PostTranslation[]
   linkedinVariants LinkedInVariant[]

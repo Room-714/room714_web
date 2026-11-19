@@ -47,11 +47,11 @@ export function buildLinkedInVariantsSection({ variants, postUrl }) {
     .map((v) => renderVariantBlock({ variant: v, postUrl }))
     .join("");
   return `
-  <h2 style="border-bottom:1px solid #eee; padding-bottom:10px; margin-top:28px;">LinkedIn — se publican automáticamente (${variants.length} esta semana)</h2>
+  <h2 style="border-bottom:1px solid #eee; padding-bottom:10px; margin-top:28px;">LinkedIn — textos propuestos (${variants.length})</h2>
   <p style="color:#666; font-size:14px;">
-    Publicación <strong>automática vía Make</strong> en la <strong>página de empresa</strong>,
-    en las fechas indicadas. <strong>No las publiques a mano</strong> para no duplicar.
-    Si alguna no te convence, edítala o rechaza el post en el admin antes de su fecha.
+    <strong>No se publica nada sin tu aprobación.</strong> Si quieres llevar el post a la
+    página de empresa, marca «Publicar en LinkedIn» en el panel y apruébalo (máximo una
+    publicación por semana). <strong>No las publiques a mano</strong> si las apruebas, para no duplicar.
   </p>
   ${blocks}`;
 }

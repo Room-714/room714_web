@@ -258,6 +258,8 @@ export async function generateDraftForToday({
       published: true,
       published_sent: false,
       source: "AUTO",
+      // Sale en la web a su hora, pero a LinkedIn solo si se aprueba en el panel.
+      linkedinEstado: "PENDIENTE",
       translations: {
         create: [
           {

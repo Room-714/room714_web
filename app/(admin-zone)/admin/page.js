@@ -1,12 +1,8 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
 import RichTextEditor from "./components/Editor";
-import {
-  savePost,
-  getPostsList,
-  deletePost,
-  triggerLinkedInNotification,
-} from "./actions";
+import { savePost, getPostsList, deletePost } from "./actions";
+import { marcarLinkedIn } from "./linkedinActions";
 import Image from "next/image";
 import Link from "next/link";
 import ImageUploader from "./components/ImageUploader";
@@ -15,8 +11,16 @@ import { signOut } from "next-auth/react";
 import { CATEGORY_IDS, CATEGORY_LABELS } from "@/app/data/BlogCategories";
 import PublishWorkflowModal from "./components/PublishWorkflowModal";
 import RegenerateModal from "./components/RegenerateModal";
+import LinkedInPanel from "./components/LinkedInPanel";
 import { CLUSTERS, clusterOfContent } from "@/app/lib/seo/clusters";
 import { pedirGeneracion } from "./generacionIa";
+
+// Marca de LinkedIn en el listado. SOLO_WEB no lleva marca: es lo normal.
+const MARCA_LINKEDIN = {
+  PENDIENTE: { texto: "LinkedIn: pendiente de aprobar", clase: "border-amber-400 text-amber-800 bg-amber-50" },
+  APROBADO: { texto: "LinkedIn: aprobado", clase: "border-sky-400 text-sky-800 bg-sky-50" },
+  PUBLICADO: { texto: "LinkedIn ✓", clase: "border-green-500 text-green-800 bg-green-50" },
+};
 
 // Etiqueta corta del cluster en el listado. El cluster no tiene columna: se
 // deduce del enlace a la página del cluster en el cuerpo del post.
@@ -179,7 +183,7 @@ export default function AdminPage() {
   };
 
   const handleFinalAction = async (options) => {
-    const { shouldPublish, linkedIn, scheduleDate } = options;
+    const { shouldPublish, linkedIn, linkedInInicial, scheduleDate } = options;
 
     const updateData = {
       ...formData,
@@ -189,6 +193,12 @@ export default function AdminPage() {
     };
 
     const finalResult = await savePost(updateData);
+
+    // La casilla del modal solo marca o desmarca: nunca aprueba. Lo marcado
+    // queda «Pendiente de aprobar para LinkedIn» hasta aprobarlo en el panel.
+    if (finalResult?.success && linkedIn !== linkedInInicial) {
+      await marcarLinkedIn(lastSavedPost.id, linkedIn);
+    }
 
     setShowModal(false);
     if (!formData.id) resetForm();
@@ -332,6 +342,13 @@ export default function AdminPage() {
           {post.translations?.find((t) => t.lang === "es")?.title ||
             "Sin título"}
         </p>
+        {MARCA_LINKEDIN[post.linkedinEstado] && (
+          <span
+            className={`mt-1 inline-block px-1.5 rounded border text-[10px] font-bold ${MARCA_LINKEDIN[post.linkedinEstado].clase}`}
+          >
+            {MARCA_LINKEDIN[post.linkedinEstado].texto}
+          </span>
+        )}
       </button>
     );
   };
@@ -449,9 +466,10 @@ export default function AdminPage() {
                 <p id="confirmar-ia-detalle" className="text-gray-600 text-xs mb-3">
                   Antes de escribirlo se comprueba que no duplique un post
                   existente y que encaje en un cluster. Tarda hasta 5 minutos y
-                  consume tokens. Se creará como publicado en la próxima franja
-                  de 07:30 (Madrid) y aparecerá en «Próximamente» para que lo
-                  valides.
+                  consume tokens. Se creará como publicado en la web en la
+                  próxima franja de 07:30 (Madrid) y aparecerá en «Próximamente»
+                  para que lo valides. A LinkedIn no sale: quedará pendiente de
+                  tu aprobación.
                 </p>
                 <div className="flex flex-col gap-2">
                   <button
@@ -603,7 +621,7 @@ export default function AdminPage() {
               {/* --- GRUPO 3: PUBLICADOS (HISTORIAL) --- */}
               <div>
                 <p className="text-sm font-black text-green-700 pl-2 mb-2">
-                  Publicados: Web & LinkedIn
+                  Publicados
                 </p>
                 {currentPosts
                   .filter((p) => p.published && new Date(p.date) <= new Date())
@@ -732,6 +750,14 @@ export default function AdminPage() {
                   />
                 </div>
               </div>
+
+              {formData.id && (
+                <LinkedInPanel
+                  key={formData.id}
+                  postId={formData.id}
+                  onCambio={loadPosts}
+                />
+              )}
 
               {savedNotice && (
                 <div className="flex justify-center">

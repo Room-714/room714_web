@@ -1,5 +1,6 @@
 import { slotFor } from "@/app/lib/time/linkedinSchedule";
 import { formatMadridTime } from "@/app/lib/time/madrid";
+import { LINKEDIN_COMPANY } from "@/app/lib/links";
 
 // Construye las tareas manuales del día a partir de datos ya consultados.
 // Función pura a propósito: es lo que permite probar las cinco tomas de la
@@ -25,12 +26,22 @@ export function buildDailyTasks({
     if (!translationEs) continue;
 
     const articleUrl = `${siteUrl}/es/blog/${translationEs.slug}`;
-    const linkUrl = `${siteUrl}/api/go/variant/${variant.id}`;
+    // Sin toma (post aprobado sin tomas generadas) no hay a qué redirigir: se
+    // enlaza la página de empresa.
+    const linkUrl =
+      variant.id != null
+        ? `${siteUrl}/api/go/variant/${variant.id}`
+        : LINKEDIN_COMPANY;
     const time = formatMadridTime(variant.scheduledFor);
-    const slot = slotFor({
-      postPublishDate: variant.post.date,
-      variant: variant.variant,
-    });
+    // Las publicaciones aprobadas traen su canal y su acción cruzada; las
+    // tomas del calendario antiguo los sacan de TAKE_PLAN.
+    const slot =
+      variant.canal && variant.cross
+        ? { canal: variant.canal, cross: variant.cross }
+        : slotFor({
+            postPublishDate: variant.post.date,
+            variant: variant.variant,
+          });
 
     if (slot.canal === "personal") {
       if (!firstCommentAutomated) {
