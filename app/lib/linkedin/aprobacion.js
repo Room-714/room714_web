@@ -10,7 +10,6 @@
 // Todo lo de este fichero es puro (sin base de datos ni red) para poder
 // probarlo: las server actions y el cron le pasan los datos ya consultados.
 import { withLinkedInUtm } from "@/app/lib/links";
-import { channelForVariant } from "@/app/lib/time/linkedinSchedule";
 import {
   getMadridHour,
   getMadridWeekday,
@@ -155,11 +154,9 @@ export function conflictosSemana({ post, otros = [], tomasEnviadas = [], now = n
     if (!toma.sentAt || toma.post?.id === post.id) continue;
     const enviada = new Date(toma.sentAt);
     if (!enRango(enviada, semana)) continue;
-    const canal = channelForVariant({
-      postPublishDate: new Date(toma.post.date),
-      variant: toma.variant,
-    });
-    if (canal !== "empresa") continue;
+    // Solo el sistema anterior enviaba tomas, y en su calendario la de la
+    // página de empresa era siempre la 2.
+    if (toma.variant !== 2) continue;
     conflictos.push({
       postId: toma.post.id,
       titulo: tituloEs(toma.post),
@@ -179,22 +176,17 @@ export function conflictosSemana({ post, otros = [], tomasEnviadas = [], now = n
 
 /* ─── Contenido de la publicación ─────────────────────────────────────────── */
 
-// De las tomas que escribe el cron generate-linkedin, la pensada para la
-// página de empresa; si no hay ninguna de empresa, la primera.
+// De las tomas que escribe el cron generate-linkedin, la de la página de
+// empresa. Desde noviembre de 2026 cada artículo lleva una sola toma, la de
+// empresa. Los artículos anteriores llevan dos o tres (calendario antiguo) y
+// en ellos la de empresa era siempre la 2; las otras se escribieron para el
+// perfil de José.
 export function elegirTomaEmpresa(post) {
   const tomas = [...(post.linkedinVariants || [])].sort(
     (a, b) => a.variant - b.variant,
   );
-  if (tomas.length === 0) return null;
-  return (
-    tomas.find(
-      (t) =>
-        channelForVariant({
-          postPublishDate: new Date(post.date),
-          variant: t.variant,
-        }) === "empresa",
-    ) ?? tomas[0]
-  );
+  if (tomas.length <= 1) return tomas[0] ?? null;
+  return tomas.find((t) => t.variant === 2) ?? tomas[0];
 }
 
 function resumen(html) {

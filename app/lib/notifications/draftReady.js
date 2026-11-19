@@ -69,7 +69,7 @@ export async function sendDraftReadyEmail({
       html: `
 <div style="font-family: sans-serif; color: #333; max-width: 640px;">
   <h2 style="border-bottom: 1px solid #eee; padding-bottom: 10px;">Post generado y programado</h2>
-  <p>Se ha generado el artículo de hoy. <strong>Se publicará automáticamente a las 07:30 en la web</strong>, salvo que lo despubliques o lo borres antes. Tienes de <strong>08:00 a 08:30</strong> para revisarlo: a las 08:30 se escriben a partir de él los textos de LinkedIn. <strong>A LinkedIn no sale nada</strong> hasta que lo apruebes en el panel: el post queda como «Pendiente de aprobar para LinkedIn».</p>
+  <p>Se ha generado el artículo de hoy. <strong>Se publicará automáticamente a las 07:30 en la web</strong>, salvo que lo despubliques o lo borres antes. Tienes de <strong>08:00 a 08:30</strong> para revisarlo: a las 08:30 se escribe a partir de él el texto de LinkedIn. LinkedIn se publica solo: el viernes la página de empresa lleva el mejor artículo de la semana y tu perfil usa los artículos los martes y jueves.</p>
   <p><strong>Categoría:</strong> ${category}</p>
   <p><strong>Título:</strong> ${translationEs.title}</p>
   <p><strong>Tags:</strong> ${translationEs.tags.join(", ")}</p>
@@ -80,8 +80,8 @@ export async function sendDraftReadyEmail({
     </a>
   </p>
   <p style="margin-top: 30px; font-size: 13px; color: #666;">
-    Si no haces nada: el artículo se publica a las 07:30 tal cual en la web, y en LinkedIn no se publica nada.<br>
-    Si quieres editarlo: entra en el admin, modifica lo que necesites y guarda. Si lo editas <strong>antes de las 08:30</strong>, los textos de LinkedIn saldrán del texto nuevo.<br>
+    Si no haces nada: el artículo se publica a las 07:30 tal cual en la web, y LinkedIn sigue su calendario automático.<br>
+    Si quieres editarlo: entra en el admin, modifica lo que necesites y guarda. Si lo editas <strong>antes de las 08:30</strong>, el texto de LinkedIn saldrá del texto nuevo.<br>
     Si quieres rechazarlo: despublícalo o bórralo desde el admin antes de las 07:30.
   </p>
   ${linkedinSection}

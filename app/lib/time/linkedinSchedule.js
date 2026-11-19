@@ -1,63 +1,32 @@
-// Calendario de las tomas de LinkedIn de un artículo.
+// Tomas de LinkedIn de un artículo del blog.
 //
-// Supuesto de entrada: el artículo se publica a las 07:30 de Madrid, un lunes
-// o un miércoles. Todo lo de aquí se calcula como desplazamiento respecto a esa
-// fecha, así que si cambia la hora de publicación hay que revisar TAKE_PLAN.
+// Desde noviembre de 2026 (publicación automática, sin aprobaciones) el blog
+// publica lunes y jueves a las 07:30 de Madrid, y cada artículo lleva UNA toma:
+// el texto para la página de empresa. No sale a su hora: el viernes a las 08:30
+// el cron publish-linkedin elige el mejor artículo de la semana y publica su
+// toma (app/lib/linkedin/autopost.js). scheduledFor queda como referencia (ese
+// viernes a las 08:30).
 //
-// La semana queda así:
-//   L 08:35  art.1 toma 1  personal  → Room714 recomparte
-//   M 07:30  art.1 toma 2  empresa   → José comenta desde su perfil
-//   X 08:35  art.2 toma 1  personal  → Room714 recomparte
-//   J 07:30  art.2 toma 2  empresa   → José comenta desde su perfil
-//   V 07:30  art.1 toma 3  personal  → Room714 recomparte
+// El perfil personal de José ya no usa tomas: su texto se genera aparte, en el
+// momento de publicar (app/lib/linkedin/perfilPersonal.js). Por eso tampoco
+// hay acciones cruzadas (recompartir, comentar): nada pide trabajo manual.
 //
-// Por qué la toma 1 sale a las 08:35 y no en la franja de las 07:30: se genera
-// a las 08:30, a partir del artículo que se acaba de revisar a mano. No puede
-// existir antes. Es la única excepción del calendario y es deliberada.
-//
-// Por qué se puede sumar milisegundos sin hacer aritmética de zona horaria: con
-// los planes de lunes y miércoles, las tomas van de lunes a viernes y los
-// cambios de horario ocurren en domingo de madrugada, así que ninguna suma
-// cruza uno. Comprobado contra las semanas del 29 de marzo y del 25 de octubre.
-//
-// Ojo: eso NO vale para FALLBACK_PLAN. Un artículo publicado un jueves o un
-// viernes hereda los offsets del lunes, y entonces +1d puede caer en sábado
-// (donde el cron de publicación no corre) y +4d puede cruzar un domingo de
-// cambio de hora y desviar la publicación ±1 hora. Es un camino de
-// recuperación manual, no el flujo normal; si deja de serlo, hay que calcular
-// los días en zona horaria en vez de en milisegundos.
+// Sumar milisegundos es seguro: de lunes o jueves a viernes no se cruza
+// ningún domingo de cambio de hora.
 import { getMadridWeekday } from "./madrid";
 
 const MIN_MS = 60 * 1000;
 
-// El plan completo, en un solo sitio: cuándo sale cada toma respecto al
-// artículo, con cuánto margen aleatorio, por qué cuenta y qué le deja que hacer
-// a la otra. Cambiar la estrategia de publicación es cambiar esta tabla.
-//
-// `offsetMin` es la distancia en minutos desde la publicación del artículo
-// (07:30): 65 son las 08:35 del mismo día, 1440 las 07:30 del día siguiente y
-// 5760 las 07:30 del viernes.
-//
-// `jitter` evita que las cinco publicaciones semanales caigan siempre en el
-// mismo minuto exacto, que es lo que delata a un robot. La ventana de la toma 1
-// es corta a propósito: el briefing sale a las 08:50 y tiene que encontrarla ya
-// publicada.
+// offsetMin: minutos desde la publicación del artículo (07:30) hasta el viernes
+// a las 08:30. 5820 = 4 días y 1 hora; 1500 = 1 día y 1 hora.
 const TAKE_PLAN = {
-  Mon: [
-    { offsetMin: 65, jitter: { min: 0, max: 8 }, canal: "personal", cross: "reshare_company" },
-    { offsetMin: 1440, jitter: { min: 0, max: 28 }, canal: "empresa", cross: "comment_personal" },
-    { offsetMin: 5760, jitter: { min: 0, max: 28 }, canal: "personal", cross: "reshare_company" },
-  ],
-  Wed: [
-    { offsetMin: 65, jitter: { min: 0, max: 8 }, canal: "personal", cross: "reshare_company" },
-    { offsetMin: 1440, jitter: { min: 0, max: 28 }, canal: "empresa", cross: "comment_personal" },
-  ],
+  Mon: [{ offsetMin: 5820, jitter: { min: 0, max: 0 }, canal: "empresa", cross: null }],
+  Thu: [{ offsetMin: 1500, jitter: { min: 0, max: 0 }, canal: "empresa", cross: null }],
 };
 
 // Si un artículo cae en un día no previsto (recuperación manual, cambio de
 // calendario), se aplica el plan del lunes en vez de fallar: publicar con el
-// calendario equivocado es preferible a no publicar. Hereda los offsets del
-// lunes además del reparto de canales — ver el aviso de la cabecera.
+// calendario equivocado es preferible a no publicar.
 const FALLBACK_PLAN = TAKE_PLAN.Mon;
 
 // Días en que un artículo tiene plan propio de tomas. Un artículo fechado

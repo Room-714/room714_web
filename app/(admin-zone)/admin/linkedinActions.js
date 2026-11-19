@@ -3,6 +3,11 @@
 // Acciones del panel para LinkedIn. Ninguna publica nada: como mucho dejan un
 // post en APROBADO, y es el cron /api/cron/publish-linkedin el que lo envía.
 //
+// Desde noviembre de 2026 LinkedIn se publica solo (app/lib/linkedin/autopost.js)
+// y este flujo de aprobación queda apagado detrás de LINKEDIN_APPROVAL_FLOW:
+// sin "true", todas las acciones responden que está desactivado y el panel no
+// las enseña (configLinkedInPanel).
+//
 // Base de datos: una consulta detrás de otra, nunca en paralelo ni en bucle,
 // siempre con el cliente compartido de @/app/lib/prisma.
 import { cookies, headers } from "next/headers";
@@ -17,6 +22,7 @@ import {
   transicion,
 } from "@/app/lib/linkedin/aprobacion";
 import { generarBorradorPerfil } from "@/app/lib/linkedin/borradorPerfil";
+import { flujoAprobacionActivo } from "@/app/lib/linkedin/config";
 
 // Las server actions se pueden invocar por POST desde cualquier ruta, no solo
 // desde /admin, así que la protección del proxy no basta: se comprueba aquí la
@@ -27,6 +33,22 @@ async function exigirAdmin() {
     secret: process.env.NEXTAUTH_SECRET,
   });
   if (!token) throw new Error("No autorizado");
+}
+
+function exigirFlujoAprobacion() {
+  if (!flujoAprobacionActivo()) {
+    throw new Error("El flujo de aprobación de LinkedIn está desactivado (LINKEDIN_APPROVAL_FLOW)");
+  }
+}
+
+/** Lo que el panel necesita saber para enseñar u ocultar la parte de LinkedIn. */
+export async function configLinkedInPanel() {
+  try {
+    await exigirAdmin();
+    return { success: true, flujoAprobacion: flujoAprobacionActivo() };
+  } catch (err) {
+    return { success: false, error: err.message, flujoAprobacion: false };
+  }
 }
 
 const idValido = (postId) => {
@@ -51,6 +73,7 @@ const selectTomas = {
 export async function obtenerLinkedIn(postId) {
   try {
     await exigirAdmin();
+    exigirFlujoAprobacion();
     const id = idValido(postId);
     const post = await prisma.post.findUnique({
       where: { id },
@@ -88,6 +111,7 @@ export async function obtenerLinkedIn(postId) {
 export async function marcarLinkedIn(postId, marcado) {
   try {
     await exigirAdmin();
+    exigirFlujoAprobacion();
     const id = idValido(postId);
     const post = await prisma.post.findUnique({
       where: { id },
@@ -122,6 +146,7 @@ export async function marcarLinkedIn(postId, marcado) {
 export async function aprobarLinkedIn(postId, { confirmarSegunda = false } = {}) {
   try {
     await exigirAdmin();
+    exigirFlujoAprobacion();
     const id = idValido(postId);
     const post = await prisma.post.findUnique({
       where: { id },
@@ -200,6 +225,7 @@ export async function aprobarLinkedIn(postId, { confirmarSegunda = false } = {})
 export async function retirarAprobacionLinkedIn(postId) {
   try {
     await exigirAdmin();
+    exigirFlujoAprobacion();
     const id = idValido(postId);
     const { count } = await prisma.post.updateMany({
       where: { id, linkedinEstado: ESTADOS.APROBADO },
@@ -221,6 +247,7 @@ export async function retirarAprobacionLinkedIn(postId) {
 export async function borradorPerfilJose(postId) {
   try {
     await exigirAdmin();
+    exigirFlujoAprobacion();
     const id = idValido(postId);
     const es = await prisma.postTranslation.findFirst({
       where: { postId: id, lang: "es" },

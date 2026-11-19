@@ -50,6 +50,42 @@ model Post {
 
   translations     PostTranslation[]
   linkedinVariants LinkedInVariant[]
+  linkedinEnvios   LinkedInEnvio[]
+}
+
+// Publicaciones automáticas en LinkedIn (página de empresa y perfil de José),
+// una fila por canal y día. Guarda el texto enviado para no repetir ideas ni
+// frases iniciales, el estado para el reintento de los 15 minutos y sirve de
+// registro para el informe. Ver app/lib/linkedin/autopost.js.
+enum LinkedInCanal {
+  EMPRESA
+  PERSONAL
+}
+
+enum LinkedInEnvioEstado {
+  ENVIADO
+  FALLIDO
+}
+
+model LinkedInEnvio {
+  id        Int                 @id @default(autoincrement())
+  canal     LinkedInCanal
+  dia       DateTime            @db.Date // día de Madrid del envío
+  postId    Int?
+  texto     String?             @db.Text
+  idea      String?             @db.Text // la idea en una frase, para la deduplicación
+  payload   Json? // lo que se manda a Make; el reintento reenvía esto mismo
+  estado    LinkedInEnvioEstado
+  intentos  Int                 @default(1)
+  error     String?             @db.Text
+  enviadoAt DateTime?
+  createdAt DateTime            @default(now())
+  updatedAt DateTime            @updatedAt
+
+  post Post? @relation(fields: [postId], references: [id], onDelete: SetNull)
+
+  @@unique([canal, dia])
+  @@index([canal, estado, enviadoAt])
 }
 
 model PostRedirect {

@@ -49,9 +49,8 @@ export function buildLinkedInVariantsSection({ variants, postUrl }) {
   return `
   <h2 style="border-bottom:1px solid #eee; padding-bottom:10px; margin-top:28px;">LinkedIn — textos propuestos (${variants.length})</h2>
   <p style="color:#666; font-size:14px;">
-    <strong>No se publica nada sin tu aprobación.</strong> Si quieres llevar el post a la
-    página de empresa, marca «Publicar en LinkedIn» en el panel y apruébalo (máximo una
-    publicación por semana). <strong>No las publiques a mano</strong> si las apruebas, para no duplicar.
+    Se publican solos: el viernes a las 08:30 la página de empresa publica el mejor
+    artículo de la semana con su texto. <strong>No los publiques a mano</strong>, para no duplicar.
   </p>
   ${blocks}`;
 }

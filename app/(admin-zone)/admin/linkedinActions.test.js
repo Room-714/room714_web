@@ -19,6 +19,7 @@ vi.mock("@/app/lib/linkedin/borradorPerfil", () => ({ generarBorradorPerfil }));
 const {
   aprobarLinkedIn,
   borradorPerfilJose,
+  configLinkedInPanel,
   marcarLinkedIn,
   retirarAprobacionLinkedIn,
 } = await import("./linkedinActions");
@@ -45,9 +46,37 @@ beforeEach(() => {
   prismaMock.linkedInVariant.findMany.mockResolvedValue([]);
   getToken.mockResolvedValue({ sub: "admin" });
   generarBorradorPerfil.mockReset();
+  // Estas pruebas son del flujo de aprobación, que va detrás del flag.
+  process.env.LINKEDIN_APPROVAL_FLOW = "true";
 });
 
-afterEach(() => vi.useRealTimers());
+afterEach(() => {
+  vi.useRealTimers();
+  delete process.env.LINKEDIN_APPROVAL_FLOW;
+});
+
+describe("flag LINKEDIN_APPROVAL_FLOW", () => {
+  it("apagado (por defecto), ninguna acción toca la base de datos ni genera nada", async () => {
+    delete process.env.LINKEDIN_APPROVAL_FLOW;
+    for (const r of [
+      await marcarLinkedIn(3, true),
+      await aprobarLinkedIn(3, { confirmarSegunda: true }),
+      await retirarAprobacionLinkedIn(3),
+      await borradorPerfilJose(3),
+    ]) {
+      expect(r.success).toBe(false);
+      expect(r.error).toMatch(/desactivado/);
+    }
+    expect(todasLasLlamadas()).toBe(0);
+    expect(generarBorradorPerfil).not.toHaveBeenCalled();
+  });
+
+  it("el panel sabe si tiene que enseñar la parte de LinkedIn", async () => {
+    expect(await configLinkedInPanel()).toEqual({ success: true, flujoAprobacion: true });
+    process.env.LINKEDIN_APPROVAL_FLOW = "false";
+    expect(await configLinkedInPanel()).toEqual({ success: true, flujoAprobacion: false });
+  });
+});
 
 describe("sesión", () => {
   it("sin sesión de admin no toca la base de datos", async () => {

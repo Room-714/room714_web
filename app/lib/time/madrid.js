@@ -118,3 +118,28 @@ export function nextMadridSlot(targetHour, targetMinute = 0) {
     `nextMadridSlot: no se encontró slot para ${targetStr}:${String(targetMinute).padStart(2, "0")}`,
   );
 }
+
+// Minuto de Madrid (0-59). Coincide con el de UTC, pero así se lee igual que
+// getMadridHour.
+export function getMadridMinute(date = new Date()) {
+  return parseInt(getMadridParts(date).minute, 10);
+}
+
+// Día natural de Madrid como "AAAA-MM-DD".
+export function madridDateString(date = new Date()) {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: TIMEZONE,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(date);
+}
+
+// Instante en que Madrid marca `hour:minute` el día "AAAA-MM-DD". Los cambios
+// de hora son de madrugada, así que a media mañana el desfase del propio
+// instante es el bueno.
+export function madridAt(ymd, hour, minute = 0) {
+  const [y, m, d] = ymd.split("-").map(Number);
+  const aprox = new Date(Date.UTC(y, m - 1, d, hour, minute));
+  return new Date(aprox.getTime() - madridOffsetMs(aprox));
+}

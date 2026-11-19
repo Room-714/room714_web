@@ -74,7 +74,7 @@ function bloqueClusters() {
 }
 
 // Exportada para probarla.
-export function buildPlanPrompt({ category, clusterSugerido, temaFijo, trending = [], existentes = [], evitar = [] }) {
+export function buildPlanPrompt({ category, clusterSugerido, clusterFijo, temaFijo, trending = [], existentes = [], evitar = [] }) {
   const tendencias = trending.length
     ? trending
         .slice(0, 12)
@@ -84,7 +84,7 @@ export function buildPlanPrompt({ category, clusterSugerido, temaFijo, trending 
 
   const tarea = temaFijo
     ? `El tema está fijado: **"${temaFijo}"**. Ponlo tal cual en tema_es (y su equivalente en tema_en). No lo cambies por otro: tu trabajo es comprobarlo y proponer el ángulo.`
-    : `Propón UN tema para un post de la categoría ${category}${clusterSugerido ? ` (cluster sugerido: ${clusterSugerido})` : ""}, a partir de las tendencias de abajo, que NO esté cubierto por ningún post existente.`;
+    : `Propón UN tema para un post de la categoría ${category}${clusterFijo ? ` (cluster obligatorio: ${clusterFijo}; el tema tiene que pertenecer a ese cluster)` : clusterSugerido ? ` (cluster sugerido: ${clusterSugerido})` : ""}, a partir de las tendencias de abajo, que NO esté cubierto por ningún post existente.`;
 
   const rechazados = evitar.length
     ? `\n## Temas ya descartados (no los propongas ni propongas uno equivalente)\n${evitar.map((t) => `- ${t}`).join("\n")}\n`
@@ -139,6 +139,7 @@ export function interpretarPlan(input, existentes, { temaFijo } = {}) {
 export async function planificarTema({
   category,
   clusterSugerido,
+  clusterFijo,
   temaFijo,
   trending,
   existentes,
@@ -157,7 +158,7 @@ export async function planificarTema({
         messages: [
           {
             role: "user",
-            content: buildPlanPrompt({ category, clusterSugerido, temaFijo, trending, existentes, evitar }),
+            content: buildPlanPrompt({ category, clusterSugerido, clusterFijo, temaFijo, trending, existentes, evitar }),
           },
         ],
       },

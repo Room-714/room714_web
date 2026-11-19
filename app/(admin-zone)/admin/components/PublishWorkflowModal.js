@@ -1,7 +1,9 @@
 "use client";
 import { useState } from "react";
 
-export default function PublishWorkflowModal({ post, onClose, onConfirm }) {
+// `mostrarLinkedIn`: solo con el flujo de aprobación (LINKEDIN_APPROVAL_FLOW).
+// Apagado, LinkedIn se publica solo y la casilla no aparece.
+export default function PublishWorkflowModal({ post, onClose, onConfirm, mostrarLinkedIn = false }) {
   // Desmarcada por defecto: un post nuevo sale solo en la web. Si el post ya
   // estaba marcado para LinkedIn, la casilla lo refleja.
   const estadoLinkedIn = post?.linkedinEstado ?? "SOLO_WEB";
@@ -88,6 +90,7 @@ export default function PublishWorkflowModal({ post, onClose, onConfirm }) {
           </div>
         )}
 
+        {mostrarLinkedIn && (
         <div className="py-6 border-t mt-4 flex items-center justify-between gap-4 px-2 text-left">
           <span className="text-sm font-black text-gray-600">
             Publicar también en LinkedIn
@@ -109,6 +112,7 @@ export default function PublishWorkflowModal({ post, onClose, onConfirm }) {
             <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full"></div>
           </label>
         </div>
+        )}
 
         <button
           onClick={onClose}

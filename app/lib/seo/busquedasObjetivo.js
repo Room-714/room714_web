@@ -1,17 +1,19 @@
 // Búsquedas objetivo de los posts automáticos, por cluster y en orden de
-// prioridad, y la regla que decide qué cluster y qué búsqueda toca cada día.
+// prioridad, y la regla que decide qué cluster y qué búsqueda toca a cada post.
 //
 // Lo usa el orquestador del generador (app/lib/ai/orchestrator.js): el cron de
-// lunes y miércoles toma el cluster del día y, dentro de él, la primera
-// búsqueda que ningún título publicado cubre todavía. Si no queda ninguna, el
+// lunes y jueves toma el cluster que lleva más tiempo sin post (clusterQueToca)
+// y, dentro de él, la primera búsqueda que ningún título publicado cubre todavía. Si no queda ninguna, el
 // generador vuelve a su comportamiento anterior y el correo lo avisa.
 //
 // Ninguna búsqueda puede ser una reservada a una página de servicio
 // (RESERVED_QUERIES en clusters.js): lo comprueba busquedasObjetivo.test.js.
 
+import { CATEGORY_CLUSTER } from "./clusters";
+
 /** En orden de prioridad: la primera sin cubrir es la que se usa. Lista de José, 2026-10-06. */
 export const BUSQUEDAS_OBJETIVO = {
-  // Ideación y discovery (lunes de semanas ISO impares).
+  // Ideación y discovery.
   C1: [
     "qué es el discovery de producto digital",
     "cómo validar una idea de producto digital",
@@ -22,7 +24,7 @@ export const BUSQUEDAS_OBJETIVO = {
     "business case de un producto digital",
     "roadmap de producto digital: cómo hacerlo",
   ],
-  // Diseño y experiencia de cliente (miércoles).
+  // Diseño y experiencia de cliente.
   C2: [
     "cómo medir la experiencia de cliente en un producto digital",
     "diferencia entre diseño de producto y diseño UX",
@@ -33,7 +35,7 @@ export const BUSQUEDAS_OBJETIVO = {
     "experiencia de empleado en herramientas internas",
     "sistema de diseño: cuándo merece la pena",
   ],
-  // Desarrollo (lunes de semanas ISO pares).
+  // Desarrollo.
   C3: [
     "fases del desarrollo de un producto digital",
     "cuánto cuesta desarrollar un producto digital",
@@ -77,17 +79,32 @@ export function semanaIso(date) {
   return Math.ceil(((dia - inicioAnio) / 86400000 + 1) / 7);
 }
 
+// Orden de desempate entre clusters igual de atrasados: el mismo que la
+// preferencia de la página de empresa de LinkedIn (C2 > C1 > C3).
+const ORDEN_DESEMPATE = ["C2", "C1", "C3"];
+
 /**
- * Cluster y categoría del post que se publica en `date` (hora de Madrid).
- * Miércoles: C2. Lunes: C1 en semanas ISO impares y C3 en las pares.
- * Cualquier otro día: null (el generador usa la rotación de categorías de siempre).
+ * Cluster y categoría del próximo post automático: el cluster que lleva más
+ * tiempo sin post (publicado o programado; los borradores no cuentan). Un
+ * cluster sin ningún post va primero. El cluster de un post sale de su
+ * categoría (no tiene columna propia). `corpus`: el de cargarCorpus.
  */
-export function clusterDelDia(date) {
-  const { weekday } = fechaMadrid(date);
-  let cluster = null;
-  if (weekday === "Wed") cluster = "C2";
-  else if (weekday === "Mon") cluster = semanaIso(date) % 2 === 1 ? "C1" : "C3";
-  return cluster ? { cluster, category: CATEGORIA_DEL_CLUSTER[cluster] } : null;
+export function clusterQueToca(corpus = []) {
+  const ultimo = Object.fromEntries(ORDEN_DESEMPATE.map((c) => [c, -Infinity]));
+  for (const post of corpus) {
+    if (!post.published) continue;
+    const cluster = CATEGORY_CLUSTER[post.category];
+    if (!cluster) continue;
+    ultimo[cluster] = Math.max(ultimo[cluster], new Date(post.date).getTime());
+  }
+  const cluster = [...ORDEN_DESEMPATE].sort(
+    (a, b) => ultimo[a] - ultimo[b] || ORDEN_DESEMPATE.indexOf(a) - ORDEN_DESEMPATE.indexOf(b),
+  )[0];
+  return {
+    cluster,
+    category: CATEGORIA_DEL_CLUSTER[cluster],
+    ultimoPost: Number.isFinite(ultimo[cluster]) ? new Date(ultimo[cluster]) : null,
+  };
 }
 
 const VACIAS = new Set(
