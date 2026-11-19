@@ -288,6 +288,16 @@ describe("fallos de envío y reintento", () => {
     expect(avisar.mock.calls[0][0].error).toMatch(/Make respondió 500[\s\S]*Make respondió 502/);
   });
 
+  it("08:45: el reintento escapa lo guardado una sola vez (no escapa dos veces)", async () => {
+    const payload = { canal: "personal", texto: "Texto (con paréntesis) y #CX", post_id: 1 };
+    prismaMock.$queryRaw.mockResolvedValue([
+      fila({ enviosSemana: [fallido({ canal: "PERSONAL", dia: "2026-11-19", payload, texto: payload.texto })] }),
+    ]);
+    ahora(new Date("2026-11-19T07:45:00Z"));
+    await GET(peticion());
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body).texto).toBe("Texto \\(con paréntesis\\) y #CX");
+  });
+
   it("08:45: tras dos fallos no hay tercer intento", async () => {
     prismaMock.$queryRaw.mockResolvedValue([fila({ enviosSemana: [fallido({ intentos: 2 })] })]);
     ahora(VIERNES_0845);
@@ -327,7 +337,10 @@ describe("perfil de José (martes y jueves 08:30)", () => {
     expect(payload.canal).toBe("personal");
     expect(payload.post_id).toBe(2);
     expect(payload.texto).not.toMatch(/https?:|www\./);
-    expect(payload.texto).toContain("pide una sesión de diagnóstico (enlace en mi perfil)");
+    // A Make llega escapado al formato de LinkedIn: paréntesis con barra, # tal cual.
+    expect(payload.texto).toContain("pide una sesión de diagnóstico \\(enlace en mi perfil\\).");
+    expect(payload.texto).toMatch(/\n\n#CX$/);
+    expect(payload.texto).not.toContain("\\#");
 
     expect(consultas()).toBe(1);
     expect(escrituras()).toBe(1);
@@ -335,10 +348,13 @@ describe("perfil de José (martes y jueves 08:30)", () => {
       canal: "PERSONAL",
       dia: new Date("2026-11-19T00:00:00Z"),
       postId: 2,
-      texto: payload.texto,
       idea: "Altas con datos de más",
       estado: "ENVIADO",
     });
+    // En la BD se guarda sin escapar: es lo que se compara al deduplicar.
+    const guardado = prismaMock.linkedInEnvio.create.mock.calls[0][0].data.texto;
+    expect(guardado).toContain("(enlace en mi perfil).");
+    expect(guardado).not.toContain("\\(");
   });
 
   it("no reutiliza posts: si el más reciente ya se usó, coge el anterior", async () => {

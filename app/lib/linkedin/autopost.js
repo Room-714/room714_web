@@ -22,6 +22,7 @@ import { madridDateString } from "@/app/lib/time/madrid";
 import { construirPublicacion, semanaMadrid, SITE } from "./aprobacion";
 import { configLinkedIn } from "./config";
 import { generarTextoPerfil, RECIENTES } from "./perfilPersonal";
+import { paraLinkedIn } from "./littleText";
 import {
   clusterDePost,
   mejorPostDeLaSemana,
@@ -160,6 +161,8 @@ export async function prepararEnvio(canal, estado, ahora, deps = {}) {
 
 /* ─── Envío a Make ────────────────────────────────────────────────────────── */
 
+// Único punto de salida hacia Make (empresa, perfil y flujo de aprobación).
+// Aquí, y solo aquí, se escapa el texto al formato de LinkedIn (littleText.js).
 export async function enviarAMake(url, payload, fetchImpl = fetch) {
   if (!url) throw new Error("Falta la URL del webhook de Make");
   let res;
@@ -167,7 +170,7 @@ export async function enviarAMake(url, payload, fetchImpl = fetch) {
     res = await fetchImpl(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(paraLinkedIn(payload)),
       signal: AbortSignal.timeout(TIMEOUT_MAKE_MS),
     });
   } catch (err) {
@@ -348,6 +351,8 @@ export async function vistaPrevia({ ahora = new Date(), deps = {} } = {}) {
         info.texto = prep.texto;
         if (prep.idea) info.idea = prep.idea;
         info.payload = prep.payload;
+        // Lo que recibiría Make, ya escapado al formato de LinkedIn.
+        info.payloadMake = paraLinkedIn(prep.payload);
       }
     } catch (err) {
       info.error = err.message;
