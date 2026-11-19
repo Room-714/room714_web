@@ -14,6 +14,23 @@ export const LINKEDIN_FOUNDER = "https://www.linkedin.com/in/josecesfranjo/";
  * Conserva los parámetros que ya trajera la URL y no duplica los utm_ que ya
  * estuvieran puestos.
  */
+/**
+ * UTMs de los enlaces al blog que se publican en LinkedIn. Es el camino
+ * contrario a withUtm: aquí el tráfico va de LinkedIn a la web, y
+ * `utm_content` lleva el slug para saber qué artículo lo trajo.
+ */
+export function withLinkedInUtm(url, slug) {
+  const salida = new URL(url);
+  const params = salida.searchParams;
+
+  params.set("utm_source", "linkedin");
+  params.set("utm_medium", "social");
+  params.set("utm_campaign", "blog");
+  params.set("utm_content", slug);
+
+  return salida.toString();
+}
+
 export function withUtm(url, { campaign, content } = {}) {
   const salida = new URL(url);
   const params = salida.searchParams;

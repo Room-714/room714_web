@@ -1,79 +1,33 @@
 import { prisma } from "@/app/lib/prisma";
 import { NextResponse } from "next/server";
-import { channelForVariant } from "@/app/lib/time/linkedinSchedule";
+import { ESTADOS, construirPublicacion } from "@/app/lib/linkedin/aprobacion";
 
 export const maxDuration = 60;
 
-const SITE = "https://www.room714.com";
-
 /* ═══════════════════════════════════════════════════════════════════════════
- * FLUJO AUTOMÁTICO VÍA MAKE — ACTIVO (jul 2026)
- * La app de LinkedIn (Community Management API) ya está aprobada, así que el
- * cron dispara el webhook de Make y Make publica en la página de empresa.
+ * PUBLICACIÓN EN LINKEDIN SOLO CON APROBACIÓN (nov 2026)
  *
- * PARA VOLVER AL MODO MANUAL (email) si Make fallara:
- *   1. Reimportar sendLinkedInManualEmail desde
- *      "@/app/lib/notifications/linkedinManual".
- *   2. En el bucle del GET, llamar a sendLinkedInManualEmail(...) en vez de
- *      fireWebhook(...).
- *   3. (Opcional) volver el filtro a un digest diario:
- *      const endOfToday = new Date(now); endOfToday.setUTCHours(23,59,59,999);
- *      where: { sent: false, scheduledFor: { lte: endOfToday } }
+ * Antes este cron publicaba, a su hora, todas las tomas que escribía
+ * generate-linkedin (personal y empresa), sin revisión. Ahora solo envía a
+ * Make los posts que alguien ha aprobado en el panel (linkedinEstado =
+ * APROBADO) y que ya están publicados en la web. Una publicación por post,
+ * siempre por el canal "empresa". Las tomas siguen generándose, pero solo como
+ * texto para la publicación aprobada; ya no salen por su cuenta.
+ *
+ * Base de datos: una lectura y, al final, una única escritura con todos los
+ * enviados. Nada de consultas dentro del bucle.
  * ═══════════════════════════════════════════════════════════════════════════ */
 
-// Construye el payload que se envía a Make. Puro y sin efectos, así el modo
-// preview puede devolverlo para inspección sin llegar a postear.
-function buildWebhookPayload({ variant, post, translationEs }) {
-  const postUrl = `${SITE}/es/blog/${translationEs.slug}`;
-  const hashtagsString = (variant.hashtags || [])
-    .map((h) => (h.startsWith("#") ? h : `#${h}`))
-    .join(" ");
-
-  return {
-    title: translationEs.title,
-    summary: (translationEs.content || "")
-      .replace(/<[^>]*>?/gm, "")
-      .substring(0, 250)
-      .concat("..."),
-    url: postUrl,
-    image: variant.imageBlobUrl,
-    date: post.date.toISOString().split("T")[0],
-    tags: translationEs.tags,
-    linkedin_post: variant.text,
-    linkedin_hashtags: variant.hashtags || [],
-    linkedin_hashtags_string: hashtagsString,
-    link_for_first_comment: postUrl,
-    variant_id: variant.id,
-    variant_number: variant.variant,
-    variant_angle: variant.angle,
-    // Decide qué ruta del Router de Make se ejecuta: "personal" → Create a
-    // User Image Post · "empresa" → Create a Company Image Post. El reparto
-    // vive en linkedinSchedule.js, no en Make.
-    canal: channelForVariant({
-      postPublishDate: post.date,
-      variant: variant.variant,
-    }),
-  };
-}
-
-async function fireWebhook({ variant, post, translationEs }) {
+async function fireWebhook(payload) {
   const webhookUrl = process.env.MAKE_WEBHOOK_URL;
-  if (!webhookUrl) {
-    throw new Error("MAKE_WEBHOOK_URL no definida");
-  }
-
-  const payload = buildWebhookPayload({ variant, post, translationEs });
+  if (!webhookUrl) throw new Error("MAKE_WEBHOOK_URL no definida");
 
   const response = await fetch(webhookUrl, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
   });
-
-  if (!response.ok) {
-    throw new Error(`Make webhook respondió ${response.status}`);
-  }
-  return true;
+  if (!response.ok) throw new Error(`Make webhook respondió ${response.status}`);
 }
 
 export async function GET(request) {
@@ -82,94 +36,69 @@ export async function GET(request) {
     return new Response("No autorizado", { status: 401 });
   }
 
-  // Modo preview: no postea ni marca nada como enviado; solo devuelve el
-  // payload que se enviaría a Make (para verificar formato sin efectos).
+  // Modo preview: no envía ni marca nada; devuelve lo que se mandaría a Make.
   const preview = new URL(request.url).searchParams.get("preview") === "1";
-
-  // Publicamos cada variante a su hora: recogemos las pendientes cuyo
-  // scheduledFor ya venció. El cron corre varias veces al día.
   const now = new Date();
 
-  // Nada con más de medio día de retraso: una variante que se quedó sin enviar
-  // ayer ya no tiene sentido hoy, y publicarla fuera de su día la deja sin la
-  // acción cruzada que le tocaba y sin aparecer en ningún briefing. Además es lo
-  // que impide que una cola vieja se vacíe de golpe tras un cambio de calendario.
-  const MAX_RETRASO_MS = 12 * 60 * 60 * 1000;
-  const minScheduledFor = new Date(now.getTime() - MAX_RETRASO_MS);
-
   try {
-    const dueVariants = await prisma.linkedInVariant.findMany({
-      where: { sent: false, scheduledFor: { lte: now, gte: minScheduledFor } },
-      include: {
-        post: { include: { translations: true } },
+    const aprobados = await prisma.post.findMany({
+      where: {
+        linkedinEstado: ESTADOS.APROBADO,
+        linkedinPublicadoAt: null,
+        published: true,
+        date: { lte: now },
       },
-      orderBy: { scheduledFor: "asc" },
+      include: { translations: true, linkedinVariants: true },
+      orderBy: { date: "asc" },
     });
 
-    // Las que se quedan fuera solo por antiguas no deben desaparecer en
-    // silencio: se cuentan aparte para que se vean en la respuesta si alguien
-    // mira, aunque el cron no haga nada con ellas.
-    const staleCount = await prisma.linkedInVariant.count({
-      where: { sent: false, scheduledFor: { lt: minScheduledFor } },
-    });
-
-    if (dueVariants.length === 0) {
+    if (aprobados.length === 0) {
       return NextResponse.json({
         mode: preview ? "preview" : "make-webhook",
-        message: "Sin variantes pendientes",
+        message: "Sin posts aprobados pendientes de LinkedIn",
         processed: 0,
-        staleSkipped: staleCount,
       });
     }
 
     const results = [];
+    const enviados = [];
 
-    for (const v of dueVariants) {
-      const translationEs = v.post.translations.find((t) => t.lang === "es");
-      if (!translationEs) {
-        results.push(`Variante ${v.id}: skipped (sin translation ES)`);
+    for (const post of aprobados) {
+      const payload = construirPublicacion(post);
+      if (!payload) {
+        results.push(`Post ${post.id}: omitido (sin traducción ES)`);
+        continue;
+      }
+
+      if (preview) {
+        results.push({ postId: post.id, payload });
         continue;
       }
 
       try {
-        if (preview) {
-          results.push({
-            id: v.id,
-            postId: v.postId,
-            variant: v.variant,
-            angle: v.angle,
-            scheduledFor: v.scheduledFor,
-            payload: buildWebhookPayload({
-              variant: v,
-              post: v.post,
-              translationEs,
-            }),
-          });
-          continue;
-        }
-
-        await fireWebhook({ variant: v, post: v.post, translationEs });
-
-        await prisma.linkedInVariant.update({
-          where: { id: v.id },
-          data: { sent: true, sentAt: new Date() },
-        });
-        results.push(
-          `Variante ${v.id} (post ${v.postId}, ${v.angle}, #${v.variant}): webhook Make disparado`,
-        );
+        await fireWebhook(payload);
+        enviados.push(post.id);
+        results.push(`Post ${post.id}: enviado a Make (página de empresa)`);
       } catch (err) {
-        console.error(`Variante ${v.id} falló:`, err.message);
-        results.push(`Variante ${v.id}: ERR ${err.message}`);
+        console.error(`publish-linkedin: post ${post.id} falló:`, err.message);
+        results.push(`Post ${post.id}: ERR ${err.message}`);
       }
+    }
+
+    if (enviados.length > 0) {
+      await prisma.post.updateMany({
+        where: { id: { in: enviados }, linkedinEstado: ESTADOS.APROBADO },
+        data: { linkedinEstado: ESTADOS.PUBLICADO, linkedinPublicadoAt: now },
+      });
     }
 
     return NextResponse.json({
       mode: preview ? "preview" : "make-webhook",
       message: preview
-        ? "Preview: nada posteado ni marcado"
-        : "Cron LinkedIn (webhook Make) ejecutado",
-      processed: dueVariants.length,
-      staleSkipped: staleCount,
+        ? "Preview: nada enviado ni marcado"
+        : "Cron LinkedIn (aprobados) ejecutado",
+      processed: aprobados.length,
+      sent: enviados.length,
       results,
     });
   } catch (err) {

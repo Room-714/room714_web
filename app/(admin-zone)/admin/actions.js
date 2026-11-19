@@ -20,56 +20,8 @@ function slugify(text) {
     .trim();
 }
 
-/**
- * Lógica de Webhook para LinkedIn (Make.com)
- * Ahora exportada para llamarla independientemente
- */
-export async function triggerLinkedInNotification(postData, imageUrl) {
-  const webhookUrl = process.env.MAKE_WEBHOOK_URL;
-  if (!webhookUrl) {
-    console.error("⚠️ MAKE_WEBHOOK_URL no definida");
-    return { success: false, error: "Webhook URL no configurada" };
-  }
-
-  const cleanSummary = postData.content_es
-    ? postData.content_es.replace(/<[^>]*>?/gm, "").substring(0, 250) + "..."
-    : "";
-
-  const slugForUrl = postData.slug_es || slugify(postData.title_es);
-  const postUrl = `https://www.room714.com/es/blog/${slugForUrl}`;
-  const hashtagsString = (postData.linkedin_hashtags_es ?? [])
-    .map((h) => (h.startsWith("#") ? h : `#${h}`))
-    .join(" ");
-
-  const payload = {
-    // Campos originales (mantenidos para compatibilidad con el scenario actual de Make)
-    title: postData.title_es,
-    summary: cleanSummary,
-    url: postUrl,
-    image: imageUrl,
-    date: postData.date,
-    tags: postData.tags_es,
-
-    // Campos nuevos para LinkedIn nativo
-    linkedin_post: postData.linkedin_post_es || cleanSummary,
-    linkedin_hashtags: postData.linkedin_hashtags_es ?? [],
-    linkedin_hashtags_string: hashtagsString,
-    // El link del post se publica como primer comentario en lugar de en el post
-    link_for_first_comment: postUrl,
-  };
-
-  try {
-    const response = await fetch(webhookUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-    return { success: response.ok };
-  } catch (error) {
-    console.error("❌ Error Webhook:", error);
-    return { success: false, error: error.message };
-  }
-}
+// La publicación en LinkedIn ya no sale de aquí: vive en linkedinActions.js
+// (aprobación en el panel) y en /api/cron/publish-linkedin (envío a Make).
 
 /**
  * Obtiene la lista de todos los posts

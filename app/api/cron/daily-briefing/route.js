@@ -8,13 +8,13 @@ import {
 } from "@/app/lib/time/madrid";
 import { PLANNED_WEEKDAYS } from "@/app/lib/time/linkedinSchedule";
 import { buildDailyTasks } from "@/app/lib/linkedin/dailyTasks";
+import { elegirTomaEmpresa } from "@/app/lib/linkedin/aprobacion";
 import { sendDailyBriefingEmail } from "@/app/lib/notifications/dailyBriefing";
 
 export const maxDuration = 60;
 
 const TARGET_HOUR = 8;
 const SITE = "https://www.room714.com";
-const DAY_MS = 24 * 60 * 60 * 1000;
 
 // Briefing diario de tareas manuales de LinkedIn.
 //
@@ -45,33 +45,47 @@ export async function GET(request) {
 
   const now = new Date();
   const { start, end } = madridDayRange(now);
-  const yesterdayStart = new Date(start.getTime() - DAY_MS);
 
   try {
-    const [todayVariants, yesterdayUnsent, todaysPosts] =
-      await Promise.all([
-      prisma.linkedInVariant.findMany({
-        where: { scheduledFor: { gte: start, lte: end } },
-        include: { post: { include: { translations: true } } },
-        orderBy: { scheduledFor: "asc" },
-      }),
-      prisma.linkedInVariant.findMany({
-        where: { sent: false, scheduledFor: { gte: yesterdayStart, lt: start } },
-        include: { post: { include: { translations: true } } },
-        orderBy: { scheduledFor: "asc" },
-      }),
-      // findMany y no findFirst: si el mismo día hay un post MANUAL y uno AUTO,
-      // un findFirst sin filtrar por source puede devolver el manual, y
-      // entonces blog_review apuntaría al artículo equivocado y la incidencia
-      // no_takes (que exige source === "AUTO") desaparecería en silencio.
-      // orderBy date desc para que, si hubiera dos AUTO (no debería), gane el
-      // más reciente al elegir abajo.
-      prisma.post.findMany({
-        where: { published: true, date: { gte: start, lte: end } },
-        include: { translations: true, linkedinVariants: true },
-        orderBy: { date: "desc" },
-      }),
-    ]);
+    // Una consulta detrás de otra, no en paralelo: la BD de producción se ha
+    // quedado sin conexiones otras veces.
+    //
+    // Lo publicado hoy en la página de empresa. Desde noviembre de 2026 solo
+    // sale a LinkedIn lo aprobado en el panel, una vez por post, así que las
+    // tomas programadas ya no son publicaciones: una toma no enviada es lo
+    // normal, no una incidencia.
+    const publicadosHoy = await prisma.post.findMany({
+      where: { linkedinPublicadoAt: { gte: start, lte: end } },
+      include: { translations: true, linkedinVariants: true },
+      orderBy: { linkedinPublicadoAt: "asc" },
+    });
+
+    // findMany y no findFirst: si el mismo día hay un post MANUAL y uno AUTO,
+    // un findFirst sin filtrar por source puede devolver el manual, y
+    // entonces blog_review apuntaría al artículo equivocado y la incidencia
+    // no_takes (que exige source === "AUTO") desaparecería en silencio.
+    // orderBy date desc para que, si hubiera dos AUTO (no debería), gane el
+    // más reciente al elegir abajo.
+    const todaysPosts = await prisma.post.findMany({
+      where: { published: true, date: { gte: start, lte: end } },
+      include: { translations: true, linkedinVariants: true },
+      orderBy: { date: "desc" },
+    });
+
+    // Cada publicación de empresa deja a José la tarea de comentarla desde su
+    // perfil. Se presenta con la forma de una toma para reutilizar las tareas.
+    const todayVariants = publicadosHoy.map((post) => {
+      const toma = elegirTomaEmpresa(post);
+      return {
+        id: toma?.id ?? null,
+        variant: toma?.variant ?? 1,
+        crossNote: toma?.crossNote ?? null,
+        scheduledFor: post.linkedinPublicadoAt,
+        canal: "empresa",
+        cross: "comment_personal",
+        post,
+      };
+    });
 
     // De los posts de hoy, prioriza el AUTO: es el que lleva tomas de
     // LinkedIn y el que espera la incidencia no_takes. Si no hay AUTO (día
@@ -83,7 +97,6 @@ export async function GET(request) {
 
     const { tasks, incidents } = buildDailyTasks({
       todayVariants,
-      yesterdayUnsent,
       blogPost,
       siteUrl,
       firstCommentAutomated: process.env.FIRST_COMMENT_AUTOMATED === "true",

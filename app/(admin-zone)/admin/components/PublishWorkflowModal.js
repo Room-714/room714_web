@@ -2,7 +2,12 @@
 import { useState } from "react";
 
 export default function PublishWorkflowModal({ post, onClose, onConfirm }) {
-  const [linkedIn, setLinkedIn] = useState(false);
+  // Desmarcada por defecto: un post nuevo sale solo en la web. Si el post ya
+  // estaba marcado para LinkedIn, la casilla lo refleja.
+  const estadoLinkedIn = post?.linkedinEstado ?? "SOLO_WEB";
+  const linkedInInicial = estadoLinkedIn !== "SOLO_WEB";
+  const yaPublicadoEnLinkedIn = estadoLinkedIn === "PUBLICADO";
+  const [linkedIn, setLinkedIn] = useState(linkedInInicial);
   const [showScheduler, setShowScheduler] = useState(false);
 
   // Calculamos la fecha de mañana como mínimo permitido
@@ -26,6 +31,7 @@ export default function PublishWorkflowModal({ post, onClose, onConfirm }) {
                 onConfirm({
                   shouldPublish: true,
                   linkedIn,
+                  linkedInInicial,
                   scheduleDate: new Date().toISOString(),
                 })
               }
@@ -54,7 +60,7 @@ export default function PublishWorkflowModal({ post, onClose, onConfirm }) {
                 className="w-full p-3 rounded-xl border-2 border-gray-200 font-bold text-center text-black bg-white outline-none focus:border-sky-500"
               />
               <p className="text-xs text-gray-400 leading-relaxed text-center">
-                * Se publicará automáticamente <br />
+                * Se publicará automáticamente en la web <br />
                 el día elegido a las 08:00.
               </p>
               <button
@@ -62,6 +68,7 @@ export default function PublishWorkflowModal({ post, onClose, onConfirm }) {
                   onConfirm({
                     shouldPublish: true,
                     linkedIn,
+                  linkedInInicial,
                     scheduleDate: new Date(
                       `${selectedDate}T08:00:00`,
                     ).toISOString(),
@@ -81,14 +88,21 @@ export default function PublishWorkflowModal({ post, onClose, onConfirm }) {
           </div>
         )}
 
-        <div className="py-6 border-t mt-4 flex items-center justify-between px-2">
+        <div className="py-6 border-t mt-4 flex items-center justify-between gap-4 px-2 text-left">
           <span className="text-sm font-black text-gray-600">
-            Notificar en LinkedIn
+            Publicar también en LinkedIn
+            <span className="block text-xs font-normal text-gray-400">
+              {yaPublicadoEnLinkedIn
+                ? "Ya está publicado en LinkedIn."
+                : "Quedará pendiente de tu aprobación en el panel del post."}
+            </span>
           </span>
           <label className="relative inline-flex items-center cursor-pointer">
             <input
               type="checkbox"
               checked={linkedIn}
+              disabled={yaPublicadoEnLinkedIn}
+              aria-label="Publicar también en LinkedIn"
               onChange={(e) => setLinkedIn(e.target.checked)}
               className="sr-only peer"
             />
