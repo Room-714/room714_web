@@ -33,7 +33,8 @@ export const INCORPORAR_IA = {
     subtitulo: "Sin normas, sin formación, sin control.",
     texto:
       "Room 714 tiene la solución para que la IA en tu empresa aporte el máximo valor y suponga el mínimo riesgo.",
-    cta: "Hablemos",
+    // Lleva al cuestionario (#hablemos), no al formulario de contacto.
+    cta: "Haz el diagnóstico (2 min)",
   },
 
   problema: {
@@ -74,7 +75,7 @@ export const INCORPORAR_IA = {
   cierre: {
     titulo: "Hablemos de tu caso.",
     texto:
-      "Responde siete preguntas sobre cómo se usa hoy la IA en tu empresa y te decimos en qué situación está y qué hacer primero.",
+      "Responde cinco preguntas sobre cómo se usa hoy la IA en tu empresa (te llevará un minuto o dos) y te decimos en qué situación está y qué hacer primero.",
     // Resumen de la bio de «Quién está detrás» (about.quien del
     // diccionario): no añade nada que no esté ya publicado allí.
     quien: {

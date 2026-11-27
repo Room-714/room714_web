@@ -27,6 +27,12 @@ import { ORIGENES } from "@/app/data/incorporarIa";
 // El diagnóstico se recalcula aquí con las mismas reglas que el navegador, y el
 // email no lleva nada escrito por el cliente salvo su dirección: este
 // endpoint no sirve para mandar texto arbitrario a terceros.
+//
+// Logs: una línea al ir bien y otra al fallar, SIN datos personales (ni el
+// email ni las respuestas): solo nivel y si viene de campaña.
+
+/** Lo que se puede registrar de un error de Resend sin datos personales. */
+const errorSeguro = (error) => ({ name: error?.name ?? null, statusCode: error?.statusCode ?? null });
 export async function POST(req) {
   let body;
   try {
@@ -41,22 +47,22 @@ export async function POST(req) {
 
   const email = typeof body?.email === "string" ? body.email.trim() : "";
   if (!emailValido(email)) {
+    console.error("[inventario-ia] error", { motivo: "email no válido" });
     return NextResponse.json({ error: "Email no válido" }, { status: 400 });
   }
-  if (body.acepta !== true) {
-    return NextResponse.json(
-      { error: "Falta aceptar la política de privacidad" },
-      { status: 400 },
-    );
-  }
+  // La política de privacidad se informa junto al botón de enviar: no hay
+  // casilla que marcar, así que `acepta` ya no se exige. No es un
+  // consentimiento para comunicaciones comerciales: el correo solo se usa para
+  // enviar el diagnóstico pedido y contestar.
   const respuestas = validarRespuestas(body.respuestas);
   if (!respuestas) {
+    console.error("[inventario-ia] error", { motivo: "respuestas no válidas" });
     return NextResponse.json({ error: "Respuestas no válidas" }, { status: 400 });
   }
 
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
-    console.error("Inventario IA: RESEND_API_KEY no configurada");
+    console.error("[inventario-ia] error", { motivo: "RESEND_API_KEY no configurada" });
     return NextResponse.json({ error: "Email no configurado" }, { status: 500 });
   }
 
@@ -86,7 +92,7 @@ export async function POST(req) {
   });
 
   if (error) {
-    console.error("Inventario IA: Resend", error);
+    console.error("[inventario-ia] error", { motivo: "Resend", nivel: d.nivel, ...errorSeguro(error) });
     return NextResponse.json({ error: "No se pudo enviar" }, { status: 502 });
   }
 
@@ -122,8 +128,13 @@ export async function POST(req) {
       </div>`,
     });
   } catch (err) {
-    console.error("Inventario IA: aviso interno", err?.message);
+    console.error("[inventario-ia] error", { motivo: "aviso interno", name: err?.name ?? null });
   }
 
+  console.log("[inventario-ia] ok", {
+    nivel: d.nivel,
+    tieneGclid: Boolean(campana?.gclid),
+    utm_source: campana?.utm_source ?? null,
+  });
   return NextResponse.json({ success: true });
 }

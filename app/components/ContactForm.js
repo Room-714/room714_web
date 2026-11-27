@@ -9,13 +9,15 @@ import { leerCampana } from "@/app/lib/campana";
 import { INCORPORAR_IA, ORIGENES } from "@/app/data/incorporarIa";
 
 // El formulario de "Hablemos", sacado de ContactClient para poder usarlo
-// también en la landing de IA en tu empresa. El marcado y los estilos son los
+// también en la landing de IA en tu empresa. Las dos variantes mandan los
+// parámetros de campaña (utm_*, gclid): quien llega por un anuncio a la
+// landing y escribe desde Hablemos tiene que constar como lead de Google Ads. El marcado y los estilos son los
 // de siempre; lo único que cambia con `variante="incorporarIa"`:
 //
 //   - La primera pregunta ("¿Qué producto es?") no aplica a esta landing y
 //     se sustituye por "Número de empleados", con las mismas pastillas.
 //   - La pregunta de texto libre es "¿Qué te preocupa?".
-//   - Se manda el origen de la landing y los parámetros de campaña.
+//   - Se manda el origen de la landing.
 //   - Al enviarse registra la conversión `diagnostico_solicitado`.
 export default function ContactForm({
   dict,
@@ -50,11 +52,11 @@ export default function ContactForm({
       message: formData.get("message"),
       // El API espera un array; aquí solo puede haber una situación.
       interests: !esLanding && producto ? [producto] : [],
+      campana: leerCampana(),
       ...(esLanding
         ? {
             origen: formData.get("origen"),
             employees: numEmpleados,
-            campana: leerCampana(),
           }
         : {}),
     };

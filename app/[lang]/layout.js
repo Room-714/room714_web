@@ -24,6 +24,7 @@ import { LINKEDIN_COMPANY, withUtm } from "@/app/lib/links";
 import { path } from "@/app/lib/routes.mjs";
 import { INCORPORAR_IA } from "@/app/data/incorporarIa";
 import AnalyticsEvents from "@/app/components/AnalyticsEvents";
+import CapturaCampana from "@/app/components/CapturaCampana";
 import KitConsultingFooter from "@/app/components/KitConsultingFooter";
 import { Analytics } from "@vercel/analytics/next";
 import { cookies } from "next/headers";
@@ -321,9 +322,14 @@ export default async function RootLayout({ children, params }) {
 
         {/* Vercel Analytics no usa cookies ni datos personales, así que no va
             detrás del banner; GTM y Clarity sí siguen esperando el
-            consentimiento. AnalyticsEvents es el oyente único de clics. */}
+            consentimiento. AnalyticsEvents es el oyente único de clics.
+            CapturaCampana guarda utm_* y gclid de la página de entrada, sea
+            cual sea (sessionStorage, sin cookies), para que lleguen a
+            /api/contact aunque se entre por la landing y se escriba desde
+            Hablemos. */}
         <Analytics />
         <AnalyticsEvents />
+        <CapturaCampana />
       </body>
     </html>
   );
