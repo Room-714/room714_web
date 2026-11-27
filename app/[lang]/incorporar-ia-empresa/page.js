@@ -2,7 +2,6 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import Navbar from "@/app/components/Navbar";
 import PrimaryButton from "@/app/components/PrimaryButton";
-import CapturaCampana from "@/app/components/incorporarIa/CapturaCampana";
 import DibujoRobots from "@/app/components/incorporarIa/DibujoRobots";
 import CandadoAbierto from "@/app/components/incorporarIa/CandadoAbierto";
 import InventarioIA from "@/app/components/incorporarIa/InventarioIA";
@@ -112,7 +111,6 @@ export default async function IncorporarIaPage({ params }) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
       />
-      <CapturaCampana />
       {/* El selector de idioma lleva a la portada inglesa: esta página no
           tiene versión en inglés. */}
       <Navbar

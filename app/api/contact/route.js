@@ -6,16 +6,13 @@ import { ORIGENES } from "@/app/data/incorporarIa";
 
 const ORIGENES_VALIDOS = new Set([ORIGENES.hablemos, ORIGENES.landing]);
 
+// Logs: una línea al ir bien y otra al fallar, SIN datos personales (ni
+// nombre, ni email, ni mensaje): solo el origen y si viene de campaña.
 export async function POST(req) {
   const apiKey = process.env.RESEND_API_KEY;
 
-  console.log(
-    "Comprobando API KEY:",
-    apiKey ? apiKey.substring(0, 4) + "..." : "ESTÁ VACÍA"
-  );
-
   if (!apiKey) {
-    console.error("Error: RESEND_API_KEY no configurada en .env.local");
+    console.error("[contact] error", { motivo: "RESEND_API_KEY no configurada" });
     return NextResponse.json(
       { error: "Email service misconfigured" },
       { status: 500 }
@@ -87,13 +84,23 @@ export async function POST(req) {
     });
 
     if (error) {
-      console.error("Resend Error:", error);
+      console.error("[contact] error", {
+        motivo: "Resend",
+        origen,
+        name: error?.name ?? null,
+        statusCode: error?.statusCode ?? null,
+      });
       return NextResponse.json({ error }, { status: 500 });
     }
 
+    console.log("[contact] ok", {
+      origen,
+      tieneGclid: Boolean(c?.gclid),
+      utm_source: c?.utm_source ?? null,
+    });
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
-    console.error("Catch Error:", error);
+    console.error("[contact] error", { motivo: "excepción", name: error?.name ?? null });
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }

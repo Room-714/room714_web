@@ -8,11 +8,12 @@ import { trackEvent } from "@/app/lib/analytics";
 import { registrarConversion } from "@/app/lib/conversiones";
 import { leerCampana } from "@/app/lib/campana";
 import { path } from "@/app/lib/routes.mjs";
-import { CIERRE, PREGUNTAS, diagnostico, respuestasVacias } from "@/app/lib/inventarioIa";
+import { CIERRE, PREGUNTAS, diagnostico, fraseEnvio, respuestasVacias } from "@/app/lib/inventarioIa";
 
-// Cuestionario de IA: siete preguntas, una por pantalla. Al terminar enseña
-// el nivel de criticidad (titular y texto) y pide el email para enviar el
-// diagnóstico completo: normativa y tres primeros pasos. El servidor lo
+// Cuestionario de IA: cinco preguntas, una por pantalla, con barra de
+// progreso. Al terminar enseña el nivel de criticidad (titular y texto) y el
+// primer paso recomendado, y pide el email para enviar el diagnóstico
+// completo: el resto de pasos y la normativa. El servidor lo
 // recalcula y guarda el contacto en Lead. Las opciones usan las
 // pastillas del formulario de Hablemos, los botones son PrimaryButton y el
 // contenedor es el gris claro de las tarjetas del sitio.
@@ -84,7 +85,9 @@ export default function InventarioIA() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email: form.get("email"),
-          acepta: form.get("acepta") === "on",
+          // La política de privacidad se informa junto al botón; no hay casilla
+          // que marcar (ver el PR del 2026-11-27).
+          acepta: true,
           web: form.get("web"),
           respuestas,
           campana: leerCampana(),
@@ -152,12 +155,21 @@ export default function InventarioIA() {
         <p className="font-body text-base md:text-lg lg:text-xl text-gray-800 leading-normal mb-8">
           {d.texto}
         </p>
+        {d.primerPaso && (
+          <div className="rounded-3xl bg-white border border-black/10 p-5 md:p-6 mb-8">
+            <p className="font-hand text-red-500 text-lg md:text-xl leading-[1.45] mb-1">
+              Tu primer paso
+            </p>
+            <p className="font-title font-black text-lg md:text-xl lg:text-2xl text-black leading-tight mb-2">
+              {d.primerPaso.titulo}
+            </p>
+            <p className="font-body text-base md:text-lg text-gray-800 leading-normal">
+              {d.primerPaso.texto}
+            </p>
+          </div>
+        )}
         <p className="font-body font-bold text-base md:text-lg lg:text-xl text-black leading-normal mb-6 border-t border-black/15 pt-6">
-          {d.pasos.length === 0
-            ? "Te enviamos el diagnóstico completo por correo."
-            : d.pasos.length === 1
-              ? "Te enviamos el diagnóstico completo con tu primer paso."
-              : `Te enviamos el diagnóstico completo con tus ${d.pasos.length === 3 ? "tres" : "dos"} primeros pasos.`}
+          {fraseEnvio(d)}
         </p>
 
         <form onSubmit={enviar} className="flex flex-col gap-5 max-w-2xl">
@@ -184,25 +196,17 @@ export default function InventarioIA() {
             <input id="inventario-web" name="web" type="text" tabIndex={-1} autoComplete="off" />
           </div>
 
-          <label className="flex items-start gap-3 font-body text-sm md:text-base text-gray-700 leading-normal cursor-pointer">
-            <input
-              type="checkbox"
-              name="acepta"
-              required
-              className="mt-1 w-5 h-5 shrink-0 accent-red-600"
-            />
-            <span>
-              He leído y acepto la{" "}
-              <Link
-                href={path("privacidad", "es")}
-                target="_blank"
-                className="underline hover:text-red-600"
-              >
-                política de privacidad
-              </Link>
-              .
-            </span>
-          </label>
+          <p className="font-body text-sm md:text-base text-gray-700 leading-normal">
+            Al enviar aceptas la{" "}
+            <Link
+              href={path("privacidad", "es")}
+              target="_blank"
+              className="underline hover:text-red-600"
+            >
+              política de privacidad
+            </Link>
+            . Usamos tu correo para enviarte el diagnóstico.
+          </p>
 
           {envio === "error" && (
             <p role="alert" className="font-body text-sm md:text-base text-red-700">
@@ -239,8 +243,21 @@ export default function InventarioIA() {
     <div className={contenedor}>
       <fieldset>
         <legend className="w-full mb-6">
-          <span className="block font-hand text-red-500 text-lg md:text-xl lg:text-2xl leading-[1.45] mb-1">
+          <span className="block font-hand text-red-500 text-lg md:text-xl lg:text-2xl leading-[1.45] mb-2">
             {`Pregunta ${paso + 1} de ${TOTAL}`}
+          </span>
+          <span
+            role="progressbar"
+            aria-label="Progreso del cuestionario"
+            aria-valuemin={0}
+            aria-valuemax={TOTAL}
+            aria-valuenow={paso + 1}
+            className="block h-2 w-full rounded-full bg-black/10 overflow-hidden mb-5"
+          >
+            <span
+              className="block h-full rounded-full bg-red-600 transition-[width] duration-300"
+              style={{ width: `${((paso + 1) / TOTAL) * 100}%` }}
+            />
           </span>
           <span ref={titularRef} tabIndex={-1} className={`block ${titular}`}>
             {pregunta.texto}
@@ -282,6 +299,17 @@ export default function InventarioIA() {
           onClick={() => setPaso(paso + 1)}
         />
       </div>
+
+      <p className="font-body text-sm md:text-base text-gray-700 leading-normal mt-6">
+        <Link
+          href={path("hablemos", "es")}
+          data-track="cta_click"
+          data-track-placement="incorporar_ia_contacto_directo"
+          className="underline underline-offset-4 hover:text-red-600"
+        >
+          ¿Prefieres hablarlo directamente? Pide una sesión de 30 minutos
+        </Link>
+      </p>
     </div>
   );
 }

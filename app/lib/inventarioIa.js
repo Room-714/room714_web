@@ -4,35 +4,18 @@
 // se fía del que mande el cliente) y escribir el email.
 //
 // Los textos son los aprobados por José Antonio (2026-11-16), tal cual.
+//
+// Cinco preguntas desde el 2026-11-27 (eran siete): se quitaron «¿Qué
+// herramientas de IA se usan?» y «¿Quién las usa?» para que se termine. El
+// cálculo no las echa de menos: «No lo sé con certeza» (no saber qué se usa)
+// sigue llegando por la pregunta de los datos, y el uso por libre por la de
+// las cuentas. Las reglas toleran que falten (respuestas antiguas).
 
 export const PREGUNTAS = [
   {
-    id: "herramientas",
-    texto: "¿Qué herramientas de IA se usan hoy en tu empresa?",
-    multiple: true,
-    opciones: [
-      { id: "chat", texto: "Asistentes de chat generalistas" },
-      { id: "ofimatica", texto: "IA integrada en ofimática y correo" },
-      { id: "gestion", texto: "IA dentro de programas de gestión" },
-      { id: "multimedia", texto: "Herramientas de imagen, vídeo o voz" },
-      { id: "programacion", texto: "Asistentes de programación" },
-      { id: "nose", texto: "No lo sé con certeza" },
-    ],
-  },
-  {
-    id: "quien",
-    texto: "¿Quién las usa?",
-    multiple: false,
-    opciones: [
-      { id: "casiNadie", texto: "Casi nadie" },
-      { id: "porSuCuenta", texto: "Algunas personas, por su cuenta" },
-      { id: "equipos", texto: "Algunos equipos, de forma organizada" },
-      { id: "casiToda", texto: "Casi toda la plantilla" },
-    ],
-  },
-  {
     id: "datos",
-    texto: "¿Qué información se introduce en ellas?",
+    // Era «¿… en ellas?», que se refería a la pregunta de las herramientas.
+    texto: "¿Qué información se introduce en las herramientas de IA?",
     multiple: true,
     opciones: [
       { id: "documentos", texto: "Documentos y textos internos" },
@@ -135,6 +118,17 @@ export const PASOS = {
   plan: "Decide con dirección en qué procesos aporta la IA y con qué prioridad.",
 };
 
+// Título corto de cada paso, para enseñar el primero en pantalla antes de
+// pedir el correo (la frase de PASOS va debajo, como explicación).
+export const TITULOS_PASOS = {
+  datos: "Marca qué datos no entran en la IA",
+  cuentas: "Pasa a cuentas de empresa",
+  normas: "Pon por escrito una política de uso",
+  visibilidad: "Haz inventario de lo que se usa",
+  formacion: "Forma a la plantilla con casos reales",
+  plan: "Elige dónde aplicar la IA",
+};
+
 export const CIERRE = {
   titulo: "Esto es exactamente lo que hacemos en Room 714.",
   texto:
@@ -173,18 +167,24 @@ export function validarRespuestas(entrada) {
   return salida;
 }
 
+/** Respuestas de una pregunta, o [] si no está (p. ej. preguntas retiradas). */
+const de = (r, id) => (Array.isArray(r?.[id]) ? r[id] : []);
+
 /** Puntos de riesgo y señales de las respuestas. */
 export function riesgos(r) {
-  const sensibles = r.datos.some((id) => DATOS_SENSIBLES.includes(id));
-  const visibilidad = r.herramientas.includes("nose") || r.datos.includes("nose");
-  const sinNormas = r.normas.includes("ninguna");
+  const datos = de(r, "datos");
+  const cuentas = de(r, "cuentas");
+  const normas = de(r, "normas");
+  const formacion = de(r, "formacion");
+  const sensibles = datos.some((id) => DATOS_SENSIBLES.includes(id));
+  const visibilidad = datos.includes("nose");
+  const sinNormas = normas.includes("ninguna");
   const puntos =
     (sensibles ? 3 : 0) +
     (visibilidad ? 2 : 0) +
-    (r.cuentas.includes("personales") ? 2 : r.cuentas.includes("sinGestion") ? 1 : 0) +
-    (sinNormas ? 2 : r.normas.includes("informales") ? 1 : 0) +
-    (r.formacion.includes("no") ? 2 : r.formacion.includes("algunas") ? 1 : 0) +
-    (r.quien.includes("porSuCuenta") ? 1 : 0);
+    (cuentas.includes("personales") ? 2 : cuentas.includes("sinGestion") ? 1 : 0) +
+    (sinNormas ? 2 : normas.includes("informales") ? 1 : 0) +
+    (formacion.includes("no") ? 2 : formacion.includes("algunas") ? 1 : 0);
   return { puntos, sensibles, visibilidad, sinNormas };
 }
 
@@ -205,11 +205,11 @@ export function pasos(r) {
   const { sensibles, visibilidad } = riesgos(r);
   const aplican = [
     sensibles && "datos",
-    !r.cuentas.includes("gestionadas") && "cuentas",
-    !r.normas.includes("politica") && "normas",
+    !de(r, "cuentas").includes("gestionadas") && "cuentas",
+    !de(r, "normas").includes("politica") && "normas",
     visibilidad && "visibilidad",
-    !r.formacion.includes("adaptada") && "formacion",
-    !r.plan.includes("plan") && "plan",
+    !de(r, "formacion").includes("adaptada") && "formacion",
+    !de(r, "plan").includes("plan") && "plan",
   ].filter(Boolean);
   return aplican.slice(0, MAX_PASOS);
 }
@@ -218,26 +218,47 @@ export function pasos(r) {
 export function normativa(r, idNivel) {
   if (idNivel === "bajo") return [];
   const claves = ["articulo4"];
-  if (r.datos.some((id) => DATOS_PERSONALES.includes(id))) claves.push("rgpd");
+  if (de(r, "datos").some((id) => DATOS_PERSONALES.includes(id))) claves.push("rgpd");
   return claves;
 }
 
 /** El diagnóstico completo, con los textos ya resueltos. */
 export function diagnostico(respuestas) {
   const idNivel = nivel(respuestas);
+  const claves = pasos(respuestas);
   return {
     nivel: idNivel,
     ...NIVELES[idNivel],
     normativa: normativa(respuestas, idNivel).map((k) => NORMATIVA[k]),
-    pasos: pasos(respuestas).map((k) => PASOS[k]),
+    pasos: claves.map((k) => PASOS[k]),
+    // El que se enseña en pantalla antes de pedir el correo.
+    primerPaso: claves.length ? { titulo: TITULOS_PASOS[claves[0]], texto: PASOS[claves[0]] } : null,
   };
+}
+
+const NUMEROS = ["", "uno", "dos", "tres"];
+
+/**
+ * La frase sobre el formulario: dice lo que llega de verdad al correo (el
+ * resto de pasos y la normativa), adaptada a cuántos pasos hay.
+ */
+export function fraseEnvio(d) {
+  const resto = Math.max(d.pasos.length - 1, 0);
+  const conNormativa = d.normativa.length > 0;
+  const partes = [];
+  if (resto === 1) partes.push("el otro paso recomendado");
+  if (resto > 1) partes.push(`los otros ${NUMEROS[resto] ?? resto} pasos recomendados`);
+  if (conNormativa) partes.push("la normativa que te afecta");
+  return partes.length
+    ? `Te enviamos a tu correo el diagnóstico completo, con ${partes.join(" y ")}.`
+    : "Te enviamos el diagnóstico completo a tu correo.";
 }
 
 /** Las respuestas con su texto, para guardarlas legibles con el contacto. */
 export function respuestasLegibles(respuestas) {
   return PREGUNTAS.map((p) => ({
     pregunta: p.texto,
-    respuestas: respuestas[p.id].map(
+    respuestas: de(respuestas, p.id).map(
       (id) => p.opciones.find((o) => o.id === id).texto,
     ),
   }));

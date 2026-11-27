@@ -3,7 +3,10 @@ import {
   NIVELES,
   NORMATIVA,
   PASOS,
+  PREGUNTAS,
+  TITULOS_PASOS,
   diagnostico,
+  fraseEnvio,
   nivel,
   pasos,
   riesgos,
@@ -12,8 +15,6 @@ import {
 
 // Una empresa ordenada: sin riesgos y con plan.
 const ORDENADA = {
-  herramientas: ["chat", "ofimatica"],
-  quien: ["equipos"],
   datos: ["documentos", "codigo"],
   normas: ["politica"],
   formacion: ["adaptada"],
@@ -23,7 +24,6 @@ const ORDENADA = {
 
 const CRITICA = {
   ...ORDENADA,
-  quien: ["porSuCuenta"],
   datos: ["documentos", "clientes"],
   normas: ["ninguna"],
   formacion: ["no"],
@@ -33,12 +33,12 @@ const CRITICA = {
 
 describe("nivel de gravedad", () => {
   it("crítico: datos sensibles, sin normas, sin formación y cuentas personales", () => {
-    expect(riesgos(CRITICA).puntos).toBe(10);
+    expect(riesgos(CRITICA).puntos).toBe(9);
     expect(nivel(CRITICA)).toBe("critico");
   });
 
   it("sin datos sensibles nunca es crítico, aunque sume mucho", () => {
-    const r = { ...CRITICA, datos: ["documentos"], herramientas: ["nose"] };
+    const r = { ...CRITICA, datos: ["documentos", "nose"] };
     expect(riesgos(r).puntos).toBeGreaterThanOrEqual(8);
     expect(nivel(r)).toBe("alto");
   });
@@ -48,7 +48,7 @@ describe("nivel de gravedad", () => {
   });
 
   it("alto sin datos sensibles: no saber qué se usa, cuentas personales y normas informales", () => {
-    const r = { ...ORDENADA, herramientas: ["nose"], cuentas: ["personales"], normas: ["informales"] };
+    const r = { ...ORDENADA, datos: ["nose"], cuentas: ["personales"], normas: ["informales"] };
     expect(riesgos(r).puntos).toBe(5);
     expect(nivel(r)).toBe("alto");
   });
@@ -69,7 +69,7 @@ describe("pasos", () => {
   });
 
   it("sin datos sensibles empieza por lo siguiente que aplica", () => {
-    const r = { ...ORDENADA, herramientas: ["nose"], formacion: ["no"], plan: ["pruebas"] };
+    const r = { ...ORDENADA, datos: ["nose"], formacion: ["no"], plan: ["pruebas"] };
     expect(pasos(r)).toEqual(["visibilidad", "formacion", "plan"]);
   });
 
@@ -111,8 +111,8 @@ describe("diagnostico", () => {
 
 describe("validarRespuestas", () => {
   it("acepta respuestas completas y las ordena como las opciones", () => {
-    const v = validarRespuestas({ ...ORDENADA, herramientas: ["ofimatica", "chat"] });
-    expect(v.herramientas).toEqual(["chat", "ofimatica"]);
+    const v = validarRespuestas({ ...ORDENADA, datos: ["codigo", "documentos"] });
+    expect(v.datos).toEqual(["documentos", "codigo"]);
   });
 
   it("rechaza si falta una de las preguntas nuevas", () => {
@@ -124,5 +124,58 @@ describe("validarRespuestas", () => {
   it("rechaza ids desconocidos y varias respuestas en una pregunta de respuesta única", () => {
     expect(validarRespuestas({ ...ORDENADA, plan: ["quizas"] })).toBeNull();
     expect(validarRespuestas({ ...ORDENADA, cuentas: ["personales", "gestionadas"] })).toBeNull();
+  });
+});
+
+describe("cuestionario de cinco preguntas", () => {
+  it("son datos, normas, formación, cuentas y plan", () => {
+    expect(PREGUNTAS.map((p) => p.id)).toEqual(["datos", "normas", "formacion", "cuentas", "plan"]);
+  });
+
+  it("una respuesta antigua con herramientas y quien sigue valiendo: las claves de más se ignoran", () => {
+    const v = validarRespuestas({ ...ORDENADA, herramientas: ["chat"], quien: ["equipos"] });
+    expect(v).toEqual(ORDENADA);
+  });
+
+  it("las reglas no fallan si falta una pregunta", () => {
+    expect(() => diagnostico({ datos: ["clientes"] })).not.toThrow();
+    expect(riesgos({}).puntos).toBe(0);
+  });
+});
+
+describe("primer paso en pantalla", () => {
+  it("lleva el título corto y la frase del paso", () => {
+    expect(diagnostico(CRITICA).primerPaso).toEqual({ titulo: TITULOS_PASOS.datos, texto: PASOS.datos });
+  });
+
+  it("sin pasos no hay primer paso", () => {
+    expect(diagnostico(ORDENADA).primerPaso).toBeNull();
+  });
+
+  it("todos los pasos tienen título", () => {
+    expect(Object.keys(TITULOS_PASOS).sort()).toEqual(Object.keys(PASOS).sort());
+  });
+});
+
+describe("frase sobre el formulario", () => {
+  it("con tres pasos y normativa: dice lo que llega al correo", () => {
+    expect(fraseEnvio(diagnostico(CRITICA))).toBe(
+      "Te enviamos a tu correo el diagnóstico completo, con los otros dos pasos recomendados y la normativa que te afecta.",
+    );
+  });
+
+  it("con dos pasos, uno más", () => {
+    expect(fraseEnvio({ pasos: ["a", "b"], normativa: [] })).toBe(
+      "Te enviamos a tu correo el diagnóstico completo, con el otro paso recomendado.",
+    );
+  });
+
+  it("con un paso y sin normativa, o sin pasos, una frase genérica", () => {
+    expect(fraseEnvio({ pasos: ["a"], normativa: [] })).toBe("Te enviamos el diagnóstico completo a tu correo.");
+    expect(fraseEnvio(diagnostico(ORDENADA))).toBe("Te enviamos el diagnóstico completo a tu correo.");
+  });
+
+  it("nunca promete un plan que el correo no lleva", () => {
+    expect(fraseEnvio(diagnostico(CRITICA))).not.toMatch(/plan/);
   });
 });
